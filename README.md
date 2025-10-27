@@ -9,7 +9,6 @@ _Beautiful text that just works - everywhere, in every language_
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6+-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![npm](https://img.shields.io/npm/v/react-native-apptext?style=for-the-badge&color=CB3837)](https://www.npmjs.com/package/react-native-apptext)
-[![Bundle Size](https://img.shields.io/bundlephobia/minzip/react-native-apptext?style=for-the-badge&label=Size)](https://bundlephobia.com/package/react-native-apptext)
 
 </div>
 
@@ -88,13 +87,13 @@ const designTokens = {
 
 ```bash
 # Using npm
-npm install react-native-apptext react-native-reanimated
+npm install react-native-apptext
 
 # Using yarn
-yarn add react-native-apptext react-native-reanimated
+yarn add react-native-apptext
 
 # Using pnpm
-pnpm add react-native-apptext react-native-reanimated
+pnpm add react-native-apptext
 ```
 
 ### Quick Setup
