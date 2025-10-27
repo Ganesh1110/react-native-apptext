@@ -1,5 +1,5 @@
 {
-  "name": "react-native-text",
+  "name": "react-native-apptext",
   "version": "1.0.0",
   "description": "A themeable text component for React Native with typography and responsive scaling",
   "main": "dist/index.js",
