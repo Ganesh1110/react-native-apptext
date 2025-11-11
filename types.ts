@@ -144,10 +144,14 @@ export interface AppTextProps extends Omit<TextProps, "style">, SpacingProps {
   decoration?: TextStyle["textDecorationLine"];
   italic?: boolean;
   truncate?: boolean | number;
+  gradient?: boolean;
   shadow?: boolean;
+  animated?: boolean;
+  script?: ScriptCode;
+  direction?: "auto" | "ltr" | "rtl";
   responsive?: boolean;
   style?: StyleProp<TextStyle>;
   testID?: string;
-  expandText?: string;
-  collapseText?: string;
+  hyphenationFrequency?: "none" | "normal" | "full";
+  textBreakStrategy?: "simple" | "highQuality" | "balanced";
 }
