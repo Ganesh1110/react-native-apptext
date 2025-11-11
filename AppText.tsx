@@ -1,16 +1,22 @@
 import React, { forwardRef, memo, useCallback, useMemo } from "react";
 import {
   Text,
+  Animated,
+  useColorScheme,
   View,
   NativeSyntheticEvent,
   TextLayoutEventData,
   AccessibilityRole,
-  useColorScheme,
 } from "react-native";
 
 import { AppTextProps, AppTextTheme, TypographyVariant } from "./types";
+import { SCRIPT_CONFIGS } from "./scriptConfigs";
 import { DEFAULT_THEME } from "./theme";
-import { useResponsiveFont, useThemedStyles } from "./hooks";
+import {
+  useResponsiveFont,
+  useScriptDetection,
+  useThemedStyles,
+} from "./hooks";
 import { AppTextProvider, useAppTextTheme } from "./context";
 import { createSpacingStyles } from "./utils";
 
@@ -81,10 +87,11 @@ const BaseAppText = memo(
         transform,
         decoration,
         italic = false,
-        expandText,
-        collapseText,
         truncate = false,
         shadow = false,
+        animated = false,
+        script,
+        direction = "auto",
         responsive = true,
         style: propStyle,
         testID,
@@ -113,6 +120,7 @@ const BaseAppText = memo(
         selectable,
         selectionColor,
         textBreakStrategy,
+        hyphenationFrequency,
         ...restProps
       },
       ref
@@ -121,12 +129,16 @@ const BaseAppText = memo(
       const rawScheme = useColorScheme();
       const colorScheme = rawScheme === "unspecified" ? "light" : rawScheme;
       const themedStyles = useThemedStyles(theme, colorScheme);
-
       const textContent = useMemo(() => {
         if (typeof children === "string") return children;
         if (typeof children === "number") return children.toString();
         return String(children || "");
       }, [children]);
+
+      const detectedScript = useScriptDetection(textContent);
+      const finalScript = script || detectedScript;
+      const scriptConfig =
+        SCRIPT_CONFIGS[finalScript] || SCRIPT_CONFIGS.Unknown;
 
       const typographyStyle =
         theme.typography[variant] || theme.typography.body1;
@@ -139,6 +151,15 @@ const BaseAppText = memo(
         responsive ? { min: 10, max: 48 } : undefined
       );
 
+      const calculatedLineHeight = useMemo(() => {
+        const baseLineHeight = typographyStyle.lineHeight || baseFontSize * 1.2;
+        return baseLineHeight * scriptConfig.lineHeightMultiplier;
+      }, [
+        typographyStyle.lineHeight,
+        baseFontSize,
+        scriptConfig.lineHeightMultiplier,
+      ]);
+
       const resolvedColor = useMemo(() => {
         if (!color) return themedStyles.defaultTextColor;
         if (color in theme.colors) {
@@ -147,17 +168,23 @@ const BaseAppText = memo(
         return color;
       }, [color, theme.colors, themedStyles.defaultTextColor]);
 
+      const textDirection = useMemo(() => {
+        if (direction !== "auto") return direction;
+        return scriptConfig.direction;
+      }, [direction, scriptConfig.direction]);
+
       const computedStyle = useMemo(() => {
         const baseStyle: any = {
           ...typographyStyle,
           fontSize: responsive ? responsiveFontSize : baseFontSize,
-          lineHeight: typographyStyle.lineHeight,
+          lineHeight: calculatedLineHeight,
           color: resolvedColor,
           fontWeight: weight || typographyStyle.fontWeight,
           textTransform: transform || typographyStyle.textTransform,
           textDecorationLine: decoration,
           fontStyle: italic ? "italic" : "normal",
-          textAlign: align,
+          writingDirection: textDirection,
+          textAlign: align || (textDirection === "rtl" ? "right" : "left"),
         };
 
         if (shadow) {
@@ -191,12 +218,14 @@ const BaseAppText = memo(
         responsive,
         responsiveFontSize,
         baseFontSize,
+        calculatedLineHeight,
         resolvedColor,
         align,
         weight,
         transform,
         decoration,
         italic,
+        textDirection,
         shadow,
         m,
         mt,
@@ -236,6 +265,7 @@ const BaseAppText = memo(
           selectable,
           selectionColor,
           textBreakStrategy,
+          hyphenationFrequency,
           testID: testID || `apptext-${variant}`,
         };
 
@@ -255,6 +285,7 @@ const BaseAppText = memo(
         selectable,
         selectionColor,
         textBreakStrategy,
+        hyphenationFrequency,
         testID,
         variant,
       ]);
@@ -271,11 +302,23 @@ const BaseAppText = memo(
             maxLines={truncate}
             style={finalStyle}
             onExpand={() => handlePress?.(undefined)}
-            expandText={expandText}
-            collapseText={collapseText}
           >
             {textContent}
           </TruncationComponent>
+        );
+      }
+
+      if (animated) {
+        return (
+          <Animated.Text
+            ref={ref as any}
+            style={finalStyle}
+            onPress={handlePress}
+            onLongPress={handleLongPress}
+            {...textProps}
+          >
+            {children}
+          </Animated.Text>
         );
       }
 
@@ -329,5 +372,12 @@ AppText.Caption = memo((props) => <BaseAppText {...props} variant="caption" />);
 AppText.Code = memo((props) => <BaseAppText {...props} variant="code" />);
 
 export default AppText;
-export { AppTextProvider, useAppTextTheme, useResponsiveFont, DEFAULT_THEME };
+export {
+  AppTextProvider,
+  useAppTextTheme,
+  useResponsiveFont,
+  useScriptDetection,
+  SCRIPT_CONFIGS,
+  DEFAULT_THEME,
+};
 export type { AppTextProps, AppTextTheme, TypographyVariant };

@@ -1,11 +1,87 @@
 import { TextProps, TextStyle, StyleProp } from "react-native";
 
+export type ScriptCode =
+  | "Latn"
+  | "Arab"
+  | "Cyrl"
+  | "Deva"
+  | "Hani"
+  | "Hang"
+  | "Hira"
+  | "Kana"
+  | "Beng"
+  | "Taml"
+  | "Telu"
+  | "Gujr"
+  | "Guru"
+  | "Knda"
+  | "Mlym"
+  | "Orya"
+  | "Sinh"
+  | "Thai"
+  | "Laoo"
+  | "Mymr"
+  | "Khmr"
+  | "Tibt"
+  | "Ethi"
+  | "Geor"
+  | "Armn"
+  | "Hebr"
+  | "Grek"
+  | "Copt"
+  | "Cans"
+  | "Cher"
+  | "Tfng"
+  | "Vaii"
+  | "Bamu"
+  | "Nkoo"
+  | "Adlm"
+  | "Olck"
+  | "Mtei"
+  | "Java"
+  | "Bali"
+  | "Sund"
+  | "Bugi"
+  | "Cham"
+  | "Tglg"
+  | "Hano"
+  | "Buhd"
+  | "Cakm"
+  | "Limb"
+  | "Lisu"
+  | "Yiii"
+  | "Mong"
+  | "Thaa"
+  | "Hmng"
+  | "Kali"
+  | "Unknown";
+
+export interface ScriptConfig {
+  name: string;
+  direction: "ltr" | "rtl";
+  region: string;
+  population: number;
+  lineHeightMultiplier: number;
+  complexShaping: boolean;
+  unicodeRanges: Array<[number, number]>;
+}
+
 export type TypographyVariant =
-  | "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
-  | "title" | "subtitle1" | "subtitle2"
-  | "body1" | "body2"
-  | "caption" | "overline"
-  | "button" | "code";
+  | "h1"
+  | "h2"
+  | "h3"
+  | "h4"
+  | "h5"
+  | "h6"
+  | "title"
+  | "subtitle1"
+  | "subtitle2"
+  | "body1"
+  | "body2"
+  | "caption"
+  | "overline"
+  | "button"
+  | "code";
 
 export interface TypographyBlock {
   fontSize: number;
@@ -42,15 +118,23 @@ export interface AppTextTheme {
 }
 
 export interface SpacingProps {
-  m?: number; mt?: number; mr?: number; mb?: number; ml?: number;
-  mx?: number; my?: number;
-  p?: number; pt?: number; pr?: number; pb?: number; pl?: number;
-  px?: number; py?: number;
+  m?: number;
+  mt?: number;
+  mr?: number;
+  mb?: number;
+  ml?: number;
+  mx?: number;
+  my?: number;
+  p?: number;
+  pt?: number;
+  pr?: number;
+  pb?: number;
+  pl?: number;
+  px?: number;
+  py?: number;
 }
 
-export interface AppTextProps
-  extends Omit<TextProps, "style">,
-    SpacingProps {
+export interface AppTextProps extends Omit<TextProps, "style">, SpacingProps {
   variant?: TypographyVariant;
   color?: keyof AppTextTheme["colors"] | string;
   size?: number | "auto";
@@ -64,6 +148,6 @@ export interface AppTextProps
   responsive?: boolean;
   style?: StyleProp<TextStyle>;
   testID?: string;
-  expandText?: string; 
+  expandText?: string;
   collapseText?: string;
 }

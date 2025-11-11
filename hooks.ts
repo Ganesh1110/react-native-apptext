@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Dimensions, PixelRatio } from "react-native";
-import { AppTextTheme } from "./types";
+import { AppTextTheme, ScriptCode } from "./types";
+import { SCRIPT_CONFIGS } from "./scriptConfigs";
 
 // Hook for responsive font scaling
 export const useResponsiveFont = (
@@ -27,6 +28,27 @@ export const useResponsiveFont = (
 
     return scaledSize;
   }, [baseSize, dimensions, bounds?.min, bounds?.max]);
+};
+
+// Hook for script detection
+export const useScriptDetection = (text: string): ScriptCode => {
+  return useMemo(() => {
+    if (!text || text.length === 0) return "Unknown";
+
+    const codePoint = text.codePointAt(0);
+    if (!codePoint) return "Unknown";
+
+    for (const [scriptCode, config] of Object.entries(SCRIPT_CONFIGS)) {
+      if (
+        config.unicodeRanges.some(
+          ([start, end]) => codePoint >= start && codePoint <= end
+        )
+      ) {
+        return scriptCode as ScriptCode;
+      }
+    }
+    return "Unknown";
+  }, [text]);
 };
 
 // Hook for theme-aware styles
