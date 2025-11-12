@@ -33,6 +33,15 @@ Tired of wrestling with text rendering across different languages and screen siz
 - ✅ **Powerful theming** with design tokens
 - ✅ **50+ writing systems** supported automatically
 
+## 📊 Performance Benchmarks
+
+| Operation       | AppText | RN Text | Improvement           |
+| --------------- | ------- | ------- | --------------------- |
+| Render (Latin)  | 4.2ms   | 6.8ms   | **38% faster** 🚀     |
+| Render (Arabic) | 5.1ms   | 12.3ms  | **58% faster** 🚀     |
+| Memory Usage    | 2.8MB   | 4.1MB   | **32% less** 💾       |
+| Bundle Size     | 18.2KB  | N/A     | **Tree-shakeable** 🌳 |
+
 ## ✨ Feature Highlights
 
 ### 🎨 **Design System First**
@@ -53,12 +62,19 @@ const designTokens = {
 };
 ```
 
-### 🌍 **Truly Global Ready**
+### 🌍 **Smart Script Detection**
 
-- **Automatic script detection** - Just type and it works
-- **Complex text shaping** for Arabic, Hindi, Thai, and more
-- **Proper line heights** tuned for each writing system
-- **Emoji and symbol** support that doesn't break layouts
+- **Automatic script detection** - Analyzes text content to determine script
+- **Proper text direction** - Automatically sets LTR/RTL based on detected script
+- **Optimized line heights** - Script-specific line height multipliers
+- **40+ supported scripts** - From Latin and Arabic to Japanese and Hindi
+
+### 📱 **Responsive by Design**
+
+- **Automatic font scaling** based on screen size
+- **Customizable bounds** with min/max font sizes
+- **Pixel-perfect rendering** across all devices
+- **Flexible spacing system** with margin and padding props
 
 ### 🚀 **Performance Champion**
 
@@ -124,6 +140,54 @@ export default function App() {
     </AppTextProvider>
   );
 }
+```
+
+## 🌍 Automatic Script Detection in Action
+
+### How It Works
+
+AppText automatically detects the writing system of your text and applies appropriate settings:
+
+```tsx
+function InternationalApp() {
+  return (
+    <View>
+      {/* Latin - Auto-detected, LTR */}
+      <AppText>Hello World! Welcome to our app.</AppText>
+
+      {/* Arabic - Auto-detected, RTL */}
+      <AppText>مرحبا بكم في تطبيقنا. هذا نص عربي.</AppText>
+
+      {/* Japanese - Auto-detected, optimized line height */}
+      <AppText>こんにちは、私たちのアプリへようこそ。</AppText>
+
+      {/* Hindi - Auto-detected, complex script handling */}
+      <AppText>हमारे ऐप में आपका स्वागत है।AppText>
+
+      {/* Mixed content - Smart handling */}
+      <AppText>
+        Hello 你好 مرحبا 🌍
+        {/* Each script is automatically detected and handled */}
+      </AppText>
+    </View>
+  );
+}
+```
+
+### Manual Script Control
+
+For fine-grained control, you can manually specify the script:
+
+```tsx
+// Force Arabic script with RTL direction
+<AppText script="Arab" direction="rtl">
+  النص العربي مع تحكم كامل
+</AppText>
+
+// Force Chinese Han characters
+<AppText script="Hani" responsive={false} size={18}>
+  中文文本与完全控制
+</AppText>
 ```
 
 ## 🎨 Theming Deep Dive
@@ -206,57 +270,6 @@ function ThemeSwitcher() {
     </View>
   );
 }
-```
-
-## 🌍 Internationalization Mastery
-
-### Automatic Script Handling
-
-```tsx
-function InternationalApp() {
-  return (
-    <View>
-      {/* Latin - Just works */}
-      <AppText>Hello World! Welcome to our app.</AppText>
-
-      {/* Arabic - Automatically RTL */}
-      <AppText>مرحبا بكم في تطبيقنا. هذا نص عربي.</AppText>
-
-      {/* Japanese - Perfect line heights */}
-      <AppText>こんにちは、私たちのアプリへようこそ。</AppText>
-
-      {/* Hindi - Complex shaping handled */}
-      <AppText>हमारे ऐप में आपका स्वागत है।</AppText>
-
-      {/* Mixed content - Smart handling */}
-      <AppText>
-        Hello 你好 مرحبا 🌍
-        {/* Automatically detects and handles each script */}
-      </AppText>
-    </View>
-  );
-}
-```
-
-### Manual Script Control
-
-```tsx
-// For fine-grained control
-<AppText
-  script="Arab"
-  direction="rtl"
-  style={{ textAlign: 'right' }}
->
-  النص العربي مع تحكم كامل
-</AppText>
-
-<AppText
-  script="Hani"
-  responsive={false}
-  size={18}
->
-  中文文本与完全控制
-</AppText>
 ```
 
 ## 🎭 Animation Gallery
@@ -741,15 +754,6 @@ src/
 ├── utils/              # Helper functions
 └── __tests__/          # Test files
 ```
-
-## 📊 Performance Benchmarks
-
-| Operation       | AppText | RN Text | Improvement           |
-| --------------- | ------- | ------- | --------------------- |
-| Render (Latin)  | 4.2ms   | 6.8ms   | **38% faster** 🚀     |
-| Render (Arabic) | 5.1ms   | 12.3ms  | **58% faster** 🚀     |
-| Memory Usage    | 2.8MB   | 4.1MB   | **32% less** 💾       |
-| Bundle Size     | 18.2KB  | N/A     | **Tree-shakeable** 🌳 |
 
 ## 🐛 Troubleshooting
 
