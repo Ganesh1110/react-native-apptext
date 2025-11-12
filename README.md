@@ -9,7 +9,9 @@ _Beautiful text that just works - everywhere, in every language_
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6+-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![npm](https://img.shields.io/npm/v/react-native-apptext?style=for-the-badge&color=CB3837)](https://www.npmjs.com/package/react-native-apptext)
-[![Bundle Size](https://img.shields.io/bundlephobia/minzip/react-native-apptext?style=for-the-badge&label=Size)](https://bundlephobia.com/package/react-native-apptext)
+[![Install Size](https://packagephobia.com/badge?p=react-native-apptext)](https://packagephobia.com/result?p=react-native-apptext)
+[![npm version](https://img.shields.io/npm/v/react-native-apptext?style=for-the-badge)](https://www.npmjs.com/package/react-native-apptext)
+[![npm downloads](https://img.shields.io/npm/dm/react-native-apptext?style=for-the-badge)](https://www.npmjs.com/package/react-native-apptext)
 
 </div>
 
