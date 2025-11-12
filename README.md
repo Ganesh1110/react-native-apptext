@@ -429,9 +429,9 @@ function ResponsiveComponent() {
 }
 ```
 
-## 🔧 Advanced Features
+<!-- ## 🔧 Advanced Features -->
 
-### Performance Monitoring
+<!-- ### Performance Monitoring
 
 ```tsx
 import { usePerformanceMonitor } from "react-native-apptext";
@@ -461,9 +461,9 @@ function OptimizedComponent() {
     <AppText onPress={handlePress}>Performance tracked interaction</AppText>
   );
 }
-```
+``` -->
 
-### Error Boundaries
+<!-- ### Error Boundaries
 
 ```tsx
 import { ErrorBoundary, useErrorBoundary } from "react-native-apptext";
@@ -495,7 +495,7 @@ function SafeComponent() {
     </HookBoundary>
   );
 }
-```
+``` -->
 
 ## 📚 Complete API Reference
 
