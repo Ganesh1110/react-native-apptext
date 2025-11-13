@@ -296,6 +296,8 @@ const BaseAppText = memo(
         [onLongPress]
       );
 
+      const hasPressHandlers = !!onPress || !!onLongPress;
+
       if (typeof truncate === "number" && truncate > 0) {
         return (
           <TruncationComponent
@@ -313,8 +315,9 @@ const BaseAppText = memo(
           <Animated.Text
             ref={ref as any}
             style={finalStyle}
-            onPress={handlePress}
-            onLongPress={handleLongPress}
+            {...(!hasPressHandlers
+              ? { pointerEvents: "none" }
+              : { onPress: handlePress, onLongPress: handleLongPress })}
             {...textProps}
           >
             {children}
@@ -326,8 +329,9 @@ const BaseAppText = memo(
         <Text
           ref={ref}
           style={finalStyle}
-          onPress={handlePress}
-          onLongPress={handleLongPress}
+          {...(!hasPressHandlers
+            ? { pointerEvents: "none" }
+            : { onPress: handlePress, onLongPress: handleLongPress })}
           {...textProps}
         >
           {children}
