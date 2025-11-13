@@ -33,6 +33,9 @@ function interpolate(text: string, params: Record<string, any> = {}): string {
  * Example: getNestedValue({ user: { name: "John" } }, "user.name") → "John"
  */
 function getNestedValue(obj: Record<string, any>, path: string): any {
+  if (!obj || typeof obj !== "object") return undefined;
+  if (!path || typeof path !== "string") return undefined;
+
   return path.split(".").reduce((current, key) => {
     return current?.[key];
   }, obj);
@@ -77,9 +80,33 @@ const PLURAL_RULES: Record<string, (count: number) => PluralForm> = {
  * Get the correct plural form for a language and count
  */
 function getPluralForm(language: string, count: number): PluralForm {
-  const langCode = language.split("-")[0]; // "en-US" → "en"
+  if (typeof count !== "number" || !isFinite(count)) {
+    console.warn(`Invalid count for plural: ${count}, using 0`);
+    count = 0;
+  }
+
+  const langCode = language?.split("-")[0] || "en";
   const rule = PLURAL_RULES[langCode] || PLURAL_RULES.en;
-  return rule(count);
+  return rule(Math.abs(Math.floor(count))); // Use absolute integer
+}
+
+type DeepKeyOf<T> = T extends object
+  ? {
+      [K in keyof T]: K extends string
+        ? T[K] extends object
+          ? `${K}` | `${K}.${DeepKeyOf<T[K]>}`
+          : `${K}`
+        : never;
+    }[keyof T]
+  : never;
+
+interface TypedTranslationManager<T extends Translations> {
+  translate(key: DeepKeyOf<T>, params?: Record<string, any>): string;
+  translatePlural(
+    key: DeepKeyOf<T>,
+    count: number,
+    params?: Record<string, any>
+  ): string;
 }
 
 /**
@@ -102,10 +129,20 @@ interface Translations {
 }
 
 class TranslationManager {
+  private cache: Map<string, string> = new Map();
   private translations: Record<string, Translations>;
 
-  constructor(translations: Record<string, Translations>) {
+  private fallbackLanguage: string;
+  private shouldWarnMissing: boolean;
+
+  constructor(
+    translations: Record<string, Translations>,
+    fallbackLanguage = "en",
+    shouldWarnMissing = true
+  ) {
     this.translations = translations;
+    this.fallbackLanguage = fallbackLanguage;
+    this.shouldWarnMissing = shouldWarnMissing;
   }
 
   /**
@@ -116,10 +153,20 @@ class TranslationManager {
    * @param params - Values to interpolate
    */
   translate(lang: string, key: string, params?: Record<string, any>): string {
+    const cacheKey = params
+      ? `${lang}:${key}:${JSON.stringify(params)}`
+      : `${lang}:${key}`;
+
+    if (this.cache.has(cacheKey)) {
+      return this.cache.get(cacheKey)!;
+    }
+
     const translation = this.getTranslationValue(lang, key);
 
     if (typeof translation === "string") {
-      return params ? interpolate(translation, params) : translation;
+      const result = params ? interpolate(translation, params) : translation;
+      this.cache.set(cacheKey, result);
+      return result;
     }
 
     // If it's a plural object, use 'other' as default
@@ -129,9 +176,10 @@ class TranslationManager {
       "other" in translation
     ) {
       const text = translation.other;
-      return params ? interpolate(text, params) : text;
+      const result = params ? interpolate(text, params) : text;
+      this.cache.set(cacheKey, result);
+      return result;
     }
-
     return key; // Fallback to key if translation not found
   }
 
@@ -151,22 +199,23 @@ class TranslationManager {
   ): string {
     const translation = this.getTranslationValue(lang, key);
 
-    // Must be a plural object
     if (
       !translation ||
       typeof translation !== "object" ||
       !("other" in translation)
     ) {
+      // Try fallback or return key
+      if (this.shouldWarnMissing) {
+        console.warn(
+          `Missing plural translation for key: ${key} in language: ${lang}`
+        );
+      }
       return key;
     }
 
-    // Get the correct plural form for this language and count
     const pluralForm = getPluralForm(lang, count);
+    const text = translation[pluralForm] ?? translation.other ?? key;
 
-    // Get the text for this plural form (fallback to 'other')
-    const text = translation[pluralForm] || translation.other;
-
-    // Add count to params and interpolate
     const allParams = { ...params, count };
     return interpolate(text, allParams);
   }
@@ -178,10 +227,21 @@ class TranslationManager {
     lang: string,
     key: string
   ): TranslationValue | null {
-    const langTranslations = this.translations[lang];
-    if (!langTranslations) return null;
+    // Try current language
+    let langTranslations = this.translations[lang];
+    let value = langTranslations ? getNestedValue(langTranslations, key) : null;
 
-    return getNestedValue(langTranslations, key);
+    // Fallback to default language
+    if (!value && lang !== this.fallbackLanguage) {
+      langTranslations = this.translations[this.fallbackLanguage];
+      value = langTranslations ? getNestedValue(langTranslations, key) : null;
+    }
+
+    return value;
+  }
+
+  clearCache() {
+    this.cache.clear();
   }
 }
 
@@ -192,22 +252,31 @@ class TranslationManager {
 export function LocaleProvider({
   translations,
   defaultLanguage,
+  onMissingTranslation,
   children,
-}: LocaleProviderProps) {
+}: LocaleProviderProps & {
+  onMissingTranslation?: (lang: string, key: string) => void;
+}) {
   const [language, setLanguage] = useState(defaultLanguage);
 
   // Create translation manager (only once)
-  const manager = useMemo(
-    () => new TranslationManager(translations),
-    [translations]
-  );
+  const manager = useMemo(() => {
+    if (process.env.NODE_ENV === "development") {
+      validateTranslations(translations);
+    }
+    return new TranslationManager(translations);
+  }, [translations]);
 
   // t() - Simple translation function
   const t = useCallback(
     (key: string, params?: Record<string, any>) => {
-      return manager.translate(language, key, params);
+      const result = manager.translate(language, key, params);
+      if (result === key && onMissingTranslation) {
+        onMissingTranslation(language, key);
+      }
+      return result;
     },
-    [language, manager]
+    [language, manager, onMissingTranslation]
   );
 
   // tn() - Plural translation function
@@ -231,6 +300,20 @@ export function LocaleProvider({
     }),
     [language, t, tn, changeLanguage]
   );
+
+  const validateTranslations = (translations: Record<string, Translations>) => {
+    Object.entries(translations).forEach(([lang, langTranslations]) => {
+      Object.entries(langTranslations).forEach(([key, value]) => {
+        if (typeof value === "object" && !Array.isArray(value)) {
+          if (!("other" in value)) {
+            console.error(
+              `Plural translation missing 'other' field: ${lang}.${key}`
+            );
+          }
+        }
+      });
+    });
+  };
 
   return (
     <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>
