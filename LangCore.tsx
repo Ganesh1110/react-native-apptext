@@ -91,18 +91,16 @@ const PLURAL_RULES: Record<string, (count: number) => PluralForm> = {
  * Get the correct plural form for a language and count
  */
 
-const getPluralForm = useMemo(() => {
-  return (language: string, count: number): PluralForm => {
-    if (typeof count !== "number" || !isFinite(count)) {
-      console.warn(`Invalid count for plural: ${count}, using 0`);
-      count = 0;
-    }
+function getPluralForm(language: string, count: number): PluralForm {
+  if (typeof count !== "number" || !isFinite(count)) {
+    console.warn(`Invalid count for plural: ${count}, using 0`);
+    count = 0;
+  }
 
-    const langCode = language?.split("-")[0] || "en";
-    const rule = PLURAL_RULES[langCode] || PLURAL_RULES.en;
-    return rule(Math.abs(Math.floor(count))); // Use absolute integer
-  };
-}, []);
+  const langCode = language?.split("-")[0] || "en";
+  const rule = PLURAL_RULES[langCode] || PLURAL_RULES.en;
+  return rule(Math.abs(Math.floor(count))); // Use absolute integer
+}
 
 type DeepKeyOf<T> = T extends object
   ? {
@@ -335,19 +333,47 @@ export function LocaleProvider({
     [language, t, tn, changeLanguage]
   );
 
-  const validateTranslations = (translations: Record<string, Translations>) => {
+  function validateTranslations(translations: Record<string, Translations>) {
     Object.entries(translations).forEach(([lang, langTranslations]) => {
-      Object.entries(langTranslations).forEach(([key, value]) => {
-        if (typeof value === "object" && !Array.isArray(value)) {
-          if (!("other" in value)) {
-            console.error(
-              `Plural translation missing 'other' field: ${lang}.${key}`
-            );
+      const checkObject = (obj: any, path: string = "") => {
+        // Early return for null/undefined
+        if (!obj || typeof obj !== "object") return;
+
+        Object.entries(obj).forEach(([key, value]) => {
+          // Skip null/undefined values
+          if (value == null) return;
+
+          const currentPath = path ? `${path}.${key}` : key;
+
+          if (typeof value === "object" && !Array.isArray(value)) {
+            // Check if this is a plural object (has 'other' key)
+            const hasPluralKeys = [
+              "zero",
+              "one",
+              "two",
+              "few",
+              "many",
+              "other",
+            ].some((pluralKey) => pluralKey in value);
+
+            if (hasPluralKeys) {
+              // This is a plural object, must have 'other'
+              if (!("other" in value)) {
+                console.error(
+                  `Plural translation missing 'other' field: ${lang}.${currentPath}`
+                );
+              }
+            } else {
+              // This is a nested container, check its children
+              checkObject(value, currentPath);
+            }
           }
-        }
-      });
+        });
+      };
+
+      checkObject(langTranslations);
     });
-  };
+  }
 
   return (
     <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>
