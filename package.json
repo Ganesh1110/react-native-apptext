@@ -25,7 +25,13 @@
     "text",
     "typography",
     "theme",
-    "component"
+    "component",
+    "responsive",
+    "scaling",
+    "ui",
+    "adaptive",
+    "font",
+    "design-system"
   ],
   "author": "Ganesh Jayaprakash <ganeshjayaprakash3@gmail.com>",
   "license": "MIT",
