@@ -8,7 +8,6 @@ _Beautiful text that just works - everywhere, in every language_
 [![React Native](https://img.shields.io/badge/React_Native-0.73+-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactnative.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6+-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
-[![npm](https://img.shields.io/npm/v/react-native-apptext?style=for-the-badge&color=CB3837)](https://www.npmjs.com/package/react-native-apptext)
 [![Install Size](https://packagephobia.com/badge?p=react-native-apptext)](https://packagephobia.com/result?p=react-native-apptext)
 [![npm version](https://img.shields.io/npm/v/react-native-apptext?style=for-the-badge)](https://www.npmjs.com/package/react-native-apptext)
 [![npm downloads](https://img.shields.io/npm/dm/react-native-apptext?style=for-the-badge)](https://www.npmjs.com/package/react-native-apptext)
@@ -95,6 +94,7 @@ const designTokens = {
     duration: 2000,
     easing: "ease-in-out",
   }}
+  animated
 >
   Hello World!
 </AppText>
@@ -126,7 +126,7 @@ export default function App() {
   return (
     <AppTextProvider>
       <View style={{ padding: 20 }}>
-        <AppText.H1 gradient animation={{ type: "fadeIn" }}>
+        <AppText.H1 animated animation={{ type: "fadeIn" }}>
           Welcome to the Future of Text
         </AppText.H1>
 
@@ -539,7 +539,6 @@ function SafeComponent() {
 | `direction`  | `'auto' \| 'ltr' \| 'rtl'` | `'auto'`            | Text direction                 |
 | `animation`  | `AnimationConfig`          | `undefined`         | Animation configuration        |
 | `truncate`   | `boolean \| number`        | `false`             | Truncate with expand option    |
-| `gradient`   | `boolean`                  | `false`             | Gradient text effect           |
 | `shadow`     | `boolean`                  | `false`             | Text shadow                    |
 | `italic`     | `boolean`                  | `false`             | Italic style                   |
 | `selectable` | `boolean`                  | `false`             | Text selection on web          |
@@ -619,7 +618,7 @@ npx react-native-macos-init
 function ProductCard({ product }) {
   return (
     <View style={styles.card}>
-      <AppText.H4 truncate={2} animation={{ type: "fadeIn" }}>
+      <AppText.H4 truncate={2} animated animation={{ type: "fadeIn" }}>
         {product.name}
       </AppText.H4>
 
@@ -694,6 +693,7 @@ function NewsArticle({ article, userLanguage }) {
         variant="caption"
         color="textSecondary"
         animation={{ type: "fadeIn", delay: 500 }}
+        animated
       >
         {article.date} • {article.source}
       </AppText>
