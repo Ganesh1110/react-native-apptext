@@ -7,10 +7,10 @@ _Beautiful text that just works - everywhere, in every language_
 
 [![React Native](https://img.shields.io/badge/React_Native-0.73+-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactnative.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6+-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
-[![Install Size](https://packagephobia.com/badge?p=react-native-apptext)](https://packagephobia.com/result?p=react-native-apptext)
-[![npm version](https://img.shields.io/npm/v/react-native-apptext?style=for-the-badge)](https://www.npmjs.com/package/react-native-apptext)
 [![npm downloads](https://img.shields.io/npm/dm/react-native-apptext?style=for-the-badge)](https://www.npmjs.com/package/react-native-apptext)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![npm version](https://img.shields.io/npm/v/react-native-apptext?style=for-the-badge)](https://www.npmjs.com/package/react-native-apptext)
+[![Install Size](https://packagephobia.com/badge?p=react-native-apptext)](https://packagephobia.com/result?p=react-native-apptext)
 
 </div>
 
@@ -25,6 +25,7 @@ Tired of wrestling with text rendering across different languages and screen siz
 - ❌ Poor performance with animations
 - ❌ Complex theming systems that are hard to maintain
 - ❌ Limited international script support
+- ❌ No built-in internationalization (i18n) support
 
 ### ✅ The Solution
 
@@ -33,6 +34,7 @@ Tired of wrestling with text rendering across different languages and screen siz
 - ✅ **Butter-smooth animations** at 60fps
 - ✅ **Powerful theming** with design tokens
 - ✅ **50+ writing systems** supported automatically
+- ✅ **Built-in i18n** with interpolation and pluralization
 
 ## 📊 Performance Benchmarks
 
@@ -63,19 +65,21 @@ const designTokens = {
 };
 ```
 
-### 🌍 **Smart Script Detection**
+### 🌍 **Internationalization (i18n) Built-In**
+
+- **Multi-language support** - Switch languages seamlessly
+- **Smart interpolation** - Insert dynamic values with `{{variable}}` syntax
+- **Advanced pluralization** - Handles complex plural rules for 50+ languages
+- **Nested translations** - Organize translations with dot notation
+- **Performance optimized** - Caching and memoization for fast lookups
+- **Type-safe** - Full TypeScript support with autocomplete
+
+### 📱 **Smart Script Detection**
 
 - **Automatic script detection** - Analyzes text content to determine script
 - **Proper text direction** - Automatically sets LTR/RTL based on detected script
 - **Optimized line heights** - Script-specific line height multipliers
 - **40+ supported scripts** - From Latin and Arabic to Japanese and Hindi
-
-### 📱 **Responsive by Design**
-
-- **Automatic font scaling** based on screen size
-- **Customizable bounds** with min/max font sizes
-- **Pixel-perfect rendering** across all devices
-- **Flexible spacing system** with margin and padding props
 
 ### 🚀 **Performance Champion**
 
@@ -144,6 +148,499 @@ export default function App() {
 }
 ```
 
+## 🌐 Internationalization (i18n)
+
+AppText includes a powerful, lightweight internationalization system with zero external dependencies.
+
+### 🎯 Quick Start with i18n
+
+```tsx
+import React from "react";
+import { View, TouchableOpacity } from "react-native";
+import AppText, { LocaleProvider, useLang } from "react-native-apptext";
+
+// 1. Define your translations
+const translations = {
+  en: {
+    greeting: "Hello, {{name}}!",
+    welcome: "Welcome to our app",
+    itemCount: {
+      one: "You have {{count}} item",
+      other: "You have {{count}} items",
+    },
+    profile: {
+      user: {
+        name: "User Name",
+        email: "Email Address",
+      },
+    },
+  },
+  es: {
+    greeting: "¡Hola, {{name}}!",
+    welcome: "Bienvenido a nuestra aplicación",
+    itemCount: {
+      one: "Tienes {{count}} artículo",
+      other: "Tienes {{count}} artículos",
+    },
+    profile: {
+      user: {
+        name: "Nombre de Usuario",
+        email: "Correo Electrónico",
+      },
+    },
+  },
+  ar: {
+    greeting: "مرحباً، {{name}}!",
+    welcome: "مرحباً بك في تطبيقنا",
+    itemCount: {
+      zero: "ليس لديك عناصر",
+      one: "لديك عنصر واحد",
+      two: "لديك عنصران",
+      few: "لديك {{count}} عناصر",
+      many: "لديك {{count}} عنصراً",
+      other: "لديك {{count}} عنصر",
+    },
+    profile: {
+      user: {
+        name: "اسم المستخدم",
+        email: "عنوان البريد الإلكتروني",
+      },
+    },
+  },
+};
+
+// 2. Wrap your app with LocaleProvider
+export default function App() {
+  return (
+    <LocaleProvider translations={translations} defaultLanguage="en">
+      <MyApp />
+    </LocaleProvider>
+  );
+}
+
+// 3. Use translations in your components
+function MyApp() {
+  const { t, tn, changeLanguage, language } = useLang();
+
+  return (
+    <View style={{ padding: 20 }}>
+      {/* Simple translation */}
+      <AppText.H2>{t("welcome")}</AppText.H2>
+
+      {/* Translation with interpolation */}
+      <AppText.Body>{t("greeting", { name: "Alice" })}</AppText.Body>
+
+      {/* Nested translation keys */}
+      <AppText>{t("profile.user.name")}</AppText>
+
+      {/* Pluralization */}
+      <AppText>{tn("itemCount", 5)}</AppText>
+
+      {/* Language switcher */}
+      <View style={{ flexDirection: "row", gap: 10, marginTop: 20 }}>
+        <TouchableOpacity onPress={() => changeLanguage("en")}>
+          <AppText color={language === "en" ? "primary" : "secondary"}>
+            English
+          </AppText>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => changeLanguage("es")}>
+          <AppText color={language === "es" ? "primary" : "secondary"}>
+            Español
+          </AppText>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => changeLanguage("ar")}>
+          <AppText color={language === "ar" ? "primary" : "secondary"}>
+            العربية
+          </AppText>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+```
+
+### 📝 Translation Features
+
+#### 1. **Simple Translations**
+
+```tsx
+const { t } = useLang();
+
+// Basic translation
+<AppText>{t("welcome")}</AppText>;
+// Output: "Welcome to our app"
+```
+
+#### 2. **Interpolation**
+
+Insert dynamic values into your translations:
+
+```tsx
+// Translation: "Hello, {{name}}! You have {{count}} messages."
+<AppText>{t("userGreeting", { name: "John", count: 5 })}</AppText>
+// Output: "Hello, John! You have 5 messages."
+```
+
+#### 3. **Nested Keys**
+
+Organize translations hierarchically:
+
+```tsx
+// Translation structure:
+// {
+//   settings: {
+//     profile: {
+//       title: "Profile Settings"
+//     }
+//   }
+// }
+
+<AppText>{t("settings.profile.title")}</AppText>
+// Output: "Profile Settings"
+```
+
+#### 4. **Pluralization**
+
+Handle plural forms automatically based on language rules:
+
+```tsx
+const { tn } = useLang();
+
+// English (2 forms: one/other)
+<AppText>{tn("itemCount", 1)}</AppText>  // "You have 1 item"
+<AppText>{tn("itemCount", 5)}</AppText>  // "You have 5 items"
+
+// Arabic (6 forms: zero/one/two/few/many/other)
+<AppText>{tn("itemCount", 0)}</AppText>  // "ليس لديك عناصر"
+<AppText>{tn("itemCount", 1)}</AppText>  // "لديك عنصر واحد"
+<AppText>{tn("itemCount", 2)}</AppText>  // "لديك عنصران"
+<AppText>{tn("itemCount", 5)}</AppText>  // "لديك 5 عناصر"
+```
+
+### 🔧 API Reference
+
+#### `LocaleProvider`
+
+Wrap your app to enable i18n features.
+
+```tsx
+<LocaleProvider
+  translations={translations}
+  defaultLanguage="en"
+  onMissingTranslation={(lang, key) => {
+    console.warn(`Missing translation: ${lang}.${key}`);
+  }}
+>
+  {children}
+</LocaleProvider>
+```
+
+**Props:**
+
+- `translations` - Object with language codes as keys
+- `defaultLanguage` - Initial language (e.g., "en", "es", "ar")
+- `onMissingTranslation` - Optional callback for missing keys
+
+#### `useLang` Hook
+
+Access translation functions in any component.
+
+```tsx
+const { t, tn, changeLanguage, language } = useLang();
+```
+
+**Returns:**
+
+- `t(key, params?)` - Get translation with optional interpolation
+- `tn(key, count, params?)` - Get plural translation
+- `changeLanguage(lang)` - Switch to a different language
+- `language` - Current active language code
+
+### 📋 Translation Format
+
+#### Simple String
+
+```json
+{
+  "welcome": "Welcome to our app",
+  "goodbye": "See you later!"
+}
+```
+
+#### With Interpolation
+
+```json
+{
+  "greeting": "Hello, {{name}}!",
+  "cartTotal": "Total: ${{amount}} ({{items}} items)"
+}
+```
+
+#### Plural Forms
+
+Different languages have different plural rules:
+
+**English** (2 forms):
+
+```json
+{
+  "items": {
+    "one": "{{count}} item",
+    "other": "{{count}} items"
+  }
+}
+```
+
+**Arabic** (6 forms):
+
+```json
+{
+  "items": {
+    "zero": "لا توجد عناصر",
+    "one": "عنصر واحد",
+    "two": "عنصران",
+    "few": "{{count}} عناصر",
+    "many": "{{count}} عنصراً",
+    "other": "{{count}} عنصر"
+  }
+}
+```
+
+**Russian** (3 forms):
+
+```json
+{
+  "items": {
+    "one": "{{count}} товар",
+    "few": "{{count}} товара",
+    "many": "{{count}} товаров"
+  }
+}
+```
+
+### 🌍 Supported Plural Rules
+
+AppText automatically handles plural rules for:
+
+| Language                 | Forms | Example                          |
+| ------------------------ | ----- | -------------------------------- |
+| English, Spanish, German | 2     | one, other                       |
+| French                   | 2     | one (0,1), other                 |
+| Arabic                   | 6     | zero, one, two, few, many, other |
+| Russian, Polish          | 3     | one, few, many                   |
+| Chinese, Japanese        | 1     | other (no plurals)               |
+
+### 💡 Best Practices
+
+#### 1. **Organize by Feature**
+
+```tsx
+const translations = {
+  en: {
+    auth: {
+      login: "Log In",
+      signup: "Sign Up",
+      forgot: "Forgot Password?",
+    },
+    home: {
+      welcome: "Welcome back, {{name}}!",
+      stats: {
+        views: "{{count}} views",
+        likes: "{{count}} likes",
+      },
+    },
+  },
+};
+
+// Usage
+t("auth.login");
+t("home.welcome", { name: user.name });
+```
+
+#### 2. **Use Constants for Keys**
+
+```tsx
+// translations/keys.ts
+export const TRANSLATION_KEYS = {
+  AUTH: {
+    LOGIN: "auth.login",
+    SIGNUP: "auth.signup",
+  },
+  HOME: {
+    WELCOME: "home.welcome",
+  },
+} as const;
+
+// Usage
+<AppText>{t(TRANSLATION_KEYS.AUTH.LOGIN)}</AppText>;
+```
+
+#### 3. **Handle Missing Translations**
+
+```tsx
+<LocaleProvider
+  translations={translations}
+  defaultLanguage="en"
+  onMissingTranslation={(lang, key) => {
+    // Log to analytics
+    analytics.track("MissingTranslation", { lang, key });
+
+    // Show to developers in dev mode
+    if (__DEV__) {
+      console.warn(`Missing: ${lang}.${key}`);
+    }
+  }}
+>
+  {children}
+</LocaleProvider>
+```
+
+#### 4. **Combine with Script Detection**
+
+```tsx
+function MultilingualText({ translationKey }) {
+  const { t, language } = useLang();
+
+  // AppText automatically detects script and sets direction
+  return (
+    <AppText script={language === "ar" ? "Arab" : "Latn"} direction="auto">
+      {t(translationKey)}
+    </AppText>
+  );
+}
+```
+
+### 🎨 Real-World Example: E-commerce App
+
+```tsx
+import React from "react";
+import { View, FlatList, TouchableOpacity } from "react-native";
+import AppText, { LocaleProvider, useLang } from "react-native-apptext";
+
+const translations = {
+  en: {
+    cart: {
+      title: "Shopping Cart",
+      empty: "Your cart is empty",
+      items: {
+        one: "{{count}} item",
+        other: "{{count}} items",
+      },
+      total: "Total: ${{amount}}",
+      checkout: "Checkout",
+    },
+    product: {
+      addToCart: "Add to Cart",
+      price: "${{amount}}",
+    },
+  },
+  es: {
+    cart: {
+      title: "Carrito de Compras",
+      empty: "Tu carrito está vacío",
+      items: {
+        one: "{{count}} artículo",
+        other: "{{count}} artículos",
+      },
+      total: "Total: ${{amount}}",
+      checkout: "Pagar",
+    },
+    product: {
+      addToCart: "Añadir al Carrito",
+      price: "${{amount}}",
+    },
+  },
+};
+
+function ShoppingCart({ items }) {
+  const { t, tn } = useLang();
+  const total = items.reduce((sum, item) => sum + item.price, 0);
+
+  if (items.length === 0) {
+    return (
+      <View style={{ padding: 20, alignItems: "center" }}>
+        <AppText.H3>{t("cart.empty")}</AppText.H3>
+      </View>
+    );
+  }
+
+  return (
+    <View style={{ flex: 1 }}>
+      <AppText.H2 style={{ padding: 16 }}>{t("cart.title")}</AppText.H2>
+
+      <AppText variant="subtitle1" style={{ paddingHorizontal: 16 }}>
+        {tn("cart.items", items.length)}
+      </AppText>
+
+      <FlatList
+        data={items}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={{ padding: 16, borderBottomWidth: 1 }}>
+            <AppText.Body>{item.name}</AppText.Body>
+            <AppText color="primary">
+              {t("product.price", { amount: item.price.toFixed(2) })}
+            </AppText>
+          </View>
+        )}
+      />
+
+      <View style={{ padding: 16, borderTopWidth: 2 }}>
+        <AppText.H4>{t("cart.total", { amount: total.toFixed(2) })}</AppText.H4>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#3b82f6",
+            padding: 16,
+            borderRadius: 8,
+            marginTop: 12,
+          }}
+        >
+          <AppText style={{ color: "white", textAlign: "center" }} weight="600">
+            {t("cart.checkout")}
+          </AppText>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
+function LanguageSwitcher() {
+  const { language, changeLanguage } = useLang();
+
+  return (
+    <View style={{ flexDirection: "row", padding: 16, gap: 12 }}>
+      {["en", "es", "ar"].map((lang) => (
+        <TouchableOpacity
+          key={lang}
+          onPress={() => changeLanguage(lang)}
+          style={{
+            paddingHorizontal: 16,
+            paddingVertical: 8,
+            borderRadius: 8,
+            backgroundColor: language === lang ? "#3b82f6" : "#e5e7eb",
+          }}
+        >
+          <AppText color={language === lang ? "white" : "text"} weight="600">
+            {lang.toUpperCase()}
+          </AppText>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+}
+
+export default function App() {
+  return (
+    <LocaleProvider translations={translations} defaultLanguage="en">
+      <View style={{ flex: 1 }}>
+        <LanguageSwitcher />
+        <ShoppingCart items={[]} />
+      </View>
+    </LocaleProvider>
+  );
+}
+```
+
 ## 🌍 Automatic Script Detection in Action
 
 ### How It Works
@@ -164,7 +661,7 @@ function InternationalApp() {
       <AppText>こんにちは、私たちのアプリへようこそ。</AppText>
 
       {/* Hindi - Auto-detected, complex script handling */}
-      <AppText>हमारे ऐप में आपका स्वागत है।AppText>
+      <AppText>हमारे ऐप में आपका स्वागत है।</AppText>
 
       {/* Mixed content - Smart handling */}
       <AppText>
@@ -430,74 +927,6 @@ function ResponsiveComponent() {
   );
 }
 ```
-
-<!-- ## 🔧 Advanced Features -->
-
-<!-- ### Performance Monitoring
-
-```tsx
-import { usePerformanceMonitor } from "react-native-apptext";
-
-function OptimizedComponent() {
-  const { startMeasure, endMeasure, measureAsync, getMetrics } =
-    usePerformanceMonitor("ProductCard");
-
-  useEffect(() => {
-    const mountId = startMeasure("mount");
-    // Component setup...
-    endMeasure(mountId);
-  }, []);
-
-  const handlePress = measureAsync("product-press", async () => {
-    // Track async operations
-    await fetchProductDetails();
-  });
-
-  const handleRender = useCallback(() => {
-    const renderId = startMeasure("render");
-    // Render logic...
-    endMeasure(renderId);
-  }, []);
-
-  return (
-    <AppText onPress={handlePress}>Performance tracked interaction</AppText>
-  );
-}
-``` -->
-
-<!-- ### Error Boundaries
-
-```tsx
-import { ErrorBoundary, useErrorBoundary } from "react-native-apptext";
-
-// Component-level boundary
-<ErrorBoundary
-  fallback={(error, errorInfo, retry) => (
-    <View style={styles.errorContainer}>
-      <AppText.H3 color="error">Something went wrong</AppText.H3>
-      <AppText>{error.message}</AppText>
-      <Button onPress={retry} title="Try Again" />
-    </View>
-  )}
-  onError={(error, errorInfo) => {
-    // Log to your error reporting service
-    console.error("AppText Error:", error, errorInfo);
-  }}
->
-  <UnstableComponent />
-</ErrorBoundary>;
-
-// Hook-based boundary
-function SafeComponent() {
-  const { ErrorBoundary: HookBoundary, triggerError } = useErrorBoundary();
-
-  return (
-    <HookBoundary>
-      <ComponentThatMightThrow />
-    </HookBoundary>
-  );
-}
-``` -->
 
 ## 📚 Complete API Reference
 
