@@ -22,6 +22,9 @@ export {
   interpolate,
   getPluralForm,
   PLURAL_RULES,
+  Translations,
+  PluralTranslation,
+  TranslationValue,
 } from "./LangCore";
 
 // Type exports for TypeScript users
@@ -32,6 +35,5 @@ export type {
   SpacingProps,
   LocaleContextValue,
   LocaleProviderProps,
-  Translations,
   PluralForm,
 } from "./types";

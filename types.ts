@@ -168,12 +168,13 @@ export interface PluralTranslation {
 
 type TranslationValue = string | PluralTranslation;
 
-export interface Translations {
+interface Translations {
   [key: string]: TranslationValue | { [nestedKey: string]: TranslationValue };
 }
 
 export interface LocaleContextValue {
   language: string;
+  direction: "rtl" | "ltr" | string;
   t: (key: string, params?: Record<string, any>) => string;
   tn: (key: string, count: number, params?: Record<string, any>) => string;
   changeLanguage: (lang: string) => void;

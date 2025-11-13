@@ -16,15 +16,17 @@ import { LocaleContext, LocaleProviderProps, PluralForm } from "./types";
  * → "Hello John"
  */
 function interpolate(text: string, params: Record<string, any> = {}): string {
-  // Regular expression to find {{variable}} patterns
   return text.replace(/\{\{([^}]+)\}\}/g, (match, key) => {
     const trimmedKey = key.trim();
-
-    // Handle nested objects like {{user.name}}
     const value = getNestedValue(params, trimmedKey);
 
-    // If value exists, use it; otherwise keep the placeholder
-    return value !== undefined ? String(value) : match;
+    // FIX: Handle null, undefined, objects properly
+    if (value === null || value === undefined) return match;
+    if (typeof value === "object") {
+      console.warn(`Cannot interpolate object for key: ${trimmedKey}`);
+      return match;
+    }
+    return String(value);
   });
 }
 
@@ -74,21 +76,33 @@ const PLURAL_RULES: Record<string, (count: number) => PluralForm> = {
   // Chinese/Japanese: No plurals
   zh: () => "other",
   ja: () => "other",
+  es: (n) => (n === 1 ? "one" : "other"),
+  de: (n) => (n === 1 ? "one" : "other"),
+  pl: (n) => {
+    const mod10 = n % 10;
+    const mod100 = n % 100;
+    if (n === 1) return "one";
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "few";
+    return "many";
+  },
 };
 
 /**
  * Get the correct plural form for a language and count
  */
-function getPluralForm(language: string, count: number): PluralForm {
-  if (typeof count !== "number" || !isFinite(count)) {
-    console.warn(`Invalid count for plural: ${count}, using 0`);
-    count = 0;
-  }
 
-  const langCode = language?.split("-")[0] || "en";
-  const rule = PLURAL_RULES[langCode] || PLURAL_RULES.en;
-  return rule(Math.abs(Math.floor(count))); // Use absolute integer
-}
+const getPluralForm = useMemo(() => {
+  return (language: string, count: number): PluralForm => {
+    if (typeof count !== "number" || !isFinite(count)) {
+      console.warn(`Invalid count for plural: ${count}, using 0`);
+      count = 0;
+    }
+
+    const langCode = language?.split("-")[0] || "en";
+    const rule = PLURAL_RULES[langCode] || PLURAL_RULES.en;
+    return rule(Math.abs(Math.floor(count))); // Use absolute integer
+  };
+}, []);
 
 type DeepKeyOf<T> = T extends object
   ? {
@@ -113,7 +127,7 @@ interface TypedTranslationManager<T extends Translations> {
  * Translation object structure
  * Can be a simple string or an object with plural forms
  */
-interface PluralTranslation {
+export interface PluralTranslation {
   zero?: string;
   one?: string;
   two?: string;
@@ -122,9 +136,9 @@ interface PluralTranslation {
   other: string; // Required fallback
 }
 
-type TranslationValue = string | PluralTranslation;
+export type TranslationValue = string | PluralTranslation;
 
-interface Translations {
+export interface Translations {
   [key: string]: TranslationValue | { [nestedKey: string]: TranslationValue };
 }
 
@@ -199,6 +213,12 @@ class TranslationManager {
   ): string {
     const translation = this.getTranslationValue(lang, key);
 
+    // Handle string translations gracefully
+    if (typeof translation === "string") {
+      const allParams = { ...params, count };
+      return interpolate(translation, allParams);
+    }
+
     if (
       !translation ||
       typeof translation !== "object" ||
@@ -237,6 +257,11 @@ class TranslationManager {
       value = langTranslations ? getNestedValue(langTranslations, key) : null;
     }
 
+    // Warning when translation is missing
+    if (!value && this.shouldWarnMissing) {
+      console.warn(`Missing translation for key: ${key} in language: ${lang}`);
+    }
+
     return value;
   }
 
@@ -258,6 +283,13 @@ export function LocaleProvider({
   onMissingTranslation?: (lang: string, key: string) => void;
 }) {
   const [language, setLanguage] = useState(defaultLanguage);
+
+  const RTL_LANGUAGES = ["ar", "he", "fa", "ur"];
+
+  const direction: "rtl" | "ltr" = useMemo(() => {
+    const langCode = language.split("-")[0];
+    return RTL_LANGUAGES.includes(langCode) ? "rtl" : "ltr";
+  }, [language]);
 
   // Create translation manager (only once)
   const manager = useMemo(() => {
@@ -289,6 +321,7 @@ export function LocaleProvider({
 
   const changeLanguage = useCallback((lang: string) => {
     setLanguage(lang);
+    manager.clearCache();
   }, []);
 
   const value = useMemo(
@@ -296,6 +329,7 @@ export function LocaleProvider({
       language,
       t,
       tn,
+      direction,
       changeLanguage,
     }),
     [language, t, tn, changeLanguage]
@@ -327,7 +361,10 @@ export function LocaleProvider({
 export function useLang() {
   const context = useContext(LocaleContext);
   if (!context) {
-    throw new Error("useLang must be used within LocaleProvider");
+    throw new Error(
+      "useLang must be used within LocaleProvider. " +
+        "Wrap your app with <LocaleProvider> component."
+    );
   }
   return context;
 }
