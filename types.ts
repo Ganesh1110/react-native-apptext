@@ -1,3 +1,4 @@
+import React, { createContext } from "react";
 import { TextProps, TextStyle, StyleProp } from "react-native";
 
 export type ScriptCode =
@@ -155,3 +156,39 @@ export interface AppTextProps extends Omit<TextProps, "style">, SpacingProps {
   hyphenationFrequency?: "none" | "normal" | "full";
   textBreakStrategy?: "simple" | "highQuality" | "balanced";
 }
+
+export interface PluralTranslation {
+  zero?: string;
+  one?: string;
+  two?: string;
+  few?: string;
+  many?: string;
+  other: string; // Required fallback
+}
+
+type TranslationValue = string | PluralTranslation;
+
+export interface Translations {
+  [key: string]: TranslationValue | { [nestedKey: string]: TranslationValue };
+}
+
+export interface LocaleContextValue {
+  language: string;
+  t: (key: string, params?: Record<string, any>) => string;
+  tn: (key: string, count: number, params?: Record<string, any>) => string;
+  changeLanguage: (lang: string) => void;
+}
+
+export const LocaleContext = createContext<LocaleContextValue | null>(null);
+
+export interface LocaleProviderProps {
+  translations: Record<string, Translations>;
+  defaultLanguage: string;
+  children: React.ReactNode;
+}
+
+/**
+ * Plural form selector based on count and language
+ * Different languages have different plural rules
+ */
+export type PluralForm = "zero" | "one" | "two" | "few" | "many" | "other";

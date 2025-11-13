@@ -14,10 +14,24 @@ export { DEFAULT_THEME } from "./theme";
 // Scripts
 export { SCRIPT_CONFIGS } from "./scriptConfigs";
 
+// Lang functionality
+export {
+  LocaleProvider,
+  useLang,
+  TranslationManager,
+  interpolate,
+  getPluralForm,
+  PLURAL_RULES,
+} from "./LangCore";
+
 // Type exports for TypeScript users
 export type {
   AppTextProps,
   AppTextTheme,
   TypographyVariant,
   SpacingProps,
+  LocaleContextValue,
+  LocaleProviderProps,
+  Translations,
+  PluralForm,
 } from "./types";
