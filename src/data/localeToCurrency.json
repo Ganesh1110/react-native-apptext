@@ -3,14 +3,26 @@
     "name": "Syria",
     "cca3": "SYR",
     "flag": "🇸🇾",
-    "currencies": { "SYP": { "name": "Syrian pound", "symbol": "£" } },
-    "languages": { "ara": "Arabic" }
+    "currencies": {
+      "SYP": {
+        "name": "Syrian pound",
+        "symbol": "£"
+      }
+    },
+    "languages": {
+      "ara": "Arabic"
+    }
   },
   {
     "name": "New Zealand",
     "cca3": "NZL",
     "flag": "🇳🇿",
-    "currencies": { "NZD": { "name": "New Zealand dollar", "symbol": "$" } },
+    "currencies": {
+      "NZD": {
+        "name": "New Zealand dollar",
+        "symbol": "$"
+      }
+    },
     "languages": {
       "eng": "English",
       "mri": "Māori",
@@ -22,150 +34,275 @@
     "cca3": "BRN",
     "flag": "🇧🇳",
     "currencies": {
-      "BND": { "name": "Brunei dollar", "symbol": "$" },
-      "SGD": { "name": "Singapore dollar", "symbol": "$" }
+      "BND": {
+        "name": "Brunei dollar",
+        "symbol": "$"
+      },
+      "SGD": {
+        "name": "Singapore dollar",
+        "symbol": "$"
+      }
     },
-    "languages": { "msa": "Malay" }
+    "languages": {
+      "msa": "Malay"
+    }
   },
   {
     "name": "British Indian Ocean Territory",
     "cca3": "IOT",
     "flag": "🇮🇴",
-    "currencies": { "USD": { "name": "United States dollar", "symbol": "$" } },
-    "languages": { "eng": "English" }
+    "currencies": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    },
+    "languages": {
+      "eng": "English"
+    }
   },
   {
     "name": "Kenya",
     "cca3": "KEN",
     "flag": "🇰🇪",
-    "currencies": { "KES": { "name": "Kenyan shilling", "symbol": "Sh" } },
-    "languages": { "eng": "English", "swa": "Swahili" }
+    "currencies": {
+      "KES": {
+        "name": "Kenyan shilling",
+        "symbol": "Sh"
+      }
+    },
+    "languages": {
+      "eng": "English",
+      "swa": "Swahili"
+    }
   },
   {
     "name": "Palau",
     "cca3": "PLW",
     "flag": "🇵🇼",
-    "currencies": { "USD": { "name": "United States dollar", "symbol": "$" } },
-    "languages": { "eng": "English", "pau": "Palauan" }
+    "currencies": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    },
+    "languages": {
+      "eng": "English",
+      "pau": "Palauan"
+    }
   },
   {
     "name": "Oman",
     "cca3": "OMN",
     "flag": "🇴🇲",
-    "currencies": { "OMR": { "name": "Omani rial", "symbol": "ر.ع." } },
-    "languages": { "ara": "Arabic" }
+    "currencies": {
+      "OMR": {
+        "name": "Omani rial",
+        "symbol": "ر.ع."
+      }
+    },
+    "languages": {
+      "ara": "Arabic"
+    }
   },
   {
     "name": "Mexico",
     "cca3": "MEX",
     "flag": "🇲🇽",
-    "currencies": { "MXN": { "name": "Mexican peso", "symbol": "$" } },
-    "languages": { "spa": "Spanish" }
+    "currencies": {
+      "MXN": {
+        "name": "Mexican peso",
+        "symbol": "$"
+      }
+    },
+    "languages": {
+      "spa": "Spanish"
+    }
   },
   {
     "name": "Palestine",
     "cca3": "PSE",
     "flag": "🇵🇸",
     "currencies": {
-      "EGP": { "name": "Egyptian pound", "symbol": "E£" },
-      "ILS": { "name": "Israeli new shekel", "symbol": "₪" },
-      "JOD": { "name": "Jordanian dinar", "symbol": "JD" }
+      "EGP": {
+        "name": "Egyptian pound",
+        "symbol": "E£"
+      },
+      "ILS": {
+        "name": "Israeli new shekel",
+        "symbol": "₪"
+      },
+      "JOD": {
+        "name": "Jordanian dinar",
+        "symbol": "JD"
+      }
     },
-    "languages": { "ara": "Arabic" }
+    "languages": {
+      "ara": "Arabic"
+    }
   },
   {
     "name": "Turks and Caicos Islands",
     "cca3": "TCA",
     "flag": "🇹🇨",
-    "currencies": { "USD": { "name": "United States dollar", "symbol": "$" } },
-    "languages": { "eng": "English" }
+    "currencies": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    },
+    "languages": {
+      "eng": "English"
+    }
   },
   {
     "name": "Central African Republic",
     "cca3": "CAF",
     "flag": "🇨🇫",
     "currencies": {
-      "XAF": { "name": "Central African CFA franc", "symbol": "Fr" }
+      "XAF": {
+        "name": "Central African CFA franc",
+        "symbol": "Fr"
+      }
     },
-    "languages": { "fra": "French", "sag": "Sango" }
+    "languages": {
+      "fra": "French",
+      "sag": "Sango"
+    }
   },
   {
     "name": "Saint Kitts and Nevis",
     "cca3": "KNA",
     "flag": "🇰🇳",
     "currencies": {
-      "XCD": { "name": "Eastern Caribbean dollar", "symbol": "$" }
+      "XCD": {
+        "name": "Eastern Caribbean dollar",
+        "symbol": "$"
+      }
     },
-    "languages": { "eng": "English" }
+    "languages": {
+      "eng": "English"
+    }
   },
   {
     "name": "South Sudan",
     "cca3": "SSD",
     "flag": "🇸🇸",
-    "currencies": { "SSP": { "name": "South Sudanese pound", "symbol": "£" } },
-    "languages": { "eng": "English" }
+    "currencies": {
+      "SSP": {
+        "name": "South Sudanese pound",
+        "symbol": "£"
+      }
+    },
+    "languages": {
+      "eng": "English"
+    }
   },
   {
     "name": "Ukraine",
     "cca3": "UKR",
     "flag": "🇺🇦",
-    "currencies": { "UAH": { "name": "Ukrainian hryvnia", "symbol": "₴" } },
-    "languages": { "ukr": "Ukrainian" }
+    "currencies": {
+      "UAH": {
+        "name": "Ukrainian hryvnia",
+        "symbol": "₴"
+      }
+    },
+    "languages": {
+      "ukr": "Ukrainian"
+    }
   },
   {
     "name": "Saint Barthélemy",
     "cca3": "BLM",
     "flag": "🇧🇱",
-    "currencies": { "EUR": { "name": "Euro", "symbol": "€" } },
-    "languages": { "fra": "French" }
+    "currencies": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    },
+    "languages": {
+      "fra": "French"
+    }
   },
   {
     "name": "Netherlands",
     "cca3": "NLD",
     "flag": "🇳🇱",
-    "currencies": { "EUR": { "name": "Euro", "symbol": "€" } },
-    "languages": { "nld": "Dutch" }
+    "currencies": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    },
+    "languages": {
+      "nld": "Dutch"
+    }
   },
   {
     "name": "Tanzania",
     "cca3": "TZA",
     "flag": "🇹🇿",
-    "currencies": { "TZS": { "name": "Tanzanian shilling", "symbol": "Sh" } },
-    "languages": { "eng": "English", "swa": "Swahili" }
+    "currencies": {
+      "TZS": {
+        "name": "Tanzanian shilling",
+        "symbol": "Sh"
+      }
+    },
+    "languages": {
+      "eng": "English",
+      "swa": "Swahili"
+    }
   },
   {
     "name": "Czechia",
     "cca3": "CZE",
     "flag": "🇨🇿",
-    "currencies": { "CZK": { "name": "Czech koruna", "symbol": "Kč" } },
-    "languages": { "ces": "Czech", "slk": "Slovak" }
+    "currencies": {
+      "CZK": {
+        "name": "Czech koruna",
+        "symbol": "Kč"
+      }
+    },
+    "languages": {
+      "ces": "Czech",
+      "slk": "Slovak"
+    }
   },
   {
     "name": "Belarus",
     "cca3": "BLR",
     "flag": "🇧🇾",
-    "currencies": { "BYN": { "name": "Belarusian ruble", "symbol": "Br" } },
-    "languages": { "bel": "Belarusian", "rus": "Russian" }
+    "currencies": {
+      "BYN": {
+        "name": "Belarusian ruble",
+        "symbol": "Br"
+      }
+    },
+    "languages": {
+      "bel": "Belarusian",
+      "rus": "Russian"
+    }
   },
   {
     "name": "Yemen",
     "cca3": "YEM",
     "flag": "🇾🇪",
-    "currencies": { "YER": { "name": "Yemeni rial", "symbol": "﷼" } },
-    "languages": { "ara": "Arabic" }
-  },
-  {
-    "name": {
-      "common": "Slovenia",
-      "official": "Republic of Slovenia",
-      "nativeName": {
-        "slv": {
-          "official": "Republika Slovenija",
-          "common": "Slovenija"
-        }
+    "currencies": {
+      "YER": {
+        "name": "Yemeni rial",
+        "symbol": "﷼"
       }
     },
+    "languages": {
+      "ara": "Arabic"
+    }
+  },
+  {
+    "name": "Slovenia",
     "cca3": "SVN",
+    "flag": "🇸🇮",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -174,29 +311,12 @@
     },
     "languages": {
       "slv": "Slovene"
-    },
-    "flag": "🇸🇮"
+    }
   },
   {
-    "name": {
-      "common": "Tokelau",
-      "official": "Tokelau",
-      "nativeName": {
-        "eng": {
-          "official": "Tokelau",
-          "common": "Tokelau"
-        },
-        "smo": {
-          "official": "Tokelau",
-          "common": "Tokelau"
-        },
-        "tkl": {
-          "official": "Tokelau",
-          "common": "Tokelau"
-        }
-      }
-    },
+    "name": "Tokelau",
     "cca3": "TKL",
+    "flag": "🇹🇰",
     "currencies": {
       "NZD": {
         "name": "New Zealand dollar",
@@ -207,21 +327,12 @@
       "eng": "English",
       "smo": "Samoan",
       "tkl": "Tokelauan"
-    },
-    "flag": "🇹🇰"
+    }
   },
   {
-    "name": {
-      "common": "Nigeria",
-      "official": "Federal Republic of Nigeria",
-      "nativeName": {
-        "eng": {
-          "official": "Federal Republic of Nigeria",
-          "common": "Nigeria"
-        }
-      }
-    },
+    "name": "Nigeria",
     "cca3": "NGA",
+    "flag": "🇳🇬",
     "currencies": {
       "NGN": {
         "name": "Nigerian naira",
@@ -230,21 +341,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇳🇬"
+    }
   },
   {
-    "name": {
-      "common": "Réunion",
-      "official": "Réunion Island",
-      "nativeName": {
-        "fra": {
-          "official": "Ile de la Réunion",
-          "common": "La Réunion"
-        }
-      }
-    },
+    "name": "Réunion",
     "cca3": "REU",
+    "flag": "🇷🇪",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -253,21 +355,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇷🇪"
+    }
   },
   {
-    "name": {
-      "common": "Guadeloupe",
-      "official": "Guadeloupe",
-      "nativeName": {
-        "fra": {
-          "official": "Guadeloupe",
-          "common": "Guadeloupe"
-        }
-      }
-    },
+    "name": "Guadeloupe",
     "cca3": "GLP",
+    "flag": "🇬🇵",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -276,21 +369,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇬🇵"
+    }
   },
   {
-    "name": {
-      "common": "Hungary",
-      "official": "Hungary",
-      "nativeName": {
-        "hun": {
-          "official": "Magyarország",
-          "common": "Magyarország"
-        }
-      }
-    },
+    "name": "Hungary",
     "cca3": "HUN",
+    "flag": "🇭🇺",
     "currencies": {
       "HUF": {
         "name": "Hungarian forint",
@@ -299,43 +383,21 @@
     },
     "languages": {
       "hun": "Hungarian"
-    },
-    "flag": "🇭🇺"
+    }
   },
   {
-    "name": {
-      "common": "Heard Island and McDonald Islands",
-      "official": "Heard Island and McDonald Islands",
-      "nativeName": {
-        "eng": {
-          "official": "Heard Island and McDonald Islands",
-          "common": "Heard Island and McDonald Islands"
-        }
-      }
-    },
+    "name": "Heard Island and McDonald Islands",
     "cca3": "HMD",
+    "flag": "🇭🇲",
     "currencies": {},
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇭🇲"
+    }
   },
   {
-    "name": {
-      "common": "Eswatini",
-      "official": "Kingdom of Eswatini",
-      "nativeName": {
-        "eng": {
-          "official": "Kingdom of Eswatini",
-          "common": "Eswatini"
-        },
-        "ssw": {
-          "official": "Umbuso weSwatini",
-          "common": "eSwatini"
-        }
-      }
-    },
+    "name": "Eswatini",
     "cca3": "SWZ",
+    "flag": "🇸🇿",
     "currencies": {
       "SZL": {
         "name": "Swazi lilangeni",
@@ -349,29 +411,12 @@
     "languages": {
       "eng": "English",
       "ssw": "Swazi"
-    },
-    "flag": "🇸🇿"
+    }
   },
   {
-    "name": {
-      "common": "Comoros",
-      "official": "Union of the Comoros",
-      "nativeName": {
-        "ara": {
-          "official": "الاتحاد القمري",
-          "common": "القمر‎"
-        },
-        "fra": {
-          "official": "Union des Comores",
-          "common": "Comores"
-        },
-        "zdj": {
-          "official": "Udzima wa Komori",
-          "common": "Komori"
-        }
-      }
-    },
+    "name": "Comoros",
     "cca3": "COM",
+    "flag": "🇰🇲",
     "currencies": {
       "KMF": {
         "name": "Comorian franc",
@@ -382,29 +427,12 @@
       "ara": "Arabic",
       "fra": "French",
       "zdj": "Comorian"
-    },
-    "flag": "🇰🇲"
+    }
   },
   {
-    "name": {
-      "common": "India",
-      "official": "Republic of India",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of India",
-          "common": "India"
-        },
-        "hin": {
-          "official": "भारत गणराज्य",
-          "common": "भारत"
-        },
-        "tam": {
-          "official": "இந்தியக் குடியரசு",
-          "common": "இந்தியா"
-        }
-      }
-    },
+    "name": "India",
     "cca3": "IND",
+    "flag": "🇮🇳",
     "currencies": {
       "INR": {
         "name": "Indian rupee",
@@ -415,21 +443,12 @@
       "eng": "English",
       "hin": "Hindi",
       "tam": "Tamil"
-    },
-    "flag": "🇮🇳"
+    }
   },
   {
-    "name": {
-      "common": "Cocos (Keeling) Islands",
-      "official": "Territory of the Cocos (Keeling) Islands",
-      "nativeName": {
-        "eng": {
-          "official": "Territory of the Cocos (Keeling) Islands",
-          "common": "Cocos (Keeling) Islands"
-        }
-      }
-    },
+    "name": "Cocos (Keeling) Islands",
     "cca3": "CCK",
+    "flag": "🇨🇨",
     "currencies": {
       "AUD": {
         "name": "Australian dollar",
@@ -438,21 +457,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇨🇨"
+    }
   },
   {
-    "name": {
-      "common": "United Kingdom",
-      "official": "United Kingdom of Great Britain and Northern Ireland",
-      "nativeName": {
-        "eng": {
-          "official": "United Kingdom of Great Britain and Northern Ireland",
-          "common": "United Kingdom"
-        }
-      }
-    },
+    "name": "United Kingdom",
     "cca3": "GBR",
+    "flag": "🇬🇧",
     "currencies": {
       "GBP": {
         "name": "British pound",
@@ -461,21 +471,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇬🇧"
+    }
   },
   {
-    "name": {
-      "common": "Angola",
-      "official": "Republic of Angola",
-      "nativeName": {
-        "por": {
-          "official": "República de Angola",
-          "common": "Angola"
-        }
-      }
-    },
+    "name": "Angola",
     "cca3": "AGO",
+    "flag": "🇦🇴",
     "currencies": {
       "AOA": {
         "name": "Angolan kwanza",
@@ -484,25 +485,12 @@
     },
     "languages": {
       "por": "Portuguese"
-    },
-    "flag": "🇦🇴"
+    }
   },
   {
-    "name": {
-      "common": "Macau",
-      "official": "Macao Special Administrative Region of the People's Republic of China",
-      "nativeName": {
-        "por": {
-          "official": "Região Administrativa Especial de Macau da República Popular da China",
-          "common": "Macau"
-        },
-        "zho": {
-          "official": "中华人民共和国澳门特别行政区",
-          "common": "澳门"
-        }
-      }
-    },
+    "name": "Macau",
     "cca3": "MAC",
+    "flag": "🇲🇴",
     "currencies": {
       "MOP": {
         "name": "Macanese pataca",
@@ -512,21 +500,12 @@
     "languages": {
       "por": "Portuguese",
       "zho": "Chinese"
-    },
-    "flag": "🇲🇴"
+    }
   },
   {
-    "name": {
-      "common": "Costa Rica",
-      "official": "Republic of Costa Rica",
-      "nativeName": {
-        "spa": {
-          "official": "República de Costa Rica",
-          "common": "Costa Rica"
-        }
-      }
-    },
+    "name": "Costa Rica",
     "cca3": "CRI",
+    "flag": "🇨🇷",
     "currencies": {
       "CRC": {
         "name": "Costa Rican colón",
@@ -535,25 +514,12 @@
     },
     "languages": {
       "spa": "Spanish"
-    },
-    "flag": "🇨🇷"
+    }
   },
   {
-    "name": {
-      "common": "Niue",
-      "official": "Niue",
-      "nativeName": {
-        "eng": {
-          "official": "Niue",
-          "common": "Niue"
-        },
-        "niu": {
-          "official": "Niuē",
-          "common": "Niuē"
-        }
-      }
-    },
+    "name": "Niue",
     "cca3": "NIU",
+    "flag": "🇳🇺",
     "currencies": {
       "NZD": {
         "name": "New Zealand dollar",
@@ -563,25 +529,12 @@
     "languages": {
       "eng": "English",
       "niu": "Niuean"
-    },
-    "flag": "🇳🇺"
+    }
   },
   {
-    "name": {
-      "common": "Cook Islands",
-      "official": "Cook Islands",
-      "nativeName": {
-        "eng": {
-          "official": "Cook Islands",
-          "common": "Cook Islands"
-        },
-        "rar": {
-          "official": "Kūki 'Āirani",
-          "common": "Kūki 'Āirani"
-        }
-      }
-    },
+    "name": "Cook Islands",
     "cca3": "COK",
+    "flag": "🇨🇰",
     "currencies": {
       "CKD": {
         "name": "Cook Islands dollar",
@@ -595,25 +548,12 @@
     "languages": {
       "eng": "English",
       "rar": "Cook Islands Māori"
-    },
-    "flag": "🇨🇰"
+    }
   },
   {
-    "name": {
-      "common": "Djibouti",
-      "official": "Republic of Djibouti",
-      "nativeName": {
-        "ara": {
-          "official": "جمهورية جيبوتي",
-          "common": "جيبوتي‎"
-        },
-        "fra": {
-          "official": "République de Djibouti",
-          "common": "Djibouti"
-        }
-      }
-    },
+    "name": "Djibouti",
     "cca3": "DJI",
+    "flag": "🇩🇯",
     "currencies": {
       "DJF": {
         "name": "Djiboutian franc",
@@ -623,21 +563,12 @@
     "languages": {
       "ara": "Arabic",
       "fra": "French"
-    },
-    "flag": "🇩🇯"
+    }
   },
   {
-    "name": {
-      "common": "Saint Pierre and Miquelon",
-      "official": "Saint Pierre and Miquelon",
-      "nativeName": {
-        "fra": {
-          "official": "Collectivité territoriale de Saint-Pierre-et-Miquelon",
-          "common": "Saint-Pierre-et-Miquelon"
-        }
-      }
-    },
+    "name": "Saint Pierre and Miquelon",
     "cca3": "SPM",
+    "flag": "🇵🇲",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -646,21 +577,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇵🇲"
+    }
   },
   {
-    "name": {
-      "common": "Austria",
-      "official": "Republic of Austria",
-      "nativeName": {
-        "bar": {
-          "official": "Republik Österreich",
-          "common": "Österreich"
-        }
-      }
-    },
+    "name": "Austria",
     "cca3": "AUT",
+    "flag": "🇦🇹",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -669,21 +591,12 @@
     },
     "languages": {
       "deu": "German"
-    },
-    "flag": "🇦🇹"
+    }
   },
   {
-    "name": {
-      "common": "Indonesia",
-      "official": "Republic of Indonesia",
-      "nativeName": {
-        "ind": {
-          "official": "Republik Indonesia",
-          "common": "Indonesia"
-        }
-      }
-    },
+    "name": "Indonesia",
     "cca3": "IDN",
+    "flag": "🇮🇩",
     "currencies": {
       "IDR": {
         "name": "Indonesian rupiah",
@@ -692,25 +605,12 @@
     },
     "languages": {
       "ind": "Indonesian"
-    },
-    "flag": "🇮🇩"
+    }
   },
   {
-    "name": {
-      "common": "Nauru",
-      "official": "Republic of Nauru",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of Nauru",
-          "common": "Nauru"
-        },
-        "nau": {
-          "official": "Republic of Nauru",
-          "common": "Nauru"
-        }
-      }
-    },
+    "name": "Nauru",
     "cca3": "NRU",
+    "flag": "🇳🇷",
     "currencies": {
       "AUD": {
         "name": "Australian dollar",
@@ -720,25 +620,12 @@
     "languages": {
       "eng": "English",
       "nau": "Nauru"
-    },
-    "flag": "🇳🇷"
+    }
   },
   {
-    "name": {
-      "common": "Kazakhstan",
-      "official": "Republic of Kazakhstan",
-      "nativeName": {
-        "kaz": {
-          "official": "Қазақстан Республикасы",
-          "common": "Қазақстан"
-        },
-        "rus": {
-          "official": "Республика Казахстан",
-          "common": "Казахстан"
-        }
-      }
-    },
+    "name": "Kazakhstan",
     "cca3": "KAZ",
+    "flag": "🇰🇿",
     "currencies": {
       "KZT": {
         "name": "Kazakhstani tenge",
@@ -748,25 +635,12 @@
     "languages": {
       "kaz": "Kazakh",
       "rus": "Russian"
-    },
-    "flag": "🇰🇿"
+    }
   },
   {
-    "name": {
-      "common": "Malawi",
-      "official": "Republic of Malawi",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of Malawi",
-          "common": "Malawi"
-        },
-        "nya": {
-          "official": "Chalo cha Malawi, Dziko la Malaŵi",
-          "common": "Malaŵi"
-        }
-      }
-    },
+    "name": "Malawi",
     "cca3": "MWI",
+    "flag": "🇲🇼",
     "currencies": {
       "MWK": {
         "name": "Malawian kwacha",
@@ -776,29 +650,12 @@
     "languages": {
       "eng": "English",
       "nya": "Chewa"
-    },
-    "flag": "🇲🇼"
+    }
   },
   {
-    "name": {
-      "common": "Eritrea",
-      "official": "State of Eritrea",
-      "nativeName": {
-        "ara": {
-          "official": "دولة إرتريا",
-          "common": "إرتريا‎"
-        },
-        "eng": {
-          "official": "State of Eritrea",
-          "common": "Eritrea"
-        },
-        "tir": {
-          "official": "ሃገረ ኤርትራ",
-          "common": "ኤርትራ"
-        }
-      }
-    },
+    "name": "Eritrea",
     "cca3": "ERI",
+    "flag": "🇪🇷",
     "currencies": {
       "ERN": {
         "name": "Eritrean nakfa",
@@ -809,21 +666,12 @@
       "ara": "Arabic",
       "eng": "English",
       "tir": "Tigrinya"
-    },
-    "flag": "🇪🇷"
+    }
   },
   {
-    "name": {
-      "common": "Tunisia",
-      "official": "Tunisian Republic",
-      "nativeName": {
-        "ara": {
-          "official": "الجمهورية التونسية",
-          "common": "تونس"
-        }
-      }
-    },
+    "name": "Tunisia",
     "cca3": "TUN",
+    "flag": "🇹🇳",
     "currencies": {
       "TND": {
         "name": "Tunisian dinar",
@@ -832,21 +680,12 @@
     },
     "languages": {
       "ara": "Arabic"
-    },
-    "flag": "🇹🇳"
+    }
   },
   {
-    "name": {
-      "common": "Pitcairn Islands",
-      "official": "Pitcairn Group of Islands",
-      "nativeName": {
-        "eng": {
-          "official": "Pitcairn Group of Islands",
-          "common": "Pitcairn Islands"
-        }
-      }
-    },
+    "name": "Pitcairn Islands",
     "cca3": "PCN",
+    "flag": "🇵🇳",
     "currencies": {
       "NZD": {
         "name": "New Zealand dollar",
@@ -855,21 +694,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇵🇳"
+    }
   },
   {
-    "name": {
-      "common": "Saudi Arabia",
-      "official": "Kingdom of Saudi Arabia",
-      "nativeName": {
-        "ara": {
-          "official": "المملكة العربية السعودية",
-          "common": "العربية السعودية"
-        }
-      }
-    },
+    "name": "Saudi Arabia",
     "cca3": "SAU",
+    "flag": "🇸🇦",
     "currencies": {
       "SAR": {
         "name": "Saudi riyal",
@@ -878,25 +708,12 @@
     },
     "languages": {
       "ara": "Arabic"
-    },
-    "flag": "🇸🇦"
+    }
   },
   {
-    "name": {
-      "common": "Turkmenistan",
-      "official": "Turkmenistan",
-      "nativeName": {
-        "rus": {
-          "official": "Туркменистан",
-          "common": "Туркмения"
-        },
-        "tuk": {
-          "official": "Türkmenistan",
-          "common": "Türkmenistan"
-        }
-      }
-    },
+    "name": "Turkmenistan",
     "cca3": "TKM",
+    "flag": "🇹🇲",
     "currencies": {
       "TMT": {
         "name": "Turkmenistan manat",
@@ -906,29 +723,12 @@
     "languages": {
       "rus": "Russian",
       "tuk": "Turkmen"
-    },
-    "flag": "🇹🇲"
+    }
   },
   {
-    "name": {
-      "common": "Western Sahara",
-      "official": "Sahrawi Arab Democratic Republic",
-      "nativeName": {
-        "ber": {
-          "official": "Sahrawi Arab Democratic Republic",
-          "common": "Western Sahara"
-        },
-        "mey": {
-          "official": "الجمهورية العربية الصحراوية الديمقراطية",
-          "common": "الصحراء الغربية"
-        },
-        "spa": {
-          "official": "República Árabe Saharaui Democrática",
-          "common": "Sahara Occidental"
-        }
-      }
-    },
+    "name": "Western Sahara",
     "cca3": "ESH",
+    "flag": "🇪🇭",
     "currencies": {
       "DZD": {
         "name": "Algerian dinar",
@@ -947,21 +747,12 @@
       "ber": "Berber",
       "mey": "Hassaniya",
       "spa": "Spanish"
-    },
-    "flag": "🇪🇭"
+    }
   },
   {
-    "name": {
-      "common": "Ghana",
-      "official": "Republic of Ghana",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of Ghana",
-          "common": "Ghana"
-        }
-      }
-    },
+    "name": "Ghana",
     "cca3": "GHA",
+    "flag": "🇬🇭",
     "currencies": {
       "GHS": {
         "name": "Ghanaian cedi",
@@ -970,25 +761,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇬🇭"
+    }
   },
   {
-    "name": {
-      "common": "Tuvalu",
-      "official": "Tuvalu",
-      "nativeName": {
-        "eng": {
-          "official": "Tuvalu",
-          "common": "Tuvalu"
-        },
-        "tvl": {
-          "official": "Tuvalu",
-          "common": "Tuvalu"
-        }
-      }
-    },
+    "name": "Tuvalu",
     "cca3": "TUV",
+    "flag": "🇹🇻",
     "currencies": {
       "AUD": {
         "name": "Australian dollar",
@@ -1002,21 +780,12 @@
     "languages": {
       "eng": "English",
       "tvl": "Tuvaluan"
-    },
-    "flag": "🇹🇻"
+    }
   },
   {
-    "name": {
-      "common": "Myanmar",
-      "official": "Republic of the Union of Myanmar",
-      "nativeName": {
-        "mya": {
-          "official": "ပြည်ထောင်စု သမ္မတ မြန်မာနိုင်ငံတော်",
-          "common": "မြန်မာ"
-        }
-      }
-    },
+    "name": "Myanmar",
     "cca3": "MMR",
+    "flag": "🇲🇲",
     "currencies": {
       "MMK": {
         "name": "Burmese kyat",
@@ -1025,21 +794,12 @@
     },
     "languages": {
       "mya": "Burmese"
-    },
-    "flag": "🇲🇲"
+    }
   },
   {
-    "name": {
-      "common": "Gabon",
-      "official": "Gabonese Republic",
-      "nativeName": {
-        "fra": {
-          "official": "République gabonaise",
-          "common": "Gabon"
-        }
-      }
-    },
+    "name": "Gabon",
     "cca3": "GAB",
+    "flag": "🇬🇦",
     "currencies": {
       "XAF": {
         "name": "Central African CFA franc",
@@ -1048,21 +808,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇬🇦"
+    }
   },
   {
-    "name": {
-      "common": "Cuba",
-      "official": "Republic of Cuba",
-      "nativeName": {
-        "spa": {
-          "official": "República de Cuba",
-          "common": "Cuba"
-        }
-      }
-    },
+    "name": "Cuba",
     "cca3": "CUB",
+    "flag": "🇨🇺",
     "currencies": {
       "CUC": {
         "name": "Cuban convertible peso",
@@ -1075,21 +826,12 @@
     },
     "languages": {
       "spa": "Spanish"
-    },
-    "flag": "🇨🇺"
+    }
   },
   {
-    "name": {
-      "common": "China",
-      "official": "People's Republic of China",
-      "nativeName": {
-        "zho": {
-          "official": "中华人民共和国",
-          "common": "中国"
-        }
-      }
-    },
+    "name": "China",
     "cca3": "CHN",
+    "flag": "🇨🇳",
     "currencies": {
       "CNY": {
         "name": "Chinese yuan",
@@ -1098,21 +840,12 @@
     },
     "languages": {
       "zho": "Chinese"
-    },
-    "flag": "🇨🇳"
+    }
   },
   {
-    "name": {
-      "common": "Panama",
-      "official": "Republic of Panama",
-      "nativeName": {
-        "spa": {
-          "official": "República de Panamá",
-          "common": "Panamá"
-        }
-      }
-    },
+    "name": "Panama",
     "cca3": "PAN",
+    "flag": "🇵🇦",
     "currencies": {
       "PAB": {
         "name": "Panamanian balboa",
@@ -1125,21 +858,12 @@
     },
     "languages": {
       "spa": "Spanish"
-    },
-    "flag": "🇵🇦"
+    }
   },
   {
-    "name": {
-      "common": "Thailand",
-      "official": "Kingdom of Thailand",
-      "nativeName": {
-        "tha": {
-          "official": "ราชอาณาจักรไทย",
-          "common": "ประเทศไทย"
-        }
-      }
-    },
+    "name": "Thailand",
     "cca3": "THA",
+    "flag": "🇹🇭",
     "currencies": {
       "THB": {
         "name": "Thai baht",
@@ -1148,21 +872,12 @@
     },
     "languages": {
       "tha": "Thai"
-    },
-    "flag": "🇹🇭"
+    }
   },
   {
-    "name": {
-      "common": "Russia",
-      "official": "Russian Federation",
-      "nativeName": {
-        "rus": {
-          "official": "Российская Федерация",
-          "common": "Россия"
-        }
-      }
-    },
+    "name": "Russia",
     "cca3": "RUS",
+    "flag": "🇷🇺",
     "currencies": {
       "RUB": {
         "name": "Russian ruble",
@@ -1171,29 +886,12 @@
     },
     "languages": {
       "rus": "Russian"
-    },
-    "flag": "🇷🇺"
+    }
   },
   {
-    "name": {
-      "common": "Bosnia and Herzegovina",
-      "official": "Bosnia and Herzegovina",
-      "nativeName": {
-        "bos": {
-          "official": "Bosna i Hercegovina",
-          "common": "Bosna i Hercegovina"
-        },
-        "hrv": {
-          "official": "Bosna i Hercegovina",
-          "common": "Bosna i Hercegovina"
-        },
-        "srp": {
-          "official": "Босна и Херцеговина",
-          "common": "Босна и Херцеговина"
-        }
-      }
-    },
+    "name": "Bosnia and Herzegovina",
     "cca3": "BIH",
+    "flag": "🇧🇦",
     "currencies": {
       "BAM": {
         "name": "Bosnia and Herzegovina convertible mark",
@@ -1204,21 +902,12 @@
       "bos": "Bosnian",
       "hrv": "Croatian",
       "srp": "Serbian"
-    },
-    "flag": "🇧🇦"
+    }
   },
   {
-    "name": {
-      "common": "Qatar",
-      "official": "State of Qatar",
-      "nativeName": {
-        "ara": {
-          "official": "دولة قطر",
-          "common": "قطر"
-        }
-      }
-    },
+    "name": "Qatar",
     "cca3": "QAT",
+    "flag": "🇶🇦",
     "currencies": {
       "QAR": {
         "name": "Qatari riyal",
@@ -1227,47 +916,21 @@
     },
     "languages": {
       "ara": "Arabic"
-    },
-    "flag": "🇶🇦"
+    }
   },
   {
-    "name": {
-      "common": "Bouvet Island",
-      "official": "Bouvet Island",
-      "nativeName": {
-        "nor": {
-          "official": "Bouvetøya",
-          "common": "Bouvetøya"
-        }
-      }
-    },
+    "name": "Bouvet Island",
     "cca3": "BVT",
+    "flag": "🇧🇻",
     "currencies": {},
     "languages": {
       "nor": "Norwegian"
-    },
-    "flag": "🇧🇻"
+    }
   },
   {
-    "name": {
-      "common": "Iraq",
-      "official": "Republic of Iraq",
-      "nativeName": {
-        "ara": {
-          "official": "جمهورية العراق",
-          "common": "العراق"
-        },
-        "arc": {
-          "official": "ܩܘܼܛܢܵܐ ܐܝܼܪܲܩ",
-          "common": "ܩܘܼܛܢܵܐ"
-        },
-        "ckb": {
-          "official": "کۆماری عێراق",
-          "common": "کۆماری"
-        }
-      }
-    },
+    "name": "Iraq",
     "cca3": "IRQ",
+    "flag": "🇮🇶",
     "currencies": {
       "IQD": {
         "name": "Iraqi dinar",
@@ -1278,25 +941,12 @@
       "ara": "Arabic",
       "arc": "Aramaic",
       "ckb": "Sorani"
-    },
-    "flag": "🇮🇶"
+    }
   },
   {
-    "name": {
-      "common": "Tajikistan",
-      "official": "Republic of Tajikistan",
-      "nativeName": {
-        "rus": {
-          "official": "Республика Таджикистан",
-          "common": "Таджикистан"
-        },
-        "tgk": {
-          "official": "Ҷумҳурии Тоҷикистон",
-          "common": "Тоҷикистон"
-        }
-      }
-    },
+    "name": "Tajikistan",
     "cca3": "TJK",
+    "flag": "🇹🇯",
     "currencies": {
       "TJS": {
         "name": "Tajikistani somoni",
@@ -1306,21 +956,12 @@
     "languages": {
       "rus": "Russian",
       "tgk": "Tajik"
-    },
-    "flag": "🇹🇯"
+    }
   },
   {
-    "name": {
-      "common": "Guyana",
-      "official": "Co-operative Republic of Guyana",
-      "nativeName": {
-        "eng": {
-          "official": "Co-operative Republic of Guyana",
-          "common": "Guyana"
-        }
-      }
-    },
+    "name": "Guyana",
     "cca3": "GUY",
+    "flag": "🇬🇾",
     "currencies": {
       "GYD": {
         "name": "Guyanese dollar",
@@ -1329,21 +970,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇬🇾"
+    }
   },
   {
-    "name": {
-      "common": "Solomon Islands",
-      "official": "Solomon Islands",
-      "nativeName": {
-        "eng": {
-          "official": "Solomon Islands",
-          "common": "Solomon Islands"
-        }
-      }
-    },
+    "name": "Solomon Islands",
     "cca3": "SLB",
+    "flag": "🇸🇧",
     "currencies": {
       "SBD": {
         "name": "Solomon Islands dollar",
@@ -1352,21 +984,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇸🇧"
+    }
   },
   {
-    "name": {
-      "common": "Slovakia",
-      "official": "Slovak Republic",
-      "nativeName": {
-        "slk": {
-          "official": "Slovenská republika",
-          "common": "Slovensko"
-        }
-      }
-    },
+    "name": "Slovakia",
     "cca3": "SVK",
+    "flag": "🇸🇰",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -1375,21 +998,12 @@
     },
     "languages": {
       "slk": "Slovak"
-    },
-    "flag": "🇸🇰"
+    }
   },
   {
-    "name": {
-      "common": "Gibraltar",
-      "official": "Gibraltar",
-      "nativeName": {
-        "eng": {
-          "official": "Gibraltar",
-          "common": "Gibraltar"
-        }
-      }
-    },
+    "name": "Gibraltar",
     "cca3": "GIB",
+    "flag": "🇬🇮",
     "currencies": {
       "GIP": {
         "name": "Gibraltar pound",
@@ -1398,29 +1012,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇬🇮"
+    }
   },
   {
-    "name": {
-      "common": "Peru",
-      "official": "Republic of Peru",
-      "nativeName": {
-        "aym": {
-          "official": "Piruw Suyu",
-          "common": "Piruw"
-        },
-        "que": {
-          "official": "Piruw Ripuwlika",
-          "common": "Piruw"
-        },
-        "spa": {
-          "official": "República del Perú",
-          "common": "Perú"
-        }
-      }
-    },
+    "name": "Peru",
     "cca3": "PER",
+    "flag": "🇵🇪",
     "currencies": {
       "PEN": {
         "name": "Peruvian sol",
@@ -1431,25 +1028,12 @@
       "aym": "Aymara",
       "que": "Quechua",
       "spa": "Spanish"
-    },
-    "flag": "🇵🇪"
+    }
   },
   {
-    "name": {
-      "common": "Puerto Rico",
-      "official": "Commonwealth of Puerto Rico",
-      "nativeName": {
-        "eng": {
-          "official": "Commonwealth of Puerto Rico",
-          "common": "Puerto Rico"
-        },
-        "spa": {
-          "official": "Estado Libre Asociado de Puerto Rico",
-          "common": "Puerto Rico"
-        }
-      }
-    },
+    "name": "Puerto Rico",
     "cca3": "PRI",
+    "flag": "🇵🇷",
     "currencies": {
       "USD": {
         "name": "United States dollar",
@@ -1459,21 +1043,12 @@
     "languages": {
       "eng": "English",
       "spa": "Spanish"
-    },
-    "flag": "🇵🇷"
+    }
   },
   {
-    "name": {
-      "common": "Armenia",
-      "official": "Republic of Armenia",
-      "nativeName": {
-        "hye": {
-          "official": "Հայաստանի Հանրապետություն",
-          "common": "Հայաստան"
-        }
-      }
-    },
+    "name": "Armenia",
     "cca3": "ARM",
+    "flag": "🇦🇲",
     "currencies": {
       "AMD": {
         "name": "Armenian dram",
@@ -1482,21 +1057,12 @@
     },
     "languages": {
       "hye": "Armenian"
-    },
-    "flag": "🇦🇲"
+    }
   },
   {
-    "name": {
-      "common": "Azerbaijan",
-      "official": "Republic of Azerbaijan",
-      "nativeName": {
-        "aze": {
-          "official": "Azərbaycan Respublikası",
-          "common": "Azərbaycan"
-        }
-      }
-    },
+    "name": "Azerbaijan",
     "cca3": "AZE",
+    "flag": "🇦🇿",
     "currencies": {
       "AZN": {
         "name": "Azerbaijani manat",
@@ -1505,21 +1071,12 @@
     },
     "languages": {
       "aze": "Azerbaijani"
-    },
-    "flag": "🇦🇿"
+    }
   },
   {
-    "name": {
-      "common": "Mauritania",
-      "official": "Islamic Republic of Mauritania",
-      "nativeName": {
-        "ara": {
-          "official": "الجمهورية الإسلامية الموريتانية",
-          "common": "موريتانيا"
-        }
-      }
-    },
+    "name": "Mauritania",
     "cca3": "MRT",
+    "flag": "🇲🇷",
     "currencies": {
       "MRU": {
         "name": "Mauritanian ouguiya",
@@ -1528,29 +1085,12 @@
     },
     "languages": {
       "ara": "Arabic"
-    },
-    "flag": "🇲🇷"
+    }
   },
   {
-    "name": {
-      "common": "Belize",
-      "official": "Belize",
-      "nativeName": {
-        "bjz": {
-          "official": "Belize",
-          "common": "Belize"
-        },
-        "eng": {
-          "official": "Belize",
-          "common": "Belize"
-        },
-        "spa": {
-          "official": "Belice",
-          "common": "Belice"
-        }
-      }
-    },
+    "name": "Belize",
     "cca3": "BLZ",
+    "flag": "🇧🇿",
     "currencies": {
       "BZD": {
         "name": "Belize dollar",
@@ -1561,21 +1101,12 @@
       "bjz": "Belizean Creole",
       "eng": "English",
       "spa": "Spanish"
-    },
-    "flag": "🇧🇿"
+    }
   },
   {
-    "name": {
-      "common": "Anguilla",
-      "official": "Anguilla",
-      "nativeName": {
-        "eng": {
-          "official": "Anguilla",
-          "common": "Anguilla"
-        }
-      }
-    },
+    "name": "Anguilla",
     "cca3": "AIA",
+    "flag": "🇦🇮",
     "currencies": {
       "XCD": {
         "name": "Eastern Caribbean dollar",
@@ -1584,29 +1115,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇦🇮"
+    }
   },
   {
-    "name": {
-      "common": "Seychelles",
-      "official": "Republic of Seychelles",
-      "nativeName": {
-        "crs": {
-          "official": "Repiblik Sesel",
-          "common": "Sesel"
-        },
-        "eng": {
-          "official": "Republic of Seychelles",
-          "common": "Seychelles"
-        },
-        "fra": {
-          "official": "République des Seychelles",
-          "common": "Seychelles"
-        }
-      }
-    },
+    "name": "Seychelles",
     "cca3": "SYC",
+    "flag": "🇸🇨",
     "currencies": {
       "SCR": {
         "name": "Seychellois rupee",
@@ -1617,25 +1131,12 @@
       "crs": "Seychellois Creole",
       "eng": "English",
       "fra": "French"
-    },
-    "flag": "🇸🇨"
+    }
   },
   {
-    "name": {
-      "common": "Norfolk Island",
-      "official": "Territory of Norfolk Island",
-      "nativeName": {
-        "eng": {
-          "official": "Territory of Norfolk Island",
-          "common": "Norfolk Island"
-        },
-        "pih": {
-          "official": "Teratri of Norf'k Ailen",
-          "common": "Norf'k Ailen"
-        }
-      }
-    },
+    "name": "Norfolk Island",
     "cca3": "NFK",
+    "flag": "🇳🇫",
     "currencies": {
       "AUD": {
         "name": "Australian dollar",
@@ -1645,25 +1146,12 @@
     "languages": {
       "eng": "English",
       "pih": "Norfuk"
-    },
-    "flag": "🇳🇫"
+    }
   },
   {
-    "name": {
-      "common": "Philippines",
-      "official": "Republic of the Philippines",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of the Philippines",
-          "common": "Philippines"
-        },
-        "fil": {
-          "official": "Republic of the Philippines",
-          "common": "Pilipinas"
-        }
-      }
-    },
+    "name": "Philippines",
     "cca3": "PHL",
+    "flag": "🇵🇭",
     "currencies": {
       "PHP": {
         "name": "Philippine peso",
@@ -1673,25 +1161,12 @@
     "languages": {
       "eng": "English",
       "fil": "Filipino"
-    },
-    "flag": "🇵🇭"
+    }
   },
   {
-    "name": {
-      "common": "Argentina",
-      "official": "Argentine Republic",
-      "nativeName": {
-        "grn": {
-          "official": "Argentine Republic",
-          "common": "Argentina"
-        },
-        "spa": {
-          "official": "República Argentina",
-          "common": "Argentina"
-        }
-      }
-    },
+    "name": "Argentina",
     "cca3": "ARG",
+    "flag": "🇦🇷",
     "currencies": {
       "ARS": {
         "name": "Argentine peso",
@@ -1701,21 +1176,12 @@
     "languages": {
       "grn": "Guaraní",
       "spa": "Spanish"
-    },
-    "flag": "🇦🇷"
+    }
   },
   {
-    "name": {
-      "common": "Moldova",
-      "official": "Republic of Moldova",
-      "nativeName": {
-        "ron": {
-          "official": "Republica Moldova",
-          "common": "Moldova"
-        }
-      }
-    },
+    "name": "Moldova",
     "cca3": "MDA",
+    "flag": "🇲🇩",
     "currencies": {
       "MDL": {
         "name": "Moldovan leu",
@@ -1724,25 +1190,12 @@
     },
     "languages": {
       "ron": "Romanian"
-    },
-    "flag": "🇲🇩"
+    }
   },
   {
-    "name": {
-      "common": "Samoa",
-      "official": "Independent State of Samoa",
-      "nativeName": {
-        "eng": {
-          "official": "Independent State of Samoa",
-          "common": "Samoa"
-        },
-        "smo": {
-          "official": "Malo Saʻoloto Tutoʻatasi o Sāmoa",
-          "common": "Sāmoa"
-        }
-      }
-    },
+    "name": "Samoa",
     "cca3": "WSM",
+    "flag": "🇼🇸",
     "currencies": {
       "WST": {
         "name": "Samoan tālā",
@@ -1752,32 +1205,19 @@
     "languages": {
       "eng": "English",
       "smo": "Samoan"
-    },
-    "flag": "🇼🇸"
+    }
   },
   {
-    "name": {
-      "common": "Antarctica",
-      "official": "Antarctica",
-      "nativeName": {}
-    },
+    "name": "Antarctica",
     "cca3": "ATA",
+    "flag": "🇦🇶",
     "currencies": {},
-    "languages": {},
-    "flag": "🇦🇶"
+    "languages": {}
   },
   {
-    "name": {
-      "common": "Sierra Leone",
-      "official": "Republic of Sierra Leone",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of Sierra Leone",
-          "common": "Sierra Leone"
-        }
-      }
-    },
+    "name": "Sierra Leone",
     "cca3": "SLE",
+    "flag": "🇸🇱",
     "currencies": {
       "SLE": {
         "name": "Leone",
@@ -1786,21 +1226,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇸🇱"
+    }
   },
   {
-    "name": {
-      "common": "Cambodia",
-      "official": "Kingdom of Cambodia",
-      "nativeName": {
-        "khm": {
-          "official": "ព្រះរាជាណាចក្រកម្ពុជា",
-          "common": "Kâmpŭchéa"
-        }
-      }
-    },
+    "name": "Cambodia",
     "cca3": "KHM",
+    "flag": "🇰🇭",
     "currencies": {
       "KHR": {
         "name": "Cambodian riel",
@@ -1813,29 +1244,12 @@
     },
     "languages": {
       "khm": "Khmer"
-    },
-    "flag": "🇰🇭"
+    }
   },
   {
-    "name": {
-      "common": "Vanuatu",
-      "official": "Republic of Vanuatu",
-      "nativeName": {
-        "bis": {
-          "official": "Ripablik blong Vanuatu",
-          "common": "Vanuatu"
-        },
-        "eng": {
-          "official": "Republic of Vanuatu",
-          "common": "Vanuatu"
-        },
-        "fra": {
-          "official": "République de Vanuatu",
-          "common": "Vanuatu"
-        }
-      }
-    },
+    "name": "Vanuatu",
     "cca3": "VUT",
+    "flag": "🇻🇺",
     "currencies": {
       "VUV": {
         "name": "Vanuatu vatu",
@@ -1846,21 +1260,12 @@
       "bis": "Bislama",
       "eng": "English",
       "fra": "French"
-    },
-    "flag": "🇻🇺"
+    }
   },
   {
-    "name": {
-      "common": "Jordan",
-      "official": "Hashemite Kingdom of Jordan",
-      "nativeName": {
-        "ara": {
-          "official": "المملكة الأردنية الهاشمية",
-          "common": "الأردن"
-        }
-      }
-    },
+    "name": "Jordan",
     "cca3": "JOR",
+    "flag": "🇯🇴",
     "currencies": {
       "JOD": {
         "name": "Jordanian dinar",
@@ -1869,21 +1274,12 @@
     },
     "languages": {
       "ara": "Arabic"
-    },
-    "flag": "🇯🇴"
+    }
   },
   {
-    "name": {
-      "common": "Martinique",
-      "official": "Martinique",
-      "nativeName": {
-        "fra": {
-          "official": "Martinique",
-          "common": "Martinique"
-        }
-      }
-    },
+    "name": "Martinique",
     "cca3": "MTQ",
+    "flag": "🇲🇶",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -1892,25 +1288,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇲🇶"
+    }
   },
   {
-    "name": {
-      "common": "Tonga",
-      "official": "Kingdom of Tonga",
-      "nativeName": {
-        "eng": {
-          "official": "Kingdom of Tonga",
-          "common": "Tonga"
-        },
-        "ton": {
-          "official": "Kingdom of Tonga",
-          "common": "Tonga"
-        }
-      }
-    },
+    "name": "Tonga",
     "cca3": "TON",
+    "flag": "🇹🇴",
     "currencies": {
       "TOP": {
         "name": "Tongan paʻanga",
@@ -1920,21 +1303,12 @@
     "languages": {
       "eng": "English",
       "ton": "Tongan"
-    },
-    "flag": "🇹🇴"
+    }
   },
   {
-    "name": {
-      "common": "British Virgin Islands",
-      "official": "Virgin Islands",
-      "nativeName": {
-        "eng": {
-          "official": "Virgin Islands",
-          "common": "British Virgin Islands"
-        }
-      }
-    },
+    "name": "British Virgin Islands",
     "cca3": "VGB",
+    "flag": "🇻🇬",
     "currencies": {
       "USD": {
         "name": "United States dollar",
@@ -1943,25 +1317,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇻🇬"
+    }
   },
   {
-    "name": {
-      "common": "Timor-Leste",
-      "official": "Democratic Republic of Timor-Leste",
-      "nativeName": {
-        "por": {
-          "official": "República Democrática de Timor-Leste",
-          "common": "Timor-Leste"
-        },
-        "tet": {
-          "official": "Repúblika Demokrátika Timór-Leste",
-          "common": "Timór-Leste"
-        }
-      }
-    },
+    "name": "Timor-Leste",
     "cca3": "TLS",
+    "flag": "🇹🇱",
     "currencies": {
       "USD": {
         "name": "United States dollar",
@@ -1971,21 +1332,12 @@
     "languages": {
       "por": "Portuguese",
       "tet": "Tetum"
-    },
-    "flag": "🇹🇱"
+    }
   },
   {
-    "name": {
-      "common": "French Polynesia",
-      "official": "French Polynesia",
-      "nativeName": {
-        "fra": {
-          "official": "Polynésie française",
-          "common": "Polynésie française"
-        }
-      }
-    },
+    "name": "French Polynesia",
     "cca3": "PYF",
+    "flag": "🇵🇫",
     "currencies": {
       "XPF": {
         "name": "CFP franc",
@@ -1994,21 +1346,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇵🇫"
+    }
   },
   {
-    "name": {
-      "common": "Turkey",
-      "official": "Republic of Turkey",
-      "nativeName": {
-        "tur": {
-          "official": "Türkiye Cumhuriyeti",
-          "common": "Türkiye"
-        }
-      }
-    },
+    "name": "Turkey",
     "cca3": "TUR",
+    "flag": "🇹🇷",
     "currencies": {
       "TRY": {
         "name": "Turkish lira",
@@ -2017,29 +1360,12 @@
     },
     "languages": {
       "tur": "Turkish"
-    },
-    "flag": "🇹🇷"
+    }
   },
   {
-    "name": {
-      "common": "Guernsey",
-      "official": "Bailiwick of Guernsey",
-      "nativeName": {
-        "eng": {
-          "official": "Bailiwick of Guernsey",
-          "common": "Guernsey"
-        },
-        "fra": {
-          "official": "Bailliage de Guernesey",
-          "common": "Guernesey"
-        },
-        "nfr": {
-          "official": "Dgèrnésiais",
-          "common": "Dgèrnésiais"
-        }
-      }
-    },
+    "name": "Guernsey",
     "cca3": "GGY",
+    "flag": "🇬🇬",
     "currencies": {
       "GBP": {
         "name": "British pound",
@@ -2054,21 +1380,12 @@
       "eng": "English",
       "fra": "French",
       "nfr": "Guernésiais"
-    },
-    "flag": "🇬🇬"
+    }
   },
   {
-    "name": {
-      "common": "Senegal",
-      "official": "Republic of Senegal",
-      "nativeName": {
-        "fra": {
-          "official": "République du Sénégal",
-          "common": "Sénégal"
-        }
-      }
-    },
+    "name": "Senegal",
     "cca3": "SEN",
+    "flag": "🇸🇳",
     "currencies": {
       "XOF": {
         "name": "West African CFA franc",
@@ -2077,21 +1394,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇸🇳"
+    }
   },
   {
-    "name": {
-      "common": "Guatemala",
-      "official": "Republic of Guatemala",
-      "nativeName": {
-        "spa": {
-          "official": "República de Guatemala",
-          "common": "Guatemala"
-        }
-      }
-    },
+    "name": "Guatemala",
     "cca3": "GTM",
+    "flag": "🇬🇹",
     "currencies": {
       "GTQ": {
         "name": "Guatemalan quetzal",
@@ -2100,21 +1408,12 @@
     },
     "languages": {
       "spa": "Spanish"
-    },
-    "flag": "🇬🇹"
+    }
   },
   {
-    "name": {
-      "common": "Poland",
-      "official": "Republic of Poland",
-      "nativeName": {
-        "pol": {
-          "official": "Rzeczpospolita Polska",
-          "common": "Polska"
-        }
-      }
-    },
+    "name": "Poland",
     "cca3": "POL",
+    "flag": "🇵🇱",
     "currencies": {
       "PLN": {
         "name": "Polish złoty",
@@ -2123,21 +1422,12 @@
     },
     "languages": {
       "pol": "Polish"
-    },
-    "flag": "🇵🇱"
+    }
   },
   {
-    "name": {
-      "common": "Bahamas",
-      "official": "Commonwealth of the Bahamas",
-      "nativeName": {
-        "eng": {
-          "official": "Commonwealth of the Bahamas",
-          "common": "Bahamas"
-        }
-      }
-    },
+    "name": "Bahamas",
     "cca3": "BHS",
+    "flag": "🇧🇸",
     "currencies": {
       "BSD": {
         "name": "Bahamian dollar",
@@ -2150,25 +1440,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇧🇸"
+    }
   },
   {
-    "name": {
-      "common": "Faroe Islands",
-      "official": "Faroe Islands",
-      "nativeName": {
-        "dan": {
-          "official": "Færøerne",
-          "common": "Færøerne"
-        },
-        "fao": {
-          "official": "Føroyar",
-          "common": "Føroyar"
-        }
-      }
-    },
+    "name": "Faroe Islands",
     "cca3": "FRO",
+    "flag": "🇫🇴",
     "currencies": {
       "DKK": {
         "name": "Danish krone",
@@ -2182,25 +1459,12 @@
     "languages": {
       "dan": "Danish",
       "fao": "Faroese"
-    },
-    "flag": "🇫🇴"
+    }
   },
   {
-    "name": {
-      "common": "Aruba",
-      "official": "Aruba",
-      "nativeName": {
-        "nld": {
-          "official": "Aruba",
-          "common": "Aruba"
-        },
-        "pap": {
-          "official": "Aruba",
-          "common": "Aruba"
-        }
-      }
-    },
+    "name": "Aruba",
     "cca3": "ABW",
+    "flag": "🇦🇼",
     "currencies": {
       "AWG": {
         "name": "Aruban florin",
@@ -2210,21 +1474,12 @@
     "languages": {
       "nld": "Dutch",
       "pap": "Papiamento"
-    },
-    "flag": "🇦🇼"
+    }
   },
   {
-    "name": {
-      "common": "Dominican Republic",
-      "official": "Dominican Republic",
-      "nativeName": {
-        "spa": {
-          "official": "República Dominicana",
-          "common": "República Dominicana"
-        }
-      }
-    },
+    "name": "Dominican Republic",
     "cca3": "DOM",
+    "flag": "🇩🇴",
     "currencies": {
       "DOP": {
         "name": "Dominican peso",
@@ -2233,25 +1488,12 @@
     },
     "languages": {
       "spa": "Spanish"
-    },
-    "flag": "🇩🇴"
+    }
   },
   {
-    "name": {
-      "common": "Hong Kong",
-      "official": "Hong Kong Special Administrative Region of the People's Republic of China",
-      "nativeName": {
-        "eng": {
-          "official": "Hong Kong Special Administrative Region of the People's Republic of China",
-          "common": "Hong Kong"
-        },
-        "zho": {
-          "official": "中华人民共和国香港特别行政区",
-          "common": "香港"
-        }
-      }
-    },
+    "name": "Hong Kong",
     "cca3": "HKG",
+    "flag": "🇭🇰",
     "currencies": {
       "HKD": {
         "name": "Hong Kong dollar",
@@ -2261,21 +1503,12 @@
     "languages": {
       "eng": "English",
       "zho": "Chinese"
-    },
-    "flag": "🇭🇰"
+    }
   },
   {
-    "name": {
-      "common": "São Tomé and Príncipe",
-      "official": "Democratic Republic of São Tomé and Príncipe",
-      "nativeName": {
-        "por": {
-          "official": "República Democrática do São Tomé e Príncipe",
-          "common": "São Tomé e Príncipe"
-        }
-      }
-    },
+    "name": "São Tomé and Príncipe",
     "cca3": "STP",
+    "flag": "🇸🇹",
     "currencies": {
       "STN": {
         "name": "São Tomé and Príncipe dobra",
@@ -2284,21 +1517,12 @@
     },
     "languages": {
       "por": "Portuguese"
-    },
-    "flag": "🇸🇹"
+    }
   },
   {
-    "name": {
-      "common": "Uruguay",
-      "official": "Oriental Republic of Uruguay",
-      "nativeName": {
-        "spa": {
-          "official": "República Oriental del Uruguay",
-          "common": "Uruguay"
-        }
-      }
-    },
+    "name": "Uruguay",
     "cca3": "URY",
+    "flag": "🇺🇾",
     "currencies": {
       "UYU": {
         "name": "Uruguayan peso",
@@ -2307,21 +1531,12 @@
     },
     "languages": {
       "spa": "Spanish"
-    },
-    "flag": "🇺🇾"
+    }
   },
   {
-    "name": {
-      "common": "Bermuda",
-      "official": "Bermuda",
-      "nativeName": {
-        "eng": {
-          "official": "Bermuda",
-          "common": "Bermuda"
-        }
-      }
-    },
+    "name": "Bermuda",
     "cca3": "BMU",
+    "flag": "🇧🇲",
     "currencies": {
       "BMD": {
         "name": "Bermudian dollar",
@@ -2330,21 +1545,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇧🇲"
+    }
   },
   {
-    "name": {
-      "common": "Wallis and Futuna",
-      "official": "Territory of the Wallis and Futuna Islands",
-      "nativeName": {
-        "fra": {
-          "official": "Territoire des îles Wallis et Futuna",
-          "common": "Wallis et Futuna"
-        }
-      }
-    },
+    "name": "Wallis and Futuna",
     "cca3": "WLF",
+    "flag": "🇼🇫",
     "currencies": {
       "XPF": {
         "name": "CFP franc",
@@ -2353,61 +1559,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇼🇫"
+    }
   },
   {
-    "name": {
-      "common": "South Africa",
-      "official": "Republic of South Africa",
-      "nativeName": {
-        "afr": {
-          "official": "Republiek van Suid-Afrika",
-          "common": "South Africa"
-        },
-        "eng": {
-          "official": "Republic of South Africa",
-          "common": "South Africa"
-        },
-        "nbl": {
-          "official": "IRiphabliki yeSewula Afrika",
-          "common": "Sewula Afrika"
-        },
-        "nso": {
-          "official": "Rephaboliki ya Afrika-Borwa ",
-          "common": "Afrika-Borwa"
-        },
-        "sot": {
-          "official": "Rephaboliki ya Afrika Borwa",
-          "common": "Afrika Borwa"
-        },
-        "ssw": {
-          "official": "IRiphabhulikhi yeNingizimu Afrika",
-          "common": "Ningizimu Afrika"
-        },
-        "tsn": {
-          "official": "Rephaboliki ya Aforika Borwa",
-          "common": "Aforika Borwa"
-        },
-        "tso": {
-          "official": "Riphabliki ra Afrika Dzonga",
-          "common": "Afrika Dzonga"
-        },
-        "ven": {
-          "official": "Riphabuḽiki ya Afurika Tshipembe",
-          "common": "Afurika Tshipembe"
-        },
-        "xho": {
-          "official": "IRiphabliki yaseMzantsi Afrika",
-          "common": "Mzantsi Afrika"
-        },
-        "zul": {
-          "official": "IRiphabliki yaseNingizimu Afrika",
-          "common": "Ningizimu Afrika"
-        }
-      }
-    },
+    "name": "South Africa",
     "cca3": "ZAF",
+    "flag": "🇿🇦",
     "currencies": {
       "ZAR": {
         "name": "South African rand",
@@ -2426,25 +1583,12 @@
       "ven": "Venda",
       "xho": "Xhosa",
       "zul": "Zulu"
-    },
-    "flag": "🇿🇦"
+    }
   },
   {
-    "name": {
-      "common": "Israel",
-      "official": "State of Israel",
-      "nativeName": {
-        "ara": {
-          "official": "دولة إسرائيل",
-          "common": "إسرائيل"
-        },
-        "heb": {
-          "official": "מדינת ישראל",
-          "common": "ישראל"
-        }
-      }
-    },
+    "name": "Israel",
     "cca3": "ISR",
+    "flag": "🇮🇱",
     "currencies": {
       "ILS": {
         "name": "Israeli new shekel",
@@ -2454,21 +1598,12 @@
     "languages": {
       "ara": "Arabic",
       "heb": "Hebrew"
-    },
-    "flag": "🇮🇱"
+    }
   },
   {
-    "name": {
-      "common": "San Marino",
-      "official": "Republic of San Marino",
-      "nativeName": {
-        "ita": {
-          "official": "Repubblica di San Marino",
-          "common": "San Marino"
-        }
-      }
-    },
+    "name": "San Marino",
     "cca3": "SMR",
+    "flag": "🇸🇲",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -2477,21 +1612,12 @@
     },
     "languages": {
       "ita": "Italian"
-    },
-    "flag": "🇸🇲"
+    }
   },
   {
-    "name": {
-      "common": "El Salvador",
-      "official": "Republic of El Salvador",
-      "nativeName": {
-        "spa": {
-          "official": "República de El Salvador",
-          "common": "El Salvador"
-        }
-      }
-    },
+    "name": "El Salvador",
     "cca3": "SLV",
+    "flag": "🇸🇻",
     "currencies": {
       "USD": {
         "name": "United States dollar",
@@ -2500,21 +1626,12 @@
     },
     "languages": {
       "spa": "Spanish"
-    },
-    "flag": "🇸🇻"
+    }
   },
   {
-    "name": {
-      "common": "Mongolia",
-      "official": "Mongolia",
-      "nativeName": {
-        "mon": {
-          "official": "Монгол улс",
-          "common": "Монгол улс"
-        }
-      }
-    },
+    "name": "Mongolia",
     "cca3": "MNG",
+    "flag": "🇲🇳",
     "currencies": {
       "MNT": {
         "name": "Mongolian tögrög",
@@ -2523,25 +1640,12 @@
     },
     "languages": {
       "mon": "Mongolian"
-    },
-    "flag": "🇲🇳"
+    }
   },
   {
-    "name": {
-      "common": "American Samoa",
-      "official": "American Samoa",
-      "nativeName": {
-        "eng": {
-          "official": "American Samoa",
-          "common": "American Samoa"
-        },
-        "smo": {
-          "official": "Sāmoa Amelika",
-          "common": "Sāmoa Amelika"
-        }
-      }
-    },
+    "name": "American Samoa",
     "cca3": "ASM",
+    "flag": "🇦🇸",
     "currencies": {
       "USD": {
         "name": "United States dollar",
@@ -2551,21 +1655,12 @@
     "languages": {
       "eng": "English",
       "smo": "Samoan"
-    },
-    "flag": "🇦🇸"
+    }
   },
   {
-    "name": {
-      "common": "French Southern and Antarctic Lands",
-      "official": "Territory of the French Southern and Antarctic Lands",
-      "nativeName": {
-        "fra": {
-          "official": "Territoire des Terres australes et antarctiques françaises",
-          "common": "Terres australes et antarctiques françaises"
-        }
-      }
-    },
+    "name": "French Southern and Antarctic Lands",
     "cca3": "ATF",
+    "flag": "🇹🇫",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -2574,77 +1669,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇹🇫"
+    }
   },
   {
-    "name": {
-      "common": "Zimbabwe",
-      "official": "Republic of Zimbabwe",
-      "nativeName": {
-        "bwg": {
-          "official": "Republic of Zimbabwe",
-          "common": "Zimbabwe"
-        },
-        "eng": {
-          "official": "Republic of Zimbabwe",
-          "common": "Zimbabwe"
-        },
-        "kck": {
-          "official": "Republic of Zimbabwe",
-          "common": "Zimbabwe"
-        },
-        "khi": {
-          "official": "Republic of Zimbabwe",
-          "common": "Zimbabwe"
-        },
-        "ndc": {
-          "official": "Republic of Zimbabwe",
-          "common": "Zimbabwe"
-        },
-        "nde": {
-          "official": "Republic of Zimbabwe",
-          "common": "Zimbabwe"
-        },
-        "nya": {
-          "official": "Republic of Zimbabwe",
-          "common": "Zimbabwe"
-        },
-        "sna": {
-          "official": "Republic of Zimbabwe",
-          "common": "Zimbabwe"
-        },
-        "sot": {
-          "official": "Republic of Zimbabwe",
-          "common": "Zimbabwe"
-        },
-        "toi": {
-          "official": "Republic of Zimbabwe",
-          "common": "Zimbabwe"
-        },
-        "tsn": {
-          "official": "Republic of Zimbabwe",
-          "common": "Zimbabwe"
-        },
-        "tso": {
-          "official": "Republic of Zimbabwe",
-          "common": "Zimbabwe"
-        },
-        "ven": {
-          "official": "Republic of Zimbabwe",
-          "common": "Zimbabwe"
-        },
-        "xho": {
-          "official": "Republic of Zimbabwe",
-          "common": "Zimbabwe"
-        },
-        "zib": {
-          "official": "Republic of Zimbabwe",
-          "common": "Zimbabwe"
-        }
-      }
-    },
+    "name": "Zimbabwe",
     "cca3": "ZWE",
+    "flag": "🇿🇼",
     "currencies": {
       "ZWL": {
         "name": "Zimbabwean dollar",
@@ -2667,21 +1697,12 @@
       "ven": "Venda",
       "xho": "Xhosa",
       "zib": "Zimbabwean Sign Language"
-    },
-    "flag": "🇿🇼"
+    }
   },
   {
-    "name": {
-      "common": "Falkland Islands",
-      "official": "Falkland Islands",
-      "nativeName": {
-        "eng": {
-          "official": "Falkland Islands",
-          "common": "Falkland Islands"
-        }
-      }
-    },
+    "name": "Falkland Islands",
     "cca3": "FLK",
+    "flag": "🇫🇰",
     "currencies": {
       "FKP": {
         "name": "Falkland Islands pound",
@@ -2690,21 +1711,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇫🇰"
+    }
   },
   {
-    "name": {
-      "common": "Croatia",
-      "official": "Republic of Croatia",
-      "nativeName": {
-        "hrv": {
-          "official": "Republika Hrvatska",
-          "common": "Hrvatska"
-        }
-      }
-    },
+    "name": "Croatia",
     "cca3": "HRV",
+    "flag": "🇭🇷",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -2713,25 +1725,12 @@
     },
     "languages": {
       "hrv": "Croatian"
-    },
-    "flag": "🇭🇷"
+    }
   },
   {
-    "name": {
-      "common": "Kiribati",
-      "official": "Independent and Sovereign Republic of Kiribati",
-      "nativeName": {
-        "eng": {
-          "official": "Independent and Sovereign Republic of Kiribati",
-          "common": "Kiribati"
-        },
-        "gil": {
-          "official": "Ribaberiki Kiribati",
-          "common": "Kiribati"
-        }
-      }
-    },
+    "name": "Kiribati",
     "cca3": "KIR",
+    "flag": "🇰🇮",
     "currencies": {
       "AUD": {
         "name": "Australian dollar",
@@ -2745,25 +1744,12 @@
     "languages": {
       "eng": "English",
       "gil": "Gilbertese"
-    },
-    "flag": "🇰🇮"
+    }
   },
   {
-    "name": {
-      "common": "Marshall Islands",
-      "official": "Republic of the Marshall Islands",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of the Marshall Islands",
-          "common": "Marshall Islands"
-        },
-        "mah": {
-          "official": "Republic of the Marshall Islands",
-          "common": "M̧ajeļ"
-        }
-      }
-    },
+    "name": "Marshall Islands",
     "cca3": "MHL",
+    "flag": "🇲🇭",
     "currencies": {
       "USD": {
         "name": "United States dollar",
@@ -2773,29 +1759,12 @@
     "languages": {
       "eng": "English",
       "mah": "Marshallese"
-    },
-    "flag": "🇲🇭"
+    }
   },
   {
-    "name": {
-      "common": "Norway",
-      "official": "Kingdom of Norway",
-      "nativeName": {
-        "nno": {
-          "official": "Kongeriket Noreg",
-          "common": "Noreg"
-        },
-        "nob": {
-          "official": "Kongeriket Norge",
-          "common": "Norge"
-        },
-        "smi": {
-          "official": "Norgga gonagasriika",
-          "common": "Norgga"
-        }
-      }
-    },
+    "name": "Norway",
     "cca3": "NOR",
+    "flag": "🇳🇴",
     "currencies": {
       "NOK": {
         "name": "Norwegian krone",
@@ -2806,21 +1775,12 @@
       "nno": "Norwegian Nynorsk",
       "nob": "Norwegian Bokmål",
       "smi": "Sami"
-    },
-    "flag": "🇳🇴"
+    }
   },
   {
-    "name": {
-      "common": "Mali",
-      "official": "Republic of Mali",
-      "nativeName": {
-        "fra": {
-          "official": "République du Mali",
-          "common": "Mali"
-        }
-      }
-    },
+    "name": "Mali",
     "cca3": "MLI",
+    "flag": "🇲🇱",
     "currencies": {
       "XOF": {
         "name": "West African CFA franc",
@@ -2829,21 +1789,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇲🇱"
+    }
   },
   {
-    "name": {
-      "common": "Zambia",
-      "official": "Republic of Zambia",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of Zambia",
-          "common": "Zambia"
-        }
-      }
-    },
+    "name": "Zambia",
     "cca3": "ZMB",
+    "flag": "🇿🇲",
     "currencies": {
       "ZMW": {
         "name": "Zambian kwacha",
@@ -2852,21 +1803,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇿🇲"
+    }
   },
   {
-    "name": {
-      "common": "Maldives",
-      "official": "Republic of the Maldives",
-      "nativeName": {
-        "div": {
-          "official": "ދިވެހިރާއްޖޭގެ ޖުމްހޫރިއްޔާ",
-          "common": "ދިވެހިރާއްޖޭގެ"
-        }
-      }
-    },
+    "name": "Maldives",
     "cca3": "MDV",
+    "flag": "🇲🇻",
     "currencies": {
       "MVR": {
         "name": "Maldivian rufiyaa",
@@ -2875,21 +1817,12 @@
     },
     "languages": {
       "div": "Maldivian"
-    },
-    "flag": "🇲🇻"
+    }
   },
   {
-    "name": {
-      "common": "Antigua and Barbuda",
-      "official": "Antigua and Barbuda",
-      "nativeName": {
-        "eng": {
-          "official": "Antigua and Barbuda",
-          "common": "Antigua and Barbuda"
-        }
-      }
-    },
+    "name": "Antigua and Barbuda",
     "cca3": "ATG",
+    "flag": "🇦🇬",
     "currencies": {
       "XCD": {
         "name": "Eastern Caribbean dollar",
@@ -2898,21 +1831,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇦🇬"
+    }
   },
   {
-    "name": {
-      "common": "Christmas Island",
-      "official": "Territory of Christmas Island",
-      "nativeName": {
-        "eng": {
-          "official": "Territory of Christmas Island",
-          "common": "Christmas Island"
-        }
-      }
-    },
+    "name": "Christmas Island",
     "cca3": "CXR",
+    "flag": "🇨🇽",
     "currencies": {
       "AUD": {
         "name": "Australian dollar",
@@ -2921,21 +1845,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇨🇽"
+    }
   },
   {
-    "name": {
-      "common": "Iran",
-      "official": "Islamic Republic of Iran",
-      "nativeName": {
-        "fas": {
-          "official": "جمهوری اسلامی ایران",
-          "common": "ایران"
-        }
-      }
-    },
+    "name": "Iran",
     "cca3": "IRN",
+    "flag": "🇮🇷",
     "currencies": {
       "IRR": {
         "name": "Iranian rial",
@@ -2944,21 +1859,12 @@
     },
     "languages": {
       "fas": "Persian (Farsi)"
-    },
-    "flag": "🇮🇷"
+    }
   },
   {
-    "name": {
-      "common": "Italy",
-      "official": "Italian Republic",
-      "nativeName": {
-        "ita": {
-          "official": "Repubblica italiana",
-          "common": "Italia"
-        }
-      }
-    },
+    "name": "Italy",
     "cca3": "ITA",
+    "flag": "🇮🇹",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -2968,21 +1874,12 @@
     "languages": {
       "ita": "Italian",
       "cat": "Catalan"
-    },
-    "flag": "🇮🇹"
+    }
   },
   {
-    "name": {
-      "common": "Gambia",
-      "official": "Republic of the Gambia",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of the Gambia",
-          "common": "Gambia"
-        }
-      }
-    },
+    "name": "Gambia",
     "cca3": "GMB",
+    "flag": "🇬🇲",
     "currencies": {
       "GMD": {
         "name": "dalasi",
@@ -2991,21 +1888,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇬🇲"
+    }
   },
   {
-    "name": {
-      "common": "South Korea",
-      "official": "Republic of Korea",
-      "nativeName": {
-        "kor": {
-          "official": "대한민국",
-          "common": "한국"
-        }
-      }
-    },
+    "name": "South Korea",
     "cca3": "KOR",
+    "flag": "🇰🇷",
     "currencies": {
       "KRW": {
         "name": "South Korean won",
@@ -3014,29 +1902,12 @@
     },
     "languages": {
       "kor": "Korean"
-    },
-    "flag": "🇰🇷"
+    }
   },
   {
-    "name": {
-      "common": "Papua New Guinea",
-      "official": "Independent State of Papua New Guinea",
-      "nativeName": {
-        "eng": {
-          "official": "Independent State of Papua New Guinea",
-          "common": "Papua New Guinea"
-        },
-        "hmo": {
-          "official": "Independen Stet bilong Papua Niugini",
-          "common": "Papua Niu Gini"
-        },
-        "tpi": {
-          "official": "Independen Stet bilong Papua Niugini",
-          "common": "Papua Niugini"
-        }
-      }
-    },
+    "name": "Papua New Guinea",
     "cca3": "PNG",
+    "flag": "🇵🇬",
     "currencies": {
       "PGK": {
         "name": "Papua New Guinean kina",
@@ -3047,21 +1918,12 @@
       "eng": "English",
       "hmo": "Hiri Motu",
       "tpi": "Tok Pisin"
-    },
-    "flag": "🇵🇬"
+    }
   },
   {
-    "name": {
-      "common": "Egypt",
-      "official": "Arab Republic of Egypt",
-      "nativeName": {
-        "ara": {
-          "official": "جمهورية مصر العربية",
-          "common": "مصر"
-        }
-      }
-    },
+    "name": "Egypt",
     "cca3": "EGY",
+    "flag": "🇪🇬",
     "currencies": {
       "EGP": {
         "name": "Egyptian pound",
@@ -3070,25 +1932,12 @@
     },
     "languages": {
       "ara": "Arabic"
-    },
-    "flag": "🇪🇬"
+    }
   },
   {
-    "name": {
-      "common": "Isle of Man",
-      "official": "Isle of Man",
-      "nativeName": {
-        "eng": {
-          "official": "Isle of Man",
-          "common": "Isle of Man"
-        },
-        "glv": {
-          "official": "Ellan Vannin or Mannin",
-          "common": "Mannin"
-        }
-      }
-    },
+    "name": "Isle of Man",
     "cca3": "IMN",
+    "flag": "🇮🇲",
     "currencies": {
       "GBP": {
         "name": "British pound",
@@ -3102,21 +1951,12 @@
     "languages": {
       "eng": "English",
       "glv": "Manx"
-    },
-    "flag": "🇮🇲"
+    }
   },
   {
-    "name": {
-      "common": "Latvia",
-      "official": "Republic of Latvia",
-      "nativeName": {
-        "lav": {
-          "official": "Latvijas Republikas",
-          "common": "Latvija"
-        }
-      }
-    },
+    "name": "Latvia",
     "cca3": "LVA",
+    "flag": "🇱🇻",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -3125,25 +1965,12 @@
     },
     "languages": {
       "lav": "Latvian"
-    },
-    "flag": "🇱🇻"
+    }
   },
   {
-    "name": {
-      "common": "Paraguay",
-      "official": "Republic of Paraguay",
-      "nativeName": {
-        "grn": {
-          "official": "Tetã Paraguái",
-          "common": "Paraguái"
-        },
-        "spa": {
-          "official": "República de Paraguay",
-          "common": "Paraguay"
-        }
-      }
-    },
+    "name": "Paraguay",
     "cca3": "PRY",
+    "flag": "🇵🇾",
     "currencies": {
       "PYG": {
         "name": "Paraguayan guaraní",
@@ -3153,21 +1980,12 @@
     "languages": {
       "grn": "Guaraní",
       "spa": "Spanish"
-    },
-    "flag": "🇵🇾"
+    }
   },
   {
-    "name": {
-      "common": "Grenada",
-      "official": "Grenada",
-      "nativeName": {
-        "eng": {
-          "official": "Grenada",
-          "common": "Grenada"
-        }
-      }
-    },
+    "name": "Grenada",
     "cca3": "GRD",
+    "flag": "🇬🇩",
     "currencies": {
       "XCD": {
         "name": "Eastern Caribbean dollar",
@@ -3176,21 +1994,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇬🇩"
+    }
   },
   {
-    "name": {
-      "common": "Colombia",
-      "official": "Republic of Colombia",
-      "nativeName": {
-        "spa": {
-          "official": "República de Colombia",
-          "common": "Colombia"
-        }
-      }
-    },
+    "name": "Colombia",
     "cca3": "COL",
+    "flag": "🇨🇴",
     "currencies": {
       "COP": {
         "name": "Colombian peso",
@@ -3199,25 +2008,12 @@
     },
     "languages": {
       "spa": "Spanish"
-    },
-    "flag": "🇨🇴"
+    }
   },
   {
-    "name": {
-      "common": "Finland",
-      "official": "Republic of Finland",
-      "nativeName": {
-        "fin": {
-          "official": "Suomen tasavalta",
-          "common": "Suomi"
-        },
-        "swe": {
-          "official": "Republiken Finland",
-          "common": "Finland"
-        }
-      }
-    },
+    "name": "Finland",
     "cca3": "FIN",
+    "flag": "🇫🇮",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -3227,21 +2023,12 @@
     "languages": {
       "fin": "Finnish",
       "swe": "Swedish"
-    },
-    "flag": "🇫🇮"
+    }
   },
   {
-    "name": {
-      "common": "Bulgaria",
-      "official": "Republic of Bulgaria",
-      "nativeName": {
-        "bul": {
-          "official": "Република България",
-          "common": "България"
-        }
-      }
-    },
+    "name": "Bulgaria",
     "cca3": "BGR",
+    "flag": "🇧🇬",
     "currencies": {
       "BGN": {
         "name": "Bulgarian lev",
@@ -3250,21 +2037,12 @@
     },
     "languages": {
       "bul": "Bulgarian"
-    },
-    "flag": "🇧🇬"
+    }
   },
   {
-    "name": {
-      "common": "Togo",
-      "official": "Togolese Republic",
-      "nativeName": {
-        "fra": {
-          "official": "République togolaise",
-          "common": "Togo"
-        }
-      }
-    },
+    "name": "Togo",
     "cca3": "TGO",
+    "flag": "🇹🇬",
     "currencies": {
       "XOF": {
         "name": "West African CFA franc",
@@ -3273,21 +2051,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇹🇬"
+    }
   },
   {
-    "name": {
-      "common": "Chile",
-      "official": "Republic of Chile",
-      "nativeName": {
-        "spa": {
-          "official": "República de Chile",
-          "common": "Chile"
-        }
-      }
-    },
+    "name": "Chile",
     "cca3": "CHL",
+    "flag": "🇨🇱",
     "currencies": {
       "CLP": {
         "name": "Chilean peso",
@@ -3296,21 +2065,12 @@
     },
     "languages": {
       "spa": "Spanish"
-    },
-    "flag": "🇨🇱"
+    }
   },
   {
-    "name": {
-      "common": "Dominica",
-      "official": "Commonwealth of Dominica",
-      "nativeName": {
-        "eng": {
-          "official": "Commonwealth of Dominica",
-          "common": "Dominica"
-        }
-      }
-    },
+    "name": "Dominica",
     "cca3": "DMA",
+    "flag": "🇩🇲",
     "currencies": {
       "XCD": {
         "name": "Eastern Caribbean dollar",
@@ -3319,25 +2079,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇩🇲"
+    }
   },
   {
-    "name": {
-      "common": "Ireland",
-      "official": "Republic of Ireland",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of Ireland",
-          "common": "Ireland"
-        },
-        "gle": {
-          "official": "Poblacht na hÉireann",
-          "common": "Éire"
-        }
-      }
-    },
+    "name": "Ireland",
     "cca3": "IRL",
+    "flag": "🇮🇪",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -3347,25 +2094,12 @@
     "languages": {
       "eng": "English",
       "gle": "Irish"
-    },
-    "flag": "🇮🇪"
+    }
   },
   {
-    "name": {
-      "common": "Botswana",
-      "official": "Republic of Botswana",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of Botswana",
-          "common": "Botswana"
-        },
-        "tsn": {
-          "official": "Lefatshe la Botswana",
-          "common": "Botswana"
-        }
-      }
-    },
+    "name": "Botswana",
     "cca3": "BWA",
+    "flag": "🇧🇼",
     "currencies": {
       "BWP": {
         "name": "Botswana pula",
@@ -3375,25 +2109,12 @@
     "languages": {
       "eng": "English",
       "tsn": "Tswana"
-    },
-    "flag": "🇧🇼"
+    }
   },
   {
-    "name": {
-      "common": "Kosovo",
-      "official": "Republic of Kosovo",
-      "nativeName": {
-        "sqi": {
-          "official": "Republika e Kosovës",
-          "common": "Kosova"
-        },
-        "srp": {
-          "official": "Република Косово",
-          "common": "Косово"
-        }
-      }
-    },
+    "name": "Kosovo",
     "cca3": "UNK",
+    "flag": "🇽🇰",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -3403,21 +2124,12 @@
     "languages": {
       "sqi": "Albanian",
       "srp": "Serbian"
-    },
-    "flag": "🇽🇰"
+    }
   },
   {
-    "name": {
-      "common": "United States",
-      "official": "United States of America",
-      "nativeName": {
-        "eng": {
-          "official": "United States of America",
-          "common": "United States"
-        }
-      }
-    },
+    "name": "United States",
     "cca3": "USA",
+    "flag": "🇺🇸",
     "currencies": {
       "USD": {
         "name": "United States dollar",
@@ -3426,25 +2138,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇺🇸"
+    }
   },
   {
-    "name": {
-      "common": "Uzbekistan",
-      "official": "Republic of Uzbekistan",
-      "nativeName": {
-        "rus": {
-          "official": "Республика Узбекистан",
-          "common": "Узбекистан"
-        },
-        "uzb": {
-          "official": "O'zbekiston Respublikasi",
-          "common": "O‘zbekiston"
-        }
-      }
-    },
+    "name": "Uzbekistan",
     "cca3": "UZB",
+    "flag": "🇺🇿",
     "currencies": {
       "UZS": {
         "name": "Uzbekistani soʻm",
@@ -3454,21 +2153,12 @@
     "languages": {
       "rus": "Russian",
       "uzb": "Uzbek"
-    },
-    "flag": "🇺🇿"
+    }
   },
   {
-    "name": {
-      "common": "Brazil",
-      "official": "Federative Republic of Brazil",
-      "nativeName": {
-        "por": {
-          "official": "República Federativa do Brasil",
-          "common": "Brasil"
-        }
-      }
-    },
+    "name": "Brazil",
     "cca3": "BRA",
+    "flag": "🇧🇷",
     "currencies": {
       "BRL": {
         "name": "Brazilian real",
@@ -3477,29 +2167,12 @@
     },
     "languages": {
       "por": "Portuguese"
-    },
-    "flag": "🇧🇷"
+    }
   },
   {
-    "name": {
-      "common": "Rwanda",
-      "official": "Republic of Rwanda",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of Rwanda",
-          "common": "Rwanda"
-        },
-        "fra": {
-          "official": "République rwandaise",
-          "common": "Rwanda"
-        },
-        "kin": {
-          "official": "Repubulika y'u Rwanda",
-          "common": "Rwanda"
-        }
-      }
-    },
+    "name": "Rwanda",
     "cca3": "RWA",
+    "flag": "🇷🇼",
     "currencies": {
       "RWF": {
         "name": "Rwandan franc",
@@ -3510,21 +2183,12 @@
       "eng": "English",
       "fra": "French",
       "kin": "Kinyarwanda"
-    },
-    "flag": "🇷🇼"
+    }
   },
   {
-    "name": {
-      "common": "Liechtenstein",
-      "official": "Principality of Liechtenstein",
-      "nativeName": {
-        "deu": {
-          "official": "Fürstentum Liechtenstein",
-          "common": "Liechtenstein"
-        }
-      }
-    },
+    "name": "Liechtenstein",
     "cca3": "LIE",
+    "flag": "🇱🇮",
     "currencies": {
       "CHF": {
         "name": "Swiss franc",
@@ -3533,21 +2197,12 @@
     },
     "languages": {
       "deu": "German"
-    },
-    "flag": "🇱🇮"
+    }
   },
   {
-    "name": {
-      "common": "Bhutan",
-      "official": "Kingdom of Bhutan",
-      "nativeName": {
-        "dzo": {
-          "official": "འབྲུག་རྒྱལ་ཁབ་",
-          "common": "འབྲུག་ཡུལ་"
-        }
-      }
-    },
+    "name": "Bhutan",
     "cca3": "BTN",
+    "flag": "🇧🇹",
     "currencies": {
       "BTN": {
         "name": "Bhutanese ngultrum",
@@ -3560,21 +2215,12 @@
     },
     "languages": {
       "dzo": "Dzongkha"
-    },
-    "flag": "🇧🇹"
+    }
   },
   {
-    "name": {
-      "common": "Montenegro",
-      "official": "Montenegro",
-      "nativeName": {
-        "cnr": {
-          "official": "Црна Гора",
-          "common": "Црна Гора"
-        }
-      }
-    },
+    "name": "Montenegro",
     "cca3": "MNE",
+    "flag": "🇲🇪",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -3583,21 +2229,12 @@
     },
     "languages": {
       "cnr": "Montenegrin"
-    },
-    "flag": "🇲🇪"
+    }
   },
   {
-    "name": {
-      "common": "Niger",
-      "official": "Republic of Niger",
-      "nativeName": {
-        "fra": {
-          "official": "République du Niger",
-          "common": "Niger"
-        }
-      }
-    },
+    "name": "Niger",
     "cca3": "NER",
+    "flag": "🇳🇪",
     "currencies": {
       "XOF": {
         "name": "West African CFA franc",
@@ -3606,21 +2243,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇳🇪"
+    }
   },
   {
-    "name": {
-      "common": "Albania",
-      "official": "Republic of Albania",
-      "nativeName": {
-        "sqi": {
-          "official": "Republika e Shqipërisë",
-          "common": "Shqipëria"
-        }
-      }
-    },
+    "name": "Albania",
     "cca3": "ALB",
+    "flag": "🇦🇱",
     "currencies": {
       "ALL": {
         "name": "Albanian lek",
@@ -3629,25 +2257,12 @@
     },
     "languages": {
       "sqi": "Albanian"
-    },
-    "flag": "🇦🇱"
+    }
   },
   {
-    "name": {
-      "common": "Morocco",
-      "official": "Kingdom of Morocco",
-      "nativeName": {
-        "ara": {
-          "official": "المملكة المغربية",
-          "common": "المغرب"
-        },
-        "ber": {
-          "official": "ⵜⴰⴳⵍⴷⵉⵜ ⵏ ⵍⵎⵖⵔⵉⴱ",
-          "common": "ⵍⵎⴰⵖⵔⵉⴱ"
-        }
-      }
-    },
+    "name": "Morocco",
     "cca3": "MAR",
+    "flag": "🇲🇦",
     "currencies": {
       "MAD": {
         "name": "Moroccan dirham",
@@ -3657,21 +2272,12 @@
     "languages": {
       "ara": "Arabic",
       "ber": "Berber"
-    },
-    "flag": "🇲🇦"
+    }
   },
   {
-    "name": {
-      "common": "Venezuela",
-      "official": "Bolivarian Republic of Venezuela",
-      "nativeName": {
-        "spa": {
-          "official": "República Bolivariana de Venezuela",
-          "common": "Venezuela"
-        }
-      }
-    },
+    "name": "Venezuela",
     "cca3": "VEN",
+    "flag": "🇻🇪",
     "currencies": {
       "VES": {
         "name": "Venezuelan bolívar soberano",
@@ -3680,29 +2286,12 @@
     },
     "languages": {
       "spa": "Spanish"
-    },
-    "flag": "🇻🇪"
+    }
   },
   {
-    "name": {
-      "common": "Republic of the Congo",
-      "official": "Republic of the Congo",
-      "nativeName": {
-        "fra": {
-          "official": "République du Congo",
-          "common": "République du Congo"
-        },
-        "kon": {
-          "official": "Repubilika ya Kongo",
-          "common": "Repubilika ya Kongo"
-        },
-        "lin": {
-          "official": "Republíki ya Kongó",
-          "common": "Republíki ya Kongó"
-        }
-      }
-    },
+    "name": "Republic of the Congo",
     "cca3": "COG",
+    "flag": "🇨🇬",
     "currencies": {
       "XAF": {
         "name": "Central African CFA franc",
@@ -3713,25 +2302,12 @@
       "fra": "French",
       "kon": "Kikongo",
       "lin": "Lingala"
-    },
-    "flag": "🇨🇬"
+    }
   },
   {
-    "name": {
-      "common": "Burundi",
-      "official": "Republic of Burundi",
-      "nativeName": {
-        "fra": {
-          "official": "République du Burundi",
-          "common": "Burundi"
-        },
-        "run": {
-          "official": "Republika y'Uburundi ",
-          "common": "Uburundi"
-        }
-      }
-    },
+    "name": "Burundi",
     "cca3": "BDI",
+    "flag": "🇧🇮",
     "currencies": {
       "BIF": {
         "name": "Burundian franc",
@@ -3741,29 +2317,12 @@
     "languages": {
       "fra": "French",
       "run": "Kirundi"
-    },
-    "flag": "🇧🇮"
+    }
   },
   {
-    "name": {
-      "common": "Jersey",
-      "official": "Bailiwick of Jersey",
-      "nativeName": {
-        "eng": {
-          "official": "Bailiwick of Jersey",
-          "common": "Jersey"
-        },
-        "fra": {
-          "official": "Bailliage de Jersey",
-          "common": "Jersey"
-        },
-        "nrf": {
-          "official": "Bailliage dé Jèrri",
-          "common": "Jèrri"
-        }
-      }
-    },
+    "name": "Jersey",
     "cca3": "JEY",
+    "flag": "🇯🇪",
     "currencies": {
       "GBP": {
         "name": "British pound",
@@ -3778,21 +2337,12 @@
       "eng": "English",
       "fra": "French",
       "nrf": "Jèrriais"
-    },
-    "flag": "🇯🇪"
+    }
   },
   {
-    "name": {
-      "common": "North Macedonia",
-      "official": "Republic of North Macedonia",
-      "nativeName": {
-        "mkd": {
-          "official": "Република Северна Македонија",
-          "common": "Македонија"
-        }
-      }
-    },
+    "name": "North Macedonia",
     "cca3": "MKD",
+    "flag": "🇲🇰",
     "currencies": {
       "MKD": {
         "name": "denar",
@@ -3801,25 +2351,12 @@
     },
     "languages": {
       "mkd": "Macedonian"
-    },
-    "flag": "🇲🇰"
+    }
   },
   {
-    "name": {
-      "common": "Kyrgyzstan",
-      "official": "Kyrgyz Republic",
-      "nativeName": {
-        "kir": {
-          "official": "Кыргыз Республикасы",
-          "common": "Кыргызстан"
-        },
-        "rus": {
-          "official": "Кыргызская Республика",
-          "common": "Киргизия"
-        }
-      }
-    },
+    "name": "Kyrgyzstan",
     "cca3": "KGZ",
+    "flag": "🇰🇬",
     "currencies": {
       "KGS": {
         "name": "Kyrgyzstani som",
@@ -3829,21 +2366,12 @@
     "languages": {
       "kir": "Kyrgyz",
       "rus": "Russian"
-    },
-    "flag": "🇰🇬"
+    }
   },
   {
-    "name": {
-      "common": "Romania",
-      "official": "Romania",
-      "nativeName": {
-        "ron": {
-          "official": "România",
-          "common": "România"
-        }
-      }
-    },
+    "name": "Romania",
     "cca3": "ROU",
+    "flag": "🇷🇴",
     "currencies": {
       "RON": {
         "name": "Romanian leu",
@@ -3852,29 +2380,12 @@
     },
     "languages": {
       "ron": "Romanian"
-    },
-    "flag": "🇷🇴"
+    }
   },
   {
-    "name": {
-      "common": "Guam",
-      "official": "Guam",
-      "nativeName": {
-        "cha": {
-          "official": "Guåhån",
-          "common": "Guåhån"
-        },
-        "eng": {
-          "official": "Guam",
-          "common": "Guam"
-        },
-        "spa": {
-          "official": "Guam",
-          "common": "Guam"
-        }
-      }
-    },
+    "name": "Guam",
     "cca3": "GUM",
+    "flag": "🇬🇺",
     "currencies": {
       "USD": {
         "name": "United States dollar",
@@ -3885,21 +2396,12 @@
       "cha": "Chamorro",
       "eng": "English",
       "spa": "Spanish"
-    },
-    "flag": "🇬🇺"
+    }
   },
   {
-    "name": {
-      "common": "Åland Islands",
-      "official": "Åland Islands",
-      "nativeName": {
-        "swe": {
-          "official": "Landskapet Åland",
-          "common": "Åland"
-        }
-      }
-    },
+    "name": "Åland Islands",
     "cca3": "ALA",
+    "flag": "🇦🇽",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -3908,29 +2410,12 @@
     },
     "languages": {
       "swe": "Swedish"
-    },
-    "flag": "🇦🇽"
+    }
   },
   {
-    "name": {
-      "common": "Equatorial Guinea",
-      "official": "Republic of Equatorial Guinea",
-      "nativeName": {
-        "fra": {
-          "official": "République de la Guinée Équatoriale",
-          "common": "Guinée équatoriale"
-        },
-        "por": {
-          "official": "República da Guiné Equatorial",
-          "common": "Guiné Equatorial"
-        },
-        "spa": {
-          "official": "República de Guinea Ecuatorial",
-          "common": "Guinea Ecuatorial"
-        }
-      }
-    },
+    "name": "Equatorial Guinea",
     "cca3": "GNQ",
+    "flag": "🇬🇶",
     "currencies": {
       "XAF": {
         "name": "Central African CFA franc",
@@ -3941,21 +2426,12 @@
       "fra": "French",
       "por": "Portuguese",
       "spa": "Spanish"
-    },
-    "flag": "🇬🇶"
+    }
   },
   {
-    "name": {
-      "common": "South Georgia",
-      "official": "South Georgia and the South Sandwich Islands",
-      "nativeName": {
-        "eng": {
-          "official": "South Georgia and the South Sandwich Islands",
-          "common": "South Georgia"
-        }
-      }
-    },
+    "name": "South Georgia",
     "cca3": "SGS",
+    "flag": "🇬🇸",
     "currencies": {
       "GBP": {
         "name": "British pound",
@@ -3964,21 +2440,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇬🇸"
+    }
   },
   {
-    "name": {
-      "common": "French Guiana",
-      "official": "Guiana",
-      "nativeName": {
-        "fra": {
-          "official": "Guyane",
-          "common": "Guyane française"
-        }
-      }
-    },
+    "name": "French Guiana",
     "cca3": "GUF",
+    "flag": "🇬🇫",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -3987,21 +2454,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇬🇫"
+    }
   },
   {
-    "name": {
-      "common": "Germany",
-      "official": "Federal Republic of Germany",
-      "nativeName": {
-        "deu": {
-          "official": "Bundesrepublik Deutschland",
-          "common": "Deutschland"
-        }
-      }
-    },
+    "name": "Germany",
     "cca3": "DEU",
+    "flag": "🇩🇪",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -4010,21 +2468,12 @@
     },
     "languages": {
       "deu": "German"
-    },
-    "flag": "🇩🇪"
+    }
   },
   {
-    "name": {
-      "common": "Denmark",
-      "official": "Kingdom of Denmark",
-      "nativeName": {
-        "dan": {
-          "official": "Kongeriget Danmark",
-          "common": "Danmark"
-        }
-      }
-    },
+    "name": "Denmark",
     "cca3": "DNK",
+    "flag": "🇩🇰",
     "currencies": {
       "DKK": {
         "name": "Danish krone",
@@ -4033,21 +2482,12 @@
     },
     "languages": {
       "dan": "Danish"
-    },
-    "flag": "🇩🇰"
+    }
   },
   {
-    "name": {
-      "common": "Iceland",
-      "official": "Iceland",
-      "nativeName": {
-        "isl": {
-          "official": "Ísland",
-          "common": "Ísland"
-        }
-      }
-    },
+    "name": "Iceland",
     "cca3": "ISL",
+    "flag": "🇮🇸",
     "currencies": {
       "ISK": {
         "name": "Icelandic króna",
@@ -4056,25 +2496,12 @@
     },
     "languages": {
       "isl": "Icelandic"
-    },
-    "flag": "🇮🇸"
+    }
   },
   {
-    "name": {
-      "common": "Somalia",
-      "official": "Federal Republic of Somalia",
-      "nativeName": {
-        "ara": {
-          "official": "جمهورية الصومال‎‎",
-          "common": "الصومال‎‎"
-        },
-        "som": {
-          "official": "Jamhuuriyadda Federaalka Soomaaliya",
-          "common": "Soomaaliya"
-        }
-      }
-    },
+    "name": "Somalia",
     "cca3": "SOM",
+    "flag": "🇸🇴",
     "currencies": {
       "SOS": {
         "name": "Somali shilling",
@@ -4084,21 +2511,12 @@
     "languages": {
       "ara": "Arabic",
       "som": "Somali"
-    },
-    "flag": "🇸🇴"
+    }
   },
   {
-    "name": {
-      "common": "Micronesia",
-      "official": "Federated States of Micronesia",
-      "nativeName": {
-        "eng": {
-          "official": "Federated States of Micronesia",
-          "common": "Micronesia"
-        }
-      }
-    },
+    "name": "Micronesia",
     "cca3": "FSM",
+    "flag": "🇫🇲",
     "currencies": {
       "USD": {
         "name": "United States dollar",
@@ -4107,21 +2525,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇫🇲"
+    }
   },
   {
-    "name": {
-      "common": "Laos",
-      "official": "Lao People's Democratic Republic",
-      "nativeName": {
-        "lao": {
-          "official": "ສາທາລະນະ ຊາທິປະໄຕ ຄົນລາວ ຂອງ",
-          "common": "ສປປລາວ"
-        }
-      }
-    },
+    "name": "Laos",
     "cca3": "LAO",
+    "flag": "🇱🇦",
     "currencies": {
       "LAK": {
         "name": "Lao kip",
@@ -4130,29 +2539,12 @@
     },
     "languages": {
       "lao": "Lao"
-    },
-    "flag": "🇱🇦"
+    }
   },
   {
-    "name": {
-      "common": "Sint Maarten",
-      "official": "Sint Maarten",
-      "nativeName": {
-        "eng": {
-          "official": "Sint Maarten",
-          "common": "Sint Maarten"
-        },
-        "fra": {
-          "official": "Saint-Martin",
-          "common": "Saint-Martin"
-        },
-        "nld": {
-          "official": "Sint Maarten",
-          "common": "Sint Maarten"
-        }
-      }
-    },
+    "name": "Sint Maarten",
     "cca3": "SXM",
+    "flag": "🇸🇽",
     "currencies": {
       "ANG": {
         "name": "Netherlands Antillean guilder",
@@ -4163,21 +2555,12 @@
       "eng": "English",
       "fra": "French",
       "nld": "Dutch"
-    },
-    "flag": "🇸🇽"
+    }
   },
   {
-    "name": {
-      "common": "Liberia",
-      "official": "Republic of Liberia",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of Liberia",
-          "common": "Liberia"
-        }
-      }
-    },
+    "name": "Liberia",
     "cca3": "LBR",
+    "flag": "🇱🇷",
     "currencies": {
       "LRD": {
         "name": "Liberian dollar",
@@ -4186,25 +2569,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇱🇷"
+    }
   },
   {
-    "name": {
-      "common": "Chad",
-      "official": "Republic of Chad",
-      "nativeName": {
-        "ara": {
-          "official": "جمهورية تشاد",
-          "common": "تشاد‎"
-        },
-        "fra": {
-          "official": "République du Tchad",
-          "common": "Tchad"
-        }
-      }
-    },
+    "name": "Chad",
     "cca3": "TCD",
+    "flag": "🇹🇩",
     "currencies": {
       "XAF": {
         "name": "Central African CFA franc",
@@ -4214,21 +2584,12 @@
     "languages": {
       "ara": "Arabic",
       "fra": "French"
-    },
-    "flag": "🇹🇩"
+    }
   },
   {
-    "name": {
-      "common": "Australia",
-      "official": "Commonwealth of Australia",
-      "nativeName": {
-        "eng": {
-          "official": "Commonwealth of Australia",
-          "common": "Australia"
-        }
-      }
-    },
+    "name": "Australia",
     "cca3": "AUS",
+    "flag": "🇦🇺",
     "currencies": {
       "AUD": {
         "name": "Australian dollar",
@@ -4237,21 +2598,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇦🇺"
+    }
   },
   {
-    "name": {
-      "common": "Burkina Faso",
-      "official": "Burkina Faso",
-      "nativeName": {
-        "fra": {
-          "official": "République du Burkina",
-          "common": "Burkina Faso"
-        }
-      }
-    },
+    "name": "Burkina Faso",
     "cca3": "BFA",
+    "flag": "🇧🇫",
     "currencies": {
       "XOF": {
         "name": "West African CFA franc",
@@ -4260,25 +2612,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇧🇫"
+    }
   },
   {
-    "name": {
-      "common": "Malta",
-      "official": "Republic of Malta",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of Malta",
-          "common": "Malta"
-        },
-        "mlt": {
-          "official": "Repubblika ta ' Malta",
-          "common": "Malta"
-        }
-      }
-    },
+    "name": "Malta",
     "cca3": "MLT",
+    "flag": "🇲🇹",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -4288,29 +2627,12 @@
     "languages": {
       "eng": "English",
       "mlt": "Maltese"
-    },
-    "flag": "🇲🇹"
+    }
   },
   {
-    "name": {
-      "common": "Northern Mariana Islands",
-      "official": "Commonwealth of the Northern Mariana Islands",
-      "nativeName": {
-        "cal": {
-          "official": "Commonwealth of the Northern Mariana Islands",
-          "common": "Northern Mariana Islands"
-        },
-        "cha": {
-          "official": "Sankattan Siha Na Islas Mariånas",
-          "common": "Na Islas Mariånas"
-        },
-        "eng": {
-          "official": "Commonwealth of the Northern Mariana Islands",
-          "common": "Northern Mariana Islands"
-        }
-      }
-    },
+    "name": "Northern Mariana Islands",
     "cca3": "MNP",
+    "flag": "🇲🇵",
     "currencies": {
       "USD": {
         "name": "United States dollar",
@@ -4321,25 +2643,12 @@
       "cal": "Carolinian",
       "cha": "Chamorro",
       "eng": "English"
-    },
-    "flag": "🇲🇵"
+    }
   },
   {
-    "name": {
-      "common": "Uganda",
-      "official": "Republic of Uganda",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of Uganda",
-          "common": "Uganda"
-        },
-        "swa": {
-          "official": "Republic of Uganda",
-          "common": "Uganda"
-        }
-      }
-    },
+    "name": "Uganda",
     "cca3": "UGA",
+    "flag": "🇺🇬",
     "currencies": {
       "UGX": {
         "name": "Ugandan shilling",
@@ -4349,21 +2658,12 @@
     "languages": {
       "eng": "English",
       "swa": "Swahili"
-    },
-    "flag": "🇺🇬"
+    }
   },
   {
-    "name": {
-      "common": "Spain",
-      "official": "Kingdom of Spain",
-      "nativeName": {
-        "spa": {
-          "official": "Reino de España",
-          "common": "España"
-        }
-      }
-    },
+    "name": "Spain",
     "cca3": "ESP",
+    "flag": "🇪🇸",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -4375,25 +2675,12 @@
       "cat": "Catalan",
       "eus": "Basque",
       "glc": "Galician"
-    },
-    "flag": "🇪🇸"
+    }
   },
   {
-    "name": {
-      "common": "Sudan",
-      "official": "Republic of the Sudan",
-      "nativeName": {
-        "ara": {
-          "official": "جمهورية السودان",
-          "common": "السودان"
-        },
-        "eng": {
-          "official": "Republic of the Sudan",
-          "common": "Sudan"
-        }
-      }
-    },
+    "name": "Sudan",
     "cca3": "SDN",
+    "flag": "🇸🇩",
     "currencies": {
       "SDG": {
         "name": "Sudanese pound",
@@ -4403,21 +2690,12 @@
     "languages": {
       "ara": "Arabic",
       "eng": "English"
-    },
-    "flag": "🇸🇩"
+    }
   },
   {
-    "name": {
-      "common": "Taiwan",
-      "official": "Republic of China (Taiwan)",
-      "nativeName": {
-        "zho": {
-          "official": "中華民國",
-          "common": "台灣"
-        }
-      }
-    },
+    "name": "Taiwan",
     "cca3": "TWN",
+    "flag": "🇹🇼",
     "currencies": {
       "TWD": {
         "name": "New Taiwan dollar",
@@ -4426,29 +2704,12 @@
     },
     "languages": {
       "zho": "Chinese"
-    },
-    "flag": "🇹🇼"
+    }
   },
   {
-    "name": {
-      "common": "Afghanistan",
-      "official": "Islamic Republic of Afghanistan",
-      "nativeName": {
-        "prs": {
-          "official": "جمهوری اسلامی افغانستان",
-          "common": "افغانستان"
-        },
-        "pus": {
-          "official": "د افغانستان اسلامي جمهوریت",
-          "common": "افغانستان"
-        },
-        "tuk": {
-          "official": "Owganystan Yslam Respublikasy",
-          "common": "Owganystan"
-        }
-      }
-    },
+    "name": "Afghanistan",
     "cca3": "AFG",
+    "flag": "🇦🇫",
     "currencies": {
       "AFN": {
         "name": "Afghan afghani",
@@ -4459,21 +2720,12 @@
       "prs": "Dari",
       "pus": "Pashto",
       "tuk": "Turkmen"
-    },
-    "flag": "🇦🇫"
+    }
   },
   {
-    "name": {
-      "common": "Svalbard and Jan Mayen",
-      "official": "Svalbard og Jan Mayen",
-      "nativeName": {
-        "nor": {
-          "official": "Svalbard og Jan Mayen",
-          "common": "Svalbard og Jan Mayen"
-        }
-      }
-    },
+    "name": "Svalbard and Jan Mayen",
     "cca3": "SJM",
+    "flag": "🇸🇯",
     "currencies": {
       "NOK": {
         "name": "krone",
@@ -4482,29 +2734,12 @@
     },
     "languages": {
       "nor": "Norwegian"
-    },
-    "flag": "🇸🇯"
+    }
   },
   {
-    "name": {
-      "common": "Fiji",
-      "official": "Republic of Fiji",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of Fiji",
-          "common": "Fiji"
-        },
-        "fij": {
-          "official": "Matanitu Tugalala o Viti",
-          "common": "Viti"
-        },
-        "hif": {
-          "official": "रिपब्लिक ऑफ फीजी",
-          "common": "फिजी"
-        }
-      }
-    },
+    "name": "Fiji",
     "cca3": "FJI",
+    "flag": "🇫🇯",
     "currencies": {
       "FJD": {
         "name": "Fijian dollar",
@@ -4515,25 +2750,12 @@
       "eng": "English",
       "fij": "Fijian",
       "hif": "Fiji Hindi"
-    },
-    "flag": "🇫🇯"
+    }
   },
   {
-    "name": {
-      "common": "Guinea-Bissau",
-      "official": "Republic of Guinea-Bissau",
-      "nativeName": {
-        "por": {
-          "official": "República da Guiné-Bissau",
-          "common": "Guiné-Bissau"
-        },
-        "pov": {
-          "official": "República da Guiné-Bissau",
-          "common": "Guiné-Bissau"
-        }
-      }
-    },
+    "name": "Guinea-Bissau",
     "cca3": "GNB",
+    "flag": "🇬🇼",
     "currencies": {
       "XOF": {
         "name": "West African CFA franc",
@@ -4543,21 +2765,12 @@
     "languages": {
       "por": "Portuguese",
       "pov": "Upper Guinea Creole"
-    },
-    "flag": "🇬🇼"
+    }
   },
   {
-    "name": {
-      "common": "Andorra",
-      "official": "Principality of Andorra",
-      "nativeName": {
-        "cat": {
-          "official": "Principat d'Andorra",
-          "common": "Andorra"
-        }
-      }
-    },
+    "name": "Andorra",
     "cca3": "AND",
+    "flag": "🇦🇩",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -4566,21 +2779,12 @@
     },
     "languages": {
       "cat": "Catalan"
-    },
-    "flag": "🇦🇩"
+    }
   },
   {
-    "name": {
-      "common": "Algeria",
-      "official": "People's Democratic Republic of Algeria",
-      "nativeName": {
-        "ara": {
-          "official": "الجمهورية الديمقراطية الشعبية الجزائرية",
-          "common": "الجزائر"
-        }
-      }
-    },
+    "name": "Algeria",
     "cca3": "DZA",
+    "flag": "🇩🇿",
     "currencies": {
       "DZD": {
         "name": "Algerian dinar",
@@ -4589,21 +2793,12 @@
     },
     "languages": {
       "ara": "Arabic"
-    },
-    "flag": "🇩🇿"
+    }
   },
   {
-    "name": {
-      "common": "Portugal",
-      "official": "Portuguese Republic",
-      "nativeName": {
-        "por": {
-          "official": "República Portuguesa",
-          "common": "Portugal"
-        }
-      }
-    },
+    "name": "Portugal",
     "cca3": "PRT",
+    "flag": "🇵🇹",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -4612,21 +2807,12 @@
     },
     "languages": {
       "por": "Portuguese"
-    },
-    "flag": "🇵🇹"
+    }
   },
   {
-    "name": {
-      "common": "Mozambique",
-      "official": "Republic of Mozambique",
-      "nativeName": {
-        "por": {
-          "official": "República de Moçambique",
-          "common": "Moçambique"
-        }
-      }
-    },
+    "name": "Mozambique",
     "cca3": "MOZ",
+    "flag": "🇲🇿",
     "currencies": {
       "MZN": {
         "name": "Mozambican metical",
@@ -4635,25 +2821,12 @@
     },
     "languages": {
       "por": "Portuguese"
-    },
-    "flag": "🇲🇿"
+    }
   },
   {
-    "name": {
-      "common": "Lesotho",
-      "official": "Kingdom of Lesotho",
-      "nativeName": {
-        "eng": {
-          "official": "Kingdom of Lesotho",
-          "common": "Lesotho"
-        },
-        "sot": {
-          "official": "Kingdom of Lesotho",
-          "common": "Lesotho"
-        }
-      }
-    },
+    "name": "Lesotho",
     "cca3": "LSO",
+    "flag": "🇱🇸",
     "currencies": {
       "LSL": {
         "name": "Lesotho loti",
@@ -4667,21 +2840,12 @@
     "languages": {
       "eng": "English",
       "sot": "Sotho"
-    },
-    "flag": "🇱🇸"
+    }
   },
   {
-    "name": {
-      "common": "North Korea",
-      "official": "Democratic People's Republic of Korea",
-      "nativeName": {
-        "kor": {
-          "official": "조선민주주의인민공화국",
-          "common": "조선"
-        }
-      }
-    },
+    "name": "North Korea",
     "cca3": "PRK",
+    "flag": "🇰🇵",
     "currencies": {
       "KPW": {
         "name": "North Korean won",
@@ -4690,33 +2854,12 @@
     },
     "languages": {
       "kor": "Korean"
-    },
-    "flag": "🇰🇵"
+    }
   },
   {
-    "name": {
-      "common": "Singapore",
-      "official": "Republic of Singapore",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of Singapore",
-          "common": "Singapore"
-        },
-        "zho": {
-          "official": "新加坡共和国",
-          "common": "新加坡"
-        },
-        "msa": {
-          "official": "Republik Singapura",
-          "common": "Singapura"
-        },
-        "tam": {
-          "official": "சிங்கப்பூர் குடியரசு",
-          "common": "சிங்கப்பூர்"
-        }
-      }
-    },
+    "name": "Singapore",
     "cca3": "SGP",
+    "flag": "🇸🇬",
     "currencies": {
       "SGD": {
         "name": "Singapore dollar",
@@ -4728,21 +2871,12 @@
       "zho": "Chinese",
       "msa": "Malay",
       "tam": "Tamil"
-    },
-    "flag": "🇸🇬"
+    }
   },
   {
-    "name": {
-      "common": "Monaco",
-      "official": "Principality of Monaco",
-      "nativeName": {
-        "fra": {
-          "official": "Principauté de Monaco",
-          "common": "Monaco"
-        }
-      }
-    },
+    "name": "Monaco",
     "cca3": "MCO",
+    "flag": "🇲🇨",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -4751,25 +2885,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇲🇨"
+    }
   },
   {
-    "name": {
-      "common": "Lebanon",
-      "official": "Lebanese Republic",
-      "nativeName": {
-        "ara": {
-          "official": "الجمهورية اللبنانية",
-          "common": "لبنان"
-        },
-        "fra": {
-          "official": "République libanaise",
-          "common": "Liban"
-        }
-      }
-    },
+    "name": "Lebanon",
     "cca3": "LBN",
+    "flag": "🇱🇧",
     "currencies": {
       "LBP": {
         "name": "Lebanese pound",
@@ -4779,21 +2900,12 @@
     "languages": {
       "ara": "Arabic",
       "fra": "French"
-    },
-    "flag": "🇱🇧"
+    }
   },
   {
-    "name": {
-      "common": "Serbia",
-      "official": "Republic of Serbia",
-      "nativeName": {
-        "srp": {
-          "official": "Република Србија",
-          "common": "Србија"
-        }
-      }
-    },
+    "name": "Serbia",
     "cca3": "SRB",
+    "flag": "🇷🇸",
     "currencies": {
       "RSD": {
         "name": "Serbian dinar",
@@ -4802,21 +2914,12 @@
     },
     "languages": {
       "srp": "Serbian"
-    },
-    "flag": "🇷🇸"
+    }
   },
   {
-    "name": {
-      "common": "Estonia",
-      "official": "Republic of Estonia",
-      "nativeName": {
-        "est": {
-          "official": "Eesti Vabariik",
-          "common": "Eesti"
-        }
-      }
-    },
+    "name": "Estonia",
     "cca3": "EST",
+    "flag": "🇪🇪",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -4825,21 +2928,12 @@
     },
     "languages": {
       "est": "Estonian"
-    },
-    "flag": "🇪🇪"
+    }
   },
   {
-    "name": {
-      "common": "Barbados",
-      "official": "Barbados",
-      "nativeName": {
-        "eng": {
-          "official": "Barbados",
-          "common": "Barbados"
-        }
-      }
-    },
+    "name": "Barbados",
     "cca3": "BRB",
+    "flag": "🇧🇧",
     "currencies": {
       "BBD": {
         "name": "Barbadian dollar",
@@ -4848,29 +2942,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇧🇧"
+    }
   },
   {
-    "name": {
-      "common": "Mauritius",
-      "official": "Republic of Mauritius",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of Mauritius",
-          "common": "Mauritius"
-        },
-        "fra": {
-          "official": "République de Maurice",
-          "common": "Maurice"
-        },
-        "mfe": {
-          "official": "Republik Moris",
-          "common": "Moris"
-        }
-      }
-    },
+    "name": "Mauritius",
     "cca3": "MUS",
+    "flag": "🇲🇺",
     "currencies": {
       "MUR": {
         "name": "Mauritian rupee",
@@ -4881,21 +2958,12 @@
       "eng": "English",
       "fra": "French",
       "mfe": "Mauritian Creole"
-    },
-    "flag": "🇲🇺"
+    }
   },
   {
-    "name": {
-      "common": "Saint Helena, Ascension and Tristan da Cunha",
-      "official": "Saint Helena, Ascension and Tristan da Cunha",
-      "nativeName": {
-        "eng": {
-          "official": "Saint Helena, Ascension and Tristan da Cunha",
-          "common": "Saint Helena, Ascension and Tristan da Cunha"
-        }
-      }
-    },
+    "name": "Saint Helena, Ascension and Tristan da Cunha",
     "cca3": "SHN",
+    "flag": "🇸🇭",
     "currencies": {
       "GBP": {
         "name": "Pound sterling",
@@ -4908,29 +2976,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇸🇭"
+    }
   },
   {
-    "name": {
-      "common": "Belgium",
-      "official": "Kingdom of Belgium",
-      "nativeName": {
-        "deu": {
-          "official": "Königreich Belgien",
-          "common": "Belgien"
-        },
-        "fra": {
-          "official": "Royaume de Belgique",
-          "common": "Belgique"
-        },
-        "nld": {
-          "official": "Koninkrijk België",
-          "common": "België"
-        }
-      }
-    },
+    "name": "Belgium",
     "cca3": "BEL",
+    "flag": "🇧🇪",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -4941,21 +2992,12 @@
       "deu": "German",
       "fra": "French",
       "nld": "Dutch"
-    },
-    "flag": "🇧🇪"
+    }
   },
   {
-    "name": {
-      "common": "Libya",
-      "official": "State of Libya",
-      "nativeName": {
-        "ara": {
-          "official": "الدولة ليبيا",
-          "common": "‏ليبيا"
-        }
-      }
-    },
+    "name": "Libya",
     "cca3": "LBY",
+    "flag": "🇱🇾",
     "currencies": {
       "LYD": {
         "name": "Libyan dinar",
@@ -4964,21 +3006,12 @@
     },
     "languages": {
       "ara": "Arabic"
-    },
-    "flag": "🇱🇾"
+    }
   },
   {
-    "name": {
-      "common": "Nicaragua",
-      "official": "Republic of Nicaragua",
-      "nativeName": {
-        "spa": {
-          "official": "República de Nicaragua",
-          "common": "Nicaragua"
-        }
-      }
-    },
+    "name": "Nicaragua",
     "cca3": "NIC",
+    "flag": "🇳🇮",
     "currencies": {
       "NIO": {
         "name": "Nicaraguan córdoba",
@@ -4987,21 +3020,12 @@
     },
     "languages": {
       "spa": "Spanish"
-    },
-    "flag": "🇳🇮"
+    }
   },
   {
-    "name": {
-      "common": "Kuwait",
-      "official": "State of Kuwait",
-      "nativeName": {
-        "ara": {
-          "official": "دولة الكويت",
-          "common": "الكويت"
-        }
-      }
-    },
+    "name": "Kuwait",
     "cca3": "KWT",
+    "flag": "🇰🇼",
     "currencies": {
       "KWD": {
         "name": "Kuwaiti dinar",
@@ -5010,21 +3034,12 @@
     },
     "languages": {
       "ara": "Arabic"
-    },
-    "flag": "🇰🇼"
+    }
   },
   {
-    "name": {
-      "common": "New Caledonia",
-      "official": "New Caledonia",
-      "nativeName": {
-        "fra": {
-          "official": "Nouvelle-Calédonie",
-          "common": "Nouvelle-Calédonie"
-        }
-      }
-    },
+    "name": "New Caledonia",
     "cca3": "NCL",
+    "flag": "🇳🇨",
     "currencies": {
       "XPF": {
         "name": "CFP franc",
@@ -5033,21 +3048,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇳🇨"
+    }
   },
   {
-    "name": {
-      "common": "France",
-      "official": "French Republic",
-      "nativeName": {
-        "fra": {
-          "official": "République française",
-          "common": "France"
-        }
-      }
-    },
+    "name": "France",
     "cca3": "FRA",
+    "flag": "🇫🇷",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -5056,21 +3062,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇫🇷"
+    }
   },
   {
-    "name": {
-      "common": "Vietnam",
-      "official": "Socialist Republic of Vietnam",
-      "nativeName": {
-        "vie": {
-          "official": "Cộng hòa xã hội chủ nghĩa Việt Nam",
-          "common": "Việt Nam"
-        }
-      }
-    },
+    "name": "Vietnam",
     "cca3": "VNM",
+    "flag": "🇻🇳",
     "currencies": {
       "VND": {
         "name": "Vietnamese đồng",
@@ -5079,21 +3076,12 @@
     },
     "languages": {
       "vie": "Vietnamese"
-    },
-    "flag": "🇻🇳"
+    }
   },
   {
-    "name": {
-      "common": "Saint Vincent and the Grenadines",
-      "official": "Saint Vincent and the Grenadines",
-      "nativeName": {
-        "eng": {
-          "official": "Saint Vincent and the Grenadines",
-          "common": "Saint Vincent and the Grenadines"
-        }
-      }
-    },
+    "name": "Saint Vincent and the Grenadines",
     "cca3": "VCT",
+    "flag": "🇻🇨",
     "currencies": {
       "XCD": {
         "name": "Eastern Caribbean dollar",
@@ -5102,21 +3090,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇻🇨"
+    }
   },
   {
-    "name": {
-      "common": "Bahrain",
-      "official": "Kingdom of Bahrain",
-      "nativeName": {
-        "ara": {
-          "official": "مملكة البحرين",
-          "common": "‏البحرين"
-        }
-      }
-    },
+    "name": "Bahrain",
     "cca3": "BHR",
+    "flag": "🇧🇭",
     "currencies": {
       "BHD": {
         "name": "Bahraini dinar",
@@ -5125,29 +3104,12 @@
     },
     "languages": {
       "ara": "Arabic"
-    },
-    "flag": "🇧🇭"
+    }
   },
   {
-    "name": {
-      "common": "Curaçao",
-      "official": "Country of Curaçao",
-      "nativeName": {
-        "eng": {
-          "official": "Country of Curaçao",
-          "common": "Curaçao"
-        },
-        "nld": {
-          "official": "Land Curaçao",
-          "common": "Curaçao"
-        },
-        "pap": {
-          "official": "Pais Kòrsou",
-          "common": "Pais Kòrsou"
-        }
-      }
-    },
+    "name": "Curaçao",
     "cca3": "CUW",
+    "flag": "🇨🇼",
     "currencies": {
       "ANG": {
         "name": "Netherlands Antillean guilder",
@@ -5158,21 +3120,12 @@
       "eng": "English",
       "nld": "Dutch",
       "pap": "Papiamento"
-    },
-    "flag": "🇨🇼"
+    }
   },
   {
-    "name": {
-      "common": "Bangladesh",
-      "official": "People's Republic of Bangladesh",
-      "nativeName": {
-        "ben": {
-          "official": "বাংলাদেশ গণপ্রজাতন্ত্রী",
-          "common": "বাংলাদেশ"
-        }
-      }
-    },
+    "name": "Bangladesh",
     "cca3": "BGD",
+    "flag": "🇧🇩",
     "currencies": {
       "BDT": {
         "name": "Bangladeshi taka",
@@ -5181,21 +3134,12 @@
     },
     "languages": {
       "ben": "Bengali"
-    },
-    "flag": "🇧🇩"
+    }
   },
   {
-    "name": {
-      "common": "Ivory Coast",
-      "official": "Republic of Côte d'Ivoire",
-      "nativeName": {
-        "fra": {
-          "official": "République de Côte d'Ivoire",
-          "common": "Côte d'Ivoire"
-        }
-      }
-    },
+    "name": "Ivory Coast",
     "cca3": "CIV",
+    "flag": "🇨🇮",
     "currencies": {
       "XOF": {
         "name": "West African CFA franc",
@@ -5204,37 +3148,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇨🇮"
+    }
   },
   {
-    "name": {
-      "common": "DR Congo",
-      "official": "Democratic Republic of the Congo",
-      "nativeName": {
-        "fra": {
-          "official": "République démocratique du Congo",
-          "common": "RD Congo"
-        },
-        "kon": {
-          "official": "Repubilika ya Kongo Demokratiki",
-          "common": "Repubilika ya Kongo Demokratiki"
-        },
-        "lin": {
-          "official": "Republiki ya Kongó Demokratiki",
-          "common": "Republiki ya Kongó Demokratiki"
-        },
-        "lua": {
-          "official": "Ditunga dia Kongu wa Mungalaata",
-          "common": "Ditunga dia Kongu wa Mungalaata"
-        },
-        "swa": {
-          "official": "Jamhuri ya Kidemokrasia ya Kongo",
-          "common": "Jamhuri ya Kidemokrasia ya Kongo"
-        }
-      }
-    },
+    "name": "DR Congo",
     "cca3": "COD",
+    "flag": "🇨🇩",
     "currencies": {
       "CDF": {
         "name": "Congolese franc",
@@ -5247,25 +3166,12 @@
       "lin": "Lingala",
       "lua": "Tshiluba",
       "swa": "Swahili"
-    },
-    "flag": "🇨🇩"
+    }
   },
   {
-    "name": {
-      "common": "Sri Lanka",
-      "official": "Democratic Socialist Republic of Sri Lanka",
-      "nativeName": {
-        "sin": {
-          "official": "ශ්‍රී ලංකා ප්‍රජාතාන්ත්‍රික සමාජවාදී ජනරජය",
-          "common": "ශ්‍රී ලංකාව"
-        },
-        "tam": {
-          "official": "இலங்கை சனநாயக சோசலிசக் குடியரசு",
-          "common": "இலங்கை"
-        }
-      }
-    },
+    "name": "Sri Lanka",
     "cca3": "LKA",
+    "flag": "🇱🇰",
     "currencies": {
       "LKR": {
         "name": "Sri Lankan rupee",
@@ -5275,21 +3181,12 @@
     "languages": {
       "sin": "Sinhala",
       "tam": "Tamil"
-    },
-    "flag": "🇱🇰"
+    }
   },
   {
-    "name": {
-      "common": "United States Minor Outlying Islands",
-      "official": "United States Minor Outlying Islands",
-      "nativeName": {
-        "eng": {
-          "official": "United States Minor Outlying Islands",
-          "common": "United States Minor Outlying Islands"
-        }
-      }
-    },
+    "name": "United States Minor Outlying Islands",
     "cca3": "UMI",
+    "flag": "🇺🇲",
     "currencies": {
       "USD": {
         "name": "United States dollar",
@@ -5298,25 +3195,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇺🇲"
+    }
   },
   {
-    "name": {
-      "common": "Caribbean Netherlands",
-      "official": "Bonaire, Sint Eustatius and Saba",
-      "nativeName": {
-        "nld": {
-          "official": "Bonaire, Sint Eustatius en Saba",
-          "common": "Caribisch Nederland"
-        },
-        "pap": {
-          "official": "Boneiru, Sint Eustatius y Saba",
-          "common": "Boneiru, Sint Eustatius y Saba"
-        }
-      }
-    },
+    "name": "Caribbean Netherlands",
     "cca3": "BES",
+    "flag": "🇧🇶",
     "currencies": {
       "USD": {
         "name": "United States dollar",
@@ -5327,21 +3211,12 @@
       "eng": "English",
       "nld": "Dutch",
       "pap": "Papiamento"
-    },
-    "flag": "🇧🇶"
+    }
   },
   {
-    "name": {
-      "common": "Nepal",
-      "official": "Federal Democratic Republic of Nepal",
-      "nativeName": {
-        "nep": {
-          "official": "नेपाल संघीय लोकतान्त्रिक गणतन्त्र",
-          "common": "नेपाल"
-        }
-      }
-    },
+    "name": "Nepal",
     "cca3": "NPL",
+    "flag": "🇳🇵",
     "currencies": {
       "NPR": {
         "name": "Nepalese rupee",
@@ -5350,33 +3225,12 @@
     },
     "languages": {
       "nep": "Nepali"
-    },
-    "flag": "🇳🇵"
+    }
   },
   {
-    "name": {
-      "common": "Bolivia",
-      "official": "Plurinational State of Bolivia",
-      "nativeName": {
-        "aym": {
-          "official": "Wuliwya Suyu",
-          "common": "Wuliwya"
-        },
-        "grn": {
-          "official": "Tetã Volívia",
-          "common": "Volívia"
-        },
-        "que": {
-          "official": "Buliwya Mamallaqta",
-          "common": "Buliwya"
-        },
-        "spa": {
-          "official": "Estado Plurinacional de Bolivia",
-          "common": "Bolivia"
-        }
-      }
-    },
+    "name": "Bolivia",
     "cca3": "BOL",
+    "flag": "🇧🇴",
     "currencies": {
       "BOB": {
         "name": "Bolivian boliviano",
@@ -5388,53 +3242,12 @@
       "grn": "Guaraní",
       "que": "Quechua",
       "spa": "Spanish"
-    },
-    "flag": "🇧🇴"
+    }
   },
   {
-    "name": {
-      "common": "Namibia",
-      "official": "Republic of Namibia",
-      "nativeName": {
-        "afr": {
-          "official": "Republiek van Namibië",
-          "common": "Namibië"
-        },
-        "deu": {
-          "official": "Republik Namibia",
-          "common": "Namibia"
-        },
-        "eng": {
-          "official": "Republic of Namibia",
-          "common": "Namibia"
-        },
-        "her": {
-          "official": "Republic of Namibia",
-          "common": "Namibia"
-        },
-        "hgm": {
-          "official": "Republic of Namibia",
-          "common": "Namibia"
-        },
-        "kwn": {
-          "official": "Republic of Namibia",
-          "common": "Namibia"
-        },
-        "loz": {
-          "official": "Republic of Namibia",
-          "common": "Namibia"
-        },
-        "ndo": {
-          "official": "Republic of Namibia",
-          "common": "Namibia"
-        },
-        "tsn": {
-          "official": "Lefatshe la Namibia",
-          "common": "Namibia"
-        }
-      }
-    },
+    "name": "Namibia",
     "cca3": "NAM",
+    "flag": "🇳🇦",
     "currencies": {
       "NAD": {
         "name": "Namibian dollar",
@@ -5455,25 +3268,12 @@
       "loz": "Lozi",
       "ndo": "Ndonga",
       "tsn": "Tswana"
-    },
-    "flag": "🇳🇦"
+    }
   },
   {
-    "name": {
-      "common": "Haiti",
-      "official": "Republic of Haiti",
-      "nativeName": {
-        "fra": {
-          "official": "République d'Haïti",
-          "common": "Haïti"
-        },
-        "hat": {
-          "official": "Repiblik Ayiti",
-          "common": "Ayiti"
-        }
-      }
-    },
+    "name": "Haiti",
     "cca3": "HTI",
+    "flag": "🇭🇹",
     "currencies": {
       "HTG": {
         "name": "Haitian gourde",
@@ -5483,21 +3283,12 @@
     "languages": {
       "fra": "French",
       "hat": "Haitian Creole"
-    },
-    "flag": "🇭🇹"
+    }
   },
   {
-    "name": {
-      "common": "Suriname",
-      "official": "Republic of Suriname",
-      "nativeName": {
-        "nld": {
-          "official": "Republiek Suriname",
-          "common": "Suriname"
-        }
-      }
-    },
+    "name": "Suriname",
     "cca3": "SUR",
+    "flag": "🇸🇷",
     "currencies": {
       "SRD": {
         "name": "Surinamese dollar",
@@ -5506,21 +3297,12 @@
     },
     "languages": {
       "nld": "Dutch"
-    },
-    "flag": "🇸🇷"
+    }
   },
   {
-    "name": {
-      "common": "Saint Martin",
-      "official": "Saint Martin",
-      "nativeName": {
-        "fra": {
-          "official": "Saint-Martin",
-          "common": "Saint-Martin"
-        }
-      }
-    },
+    "name": "Saint Martin",
     "cca3": "MAF",
+    "flag": "🇲🇫",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -5529,25 +3311,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇲🇫"
+    }
   },
   {
-    "name": {
-      "common": "Canada",
-      "official": "Canada",
-      "nativeName": {
-        "eng": {
-          "official": "Canada",
-          "common": "Canada"
-        },
-        "fra": {
-          "official": "Canada",
-          "common": "Canada"
-        }
-      }
-    },
+    "name": "Canada",
     "cca3": "CAN",
+    "flag": "🇨🇦",
     "currencies": {
       "CAD": {
         "name": "Canadian dollar",
@@ -5557,21 +3326,12 @@
     "languages": {
       "eng": "English",
       "fra": "French"
-    },
-    "flag": "🇨🇦"
+    }
   },
   {
-    "name": {
-      "common": "Honduras",
-      "official": "Republic of Honduras",
-      "nativeName": {
-        "spa": {
-          "official": "República de Honduras",
-          "common": "Honduras"
-        }
-      }
-    },
+    "name": "Honduras",
     "cca3": "HND",
+    "flag": "🇭🇳",
     "currencies": {
       "HNL": {
         "name": "Honduran lempira",
@@ -5580,25 +3340,12 @@
     },
     "languages": {
       "spa": "Spanish"
-    },
-    "flag": "🇭🇳"
+    }
   },
   {
-    "name": {
-      "common": "Vatican City",
-      "official": "Vatican City State",
-      "nativeName": {
-        "ita": {
-          "official": "Stato della Città del Vaticano",
-          "common": "Vaticano"
-        },
-        "lat": {
-          "official": "Status Civitatis Vaticanæ",
-          "common": "Vaticanæ"
-        }
-      }
-    },
+    "name": "Vatican City",
     "cca3": "VAT",
+    "flag": "🇻🇦",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -5608,21 +3355,12 @@
     "languages": {
       "ita": "Italian",
       "lat": "Latin"
-    },
-    "flag": "🇻🇦"
+    }
   },
   {
-    "name": {
-      "common": "United Arab Emirates",
-      "official": "United Arab Emirates",
-      "nativeName": {
-        "ara": {
-          "official": "الإمارات العربية المتحدة",
-          "common": "دولة الإمارات العربية المتحدة"
-        }
-      }
-    },
+    "name": "United Arab Emirates",
     "cca3": "ARE",
+    "flag": "🇦🇪",
     "currencies": {
       "AED": {
         "name": "United Arab Emirates dirham",
@@ -5631,21 +3369,12 @@
     },
     "languages": {
       "ara": "Arabic"
-    },
-    "flag": "🇦🇪"
+    }
   },
   {
-    "name": {
-      "common": "Guinea",
-      "official": "Republic of Guinea",
-      "nativeName": {
-        "fra": {
-          "official": "République de Guinée",
-          "common": "Guinée"
-        }
-      }
-    },
+    "name": "Guinea",
     "cca3": "GIN",
+    "flag": "🇬🇳",
     "currencies": {
       "GNF": {
         "name": "Guinean franc",
@@ -5654,25 +3383,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇬🇳"
+    }
   },
   {
-    "name": {
-      "common": "Cameroon",
-      "official": "Republic of Cameroon",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of Cameroon",
-          "common": "Cameroon"
-        },
-        "fra": {
-          "official": "République du Cameroun",
-          "common": "Cameroun"
-        }
-      }
-    },
+    "name": "Cameroon",
     "cca3": "CMR",
+    "flag": "🇨🇲",
     "currencies": {
       "XAF": {
         "name": "Central African CFA franc",
@@ -5682,25 +3398,12 @@
     "languages": {
       "eng": "English",
       "fra": "French"
-    },
-    "flag": "🇨🇲"
+    }
   },
   {
-    "name": {
-      "common": "Cyprus",
-      "official": "Republic of Cyprus",
-      "nativeName": {
-        "ell": {
-          "official": "Δημοκρατία της Κύπρος",
-          "common": "Κύπρος"
-        },
-        "tur": {
-          "official": "Kıbrıs Cumhuriyeti",
-          "common": "Kıbrıs"
-        }
-      }
-    },
+    "name": "Cyprus",
     "cca3": "CYP",
+    "flag": "🇨🇾",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -5710,21 +3413,12 @@
     "languages": {
       "ell": "Greek",
       "tur": "Turkish"
-    },
-    "flag": "🇨🇾"
+    }
   },
   {
-    "name": {
-      "common": "Trinidad and Tobago",
-      "official": "Republic of Trinidad and Tobago",
-      "nativeName": {
-        "eng": {
-          "official": "Republic of Trinidad and Tobago",
-          "common": "Trinidad and Tobago"
-        }
-      }
-    },
+    "name": "Trinidad and Tobago",
     "cca3": "TTO",
+    "flag": "🇹🇹",
     "currencies": {
       "TTD": {
         "name": "Trinidad and Tobago dollar",
@@ -5733,21 +3427,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇹🇹"
+    }
   },
   {
-    "name": {
-      "common": "Sweden",
-      "official": "Kingdom of Sweden",
-      "nativeName": {
-        "swe": {
-          "official": "Konungariket Sverige",
-          "common": "Sverige"
-        }
-      }
-    },
+    "name": "Sweden",
     "cca3": "SWE",
+    "flag": "🇸🇪",
     "currencies": {
       "SEK": {
         "name": "Swedish krona",
@@ -5756,25 +3441,12 @@
     },
     "languages": {
       "swe": "Swedish"
-    },
-    "flag": "🇸🇪"
+    }
   },
   {
-    "name": {
-      "common": "Madagascar",
-      "official": "Republic of Madagascar",
-      "nativeName": {
-        "fra": {
-          "official": "République de Madagascar",
-          "common": "Madagascar"
-        },
-        "mlg": {
-          "official": "Repoblikan'i Madagasikara",
-          "common": "Madagasikara"
-        }
-      }
-    },
+    "name": "Madagascar",
     "cca3": "MDG",
+    "flag": "🇲🇬",
     "currencies": {
       "MGA": {
         "name": "Malagasy ariary",
@@ -5784,21 +3456,12 @@
     "languages": {
       "fra": "French",
       "mlg": "Malagasy"
-    },
-    "flag": "🇲🇬"
+    }
   },
   {
-    "name": {
-      "common": "Mayotte",
-      "official": "Department of Mayotte",
-      "nativeName": {
-        "fra": {
-          "official": "Département de Mayotte",
-          "common": "Mayotte"
-        }
-      }
-    },
+    "name": "Mayotte",
     "cca3": "MYT",
+    "flag": "🇾🇹",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -5807,21 +3470,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇾🇹"
+    }
   },
   {
-    "name": {
-      "common": "Cayman Islands",
-      "official": "Cayman Islands",
-      "nativeName": {
-        "eng": {
-          "official": "Cayman Islands",
-          "common": "Cayman Islands"
-        }
-      }
-    },
+    "name": "Cayman Islands",
     "cca3": "CYM",
+    "flag": "🇰🇾",
     "currencies": {
       "KYD": {
         "name": "Cayman Islands dollar",
@@ -5830,25 +3484,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇰🇾"
+    }
   },
   {
-    "name": {
-      "common": "Malaysia",
-      "official": "Malaysia",
-      "nativeName": {
-        "eng": {
-          "official": "Malaysia",
-          "common": "Malaysia"
-        },
-        "msa": {
-          "official": "مليسيا",
-          "common": "مليسيا"
-        }
-      }
-    },
+    "name": "Malaysia",
     "cca3": "MYS",
+    "flag": "🇲🇾",
     "currencies": {
       "MYR": {
         "name": "Malaysian ringgit",
@@ -5858,21 +3499,12 @@
     "languages": {
       "eng": "English",
       "msa": "Malay"
-    },
-    "flag": "🇲🇾"
+    }
   },
   {
-    "name": {
-      "common": "Benin",
-      "official": "Republic of Benin",
-      "nativeName": {
-        "fra": {
-          "official": "République du Bénin",
-          "common": "Bénin"
-        }
-      }
-    },
+    "name": "Benin",
     "cca3": "BEN",
+    "flag": "🇧🇯",
     "currencies": {
       "XOF": {
         "name": "West African CFA franc",
@@ -5881,21 +3513,12 @@
     },
     "languages": {
       "fra": "French"
-    },
-    "flag": "🇧🇯"
+    }
   },
   {
-    "name": {
-      "common": "Greenland",
-      "official": "Greenland",
-      "nativeName": {
-        "kal": {
-          "official": "Kalaallit Nunaat",
-          "common": "Kalaallit Nunaat"
-        }
-      }
-    },
+    "name": "Greenland",
     "cca3": "GRL",
+    "flag": "🇬🇱",
     "currencies": {
       "DKK": {
         "name": "krone",
@@ -5904,33 +3527,12 @@
     },
     "languages": {
       "kal": "Greenlandic"
-    },
-    "flag": "🇬🇱"
+    }
   },
   {
-    "name": {
-      "common": "Switzerland",
-      "official": "Swiss Confederation",
-      "nativeName": {
-        "fra": {
-          "official": "Confédération suisse",
-          "common": "Suisse"
-        },
-        "gsw": {
-          "official": "Schweizerische Eidgenossenschaft",
-          "common": "Schweiz"
-        },
-        "ita": {
-          "official": "Confederazione Svizzera",
-          "common": "Svizzera"
-        },
-        "roh": {
-          "official": "Confederaziun svizra",
-          "common": "Svizra"
-        }
-      }
-    },
+    "name": "Switzerland",
     "cca3": "CHE",
+    "flag": "🇨🇭",
     "currencies": {
       "CHF": {
         "name": "Swiss franc",
@@ -5942,21 +3544,12 @@
       "gsw": "Swiss German",
       "ita": "Italian",
       "roh": "Romansh"
-    },
-    "flag": "🇨🇭"
+    }
   },
   {
-    "name": {
-      "common": "Georgia",
-      "official": "Georgia",
-      "nativeName": {
-        "kat": {
-          "official": "საქართველო",
-          "common": "საქართველო"
-        }
-      }
-    },
+    "name": "Georgia",
     "cca3": "GEO",
+    "flag": "🇬🇪",
     "currencies": {
       "GEL": {
         "name": "lari",
@@ -5965,21 +3558,12 @@
     },
     "languages": {
       "kat": "Georgian"
-    },
-    "flag": "🇬🇪"
+    }
   },
   {
-    "name": {
-      "common": "Ecuador",
-      "official": "Republic of Ecuador",
-      "nativeName": {
-        "spa": {
-          "official": "República del Ecuador",
-          "common": "Ecuador"
-        }
-      }
-    },
+    "name": "Ecuador",
     "cca3": "ECU",
+    "flag": "🇪🇨",
     "currencies": {
       "USD": {
         "name": "United States dollar",
@@ -5988,21 +3572,12 @@
     },
     "languages": {
       "spa": "Spanish"
-    },
-    "flag": "🇪🇨"
+    }
   },
   {
-    "name": {
-      "common": "Cape Verde",
-      "official": "Republic of Cabo Verde",
-      "nativeName": {
-        "por": {
-          "official": "República de Cabo Verde",
-          "common": "Cabo Verde"
-        }
-      }
-    },
+    "name": "Cape Verde",
     "cca3": "CPV",
+    "flag": "🇨🇻",
     "currencies": {
       "CVE": {
         "name": "Cape Verdean escudo",
@@ -6011,29 +3586,12 @@
     },
     "languages": {
       "por": "Portuguese"
-    },
-    "flag": "🇨🇻"
+    }
   },
   {
-    "name": {
-      "common": "Luxembourg",
-      "official": "Grand Duchy of Luxembourg",
-      "nativeName": {
-        "deu": {
-          "official": "Großherzogtum Luxemburg",
-          "common": "Luxemburg"
-        },
-        "fra": {
-          "official": "Grand-Duché de Luxembourg",
-          "common": "Luxembourg"
-        },
-        "ltz": {
-          "official": "Groussherzogtum Lëtzebuerg",
-          "common": "Lëtzebuerg"
-        }
-      }
-    },
+    "name": "Luxembourg",
     "cca3": "LUX",
+    "flag": "🇱🇺",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -6044,21 +3602,12 @@
       "deu": "German",
       "fra": "French",
       "ltz": "Luxembourgish"
-    },
-    "flag": "🇱🇺"
+    }
   },
   {
-    "name": {
-      "common": "Saint Lucia",
-      "official": "Saint Lucia",
-      "nativeName": {
-        "eng": {
-          "official": "Saint Lucia",
-          "common": "Saint Lucia"
-        }
-      }
-    },
+    "name": "Saint Lucia",
     "cca3": "LCA",
+    "flag": "🇱🇨",
     "currencies": {
       "XCD": {
         "name": "Eastern Caribbean dollar",
@@ -6067,21 +3616,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇱🇨"
+    }
   },
   {
-    "name": {
-      "common": "United States Virgin Islands",
-      "official": "Virgin Islands of the United States",
-      "nativeName": {
-        "eng": {
-          "official": "Virgin Islands of the United States",
-          "common": "United States Virgin Islands"
-        }
-      }
-    },
+    "name": "United States Virgin Islands",
     "cca3": "VIR",
+    "flag": "🇻🇮",
     "currencies": {
       "USD": {
         "name": "United States dollar",
@@ -6090,21 +3630,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇻🇮"
+    }
   },
   {
-    "name": {
-      "common": "Japan",
-      "official": "Japan",
-      "nativeName": {
-        "jpn": {
-          "official": "日本",
-          "common": "日本"
-        }
-      }
-    },
+    "name": "Japan",
     "cca3": "JPN",
+    "flag": "🇯🇵",
     "currencies": {
       "JPY": {
         "name": "Japanese yen",
@@ -6113,25 +3644,12 @@
     },
     "languages": {
       "jpn": "Japanese"
-    },
-    "flag": "🇯🇵"
+    }
   },
   {
-    "name": {
-      "common": "Jamaica",
-      "official": "Jamaica",
-      "nativeName": {
-        "eng": {
-          "official": "Jamaica",
-          "common": "Jamaica"
-        },
-        "jam": {
-          "official": "Jamaica",
-          "common": "Jamaica"
-        }
-      }
-    },
+    "name": "Jamaica",
     "cca3": "JAM",
+    "flag": "🇯🇲",
     "currencies": {
       "JMD": {
         "name": "Jamaican dollar",
@@ -6141,21 +3659,12 @@
     "languages": {
       "eng": "English",
       "jam": "Jamaican Patois"
-    },
-    "flag": "🇯🇲"
+    }
   },
   {
-    "name": {
-      "common": "Ethiopia",
-      "official": "Federal Democratic Republic of Ethiopia",
-      "nativeName": {
-        "amh": {
-          "official": "የኢትዮጵያ ፌዴራላዊ ዲሞክራሲያዊ ሪፐብሊክ",
-          "common": "ኢትዮጵያ"
-        }
-      }
-    },
+    "name": "Ethiopia",
     "cca3": "ETH",
+    "flag": "🇪🇹",
     "currencies": {
       "ETB": {
         "name": "Ethiopian birr",
@@ -6164,25 +3673,12 @@
     },
     "languages": {
       "amh": "Amharic"
-    },
-    "flag": "🇪🇹"
+    }
   },
   {
-    "name": {
-      "common": "Pakistan",
-      "official": "Islamic Republic of Pakistan",
-      "nativeName": {
-        "eng": {
-          "official": "Islamic Republic of Pakistan",
-          "common": "Pakistan"
-        },
-        "urd": {
-          "official": "اسلامی جمہوریۂ پاكستان",
-          "common": "پاكستان"
-        }
-      }
-    },
+    "name": "Pakistan",
     "cca3": "PAK",
+    "flag": "🇵🇰",
     "currencies": {
       "PKR": {
         "name": "Pakistani rupee",
@@ -6192,21 +3688,12 @@
     "languages": {
       "eng": "English",
       "urd": "Urdu"
-    },
-    "flag": "🇵🇰"
+    }
   },
   {
-    "name": {
-      "common": "Montserrat",
-      "official": "Montserrat",
-      "nativeName": {
-        "eng": {
-          "official": "Montserrat",
-          "common": "Montserrat"
-        }
-      }
-    },
+    "name": "Montserrat",
     "cca3": "MSR",
+    "flag": "🇲🇸",
     "currencies": {
       "XCD": {
         "name": "Eastern Caribbean dollar",
@@ -6215,21 +3702,12 @@
     },
     "languages": {
       "eng": "English"
-    },
-    "flag": "🇲🇸"
+    }
   },
   {
-    "name": {
-      "common": "Lithuania",
-      "official": "Republic of Lithuania",
-      "nativeName": {
-        "lit": {
-          "official": "Lietuvos Respublikos",
-          "common": "Lietuva"
-        }
-      }
-    },
+    "name": "Lithuania",
     "cca3": "LTU",
+    "flag": "🇱🇹",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -6238,21 +3716,12 @@
     },
     "languages": {
       "lit": "Lithuanian"
-    },
-    "flag": "🇱🇹"
+    }
   },
   {
-    "name": {
-      "common": "Greece",
-      "official": "Hellenic Republic",
-      "nativeName": {
-        "ell": {
-          "official": "Ελληνική Δημοκρατία",
-          "common": "Ελλάδα"
-        }
-      }
-    },
+    "name": "Greece",
     "cca3": "GRC",
+    "flag": "🇬🇷",
     "currencies": {
       "EUR": {
         "name": "Euro",
@@ -6261,7 +3730,6 @@
     },
     "languages": {
       "ell": "Greek"
-    },
-    "flag": "🇬🇷"
+    }
   }
 ]
