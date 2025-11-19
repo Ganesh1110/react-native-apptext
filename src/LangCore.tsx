@@ -7,6 +7,8 @@ import React, {
   useEffect,
 } from "react";
 import { LocaleContext, LocaleProviderProps, PluralForm } from "./types";
+import localeToCurrencyJson from "../src/data/localeToCurrency.json";
+import languageToCurrencyJson from "../src/data/languageToCurrency.json";
 
 // ============================================================================
 // PART 1: ICU MESSAGE FORMAT PARSER
@@ -16,10 +18,23 @@ import { LocaleContext, LocaleProviderProps, PluralForm } from "./types";
  * ICU MessageFormat parser for advanced formatting
  * Supports: {variable}, {count, plural, ...}, {gender, select, ...}
  */
+interface CurrencyInfo {
+  code: string;
+  symbol: string;
+}
+
+const localeToCurrency: Record<string, CurrencyInfo> = localeToCurrencyJson;
+const languageToCurrency: Record<string, string> = languageToCurrencyJson;
 class ICUMessageFormat {
-  private static PLURAL_REGEX = /\{(\w+),\s*plural,\s*(.+?)\}/gs;
-  private static SELECT_REGEX = /\{(\w+),\s*select,\s*(.+?)\}/gs;
-  private static SELECTORDINAL_REGEX = /\{(\w+),\s*selectordinal,\s*(.+?)\}/gs;
+  private static PLURAL_REGEX =
+    /\{(\w+),\s*plural,\s*((?:[^{}]|\{[^{}]*\})*)\}/g;
+
+  private static SELECT_REGEX =
+    /\{(\w+),\s*select,\s*((?:[^{}]|\{[^{}]*\})*)\}/g;
+
+  private static SELECTORDINAL_REGEX =
+    /\{(\w+),\s*selectordinal,\s*((?:[^{}]|\{[^{}]*\})*)\}/g;
+
   private static VARIABLE_REGEX = /\{([^}]+)\}/g;
 
   static format(
@@ -52,7 +67,7 @@ class ICUMessageFormat {
 
     // 4. Handle simple variables and formatting
     result = result.replace(this.VARIABLE_REGEX, (match, expression) => {
-      return this.handleVariable(expression.trim(), params);
+      return this.handleVariable(expression.trim(), params, language); // Pass language
     });
 
     return result;
@@ -103,7 +118,8 @@ class ICUMessageFormat {
 
   private static handleVariable(
     expression: string,
-    params: Record<string, any>
+    params: Record<string, any>,
+    language: string // Add language parameter
   ): string {
     // Support formatting: {price, number, currency}
     const parts = expression.split(",").map((s) => s.trim());
@@ -117,9 +133,9 @@ class ICUMessageFormat {
 
     // Apply formatting if specified
     if (type === "number") {
-      return this.formatNumber(value, format);
+      return this.formatNumber(value, format, language); // Pass language
     } else if (type === "date") {
-      return this.formatDate(value, format);
+      return this.formatDate(value, format, language); // Pass language
     }
 
     return String(value);
@@ -149,37 +165,69 @@ class ICUMessageFormat {
     });
   }
 
-  private static formatNumber(value: any, format?: string): string {
+  private static formatNumber(
+    value: any,
+    format?: string,
+    language: string = "en"
+  ): string {
     const num = Number(value);
     if (isNaN(num)) return String(value);
 
-    if (format === "currency") {
+    try {
+      if (format === "currency") {
+        const currencyInfo = this.getCurrencyForLanguage(language);
+        return new Intl.NumberFormat(language, {
+          style: "currency",
+          currency: currencyInfo.code,
+          currencyDisplay: "symbol",
+        }).format(num);
+      }
+      return new Intl.NumberFormat(language).format(num);
+    } catch (error) {
+      // Fallback to English if the locale is not supported
       return new Intl.NumberFormat("en-US", {
-        style: "currency",
+        style: format === "currency" ? "currency" : "decimal",
         currency: "USD",
       }).format(num);
-    } else if (format === "percent") {
-      return new Intl.NumberFormat("en-US", { style: "percent" }).format(num);
     }
-
-    return new Intl.NumberFormat("en-US").format(num);
   }
 
-  private static formatDate(value: any, format?: string): string {
+  private static formatDate(
+    value: any,
+    format?: string,
+    language: string = "en"
+  ): string {
     const date = new Date(value);
     if (isNaN(date.getTime())) return String(value);
 
-    if (format === "short") {
-      return date.toLocaleDateString();
-    } else if (format === "long") {
-      return date.toLocaleDateString(undefined, {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
-    }
+    try {
+      if (format === "short") {
+        return date.toLocaleDateString(language);
+      } else if (format === "long") {
+        return date.toLocaleDateString(language, {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+      }
 
-    return date.toLocaleString();
+      return date.toLocaleString(language);
+    } catch (error) {
+      // Fallback to English if the locale is not supported
+      return date.toLocaleString("en-US");
+    }
+  }
+
+  private static getCurrencyForLanguage(language: string): CurrencyInfo {
+    if (!language) return { code: "USD", symbol: "$" };
+
+    const normalized = language.replace("_", "-"); // e.g., en_US -> en-US
+    const [lang] = normalized.split("-");
+
+    return (
+      localeToCurrency[normalized] ||
+      localeToCurrency[lang] || { code: "USD", symbol: "$" } // fallback to language-only // final default
+    );
   }
 }
 
@@ -461,7 +509,9 @@ class TranslationManager {
   }
 
   private hasICUSyntax(text: string): boolean {
-    return /\{[^}]+,\s*(plural|select|selectordinal)/.test(text);
+    return /\{[^}]+,\s*(plural|select|selectordinal|number|date)\s*(,\s*\w+)?\s*\}/.test(
+      text
+    );
   }
 
   private getTranslationValue(
