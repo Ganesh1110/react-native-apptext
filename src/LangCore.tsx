@@ -7,7 +7,7 @@ import React, {
   useEffect,
 } from "react";
 import { LocaleContext, LocaleProviderProps, PluralForm } from "./types";
-import localeToCurrencyJson from "../src/data/localeToCurrency.json";
+import CurrencyJsonList from "../src/data/Currency.json";
 
 // ============================================================================
 // PART 1: ICU MESSAGE FORMAT PARSER
@@ -17,23 +17,31 @@ import localeToCurrencyJson from "../src/data/localeToCurrency.json";
  * ICU MessageFormat parser for advanced formatting
  * Supports: {variable}, {count, plural, ...}, {gender, select, ...}
  */
-interface CurrencyInfo {
-  code: string;
-  symbol: string;
+interface CurrencyEntry {
+  cca3: string;
+  currencies: Record<string, { name: string; symbol: string }>;
+  languages?: Record<string, string>;
+  name?: string;
+  flag?: string;
 }
 
 // Convert array to object with locale/cca3 as keys
-const localeToCurrency: Record<string, CurrencyInfo> =
-  localeToCurrencyJson.reduce(
-    (acc, item) => {
-      acc[item.cca3] = {
-        code: Object.keys(item.currencies)[0], // Get the first currency code
-        symbol: Object.values(item.currencies)[0]?.symbol || "",
-      };
-      return acc;
-    },
-    {} as Record<string, CurrencyInfo>
-  );
+const localeToCurrency: Record<string, CurrencyEntry> = CurrencyJsonList.reduce(
+  (acc, item) => {
+    acc[item.cca3] = {
+      cca3: item.cca3,
+      name: item.name,
+      flag: item.flag,
+      currencies: item.currencies as Record<
+        string,
+        { name: string; symbol: string }
+      >,
+      languages: item.languages as Record<string, string> | undefined,
+    };
+    return acc;
+  },
+  {} as Record<string, CurrencyEntry>
+);
 
 class ICUMessageFormat {
   private static PLURAL_REGEX =
@@ -187,6 +195,7 @@ class ICUMessageFormat {
     try {
       if (format === "currency") {
         const currencyInfo = this.getCurrencyForLanguage(language);
+
         return new Intl.NumberFormat(language, {
           style: "currency",
           currency: currencyInfo.code,
@@ -238,16 +247,76 @@ class ICUMessageFormat {
     }
   }
 
-  private static getCurrencyForLanguage(language: string): CurrencyInfo {
-    if (!language) return { code: "USD", symbol: "$" };
+  private static getCurrencyForLanguage(language: string): {
+    code: string;
+    symbol: string;
+  } {
+    const defaultCurrency = { code: "USD", symbol: "$" };
+    if (!language) return defaultCurrency;
 
-    const normalized = language.replace("_", "-");
-    const [lang] = normalized.split("-");
+    const normalized = language.toLowerCase().replace("_", "-");
+    const [lang, region] = normalized.split("-");
 
-    return (
-      localeToCurrency[normalized] ||
-      localeToCurrency[lang] || { code: "USD", symbol: "$" }
-    );
+    // 1. Exact region match (e.g., "en-GB" → GBR, "ps-AF" → AFG)
+    if (region) {
+      const regionEntry = localeToCurrency[region.toUpperCase()];
+      if (regionEntry) {
+        const code = Object.keys(regionEntry.currencies)[0];
+        return { code, symbol: regionEntry.currencies[code].symbol || "$" };
+      }
+    }
+
+    // 2. Primary country mapping (most common usage)
+    const PRIMARY_COUNTRY: Record<string, string> = {
+      en: "USA",
+      es: "ESP",
+      pt: "BRA",
+      fr: "FRA",
+      de: "DEU",
+      it: "ITA",
+      ru: "RUS",
+      ar: "SAU",
+      hi: "IND",
+      zh: "CHN",
+      ja: "JPN",
+      ko: "KOR",
+      el: "GRC",
+      // Add more if needed
+    };
+
+    if (PRIMARY_COUNTRY[lang]) {
+      const entry = localeToCurrency[PRIMARY_COUNTRY[lang]];
+      if (entry) {
+        const code = Object.keys(entry.currencies)[0];
+        return { code, symbol: entry.currencies[code].symbol || "$" };
+      }
+    }
+
+    // 3. Smart language matching: match both ISO 639-1 and ISO 639-2 codes
+    const ISO_MAP: Record<string, string[]> = {
+      ps: ["pus", "pbu", "pst"], // Pashto variants
+      prs: ["prs"], // Dari
+      fa: ["fa", "prs"], // Persian + Dari
+      ur: ["ur"],
+      bn: ["bn"],
+      // Add more if needed
+    };
+
+    const searchCodes = ISO_MAP[lang] || [lang];
+
+    const fallbackEntry = Object.values(localeToCurrency).find((entry) => {
+      if (!entry.languages) return false;
+      const langKeys = Object.keys(entry.languages);
+      return searchCodes.some((code) => langKeys.includes(code));
+    });
+
+    if (fallbackEntry) {
+      const code = Object.keys(fallbackEntry.currencies)[0];
+      return { code, symbol: fallbackEntry.currencies[code].symbol || "$" };
+    }
+
+    // 4. Final fallback
+    return defaultCurrency;
   }
 }
 
