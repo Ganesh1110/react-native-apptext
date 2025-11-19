@@ -45,6 +45,50 @@ Tired of wrestling with text rendering across different languages and screen siz
 | Memory Usage    | 2.8MB   | 4.1MB   | **32% less** 💾       |
 | Bundle Size     | 18.2KB  | N/A     | **Tree-shakeable** 🌳 |
 
+## 🏁 Getting Started
+
+### Installation
+
+```bash
+# Using npm
+npm install react-native-apptext
+
+# Using yarn
+yarn add react-native-apptext
+
+# Using pnpm
+pnpm add react-native-apptext
+```
+
+### Quick Setup
+
+```tsx
+import React from "react";
+import { View } from "react-native";
+import AppText, { AppTextProvider } from "react-native-apptext";
+
+export default function App() {
+  return (
+    <AppTextProvider>
+      <View style={{ padding: 20 }}>
+        <AppText.H1 animated animation={{ type: "fadeIn" }}>
+          Welcome to the Future of Text
+        </AppText.H1>
+
+        <AppText.Body color="secondary">
+          Build beautiful, accessible, and performant text experiences that work
+          seamlessly across all languages and devices.
+        </AppText.Body>
+
+        <AppText variant="caption" style={{ marginTop: 8 }}>
+          Automatic RTL • 60FPS Animations • 50+ Scripts • Perfect Scaling
+        </AppText>
+      </View>
+    </AppTextProvider>
+  );
+}
+```
+
 ## ✨ Feature Highlights
 
 ### 🎨 **Design System First**
@@ -102,50 +146,6 @@ const designTokens = {
 >
   Hello World!
 </AppText>
-```
-
-## 🏁 Getting Started
-
-### Installation
-
-```bash
-# Using npm
-npm install react-native-apptext
-
-# Using yarn
-yarn add react-native-apptext
-
-# Using pnpm
-pnpm add react-native-apptext
-```
-
-### Quick Setup
-
-```tsx
-import React from "react";
-import { View } from "react-native";
-import AppText, { AppTextProvider } from "react-native-apptext";
-
-export default function App() {
-  return (
-    <AppTextProvider>
-      <View style={{ padding: 20 }}>
-        <AppText.H1 animated animation={{ type: "fadeIn" }}>
-          Welcome to the Future of Text
-        </AppText.H1>
-
-        <AppText.Body color="secondary">
-          Build beautiful, accessible, and performant text experiences that work
-          seamlessly across all languages and devices.
-        </AppText.Body>
-
-        <AppText variant="caption" style={{ marginTop: 8 }}>
-          Automatic RTL • 60FPS Animations • 50+ Scripts • Perfect Scaling
-        </AppText>
-      </View>
-    </AppTextProvider>
-  );
-}
 ```
 
 ## 🌐 Internationalization (i18n)
