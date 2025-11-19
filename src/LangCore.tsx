@@ -13,10 +13,6 @@ import CurrencyJsonList from "../src/data/Currency.json";
 // PART 1: ICU MESSAGE FORMAT PARSER
 // ============================================================================
 
-/**
- * ICU MessageFormat parser for advanced formatting
- * Supports: {variable}, {count, plural, ...}, {gender, select, ...}
- */
 interface CurrencyEntry {
   cca3: string;
   currencies: Record<string, { name: string; symbol: string }>;
@@ -62,13 +58,13 @@ class ICUMessageFormat {
   ): string {
     let result = message;
 
-    // 1. Handle plural formatting: {count, plural, one {# item} other {# items}}
+    // 1. Handle plural formatting
     result = result.replace(this.PLURAL_REGEX, (match, variable, options) => {
       const count = Number(params[variable] ?? 0);
       return this.handlePlural(options, count, language, params);
     });
 
-    // 2. Handle selectordinal: {count, selectordinal, one {#st} two {#nd} few {#rd} other {#th}}
+    // 2. Handle selectordinal
     result = result.replace(
       this.SELECTORDINAL_REGEX,
       (match, variable, options) => {
@@ -77,7 +73,7 @@ class ICUMessageFormat {
       }
     );
 
-    // 3. Handle select: {gender, select, male {He} female {She} other {They}}
+    // 3. Handle select
     result = result.replace(this.SELECT_REGEX, (match, variable, options) => {
       const value = params[variable];
       return this.handleSelect(options, value, params);
@@ -161,7 +157,6 @@ class ICUMessageFormat {
 
   private static parseOptions(optionsStr: string): Record<string, string> {
     const cases: Record<string, string> = {};
-    // Updated regex to handle nested braces and content properly
     const regex = /(=?\w+)\s*\{([^}]*(?:\{[^}]*\}[^}]*)*)\}/g;
     let match;
 
@@ -242,7 +237,6 @@ class ICUMessageFormat {
 
       return date.toLocaleString(language);
     } catch (error) {
-      // Fallback to English if the locale is not supported
       return date.toLocaleString("en-US");
     }
   }
@@ -254,20 +248,35 @@ class ICUMessageFormat {
     const defaultCurrency = { code: "USD", symbol: "$" };
     if (!language) return defaultCurrency;
 
+    // Normalize language code
     const normalized = language.toLowerCase().replace("_", "-");
     const [lang, region] = normalized.split("-");
 
-    // 1. Exact region match (e.g., "en-GB" → GBR, "ps-AF" → AFG)
+    // ========================================================================
+    // STEP 1: Try exact region match (highest priority)
+    // ========================================================================
     if (region) {
-      const regionEntry = localeToCurrency[region.toUpperCase()];
-      if (regionEntry) {
-        const code = Object.keys(regionEntry.currencies)[0];
-        return { code, symbol: regionEntry.currencies[code].symbol || "$" };
+      const regionUpper = region.toUpperCase();
+      const regionEntry = localeToCurrency[regionUpper];
+
+      if (regionEntry && regionEntry.currencies) {
+        const currencyCodes = Object.keys(regionEntry.currencies);
+        if (currencyCodes.length > 0) {
+          const code = currencyCodes[0];
+          const symbol = regionEntry.currencies[code]?.symbol || "$";
+          console.log(
+            `✅ Currency found by region: ${regionUpper} → ${code} (${symbol})`
+          );
+          return { code, symbol };
+        }
       }
     }
 
-    // 2. Primary country mapping (most common usage)
+    // ========================================================================
+    // STEP 2: Primary country mapping (most common usage)
+    // ========================================================================
     const PRIMARY_COUNTRY: Record<string, string> = {
+      // Major languages
       en: "USA",
       es: "ESP",
       pt: "BRA",
@@ -281,41 +290,168 @@ class ICUMessageFormat {
       ja: "JPN",
       ko: "KOR",
       el: "GRC",
-      // Add more if needed
+
+      // South Asian languages
+      ur: "PAK", // Urdu → Pakistan
+      bn: "BGD", // Bengali → Bangladesh
+      ta: "IND", // Tamil → India
+      te: "IND", // Telugu → India
+      ml: "IND", // Malayalam → India
+      kn: "IND", // Kannada → India
+      pa: "IND", // Punjabi → India
+      gu: "IND", // Gujarati → India
+      or: "IND", // Odia → India
+      mr: "IND", // Marathi → India
+
+      // Afghan languages
+      ps: "AFG", // Pashto → Afghanistan
+      pus: "AFG", // Pashto (ISO 639-3) → Afghanistan
+      prs: "AFG", // Dari → Afghanistan
+      fa: "IRN", // Persian → Iran
+      fas: "IRN", // Persian (ISO 639-3) → Iran
+
+      // Southeast Asian languages
+      th: "THA", // Thai → Thailand
+      vi: "VNM", // Vietnamese → Vietnam
+      id: "IDN", // Indonesian → Indonesia
+      ms: "MYS", // Malay → Malaysia
+      my: "MMR", // Burmese → Myanmar
+      km: "KHM", // Khmer → Cambodia
+      lo: "LAO", // Lao → Laos
+
+      // Middle Eastern languages
+      he: "ISR", // Hebrew → Israel
+      tr: "TUR", // Turkish → Turkey
+
+      // African languages
+      sw: "KEN", // Swahili → Kenya
+      am: "ETH", // Amharic → Ethiopia
+      ha: "NGA", // Hausa → Nigeria
+      yo: "NGA", // Yoruba → Nigeria
+      ig: "NGA", // Igbo → Nigeria
+
+      // European languages
+      pl: "POL", // Polish → Poland
+      uk: "UKR", // Ukrainian → Ukraine
+      cs: "CZE", // Czech → Czechia
+      ro: "ROU", // Romanian → Romania
+      hu: "HUN", // Hungarian → Hungary
+      nl: "NLD", // Dutch → Netherlands
+      sv: "SWE", // Swedish → Sweden
+      no: "NOR", // Norwegian → Norway
+      da: "DNK", // Danish → Denmark
+      fi: "FIN", // Finnish → Finland
     };
 
     if (PRIMARY_COUNTRY[lang]) {
-      const entry = localeToCurrency[PRIMARY_COUNTRY[lang]];
-      if (entry) {
-        const code = Object.keys(entry.currencies)[0];
-        return { code, symbol: entry.currencies[code].symbol || "$" };
+      const countryCode = PRIMARY_COUNTRY[lang];
+      const entry = localeToCurrency[countryCode];
+
+      if (entry && entry.currencies) {
+        const currencyCodes = Object.keys(entry.currencies);
+        if (currencyCodes.length > 0) {
+          const code = currencyCodes[0];
+          const symbol = entry.currencies[code]?.symbol || "$";
+          console.log(
+            `✅ Currency found by language: ${lang} → ${countryCode} → ${code} (${symbol})`
+          );
+          return { code, symbol };
+        }
       }
     }
 
-    // 3. Smart language matching: match both ISO 639-1 and ISO 639-2 codes
+    // ========================================================================
+    // STEP 3: Smart language matching (ISO 639-1, 639-2, 639-3)
+    // ========================================================================
     const ISO_MAP: Record<string, string[]> = {
-      ps: ["pus", "pbu", "pst"], // Pashto variants
-      prs: ["prs"], // Dari
-      fa: ["fa", "prs"], // Persian + Dari
-      ur: ["ur"],
-      bn: ["bn"],
-      // Add more if needed
+      // Afghan languages (various ISO codes)
+      ps: ["pus", "pbt", "pst"], // Pashto variants
+      pus: ["pus", "pbt", "pst"], // Pashto ISO 639-3
+      prs: ["prs", "fa"], // Dari (also related to Persian)
+      fa: ["fas", "fa", "prs"], // Persian + Dari
+
+      // South Asian
+      ur: ["urd", "ur"], // Urdu
+      bn: ["ben", "bn"], // Bengali
+      hi: ["hin", "hi"], // Hindi
+      pa: ["pan", "pa"], // Punjabi
+
+      // Southeast Asian
+      th: ["tha", "th"], // Thai
+      vi: ["vie", "vi"], // Vietnamese
+      id: ["ind", "id"], // Indonesian
+      ms: ["msa", "ms"], // Malay
+      my: ["mya", "my"], // Burmese
+      km: ["khm", "km"], // Khmer
+      lo: ["lao", "lo"], // Lao
+
+      // Middle Eastern
+      ar: ["ara", "ar"], // Arabic
+      he: ["heb", "he"], // Hebrew
+      tr: ["tur", "tr"], // Turkish
+
+      // African
+      sw: ["swa", "sw"], // Swahili
+      am: ["amh", "am"], // Amharic
+      ha: ["hau", "ha"], // Hausa
     };
 
     const searchCodes = ISO_MAP[lang] || [lang];
 
-    const fallbackEntry = Object.values(localeToCurrency).find((entry) => {
+    const matchedEntry = Object.values(localeToCurrency).find((entry) => {
       if (!entry.languages) return false;
-      const langKeys = Object.keys(entry.languages);
-      return searchCodes.some((code) => langKeys.includes(code));
+      const langKeys = Object.keys(entry.languages).map((k) => k.toLowerCase());
+      return searchCodes.some((code) => langKeys.includes(code.toLowerCase()));
     });
 
-    if (fallbackEntry) {
-      const code = Object.keys(fallbackEntry.currencies)[0];
-      return { code, symbol: fallbackEntry.currencies[code].symbol || "$" };
+    if (matchedEntry && matchedEntry.currencies) {
+      const currencyCodes = Object.keys(matchedEntry.currencies);
+      if (currencyCodes.length > 0) {
+        const code = currencyCodes[0];
+        const symbol = matchedEntry.currencies[code]?.symbol || "$";
+        console.log(
+          `✅ Currency found by ISO matching: ${lang} → ${matchedEntry.cca3} → ${code} (${symbol})`
+        );
+        return { code, symbol };
+      }
     }
 
-    // 4. Final fallback
+    // ========================================================================
+    // STEP 4: Final fallback - try to find ANY entry with the language
+    // ========================================================================
+    const anyMatch = Object.values(localeToCurrency).find((entry) => {
+      if (!entry.languages) return false;
+      const languageValues = Object.values(entry.languages).map((v) =>
+        v.toLowerCase()
+      );
+      const languageKeys = Object.keys(entry.languages).map((k) =>
+        k.toLowerCase()
+      );
+
+      return (
+        languageValues.some((v) => v.includes(lang)) ||
+        languageKeys.some((k) => k.includes(lang))
+      );
+    });
+
+    if (anyMatch && anyMatch.currencies) {
+      const currencyCodes = Object.keys(anyMatch.currencies);
+      if (currencyCodes.length > 0) {
+        const code = currencyCodes[0];
+        const symbol = anyMatch.currencies[code]?.symbol || "$";
+        console.log(
+          `✅ Currency found by partial match: ${lang} → ${anyMatch.cca3} → ${code} (${symbol})`
+        );
+        return { code, symbol };
+      }
+    }
+
+    // ========================================================================
+    // STEP 5: Ultimate fallback
+    // ========================================================================
+    console.warn(
+      `⚠️ No currency found for language: ${language}. Falling back to USD.`
+    );
     return defaultCurrency;
   }
 }
@@ -325,13 +461,8 @@ class ICUMessageFormat {
 // ============================================================================
 
 const PLURAL_RULES: Record<string, (count: number) => PluralForm> = {
-  // English: 1 is "one", everything else is "other"
   en: (n) => (n === 1 ? "one" : "other"),
-
-  // French: 0 and 1 are "one", rest is "other"
   fr: (n) => (n === 0 || n === 1 ? "one" : "other"),
-
-  // Arabic: Complex 6-form system
   ar: (n) => {
     if (n === 0) return "zero";
     if (n === 1) return "one";
@@ -340,8 +471,6 @@ const PLURAL_RULES: Record<string, (count: number) => PluralForm> = {
     if (n % 100 >= 11) return "many";
     return "other";
   },
-
-  // Russian: Complex Slavic rules
   ru: (n) => {
     const mod10 = n % 10;
     const mod100 = n % 100;
@@ -374,17 +503,13 @@ const ORDINAL_RULES: Record<string, (count: number) => PluralForm> = {
   en: (n) => {
     const mod10 = n % 10;
     const mod100 = n % 100;
-    if (mod10 === 1 && mod100 !== 11) return "one"; // 1st, 21st, 31st
-    if (mod10 === 2 && mod100 !== 12) return "two"; // 2nd, 22nd
-    if (mod10 === 3 && mod100 !== 13) return "few"; // 3rd, 23rd
-    return "other"; // 4th, 5th, etc.
+    if (mod10 === 1 && mod100 !== 11) return "one";
+    if (mod10 === 2 && mod100 !== 12) return "two";
+    if (mod10 === 3 && mod100 !== 13) return "few";
+    return "other";
   },
-  es: (n) => {
-    return "other"; // Spanish uses "º" for all ordinals
-  },
-  ar: (n) => {
-    return "other"; // Arabic ordinals don't follow the same pattern
-  },
+  es: (n) => "other",
+  ar: (n) => "other",
 };
 
 function getPluralForm(language: string, count: number): PluralForm {
@@ -452,7 +577,7 @@ export interface PluralTranslation {
   two?: string;
   few?: string;
   many?: string;
-  other: string; // Required fallback
+  other: string;
 }
 
 export type TranslationValue = string | PluralTranslation;
@@ -510,16 +635,13 @@ class TranslationManager {
   ): string {
     const { namespace, context, count } = options || {};
 
-    // Build cache key
     const cacheKey = this.buildCacheKey(lang, key, params, namespace, context);
     if (this.cache.has(cacheKey)) {
       return this.cache.get(cacheKey)!;
     }
 
-    // Get translation value
     let translation = this.getTranslationValue(lang, key, namespace, context);
 
-    // Handle context-specific translations
     if (context && !translation) {
       const contextKey = `${key}_${context}`;
       translation = this.getTranslationValue(lang, contextKey, namespace);
@@ -530,7 +652,6 @@ class TranslationManager {
       return key;
     }
 
-    // Handle plural translations
     if (
       typeof translation === "object" &&
       "other" in translation &&
@@ -539,18 +660,14 @@ class TranslationManager {
       return this.translatePlural(lang, key, count, params, { namespace });
     }
 
-    // Handle string translations
     if (typeof translation === "string") {
       let result = translation;
 
-      // Always merge count into params if provided
       const mergedParams = count !== undefined ? { ...params, count } : params;
 
-      // Use ICU MessageFormat if enabled
       if (this.useICU && this.hasICUSyntax(result)) {
         result = ICUMessageFormat.format(result, mergedParams || {}, lang);
       } else {
-        // Fallback to simple interpolation
         result = mergedParams ? interpolate(result, mergedParams) : result;
       }
 
@@ -570,7 +687,6 @@ class TranslationManager {
   ): string {
     const translation = this.getTranslationValue(lang, key, options?.namespace);
 
-    // Handle string translations with ICU plural syntax
     if (typeof translation === "string") {
       const allParams = { ...params, count };
       return this.useICU && this.hasICUSyntax(translation)
@@ -578,7 +694,6 @@ class TranslationManager {
         : interpolate(translation, allParams);
     }
 
-    // Handle plural object
     if (
       !translation ||
       typeof translation !== "object" ||
@@ -610,17 +725,14 @@ class TranslationManager {
     namespace?: string,
     context?: string
   ): TranslationValue | null {
-    // Check namespace first
     if (namespace && this.namespaces[namespace]?.[lang]) {
       const value = getNestedValue(this.namespaces[namespace][lang], key);
       if (value) return value;
     }
 
-    // Check main translations
     let langTranslations = this.translations[lang];
     let value = langTranslations ? getNestedValue(langTranslations, key) : null;
 
-    // Fallback to default language
     if (!value && lang !== this.fallbackLanguage) {
       langTranslations = this.translations[this.fallbackLanguage];
       value = langTranslations ? getNestedValue(langTranslations, key) : null;
@@ -690,7 +802,6 @@ export function LocaleProvider({
     return RTL_LANGUAGES.includes(langCode) ? "rtl" : "ltr";
   }, [language]);
 
-  // Create translation manager
   const manager = useMemo(() => {
     return new TranslationManager(translations, {
       fallbackLanguage,
@@ -700,7 +811,6 @@ export function LocaleProvider({
     });
   }, [translations, fallbackLanguage, useICU, onMissingTranslation]);
 
-  // t() - Translation function with full ICU support
   const t = useCallback(
     (
       key: string,
@@ -712,7 +822,6 @@ export function LocaleProvider({
     [language, manager]
   );
 
-  // tn() - Plural translation function
   const tn = useCallback(
     (
       key: string,
@@ -725,7 +834,6 @@ export function LocaleProvider({
     [language, manager]
   );
 
-  // Change language
   const changeLanguage = useCallback(
     (lang: string) => {
       setLanguage(lang);
@@ -734,7 +842,6 @@ export function LocaleProvider({
     [manager]
   );
 
-  // Load namespace dynamically
   const loadNamespace = useCallback(
     async (namespace: string, loader: () => Promise<any>) => {
       if (loadedNamespaces.has(namespace)) return;
@@ -779,7 +886,6 @@ export function useLang() {
   return context;
 }
 
-// Hook for loading namespaces
 export function useNamespace(namespace: string, loader: () => Promise<any>) {
   const { loadNamespace } = useLang();
 
