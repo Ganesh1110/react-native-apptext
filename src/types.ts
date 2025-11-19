@@ -1,6 +1,10 @@
 import React, { createContext } from "react";
 import { TextProps, TextStyle, StyleProp } from "react-native";
 
+// ============================================================================
+// SCRIPT & TYPOGRAPHY TYPES (Keep existing)
+// ============================================================================
+
 export type ScriptCode =
   | "Latn"
   | "Arab"
@@ -157,6 +161,19 @@ export interface AppTextProps extends Omit<TextProps, "style">, SpacingProps {
   textBreakStrategy?: "simple" | "highQuality" | "balanced";
 }
 
+// ============================================================================
+// ENHANCED TRANSLATION TYPES
+// ============================================================================
+
+/**
+ * Plural form selector based on count and language
+ * Different languages have different plural rules
+ */
+export type PluralForm = "zero" | "one" | "two" | "few" | "many" | "other";
+
+/**
+ * Translation object with plural support
+ */
 export interface PluralTranslation {
   zero?: string;
   one?: string;
@@ -166,30 +183,200 @@ export interface PluralTranslation {
   other: string; // Required fallback
 }
 
-type TranslationValue = string | PluralTranslation;
+/**
+ * Translation value can be:
+ * - Simple string: "Hello"
+ * - ICU MessageFormat string: "You have {count, plural, one {# item} other {# items}}"
+ * - Plural object: { one: "1 item", other: "{{count}} items" }
+ */
+export type TranslationValue = string | PluralTranslation;
 
-interface Translations {
-  [key: string]: TranslationValue | { [nestedKey: string]: TranslationValue };
+/**
+ * Nested translation structure
+ * Supports infinite nesting: { user: { profile: { name: "Name" } } }
+ */
+export interface Translations {
+  [key: string]: TranslationValue | Translations;
 }
 
+/**
+ * Translation options for advanced features
+ */
+export interface TranslationOptions {
+  /** Namespace for code-splitting (e.g., "auth", "dashboard") */
+  namespace?: string;
+
+  /** Context for variations (e.g., "male", "female", "formal") */
+  context?: string;
+
+  /** Count for plural selection */
+  count?: number;
+
+  /** Default value if translation missing */
+  defaultValue?: string;
+
+  /** Post-process the translation result */
+  postProcess?: (value: string) => string;
+}
+
+/**
+ * Enhanced LocaleContext with all features
+ */
 export interface LocaleContextValue {
+  /** Current language code (e.g., "en", "fr-FR") */
   language: string;
-  direction: "rtl" | "ltr" | string;
-  t: (key: string, params?: Record<string, any>) => string;
-  tn: (key: string, count: number, params?: Record<string, any>) => string;
+
+  /** Text direction based on language */
+  direction: "rtl" | "ltr";
+
+  /**
+   * Translate a key with optional parameters
+   * @param key - Translation key (supports nesting: "user.profile.name")
+   * @param params - Values for interpolation
+   * @param options - Advanced options (namespace, context, count)
+   *
+   * @example
+   * t("welcome.message", { name: "John" })
+   * t("items", { count: 5 }, { count: 5 })
+   * t("greeting", { name: "John" }, { context: "formal" })
+   */
+  t: (
+    key: string,
+    params?: Record<string, any>,
+    options?: TranslationOptions
+  ) => string;
+
+  /**
+   * Translate with plural support
+   * @param key - Translation key
+   * @param count - Number for plural selection
+   * @param params - Additional parameters
+   * @param options - Namespace and other options
+   *
+   * @example
+   * tn("items", 5) // "5 items"
+   * tn("items", 1) // "1 item"
+   */
+  tn: (
+    key: string,
+    count: number,
+    params?: Record<string, any>,
+    options?: { namespace?: string }
+  ) => string;
+
+  /**
+   * Change the current language
+   * @param lang - New language code
+   */
   changeLanguage: (lang: string) => void;
+
+  /**
+   * Load a namespace dynamically (for code-splitting)
+   * @param namespace - Namespace identifier
+   * @param loader - Async function that returns translations
+   *
+   * @example
+   * loadNamespace("dashboard", () => import("./translations/dashboard"))
+   */
+  loadNamespace: (
+    namespace: string,
+    loader: () => Promise<any>
+  ) => Promise<void>;
 }
 
 export const LocaleContext = createContext<LocaleContextValue | null>(null);
 
+/**
+ * Props for LocaleProvider
+ */
 export interface LocaleProviderProps {
+  /** Translation object organized by language */
   translations: Record<string, Translations>;
+
+  /** Default language to use on initialization */
   defaultLanguage: string;
+
+  /** Fallback language when translation is missing (default: "en") */
+  fallbackLanguage?: string;
+
+  /** Enable ICU MessageFormat syntax (default: true) */
+  useICU?: boolean;
+
+  /** Callback when a translation key is missing */
+  onMissingTranslation?: (
+    lang: string,
+    key: string,
+    namespace?: string
+  ) => void;
+
+  /** Child components */
   children: React.ReactNode;
 }
 
+// ============================================================================
+// TYPE-SAFE TRANSLATION KEYS (Optional, for TypeScript users)
+// ============================================================================
+
 /**
- * Plural form selector based on count and language
- * Different languages have different plural rules
+ * Helper type to extract all nested keys from translation object
+ * Usage: type TranslationKeys = DeepKeyOf<typeof translations.en>
  */
-export type PluralForm = "zero" | "one" | "two" | "few" | "many" | "other";
+export type DeepKeyOf<T> = T extends object
+  ? {
+      [K in keyof T]: K extends string
+        ? T[K] extends object
+          ? `${K}` | `${K}.${DeepKeyOf<T[K]>}`
+          : `${K}`
+        : never;
+    }[keyof T]
+  : never;
+
+/**
+ * Type-safe translation hook
+ * Usage: const { t } = useTypedLang<typeof translations.en>()
+ */
+export interface TypedLocaleContextValue<T extends Translations> {
+  language: string;
+  direction: "rtl" | "ltr";
+  t: (
+    key: DeepKeyOf<T>,
+    params?: Record<string, any>,
+    options?: TranslationOptions
+  ) => string;
+  tn: (
+    key: DeepKeyOf<T>,
+    count: number,
+    params?: Record<string, any>,
+    options?: { namespace?: string }
+  ) => string;
+  changeLanguage: (lang: string) => void;
+  loadNamespace: (
+    namespace: string,
+    loader: () => Promise<any>
+  ) => Promise<void>;
+}
+
+// ============================================================================
+// FORMATTING OPTIONS
+// ============================================================================
+
+/**
+ * Number formatting options for ICU MessageFormat
+ */
+export interface NumberFormatOptions {
+  style?: "decimal" | "currency" | "percent";
+  currency?: string;
+  minimumFractionDigits?: number;
+  maximumFractionDigits?: number;
+}
+
+/**
+ * Date formatting options for ICU MessageFormat
+ */
+export interface DateFormatOptions {
+  dateStyle?: "full" | "long" | "medium" | "short";
+  timeStyle?: "full" | "long" | "medium" | "short";
+  year?: "numeric" | "2-digit";
+  month?: "numeric" | "2-digit" | "long" | "short" | "narrow";
+  day?: "numeric" | "2-digit";
+}

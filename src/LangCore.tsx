@@ -4,49 +4,189 @@ import React, {
   useState,
   useCallback,
   useMemo,
+  useEffect,
 } from "react";
 import { LocaleContext, LocaleProviderProps, PluralForm } from "./types";
 
-/**
- * Simple Interpolator
- * Replaces {{key}} placeholders with actual values
- *
- * Example:
- * interpolate("Hello {{name}}", { name: "John" })
- * → "Hello John"
- */
-function interpolate(text: string, params: Record<string, any> = {}): string {
-  return text.replace(/\{\{([^}]+)\}\}/g, (match, key) => {
-    const trimmedKey = key.trim();
-    const value = getNestedValue(params, trimmedKey);
+// ============================================================================
+// PART 1: ICU MESSAGE FORMAT PARSER
+// ============================================================================
 
-    // FIX: Handle null, undefined, objects properly
-    if (value === null || value === undefined) return match;
-    if (typeof value === "object") {
-      console.warn(`Cannot interpolate object for key: ${trimmedKey}`);
-      return match;
+/**
+ * ICU MessageFormat parser for advanced formatting
+ * Supports: {variable}, {count, plural, ...}, {gender, select, ...}
+ */
+class ICUMessageFormat {
+  private static PLURAL_REGEX = /\{(\w+),\s*plural,\s*(.+?)\}/gs;
+  private static SELECT_REGEX = /\{(\w+),\s*select,\s*(.+?)\}/gs;
+  private static SELECTORDINAL_REGEX = /\{(\w+),\s*selectordinal,\s*(.+?)\}/gs;
+  private static VARIABLE_REGEX = /\{([^}]+)\}/g;
+
+  static format(
+    message: string,
+    params: Record<string, any>,
+    language: string
+  ): string {
+    let result = message;
+
+    // 1. Handle plural formatting: {count, plural, one {# item} other {# items}}
+    result = result.replace(this.PLURAL_REGEX, (match, variable, options) => {
+      const count = Number(params[variable] ?? 0);
+      return this.handlePlural(options, count, language, params);
+    });
+
+    // 2. Handle selectordinal: {count, selectordinal, one {#st} two {#nd} few {#rd} other {#th}}
+    result = result.replace(
+      this.SELECTORDINAL_REGEX,
+      (match, variable, options) => {
+        const count = Number(params[variable] ?? 0);
+        return this.handleSelectOrdinal(options, count, language, params);
+      }
+    );
+
+    // 3. Handle select: {gender, select, male {He} female {She} other {They}}
+    result = result.replace(this.SELECT_REGEX, (match, variable, options) => {
+      const value = params[variable];
+      return this.handleSelect(options, value, params);
+    });
+
+    // 4. Handle simple variables and formatting
+    result = result.replace(this.VARIABLE_REGEX, (match, expression) => {
+      return this.handleVariable(expression.trim(), params);
+    });
+
+    return result;
+  }
+
+  private static handlePlural(
+    options: string,
+    count: number,
+    language: string,
+    params: Record<string, any>
+  ): string {
+    const cases = this.parseOptions(options);
+    const pluralForm = getPluralForm(language, count);
+
+    // Try exact match first (e.g., =0, =1)
+    const exactKey = `=${count}`;
+    if (cases[exactKey]) {
+      return this.replacePoundSign(cases[exactKey], count, params);
     }
+
+    // Then try plural form (one, few, many, other)
+    const caseValue = cases[pluralForm] || cases["other"] || "";
+    return this.replacePoundSign(caseValue, count, params);
+  }
+
+  private static handleSelectOrdinal(
+    options: string,
+    count: number,
+    language: string,
+    params: Record<string, any>
+  ): string {
+    const cases = this.parseOptions(options);
+    const ordinalForm = getOrdinalForm(language, count);
+
+    const caseValue = cases[ordinalForm] || cases["other"] || "";
+    return this.replacePoundSign(caseValue, count, params);
+  }
+
+  private static handleSelect(
+    options: string,
+    value: any,
+    params: Record<string, any>
+  ): string {
+    const cases = this.parseOptions(options);
+    const key = String(value ?? "other");
+    return cases[key] || cases["other"] || "";
+  }
+
+  private static handleVariable(
+    expression: string,
+    params: Record<string, any>
+  ): string {
+    // Support formatting: {price, number, currency}
+    const parts = expression.split(",").map((s) => s.trim());
+    const variable = parts[0];
+    const type = parts[1];
+    const format = parts[2];
+
+    const value = getNestedValue(params, variable);
+
+    if (value === null || value === undefined) return `{${expression}}`;
+
+    // Apply formatting if specified
+    if (type === "number") {
+      return this.formatNumber(value, format);
+    } else if (type === "date") {
+      return this.formatDate(value, format);
+    }
+
     return String(value);
-  });
+  }
+
+  private static parseOptions(optionsStr: string): Record<string, string> {
+    const cases: Record<string, string> = {};
+    const regex = /(=?\w+)\s*\{([^}]*)\}/g;
+    let match;
+
+    while ((match = regex.exec(optionsStr)) !== null) {
+      const key = match[1].trim();
+      const value = match[2].trim();
+      cases[key] = value;
+    }
+
+    return cases;
+  }
+
+  private static replacePoundSign(
+    text: string,
+    count: number,
+    params: Record<string, any>
+  ): string {
+    return text.replace(/#/g, String(count)).replace(/\{(\w+)\}/g, (_, key) => {
+      return String(params[key] ?? `{${key}}`);
+    });
+  }
+
+  private static formatNumber(value: any, format?: string): string {
+    const num = Number(value);
+    if (isNaN(num)) return String(value);
+
+    if (format === "currency") {
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(num);
+    } else if (format === "percent") {
+      return new Intl.NumberFormat("en-US", { style: "percent" }).format(num);
+    }
+
+    return new Intl.NumberFormat("en-US").format(num);
+  }
+
+  private static formatDate(value: any, format?: string): string {
+    const date = new Date(value);
+    if (isNaN(date.getTime())) return String(value);
+
+    if (format === "short") {
+      return date.toLocaleDateString();
+    } else if (format === "long") {
+      return date.toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    }
+
+    return date.toLocaleString();
+  }
 }
 
-/**
- * Helper function to access nested object properties
- * Example: getNestedValue({ user: { name: "John" } }, "user.name") → "John"
- */
-function getNestedValue(obj: Record<string, any>, path: string): any {
-  if (!obj || typeof obj !== "object") return undefined;
-  if (!path || typeof path !== "string") return undefined;
+// ============================================================================
+// PART 2: ENHANCED PLURAL RULES (CLDR-compliant)
+// ============================================================================
 
-  return path.split(".").reduce((current, key) => {
-    return current?.[key];
-  }, obj);
-}
-
-/**
- * Language-specific plural rules
- * Returns which plural form to use based on count
- */
 const PLURAL_RULES: Record<string, (count: number) => PluralForm> = {
   // English: 1 is "one", everything else is "other"
   en: (n) => (n === 1 ? "one" : "other"),
@@ -72,12 +212,6 @@ const PLURAL_RULES: Record<string, (count: number) => PluralForm> = {
     if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "few";
     return "many";
   },
-
-  // Chinese/Japanese: No plurals
-  zh: () => "other",
-  ja: () => "other",
-  es: (n) => (n === 1 ? "one" : "other"),
-  de: (n) => (n === 1 ? "one" : "other"),
   pl: (n) => {
     const mod10 = n % 10;
     const mod100 = n % 100;
@@ -85,46 +219,90 @@ const PLURAL_RULES: Record<string, (count: number) => PluralForm> = {
     if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "few";
     return "many";
   },
+  cs: (n) => {
+    if (n === 1) return "one";
+    if (n >= 2 && n <= 4) return "few";
+    return "many";
+  },
+  zh: () => "other",
+  ja: () => "other",
+  ko: () => "other",
+  es: (n) => (n === 1 ? "one" : "other"),
+  de: (n) => (n === 1 ? "one" : "other"),
+  it: (n) => (n === 1 ? "one" : "other"),
+  pt: (n) => (n === 0 || n === 1 ? "one" : "other"),
 };
 
-/**
- * Get the correct plural form for a language and count
- */
+const ORDINAL_RULES: Record<string, (count: number) => PluralForm> = {
+  en: (n) => {
+    const mod10 = n % 10;
+    const mod100 = n % 100;
+    if (mod10 === 1 && mod100 !== 11) return "one"; // 1st, 21st, 31st
+    if (mod10 === 2 && mod100 !== 12) return "two"; // 2nd, 22nd
+    if (mod10 === 3 && mod100 !== 13) return "few"; // 3rd, 23rd
+    return "other"; // 4th, 5th, etc.
+  },
+};
 
 function getPluralForm(language: string, count: number): PluralForm {
   if (typeof count !== "number" || !isFinite(count)) {
-    console.warn(`Invalid count for plural: ${count}, using 0`);
     count = 0;
   }
-
   const langCode = language?.split("-")[0] || "en";
   const rule = PLURAL_RULES[langCode] || PLURAL_RULES.en;
-  return rule(Math.abs(Math.floor(count))); // Use absolute integer
+  return rule(Math.abs(Math.floor(count)));
 }
 
-type DeepKeyOf<T> = T extends object
-  ? {
-      [K in keyof T]: K extends string
-        ? T[K] extends object
-          ? `${K}` | `${K}.${DeepKeyOf<T[K]>}`
-          : `${K}`
-        : never;
-    }[keyof T]
-  : never;
-
-interface TypedTranslationManager<T extends Translations> {
-  translate(key: DeepKeyOf<T>, params?: Record<string, any>): string;
-  translatePlural(
-    key: DeepKeyOf<T>,
-    count: number,
-    params?: Record<string, any>
-  ): string;
+function getOrdinalForm(language: string, count: number): PluralForm {
+  const langCode = language?.split("-")[0] || "en";
+  const rule = ORDINAL_RULES[langCode];
+  if (!rule) return "other";
+  return rule(Math.abs(Math.floor(count)));
 }
 
-/**
- * Translation object structure
- * Can be a simple string or an object with plural forms
- */
+// ============================================================================
+// PART 3: INTERPOLATION & FORMATTING
+// ============================================================================
+
+function interpolate(text: string, params: Record<string, any> = {}): string {
+  return text.replace(/\{\{([^}]+)\}\}/g, (match, key) => {
+    const trimmedKey = key.trim();
+    const value = getNestedValue(params, trimmedKey);
+
+    if (value === null || value === undefined) return match;
+    if (typeof value === "object") {
+      console.warn(`Cannot interpolate object for key: ${trimmedKey}`);
+      return match;
+    }
+    return String(value);
+  });
+}
+
+function getNestedValue(obj: Record<string, any>, path: string): any {
+  if (!obj || typeof obj !== "object") return undefined;
+  if (!path || typeof path !== "string") return undefined;
+
+  return path.split(".").reduce((current, key) => {
+    return current?.[key];
+  }, obj);
+}
+
+// ============================================================================
+// PART 4: NAMESPACE SUPPORT
+// ============================================================================
+
+interface TranslationNamespace {
+  [key: string]: any;
+}
+
+interface NamespacedTranslations {
+  [namespace: string]: TranslationNamespace;
+}
+
+// ============================================================================
+// PART 5: TRANSLATION MANAGER (Enhanced)
+// ============================================================================
+
 export interface PluralTranslation {
   zero?: string;
   one?: string;
@@ -137,97 +315,139 @@ export interface PluralTranslation {
 export type TranslationValue = string | PluralTranslation;
 
 export interface Translations {
-  [key: string]: TranslationValue | { [nestedKey: string]: TranslationValue };
+  [key: string]: TranslationValue | { [nestedKey: string]: any };
+}
+
+interface TranslationManagerOptions {
+  fallbackLanguage?: string;
+  shouldWarnMissing?: boolean;
+  useICU?: boolean; // Enable ICU MessageFormat
+  onMissingKey?: (lang: string, key: string, namespace?: string) => void;
 }
 
 class TranslationManager {
   private cache: Map<string, string> = new Map();
   private translations: Record<string, Translations>;
-
+  private namespaces: Record<string, NamespacedTranslations> = {};
   private fallbackLanguage: string;
   private shouldWarnMissing: boolean;
+  private useICU: boolean;
+  private onMissingKey?: (
+    lang: string,
+    key: string,
+    namespace?: string
+  ) => void;
 
   constructor(
     translations: Record<string, Translations>,
-    fallbackLanguage = "en",
-    shouldWarnMissing = true
+    options: TranslationManagerOptions = {}
   ) {
     this.translations = translations;
-    this.fallbackLanguage = fallbackLanguage;
-    this.shouldWarnMissing = shouldWarnMissing;
+    this.fallbackLanguage = options.fallbackLanguage || "en";
+    this.shouldWarnMissing = options.shouldWarnMissing ?? true;
+    this.useICU = options.useICU ?? true;
+    this.onMissingKey = options.onMissingKey;
   }
 
   /**
-   * Get a simple translation with interpolation
-   *
-   * @param lang - Language code (e.g., "en", "ar")
-   * @param key - Translation key (supports nested like "profile.name")
-   * @param params - Values to interpolate
+   * Register a namespace for code-splitting
    */
-  translate(lang: string, key: string, params?: Record<string, any>): string {
-    const cacheKey = params
-      ? `${lang}:${key}:${JSON.stringify(params)}`
-      : `${lang}:${key}`;
+  addNamespace(
+    namespace: string,
+    translations: Record<string, TranslationNamespace>
+  ) {
+    if (!this.namespaces[namespace]) {
+      this.namespaces[namespace] = translations;
+    }
+    this.clearCache();
+  }
 
+  /**
+   * Get a translation with full ICU MessageFormat support
+   */
+  translate(
+    lang: string,
+    key: string,
+    params?: Record<string, any>,
+    options?: { namespace?: string; context?: string; count?: number }
+  ): string {
+    const { namespace, context, count } = options || {};
+
+    // Build cache key
+    const cacheKey = this.buildCacheKey(lang, key, params, namespace, context);
     if (this.cache.has(cacheKey)) {
       return this.cache.get(cacheKey)!;
     }
 
-    const translation = this.getTranslationValue(lang, key);
+    // Get translation value
+    let translation = this.getTranslationValue(lang, key, namespace, context);
 
-    if (typeof translation === "string") {
-      const result = params ? interpolate(translation, params) : translation;
-      this.cache.set(cacheKey, result);
-      return result;
+    // Handle context-specific translations (e.g., key_male, key_female)
+    if (context && !translation) {
+      const contextKey = `${key}_${context}`;
+      translation = this.getTranslationValue(lang, contextKey, namespace);
     }
 
-    // If it's a plural object, use 'other' as default
+    if (!translation) {
+      this.handleMissingKey(lang, key, namespace);
+      return key;
+    }
+
+    // Handle plural translations
     if (
-      translation &&
       typeof translation === "object" &&
-      "other" in translation
+      "other" in translation &&
+      count !== undefined
     ) {
-      const text = translation.other;
-      const result = params ? interpolate(text, params) : text;
+      return this.translatePlural(lang, key, count, params, { namespace });
+    }
+
+    // Handle string translations
+    if (typeof translation === "string") {
+      let result = translation;
+
+      // Use ICU MessageFormat if enabled
+      if (this.useICU && this.hasICUSyntax(result)) {
+        result = ICUMessageFormat.format(result, params || {}, lang);
+      } else {
+        // Fallback to simple interpolation
+        result = params ? interpolate(result, params) : result;
+      }
+
       this.cache.set(cacheKey, result);
       return result;
     }
-    return key; // Fallback to key if translation not found
+
+    return key;
   }
 
   /**
-   * Get a plural translation
-   *
-   * @param lang - Language code
-   * @param key - Translation key
-   * @param count - Number to determine plural form
-   * @param params - Additional values to interpolate
+   * Get plural translation
    */
   translatePlural(
     lang: string,
     key: string,
     count: number,
-    params?: Record<string, any>
+    params?: Record<string, any>,
+    options?: { namespace?: string }
   ): string {
-    const translation = this.getTranslationValue(lang, key);
+    const translation = this.getTranslationValue(lang, key, options?.namespace);
 
-    // Handle string translations gracefully
+    // Handle string translations with ICU plural syntax
     if (typeof translation === "string") {
       const allParams = { ...params, count };
-      return interpolate(translation, allParams);
+      return this.useICU && this.hasICUSyntax(translation)
+        ? ICUMessageFormat.format(translation, allParams, lang)
+        : interpolate(translation, allParams);
     }
 
+    // Handle plural object
     if (
       !translation ||
       typeof translation !== "object" ||
       !("other" in translation)
     ) {
-      // Try fallback or return key
-      if (this.shouldWarnMissing) {
-        console.warn(
-          `Missing plural translation for key: ${key} in language: ${lang}`
-        );
-      }
+      this.handleMissingKey(lang, key, options?.namespace);
       return key;
     }
 
@@ -235,17 +455,28 @@ class TranslationManager {
     const text = translation[pluralForm] ?? translation.other ?? key;
 
     const allParams = { ...params, count };
-    return interpolate(text, allParams);
+    return this.useICU && this.hasICUSyntax(text)
+      ? ICUMessageFormat.format(text, allParams, lang)
+      : interpolate(text, allParams);
   }
 
-  /**
-   * Helper to get nested translation value
-   */
+  private hasICUSyntax(text: string): boolean {
+    return /\{[^}]+,\s*(plural|select|selectordinal)/.test(text);
+  }
+
   private getTranslationValue(
     lang: string,
-    key: string
+    key: string,
+    namespace?: string,
+    context?: string
   ): TranslationValue | null {
-    // Try current language
+    // Check namespace first
+    if (namespace && this.namespaces[namespace]?.[lang]) {
+      const value = getNestedValue(this.namespaces[namespace][lang], key);
+      if (value) return value;
+    }
+
+    // Check main translations
     let langTranslations = this.translations[lang];
     let value = langTranslations ? getNestedValue(langTranslations, key) : null;
 
@@ -255,12 +486,31 @@ class TranslationManager {
       value = langTranslations ? getNestedValue(langTranslations, key) : null;
     }
 
-    // Warning when translation is missing
-    if (!value && this.shouldWarnMissing) {
-      console.warn(`Missing translation for key: ${key} in language: ${lang}`);
-    }
-
     return value;
+  }
+
+  private buildCacheKey(
+    lang: string,
+    key: string,
+    params?: Record<string, any>,
+    namespace?: string,
+    context?: string
+  ): string {
+    const parts = [lang, namespace || "main", key];
+    if (context) parts.push(context);
+    if (params) parts.push(JSON.stringify(params));
+    return parts.join(":");
+  }
+
+  private handleMissingKey(lang: string, key: string, namespace?: string) {
+    if (this.shouldWarnMissing) {
+      console.warn(
+        `[i18n] Missing translation: "${key}" (lang: ${lang}${
+          namespace ? `, namespace: ${namespace}` : ""
+        })`
+      );
+    }
+    this.onMissingKey?.(lang, key, namespace);
   }
 
   clearCache() {
@@ -268,19 +518,30 @@ class TranslationManager {
   }
 }
 
-/**
- * STEP 5A: LocaleProvider Component
- * Wrap your app with this to enable translations
- */
+// ============================================================================
+// PART 6: LOCALE PROVIDER (Enhanced)
+// ============================================================================
+
 export function LocaleProvider({
   translations,
   defaultLanguage,
+  fallbackLanguage = "en",
+  useICU = true,
   onMissingTranslation,
   children,
 }: LocaleProviderProps & {
-  onMissingTranslation?: (lang: string, key: string) => void;
+  fallbackLanguage?: string;
+  useICU?: boolean;
+  onMissingTranslation?: (
+    lang: string,
+    key: string,
+    namespace?: string
+  ) => void;
 }) {
   const [language, setLanguage] = useState(defaultLanguage);
+  const [loadedNamespaces, setLoadedNamespaces] = useState<Set<string>>(
+    new Set(["main"])
+  );
 
   const RTL_LANGUAGES = ["ar", "he", "fa", "ur"];
 
@@ -289,38 +550,65 @@ export function LocaleProvider({
     return RTL_LANGUAGES.includes(langCode) ? "rtl" : "ltr";
   }, [language]);
 
-  // Create translation manager (only once)
+  // Create translation manager
   const manager = useMemo(() => {
-    if (process.env.NODE_ENV === "development") {
-      validateTranslations(translations);
-    }
-    return new TranslationManager(translations);
-  }, [translations]);
+    return new TranslationManager(translations, {
+      fallbackLanguage,
+      shouldWarnMissing: true,
+      useICU,
+      onMissingKey: onMissingTranslation,
+    });
+  }, [translations, fallbackLanguage, useICU, onMissingTranslation]);
 
-  // t() - Simple translation function
+  // t() - Translation function with full ICU support
   const t = useCallback(
-    (key: string, params?: Record<string, any>) => {
-      const result = manager.translate(language, key, params);
-      if (result === key && onMissingTranslation) {
-        onMissingTranslation(language, key);
-      }
-      return result;
-    },
-    [language, manager, onMissingTranslation]
-  );
-
-  // tn() - Plural translation function
-  const tn = useCallback(
-    (key: string, count: number, params?: Record<string, any>) => {
-      return manager.translatePlural(language, key, count, params);
+    (
+      key: string,
+      params?: Record<string, any>,
+      options?: { namespace?: string; context?: string; count?: number }
+    ) => {
+      return manager.translate(language, key, params, options);
     },
     [language, manager]
   );
 
-  const changeLanguage = useCallback((lang: string) => {
-    setLanguage(lang);
-    manager.clearCache();
-  }, []);
+  // tn() - Plural translation function
+  const tn = useCallback(
+    (
+      key: string,
+      count: number,
+      params?: Record<string, any>,
+      options?: { namespace?: string }
+    ) => {
+      return manager.translatePlural(language, key, count, params, options);
+    },
+    [language, manager]
+  );
+
+  // Change language
+  const changeLanguage = useCallback(
+    (lang: string) => {
+      setLanguage(lang);
+      manager.clearCache();
+    },
+    [manager]
+  );
+
+  // Load namespace dynamically
+  const loadNamespace = useCallback(
+    async (namespace: string, loader: () => Promise<any>) => {
+      if (loadedNamespaces.has(namespace)) return;
+
+      try {
+        const translations = await loader();
+        manager.addNamespace(namespace, translations);
+        setLoadedNamespaces((prev) => new Set([...prev, namespace]));
+      } catch (error) {
+        console.error(`Failed to load namespace: ${namespace}`, error);
+      }
+    },
+    [manager, loadedNamespaces]
+  );
 
   const value = useMemo(
     () => ({
@@ -329,77 +617,42 @@ export function LocaleProvider({
       tn,
       direction,
       changeLanguage,
+      loadNamespace,
     }),
-    [language, t, tn, changeLanguage]
+    [language, t, tn, direction, changeLanguage, loadNamespace]
   );
-
-  function validateTranslations(translations: Record<string, Translations>) {
-    Object.entries(translations).forEach(([lang, langTranslations]) => {
-      const checkObject = (obj: any, path: string = "") => {
-        // Early return for null/undefined
-        if (!obj || typeof obj !== "object") return;
-
-        Object.entries(obj).forEach(([key, value]) => {
-          // Skip null/undefined values
-          if (value == null) return;
-
-          const currentPath = path ? `${path}.${key}` : key;
-
-          if (typeof value === "object" && !Array.isArray(value)) {
-            // Check if this is a plural object (has 'other' key)
-            const hasPluralKeys = [
-              "zero",
-              "one",
-              "two",
-              "few",
-              "many",
-              "other",
-            ].some((pluralKey) => pluralKey in value);
-
-            if (hasPluralKeys) {
-              // This is a plural object, must have 'other'
-              if (!("other" in value)) {
-                console.error(
-                  `Plural translation missing 'other' field: ${lang}.${currentPath}`
-                );
-              }
-            } else {
-              // This is a nested container, check its children
-              checkObject(value, currentPath);
-            }
-          }
-        });
-      };
-
-      checkObject(langTranslations);
-    });
-  }
 
   return (
     <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>
   );
 }
 
-/**
- * STEP 5B: useLang Hook
- * Use this hook in any component to access translations
- */
+// ============================================================================
+// PART 7: HOOKS
+// ============================================================================
+
 export function useLang() {
   const context = useContext(LocaleContext);
   if (!context) {
-    throw new Error(
-      "useLang must be used within LocaleProvider. " +
-        "Wrap your app with <LocaleProvider> component."
-    );
+    throw new Error("useLang must be used within LocaleProvider");
   }
   return context;
 }
 
-// Core translation manager for advanced usage
-export { TranslationManager };
+// Hook for loading namespaces
+export function useNamespace(namespace: string, loader: () => Promise<any>) {
+  const { loadNamespace } = useLang();
 
-// Utility functions
-export { interpolate, getNestedValue, getPluralForm };
+  useEffect(() => {
+    loadNamespace(namespace, loader);
+  }, [namespace, loader, loadNamespace]);
+}
 
-// Constants
-export { PLURAL_RULES };
+// Export utilities
+export {
+  TranslationManager,
+  interpolate,
+  getNestedValue,
+  getPluralForm,
+  PLURAL_RULES,
+};
