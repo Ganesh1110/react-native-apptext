@@ -8,7 +8,6 @@ import React, {
 } from "react";
 import { LocaleContext, LocaleProviderProps, PluralForm } from "./types";
 import localeToCurrencyJson from "../src/data/localeToCurrency.json";
-import languageToCurrencyJson from "../src/data/languageToCurrency.json";
 
 // ============================================================================
 // PART 1: ICU MESSAGE FORMAT PARSER
@@ -24,7 +23,7 @@ interface CurrencyInfo {
 }
 
 const localeToCurrency: Record<string, CurrencyInfo> = localeToCurrencyJson;
-const languageToCurrency: Record<string, string> = languageToCurrencyJson;
+
 class ICUMessageFormat {
   private static PLURAL_REGEX =
     /\{(\w+),\s*plural,\s*((?:[^{}]|\{[^{}]*\})*)\}/g;
@@ -67,7 +66,7 @@ class ICUMessageFormat {
 
     // 4. Handle simple variables and formatting
     result = result.replace(this.VARIABLE_REGEX, (match, expression) => {
-      return this.handleVariable(expression.trim(), params, language); // Pass language
+      return this.handleVariable(expression.trim(), params, language);
     });
 
     return result;
@@ -119,7 +118,7 @@ class ICUMessageFormat {
   private static handleVariable(
     expression: string,
     params: Record<string, any>,
-    language: string // Add language parameter
+    language: string
   ): string {
     // Support formatting: {price, number, currency}
     const parts = expression.split(",").map((s) => s.trim());
@@ -133,9 +132,9 @@ class ICUMessageFormat {
 
     // Apply formatting if specified
     if (type === "number") {
-      return this.formatNumber(value, format, language); // Pass language
+      return this.formatNumber(value, format, language);
     } else if (type === "date") {
-      return this.formatDate(value, format, language); // Pass language
+      return this.formatDate(value, format, language);
     }
 
     return String(value);
@@ -143,7 +142,8 @@ class ICUMessageFormat {
 
   private static parseOptions(optionsStr: string): Record<string, string> {
     const cases: Record<string, string> = {};
-    const regex = /(=?\w+)\s*\{([^}]*)\}/g;
+    // Updated regex to handle nested braces and content properly
+    const regex = /(=?\w+)\s*\{([^}]*(?:\{[^}]*\}[^}]*)*)\}/g;
     let match;
 
     while ((match = regex.exec(optionsStr)) !== null) {
@@ -181,12 +181,21 @@ class ICUMessageFormat {
           currency: currencyInfo.code,
           currencyDisplay: "symbol",
         }).format(num);
+      } else if (format === "percent") {
+        return new Intl.NumberFormat(language, {
+          style: "percent",
+        }).format(num);
       }
       return new Intl.NumberFormat(language).format(num);
     } catch (error) {
       // Fallback to English if the locale is not supported
       return new Intl.NumberFormat("en-US", {
-        style: format === "currency" ? "currency" : "decimal",
+        style:
+          format === "currency"
+            ? "currency"
+            : format === "percent"
+              ? "percent"
+              : "decimal",
         currency: "USD",
       }).format(num);
     }
@@ -221,12 +230,12 @@ class ICUMessageFormat {
   private static getCurrencyForLanguage(language: string): CurrencyInfo {
     if (!language) return { code: "USD", symbol: "$" };
 
-    const normalized = language.replace("_", "-"); // e.g., en_US -> en-US
+    const normalized = language.replace("_", "-");
     const [lang] = normalized.split("-");
 
     return (
       localeToCurrency[normalized] ||
-      localeToCurrency[lang] || { code: "USD", symbol: "$" } // fallback to language-only // final default
+      localeToCurrency[lang] || { code: "USD", symbol: "$" }
     );
   }
 }
@@ -289,6 +298,12 @@ const ORDINAL_RULES: Record<string, (count: number) => PluralForm> = {
     if (mod10 === 2 && mod100 !== 12) return "two"; // 2nd, 22nd
     if (mod10 === 3 && mod100 !== 13) return "few"; // 3rd, 23rd
     return "other"; // 4th, 5th, etc.
+  },
+  es: (n) => {
+    return "other"; // Spanish uses "º" for all ordinals
+  },
+  ar: (n) => {
+    return "other"; // Arabic ordinals don't follow the same pattern
   },
 };
 
@@ -369,7 +384,7 @@ export interface Translations {
 interface TranslationManagerOptions {
   fallbackLanguage?: string;
   shouldWarnMissing?: boolean;
-  useICU?: boolean; // Enable ICU MessageFormat
+  useICU?: boolean;
   onMissingKey?: (lang: string, key: string, namespace?: string) => void;
 }
 
@@ -397,9 +412,6 @@ class TranslationManager {
     this.onMissingKey = options.onMissingKey;
   }
 
-  /**
-   * Register a namespace for code-splitting
-   */
   addNamespace(
     namespace: string,
     translations: Record<string, TranslationNamespace>
@@ -410,9 +422,6 @@ class TranslationManager {
     this.clearCache();
   }
 
-  /**
-   * Get a translation with full ICU MessageFormat support
-   */
   translate(
     lang: string,
     key: string,
@@ -430,7 +439,7 @@ class TranslationManager {
     // Get translation value
     let translation = this.getTranslationValue(lang, key, namespace, context);
 
-    // Handle context-specific translations (e.g., key_male, key_female)
+    // Handle context-specific translations
     if (context && !translation) {
       const contextKey = `${key}_${context}`;
       translation = this.getTranslationValue(lang, contextKey, namespace);
@@ -454,12 +463,15 @@ class TranslationManager {
     if (typeof translation === "string") {
       let result = translation;
 
+      // Always merge count into params if provided
+      const mergedParams = count !== undefined ? { ...params, count } : params;
+
       // Use ICU MessageFormat if enabled
       if (this.useICU && this.hasICUSyntax(result)) {
-        result = ICUMessageFormat.format(result, params || {}, lang);
+        result = ICUMessageFormat.format(result, mergedParams || {}, lang);
       } else {
         // Fallback to simple interpolation
-        result = params ? interpolate(result, params) : result;
+        result = mergedParams ? interpolate(result, mergedParams) : result;
       }
 
       this.cache.set(cacheKey, result);
@@ -469,9 +481,6 @@ class TranslationManager {
     return key;
   }
 
-  /**
-   * Get plural translation
-   */
   translatePlural(
     lang: string,
     key: string,
