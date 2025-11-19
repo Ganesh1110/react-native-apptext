@@ -22,7 +22,18 @@ interface CurrencyInfo {
   symbol: string;
 }
 
-const localeToCurrency: Record<string, CurrencyInfo> = localeToCurrencyJson;
+// Convert array to object with locale/cca3 as keys
+const localeToCurrency: Record<string, CurrencyInfo> =
+  localeToCurrencyJson.reduce(
+    (acc, item) => {
+      acc[item.cca3] = {
+        code: Object.keys(item.currencies)[0], // Get the first currency code
+        symbol: Object.values(item.currencies)[0]?.symbol || "",
+      };
+      return acc;
+    },
+    {} as Record<string, CurrencyInfo>
+  );
 
 class ICUMessageFormat {
   private static PLURAL_REGEX =
@@ -518,8 +529,9 @@ class TranslationManager {
   }
 
   private hasICUSyntax(text: string): boolean {
-    return /\{[^}]+,\s*(plural|select|selectordinal|number|date)\s*(,\s*\w+)?\s*\}/.test(
-      text
+    return (
+      /\{[^}]+,\s*(plural|select|selectordinal|number|date)\s*,/.test(text) ||
+      /\{[^}]+,\s*(plural|select|selectordinal)\s+\}/.test(text)
     );
   }
 
