@@ -1,4 +1,7 @@
-#node_module
-node_modules
-#dist
-/dist
+node_modules/
+*.log
+*.ts
+*.map
+tests/
+example/
+.vscode/
