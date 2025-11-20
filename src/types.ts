@@ -71,7 +71,26 @@ export interface ScriptConfig {
   unicodeRanges: Array<[number, number]>;
 }
 
-export type TypographyVariant =
+// Material Design Typography Scale
+export type MaterialTypographyVariant =
+  | "displayLarge"
+  | "displayMedium"
+  | "displaySmall"
+  | "headlineLarge"
+  | "headlineMedium"
+  | "headlineSmall"
+  | "titleLarge"
+  | "titleMedium"
+  | "titleSmall"
+  | "bodyLarge"
+  | "bodyMedium"
+  | "bodySmall"
+  | "labelLarge"
+  | "labelMedium"
+  | "labelSmall";
+
+// Legacy variants for backward compatibility
+export type LegacyTypographyVariant =
   | "h1"
   | "h2"
   | "h3"
@@ -87,6 +106,11 @@ export type TypographyVariant =
   | "overline"
   | "button"
   | "code";
+
+// Combined variant type
+export type TypographyVariant =
+  | MaterialTypographyVariant
+  | LegacyTypographyVariant;
 
 export interface TypographyBlock {
   fontSize: number;
@@ -109,6 +133,13 @@ export interface AppTextTheme {
     warning: string;
     info: string;
     success: string;
+    // Material Design additional colors
+    onPrimary: string;
+    onSecondary: string;
+    onSurface: string;
+    onBackground: string;
+    surfaceVariant: string;
+    outline: string;
   };
   typography: {
     [K in TypographyVariant]: TypographyBlock;
@@ -159,6 +190,43 @@ export interface AppTextProps extends Omit<TextProps, "style">, SpacingProps {
   testID?: string;
   hyphenationFrequency?: "none" | "normal" | "full";
   textBreakStrategy?: "simple" | "highQuality" | "balanced";
+}
+
+// ============================================================================
+// TRANS COMPONENT TYPES
+// ============================================================================
+
+export interface TransProps extends Omit<AppTextProps, "children"> {
+  /**
+   * Translation key
+   */
+  i18nKey: string;
+
+  /**
+   * Translation parameters for interpolation
+   */
+  values?: Record<string, any>;
+
+  /**
+   * Translation options (namespace, context, count)
+   */
+  options?: {
+    namespace?: string;
+    context?: string;
+    count?: number;
+    defaultValue?: string;
+  };
+
+  /**
+   * Custom components for rich text translation
+   * Example: { bold: <strong />, link: <a /> }
+   */
+  components?: Record<string, React.ReactNode>;
+
+  /**
+   * Fallback text when translation is missing
+   */
+  fallback?: string;
 }
 
 // ============================================================================

@@ -346,6 +346,7 @@ BaseAppText.displayName = "AppText";
 /* ========== Compound Components ========== */
 type VariantFC = React.FC<Omit<AppTextProps, "variant">>;
 type AppTextCompound = typeof BaseAppText & {
+  // Legacy variants
   H1: VariantFC;
   H2: VariantFC;
   H3: VariantFC;
@@ -357,10 +358,31 @@ type AppTextCompound = typeof BaseAppText & {
   Body: VariantFC;
   Caption: VariantFC;
   Code: VariantFC;
+
+  // Material Design 3 variants
+  DisplayLarge: VariantFC;
+  DisplayMedium: VariantFC;
+  DisplaySmall: VariantFC;
+  HeadlineLarge: VariantFC;
+  HeadlineMedium: VariantFC;
+  HeadlineSmall: VariantFC;
+  TitleLarge: VariantFC;
+  TitleMedium: VariantFC;
+  TitleSmall: VariantFC;
+  BodyLarge: VariantFC;
+  BodyMedium: VariantFC;
+  BodySmall: VariantFC;
+  LabelLarge: VariantFC;
+  LabelMedium: VariantFC;
+  LabelSmall: VariantFC;
+
+  // Trans component
+  Trans: React.FC<import("./Trans").TransProps>;
 };
 
 const AppText = BaseAppText as AppTextCompound;
 
+// Legacy variants
 AppText.H1 = memo((props) => <BaseAppText {...props} variant="h1" />);
 AppText.H2 = memo((props) => <BaseAppText {...props} variant="h2" />);
 AppText.H3 = memo((props) => <BaseAppText {...props} variant="h3" />);
@@ -374,6 +396,53 @@ AppText.Subtitle = memo((props) => (
 AppText.Body = memo((props) => <BaseAppText {...props} variant="body1" />);
 AppText.Caption = memo((props) => <BaseAppText {...props} variant="caption" />);
 AppText.Code = memo((props) => <BaseAppText {...props} variant="code" />);
+
+// Material Design 3 variants
+AppText.DisplayLarge = memo((props) => (
+  <BaseAppText {...props} variant="displayLarge" />
+));
+AppText.DisplayMedium = memo((props) => (
+  <BaseAppText {...props} variant="displayMedium" />
+));
+AppText.DisplaySmall = memo((props) => (
+  <BaseAppText {...props} variant="displaySmall" />
+));
+AppText.HeadlineLarge = memo((props) => (
+  <BaseAppText {...props} variant="headlineLarge" />
+));
+AppText.HeadlineMedium = memo((props) => (
+  <BaseAppText {...props} variant="headlineMedium" />
+));
+AppText.HeadlineSmall = memo((props) => (
+  <BaseAppText {...props} variant="headlineSmall" />
+));
+AppText.TitleLarge = memo((props) => (
+  <BaseAppText {...props} variant="titleLarge" />
+));
+AppText.TitleMedium = memo((props) => (
+  <BaseAppText {...props} variant="titleMedium" />
+));
+AppText.TitleSmall = memo((props) => (
+  <BaseAppText {...props} variant="titleSmall" />
+));
+AppText.BodyLarge = memo((props) => (
+  <BaseAppText {...props} variant="bodyLarge" />
+));
+AppText.BodyMedium = memo((props) => (
+  <BaseAppText {...props} variant="bodyMedium" />
+));
+AppText.BodySmall = memo((props) => (
+  <BaseAppText {...props} variant="bodySmall" />
+));
+AppText.LabelLarge = memo((props) => (
+  <BaseAppText {...props} variant="labelLarge" />
+));
+AppText.LabelMedium = memo((props) => (
+  <BaseAppText {...props} variant="labelMedium" />
+));
+AppText.LabelSmall = memo((props) => (
+  <BaseAppText {...props} variant="labelSmall" />
+));
 
 export default AppText;
 export {

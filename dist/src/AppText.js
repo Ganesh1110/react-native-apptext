@@ -198,6 +198,7 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
 }));
 BaseAppText.displayName = "AppText";
 const AppText = BaseAppText;
+// Legacy variants
 AppText.H1 = memo((props) => <BaseAppText {...props} variant="h1"/>);
 AppText.H2 = memo((props) => <BaseAppText {...props} variant="h2"/>);
 AppText.H3 = memo((props) => <BaseAppText {...props} variant="h3"/>);
@@ -209,5 +210,21 @@ AppText.Subtitle = memo((props) => (<BaseAppText {...props} variant="subtitle1"/
 AppText.Body = memo((props) => <BaseAppText {...props} variant="body1"/>);
 AppText.Caption = memo((props) => <BaseAppText {...props} variant="caption"/>);
 AppText.Code = memo((props) => <BaseAppText {...props} variant="code"/>);
+// Material Design 3 variants
+AppText.DisplayLarge = memo((props) => (<BaseAppText {...props} variant="displayLarge"/>));
+AppText.DisplayMedium = memo((props) => (<BaseAppText {...props} variant="displayMedium"/>));
+AppText.DisplaySmall = memo((props) => (<BaseAppText {...props} variant="displaySmall"/>));
+AppText.HeadlineLarge = memo((props) => (<BaseAppText {...props} variant="headlineLarge"/>));
+AppText.HeadlineMedium = memo((props) => (<BaseAppText {...props} variant="headlineMedium"/>));
+AppText.HeadlineSmall = memo((props) => (<BaseAppText {...props} variant="headlineSmall"/>));
+AppText.TitleLarge = memo((props) => (<BaseAppText {...props} variant="titleLarge"/>));
+AppText.TitleMedium = memo((props) => (<BaseAppText {...props} variant="titleMedium"/>));
+AppText.TitleSmall = memo((props) => (<BaseAppText {...props} variant="titleSmall"/>));
+AppText.BodyLarge = memo((props) => (<BaseAppText {...props} variant="bodyLarge"/>));
+AppText.BodyMedium = memo((props) => (<BaseAppText {...props} variant="bodyMedium"/>));
+AppText.BodySmall = memo((props) => (<BaseAppText {...props} variant="bodySmall"/>));
+AppText.LabelLarge = memo((props) => (<BaseAppText {...props} variant="labelLarge"/>));
+AppText.LabelMedium = memo((props) => (<BaseAppText {...props} variant="labelMedium"/>));
+AppText.LabelSmall = memo((props) => (<BaseAppText {...props} variant="labelSmall"/>));
 export default AppText;
 export { AppTextProvider, useAppTextTheme, useResponsiveFont, useScriptDetection, SCRIPT_CONFIGS, DEFAULT_THEME, };

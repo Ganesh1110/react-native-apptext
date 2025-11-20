@@ -4,6 +4,7 @@ import AppText, {
   AppTextProvider,
   LocaleProvider,
   useLang,
+  Trans,
 } from "react-native-apptext";
 
 // Define your translations
@@ -77,6 +78,12 @@ const translations = {
     buttons: { save: "Save", cancel: "Cancel" },
 
     errors: { generic: "Something went wrong" },
+
+    // Rich text examples for Trans component
+    rich_welcome:
+      "Hello <bold>{{name}}</bold>, welcome to our <link>amazing app</link>!",
+    terms:
+      "By continuing, you agree to our <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>.",
   },
   "en-US": {
     welcome: "Welcome, {{name}}! 🇺🇸",
@@ -321,6 +328,14 @@ export default function App() {
 function YourApp() {
   const { t, tn, changeLanguage, language } = useLang();
 
+  // Rich text components for Trans component
+  const richComponents = {
+    bold: <AppText weight="bold" color="primary" />,
+    link: <AppText color="info" style={{ textDecorationLine: "underline" }} />,
+    terms: <AppText weight="bold" color="error" />,
+    privacy: <AppText weight="bold" color="info" />,
+  };
+
   return (
     <AppTextProvider>
       <View style={{ flex: 1, backgroundColor: "#F7F7F9" }}>
@@ -343,25 +358,98 @@ function YourApp() {
               gap: 10,
             }}
           >
-            <AppText.H1 animated animation={{ type: "fadeIn" }}>
-              ✨ Future of Text
-            </AppText.H1>
+            <AppText.DisplaySmall>✨ Future of Text</AppText.DisplaySmall>
 
-            <AppText.Body color="secondary">
+            <AppText.BodyMedium color="secondary">
               Beautiful, scalable multilingual text — powered by ICU,
               animations, and automatic RTL support.
-            </AppText.Body>
+            </AppText.BodyMedium>
 
-            <AppText variant="caption" color="gray">
+            <AppText.LabelSmall color="textSecondary">
               50+ languages • Smart formatting • Lightning-fast rendering
-            </AppText>
+            </AppText.LabelSmall>
 
-            <AppText variant="caption" weight="bold" color="primary">
+            <AppText.LabelMedium weight="bold" color="primary">
               Current Language: {language}
-            </AppText>
+            </AppText.LabelMedium>
           </View>
 
-          {/* Translations Section */}
+          {/* NEW: Trans Component Examples */}
+          <View
+            style={{
+              backgroundColor: "#E8F5E8",
+              padding: 20,
+              borderRadius: 16,
+              gap: 12,
+              borderWidth: 2,
+              borderColor: "#4CAF50",
+            }}
+          >
+            <AppText.HeadlineSmall>🆕 Trans Component</AppText.HeadlineSmall>
+
+            <AppText.BodyMedium>
+              The new Trans component supports rich text with custom components:
+            </AppText.BodyMedium>
+
+            <Trans
+              i18nKey="rich_welcome"
+              values={{ name: "Sarah" }}
+              components={richComponents}
+              variant="bodyMedium"
+            />
+
+            <Trans
+              i18nKey="terms"
+              components={richComponents}
+              variant="bodySmall"
+              color="textSecondary"
+            />
+
+            <AppText.LabelSmall color="success" style={{ marginTop: 8 }}>
+              ✓ Rich text support ✓ Component interpolation ✓ Seamless
+              integration
+            </AppText.LabelSmall>
+          </View>
+
+          {/* Material Design Variants */}
+          <View
+            style={{
+              backgroundColor: "#F3E5F5",
+              padding: 20,
+              borderRadius: 16,
+              gap: 12,
+              borderWidth: 2,
+              borderColor: "#9C27B0",
+            }}
+          >
+            <AppText.HeadlineSmall>
+              🎨 Material Design Variants
+            </AppText.HeadlineSmall>
+
+            <View style={{ gap: 8 }}>
+              <AppText.DisplayLarge>Display Large</AppText.DisplayLarge>
+              <AppText.DisplayMedium>Display Medium</AppText.DisplayMedium>
+              <AppText.DisplaySmall>Display Small</AppText.DisplaySmall>
+
+              <AppText.HeadlineLarge>Headline Large</AppText.HeadlineLarge>
+              <AppText.HeadlineMedium>Headline Medium</AppText.HeadlineMedium>
+              <AppText.HeadlineSmall>Headline Small</AppText.HeadlineSmall>
+
+              <AppText.TitleLarge>Title Large</AppText.TitleLarge>
+              <AppText.TitleMedium>Title Medium</AppText.TitleMedium>
+              <AppText.TitleSmall>Title Small</AppText.TitleSmall>
+
+              <AppText.BodyLarge>Body Large</AppText.BodyLarge>
+              <AppText.BodyMedium>Body Medium</AppText.BodyMedium>
+              <AppText.BodySmall>Body Small</AppText.BodySmall>
+
+              <AppText.LabelLarge>Label Large</AppText.LabelLarge>
+              <AppText.LabelMedium>Label Medium</AppText.LabelMedium>
+              <AppText.LabelSmall>Label Small</AppText.LabelSmall>
+            </View>
+          </View>
+
+          {/* Basic Translations */}
           <View
             style={{
               backgroundColor: "#fff",
@@ -370,8 +458,10 @@ function YourApp() {
               gap: 16,
             }}
           >
-            <AppText.H3>✅ Basic Example</AppText.H3>
-            <AppText>{t("welcome", { name: "John" })}</AppText>
+            <AppText.HeadlineSmall>✅ Basic Example</AppText.HeadlineSmall>
+            <AppText.BodyLarge>
+              {t("welcome", { name: "John" })}
+            </AppText.BodyLarge>
           </View>
 
           {/* Currency Formatting Tests */}
@@ -385,7 +475,9 @@ function YourApp() {
               borderColor: "#FFD54F",
             }}
           >
-            <AppText.H3>💰 Currency Formatting (Fixed!)</AppText.H3>
+            <AppText.HeadlineSmall>
+              💰 Currency Formatting
+            </AppText.HeadlineSmall>
             <View style={{ gap: 8 }}>
               <AppText weight="semibold">Standard Price:</AppText>
               <AppText>{t("price", { amount: 1299.99 })}</AppText>
@@ -400,15 +492,18 @@ function YourApp() {
               </AppText>
               <AppText>{t("discount", { amount: 25.5 })}</AppText>
 
-              <AppText variant="caption" color="gray" style={{ marginTop: 8 }}>
+              <AppText.LabelSmall
+                color="textSecondary"
+                style={{ marginTop: 8 }}
+              >
                 ✓ Proper ISO currency codes (USD, EUR, GBP, etc.)
-              </AppText>
-              <AppText variant="caption" color="gray">
+              </AppText.LabelSmall>
+              <AppText.LabelSmall color="textSecondary">
                 ✓ Correct symbols for all 200+ countries
-              </AppText>
-              <AppText variant="caption" color="gray">
+              </AppText.LabelSmall>
+              <AppText.LabelSmall color="textSecondary">
                 ✓ RTL support for Arabic, Hebrew, Persian
-              </AppText>
+              </AppText.LabelSmall>
             </View>
           </View>
 
@@ -420,7 +515,9 @@ function YourApp() {
               gap: 12,
             }}
           >
-            <AppText.H3>✅ Plural & ICU Examples</AppText.H3>
+            <AppText.HeadlineSmall>
+              ✅ Plural & ICU Examples
+            </AppText.HeadlineSmall>
             <AppText>{t("items", { count: 1 })}</AppText>
             <AppText>{t("items", { count: 5 })}</AppText>
             <AppText>{t("messages", { count: 0 })}</AppText>
@@ -436,7 +533,9 @@ function YourApp() {
               gap: 12,
             }}
           >
-            <AppText.H3>✅ Gender-Based Examples</AppText.H3>
+            <AppText.HeadlineSmall>
+              ✅ Gender-Based Examples
+            </AppText.HeadlineSmall>
             <AppText>{t("greeting", { gender: "male" })}</AppText>
             <AppText>{t("greeting", { gender: "female" })}</AppText>
             <AppText>{t("greeting", { gender: "other" })}</AppText>
@@ -453,7 +552,9 @@ function YourApp() {
               gap: 12,
             }}
           >
-            <AppText.H3>✅ Combined Select + Plural</AppText.H3>
+            <AppText.HeadlineSmall>
+              ✅ Combined Select + Plural
+            </AppText.HeadlineSmall>
             <AppText>{t("invitation", { gender: "male", count: 1 })}</AppText>
             <AppText>{t("invitation", { gender: "female", count: 3 })}</AppText>
             <AppText>{t("invitation", { gender: "other", count: 5 })}</AppText>
@@ -467,7 +568,7 @@ function YourApp() {
               gap: 12,
             }}
           >
-            <AppText.H3>✅ Ordinal Numbers</AppText.H3>
+            <AppText.HeadlineSmall>✅ Ordinal Numbers</AppText.HeadlineSmall>
             <AppText>{t("position", { place: 1 })}</AppText>
             <AppText>{t("position", { place: 2 })}</AppText>
             <AppText>{t("position", { place: 3 })}</AppText>
@@ -484,7 +585,9 @@ function YourApp() {
               gap: 12,
             }}
           >
-            <AppText.H3>✅ Number & Date Formatting</AppText.H3>
+            <AppText.HeadlineSmall>
+              ✅ Number & Date Formatting
+            </AppText.HeadlineSmall>
             <AppText>{t("price", { amount: 1299.99 })}</AppText>
             <AppText>{t("percent", { value: 0.85 })}</AppText>
             <AppText>{t("completion", { value: 0.42 })}</AppText>
@@ -501,7 +604,9 @@ function YourApp() {
               gap: 12,
             }}
           >
-            <AppText.H3>✅ Nested Translations</AppText.H3>
+            <AppText.HeadlineSmall>
+              ✅ Nested Translations
+            </AppText.HeadlineSmall>
             <AppText>{t("user.profile.settings.privacy")}</AppText>
             <AppText>{t("user.profile.settings.notifications.email")}</AppText>
             <AppText>{t("user.profile.settings.notifications.push")}</AppText>
@@ -517,10 +622,15 @@ function YourApp() {
               gap: 12,
             }}
           >
-            <AppText.H3>🌍 Switch Language & Currency</AppText.H3>
-            <AppText variant="caption" color="gray" style={{ marginBottom: 8 }}>
+            <AppText.HeadlineSmall>
+              🌍 Switch Language & Currency
+            </AppText.HeadlineSmall>
+            <AppText.BodySmall
+              color="textSecondary"
+              style={{ marginBottom: 8 }}
+            >
               Each language will show prices in its native currency!
-            </AppText>
+            </AppText.BodySmall>
 
             <View style={{ gap: 10 }}>
               <Button
@@ -569,15 +679,43 @@ function YourApp() {
               borderColor: "#2196F3",
             }}
           >
-            <AppText.H3>🧪 Currency Test Results</AppText.H3>
+            <AppText.HeadlineSmall>
+              🧪 Currency Test Results
+            </AppText.HeadlineSmall>
             <View style={{ gap: 6 }}>
-              <AppText variant="caption">Test various amounts:</AppText>
+              <AppText.LabelSmall>Test various amounts:</AppText.LabelSmall>
               <AppText>• {t("price_simple", { amount: 0.99 })}</AppText>
               <AppText>• {t("price_simple", { amount: 9.99 })}</AppText>
               <AppText>• {t("price_simple", { amount: 99.99 })}</AppText>
               <AppText>• {t("price_simple", { amount: 999.99 })}</AppText>
               <AppText>• {t("price_simple", { amount: 9999.99 })}</AppText>
               <AppText>• {t("price_simple", { amount: 1234567.89 })}</AppText>
+            </View>
+          </View>
+
+          {/* Legacy Variants (Backward Compatibility) */}
+          <View
+            style={{
+              backgroundColor: "#FFF3E0",
+              padding: 20,
+              borderRadius: 16,
+              gap: 12,
+              borderWidth: 2,
+              borderColor: "#FF9800",
+            }}
+          >
+            <AppText.HeadlineSmall>🔙 Legacy Variants</AppText.HeadlineSmall>
+            <AppText.BodySmall color="textSecondary">
+              Backward compatibility with existing code:
+            </AppText.BodySmall>
+
+            <View style={{ gap: 6 }}>
+              <AppText.H1>H1 - Legacy Heading</AppText.H1>
+              <AppText.H2>H2 - Legacy Heading</AppText.H2>
+              <AppText.H3>H3 - Legacy Heading</AppText.H3>
+              <AppText.Body>Body - Legacy Body</AppText.Body>
+              <AppText.Caption>Caption - Legacy Caption</AppText.Caption>
+              <AppText.Code>Code - Legacy Code</AppText.Code>
             </View>
           </View>
         </ScrollView>
