@@ -14,25 +14,33 @@ import CurrencyJsonList from "../src/data/Currency.json";
 // ============================================================================
 
 interface CurrencyEntry {
-  cca3: string;
-  currencies: Record<string, { name: string; symbol: string }>;
-  languages?: Record<string, string>;
+  languages: any;
   name?: string;
+  cca3: string;
   flag?: string;
+  currencies: {
+    symbol: string;
+  };
 }
 
 // Convert array to object with locale/cca3 as keys
 const localeToCurrency: Record<string, CurrencyEntry> = CurrencyJsonList.reduce(
   (acc, item) => {
+    let symbol = "$";
+
+    if (typeof item.currencies === "object" && item.currencies !== null) {
+      symbol = item.currencies.symbol || "$";
+    } else if (typeof item.currencies === "string") {
+      symbol = item.currencies;
+    }
+
     acc[item.cca3] = {
       cca3: item.cca3,
       name: item.name,
       flag: item.flag,
-      currencies: item.currencies as Record<
-        string,
-        { name: string; symbol: string }
-      >,
-      languages: item.languages as Record<string, string> | undefined,
+      currencies: {
+        symbol: symbol,
+      },
     };
     return acc;
   },
@@ -184,35 +192,61 @@ class ICUMessageFormat {
     format?: string,
     language: string = "en"
   ): string {
+    // Validate input
+    if (value === null || value === undefined) {
+      return String(value);
+    }
+
     const num = Number(value);
-    if (isNaN(num)) return String(value);
+    if (isNaN(num) || !isFinite(num)) {
+      return String(value);
+    }
 
     try {
       if (format === "currency") {
         const currencyInfo = this.getCurrencyForLanguage(language);
 
-        return new Intl.NumberFormat(language, {
+        const formatter = new Intl.NumberFormat(language, {
           style: "currency",
           currency: currencyInfo.code,
           currencyDisplay: "symbol",
-        }).format(num);
+        });
+
+        let result = formatter.format(num);
+
+        // Fix spacing issues for RTL and specific locales
+        if (["ar", "he", "fa", "ur"].includes(language.split("-")[0])) {
+          result = result.replace(/\u202F/g, " ").replace(/\u00A0/g, " ");
+        }
+
+        return result;
       } else if (format === "percent") {
         return new Intl.NumberFormat(language, {
           style: "percent",
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2,
+        }).format(num);
+      } else {
+        return new Intl.NumberFormat(language, {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2,
         }).format(num);
       }
-      return new Intl.NumberFormat(language).format(num);
     } catch (error) {
-      // Fallback to English if the locale is not supported
-      return new Intl.NumberFormat("en-US", {
-        style:
-          format === "currency"
-            ? "currency"
-            : format === "percent"
-              ? "percent"
-              : "decimal",
-        currency: "USD",
-      }).format(num);
+      // Silent fallback for production
+      try {
+        return new Intl.NumberFormat("en-US", {
+          style:
+            format === "currency"
+              ? "currency"
+              : format === "percent"
+                ? "percent"
+                : "decimal",
+          currency: "USD",
+        }).format(num);
+      } catch {
+        return String(value);
+      }
     }
   }
 
@@ -246,11 +280,22 @@ class ICUMessageFormat {
     symbol: string;
   } {
     const defaultCurrency = { code: "USD", symbol: "$" };
-    if (!language) return defaultCurrency;
+
+    if (!language || typeof language !== "string") {
+      return defaultCurrency;
+    }
 
     // Normalize language code
-    const normalized = language.toLowerCase().replace("_", "-");
+    const normalized = language.toLowerCase().replace(/_/g, "-");
     const [lang, region] = normalized.split("-");
+
+    // Cache for frequently used currencies to improve performance
+    const cacheKey = `${lang}-${region || ""}`;
+    if (this.currencyCache.has(cacheKey)) {
+      return this.currencyCache.get(cacheKey)!;
+    }
+
+    let result = defaultCurrency;
 
     // ========================================================================
     // STEP 1: Try exact region match (highest priority)
@@ -259,16 +304,13 @@ class ICUMessageFormat {
       const regionUpper = region.toUpperCase();
       const regionEntry = localeToCurrency[regionUpper];
 
-      if (regionEntry && regionEntry.currencies) {
-        const currencyCodes = Object.keys(regionEntry.currencies);
-        if (currencyCodes.length > 0) {
-          const code = currencyCodes[0];
-          const symbol = regionEntry.currencies[code]?.symbol || "$";
-          console.log(
-            `✅ Currency found by region: ${regionUpper} → ${code} (${symbol})`
-          );
-          return { code, symbol };
-        }
+      if (regionEntry?.currencies) {
+        // Use the region as currency code and get symbol directly
+        const code = regionUpper;
+        const symbol = regionEntry.currencies.symbol || "$";
+        result = { code, symbol };
+        this.currencyCache.set(cacheKey, result);
+        return result;
       }
     }
 
@@ -292,71 +334,69 @@ class ICUMessageFormat {
       el: "GRC",
 
       // South Asian languages
-      ur: "PAK", // Urdu → Pakistan
-      bn: "BGD", // Bengali → Bangladesh
-      ta: "IND", // Tamil → India
-      te: "IND", // Telugu → India
-      ml: "IND", // Malayalam → India
-      kn: "IND", // Kannada → India
-      pa: "IND", // Punjabi → India
-      gu: "IND", // Gujarati → India
-      or: "IND", // Odia → India
-      mr: "IND", // Marathi → India
+      ur: "PAK",
+      bn: "BGD",
+      ta: "IND",
+      te: "IND",
+      ml: "IND",
+      kn: "IND",
+      pa: "IND",
+      gu: "IND",
+      or: "IND",
+      mr: "IND",
 
       // Afghan languages
-      ps: "AFG", // Pashto → Afghanistan
-      pus: "AFG", // Pashto (ISO 639-3) → Afghanistan
-      prs: "AFG", // Dari → Afghanistan
-      fa: "IRN", // Persian → Iran
-      fas: "IRN", // Persian (ISO 639-3) → Iran
+      ps: "AFG",
+      pus: "AFG",
+      prs: "AFG",
+      fa: "IRN",
+      fas: "IRN",
 
       // Southeast Asian languages
-      th: "THA", // Thai → Thailand
-      vi: "VNM", // Vietnamese → Vietnam
-      id: "IDN", // Indonesian → Indonesia
-      ms: "MYS", // Malay → Malaysia
-      my: "MMR", // Burmese → Myanmar
-      km: "KHM", // Khmer → Cambodia
-      lo: "LAO", // Lao → Laos
+      th: "THA",
+      vi: "VNM",
+      id: "IDN",
+      ms: "MYS",
+      my: "MMR",
+      km: "KHM",
+      lo: "LAO",
 
       // Middle Eastern languages
-      he: "ISR", // Hebrew → Israel
-      tr: "TUR", // Turkish → Turkey
+      he: "ISR",
+      tr: "TUR",
+      af: "AFG",
 
       // African languages
-      sw: "KEN", // Swahili → Kenya
-      am: "ETH", // Amharic → Ethiopia
-      ha: "NGA", // Hausa → Nigeria
-      yo: "NGA", // Yoruba → Nigeria
-      ig: "NGA", // Igbo → Nigeria
+      sw: "KEN",
+      am: "ETH",
+      ha: "NGA",
+      yo: "NGA",
+      ig: "NGA",
 
       // European languages
-      pl: "POL", // Polish → Poland
-      uk: "UKR", // Ukrainian → Ukraine
-      cs: "CZE", // Czech → Czechia
-      ro: "ROU", // Romanian → Romania
-      hu: "HUN", // Hungarian → Hungary
-      nl: "NLD", // Dutch → Netherlands
-      sv: "SWE", // Swedish → Sweden
-      no: "NOR", // Norwegian → Norway
-      da: "DNK", // Danish → Denmark
-      fi: "FIN", // Finnish → Finland
+      pl: "POL",
+      uk: "UKR",
+      cs: "CZE",
+      ro: "ROU",
+      hu: "HUN",
+      nl: "NLD",
+      sv: "SWE",
+      no: "NOR",
+      da: "DNK",
+      fi: "FIN",
     };
 
     if (PRIMARY_COUNTRY[lang]) {
       const countryCode = PRIMARY_COUNTRY[lang];
       const entry = localeToCurrency[countryCode];
 
-      if (entry && entry.currencies) {
-        const currencyCodes = Object.keys(entry.currencies);
-        if (currencyCodes.length > 0) {
-          const code = currencyCodes[0];
-          const symbol = entry.currencies[code]?.symbol || "$";
-          console.log(
-            `✅ Currency found by language: ${lang} → ${countryCode} → ${code} (${symbol})`
-          );
-          return { code, symbol };
-        }
+      if (entry?.currencies) {
+        // Use country code as currency code and get symbol directly
+        const code = countryCode;
+        const symbol = entry.currencies.symbol || "$";
+        result = { code, symbol };
+        this.currencyCache.set(cacheKey, result);
+        return result;
       }
     }
 
@@ -364,96 +404,82 @@ class ICUMessageFormat {
     // STEP 3: Smart language matching (ISO 639-1, 639-2, 639-3)
     // ========================================================================
     const ISO_MAP: Record<string, string[]> = {
-      // Afghan languages (various ISO codes)
-      ps: ["pus", "pbt", "pst"], // Pashto variants
-      pus: ["pus", "pbt", "pst"], // Pashto ISO 639-3
-      prs: ["prs", "fa"], // Dari (also related to Persian)
-      fa: ["fas", "fa", "prs"], // Persian + Dari
-
-      // South Asian
-      ur: ["urd", "ur"], // Urdu
-      bn: ["ben", "bn"], // Bengali
-      hi: ["hin", "hi"], // Hindi
-      pa: ["pan", "pa"], // Punjabi
-
-      // Southeast Asian
-      th: ["tha", "th"], // Thai
-      vi: ["vie", "vi"], // Vietnamese
-      id: ["ind", "id"], // Indonesian
-      ms: ["msa", "ms"], // Malay
-      my: ["mya", "my"], // Burmese
-      km: ["khm", "km"], // Khmer
-      lo: ["lao", "lo"], // Lao
-
-      // Middle Eastern
-      ar: ["ara", "ar"], // Arabic
-      he: ["heb", "he"], // Hebrew
-      tr: ["tur", "tr"], // Turkish
-
-      // African
-      sw: ["swa", "sw"], // Swahili
-      am: ["amh", "am"], // Amharic
-      ha: ["hau", "ha"], // Hausa
+      ps: ["pus", "pbt", "pst"],
+      pus: ["pus", "pbt", "pst"],
+      prs: ["prs", "fa"],
+      fa: ["fas", "fa", "prs"],
+      ur: ["urd", "ur"],
+      bn: ["ben", "bn"],
+      hi: ["hin", "hi"],
+      pa: ["pan", "pa"],
+      th: ["tha", "th"],
+      vi: ["vie", "vi"],
+      id: ["ind", "id"],
+      ms: ["msa", "ms"],
+      my: ["mya", "my"],
+      km: ["khm", "km"],
+      lo: ["lao", "lo"],
+      ar: ["ara", "ar"],
+      he: ["heb", "he"],
+      tr: ["tur", "tr"],
+      sw: ["swa", "sw"],
+      am: ["amh", "am"],
+      ha: ["hau", "ha"],
     };
 
     const searchCodes = ISO_MAP[lang] || [lang];
-
     const matchedEntry = Object.values(localeToCurrency).find((entry) => {
       if (!entry.languages) return false;
       const langKeys = Object.keys(entry.languages).map((k) => k.toLowerCase());
       return searchCodes.some((code) => langKeys.includes(code.toLowerCase()));
     });
 
-    if (matchedEntry && matchedEntry.currencies) {
-      const currencyCodes = Object.keys(matchedEntry.currencies);
-      if (currencyCodes.length > 0) {
-        const code = currencyCodes[0];
-        const symbol = matchedEntry.currencies[code]?.symbol || "$";
-        console.log(
-          `✅ Currency found by ISO matching: ${lang} → ${matchedEntry.cca3} → ${code} (${symbol})`
-        );
-        return { code, symbol };
-      }
+    if (matchedEntry?.currencies) {
+      // Use country code as currency code and get symbol directly
+      const code = matchedEntry.cca3;
+      const symbol = matchedEntry.currencies.symbol || "$";
+      result = { code, symbol };
+      this.currencyCache.set(cacheKey, result);
+      return result;
     }
 
     // ========================================================================
-    // STEP 4: Final fallback - try to find ANY entry with the language
+    // STEP 4: Final fallback - exact language match
     // ========================================================================
-    const anyMatch = Object.values(localeToCurrency).find((entry) => {
+    const exactMatch = Object.values(localeToCurrency).find((entry) => {
       if (!entry.languages) return false;
-      const languageValues = Object.values(entry.languages).map((v) =>
-        v.toLowerCase()
-      );
-      const languageKeys = Object.keys(entry.languages).map((k) =>
-        k.toLowerCase()
+
+      // Check for exact language code match
+      const hasExactCodeMatch = Object.keys(entry.languages).some(
+        (k) => k.toLowerCase() === lang.toLowerCase()
       );
 
-      return (
-        languageValues.some((v) => v.includes(lang)) ||
-        languageKeys.some((k) => k.includes(lang))
+      // Check for exact language name match
+      const hasExactNameMatch = Object.values(entry.languages).some(
+        (v) => v.toLowerCase().replace(/[^a-z]/g, "") === lang.toLowerCase()
       );
+
+      return hasExactCodeMatch || hasExactNameMatch;
     });
 
-    if (anyMatch && anyMatch.currencies) {
-      const currencyCodes = Object.keys(anyMatch.currencies);
-      if (currencyCodes.length > 0) {
-        const code = currencyCodes[0];
-        const symbol = anyMatch.currencies[code]?.symbol || "$";
-        console.log(
-          `✅ Currency found by partial match: ${lang} → ${anyMatch.cca3} → ${code} (${symbol})`
-        );
-        return { code, symbol };
-      }
+    if (exactMatch?.currencies) {
+      // Use country code as currency code and get symbol directly
+      const code = exactMatch.cca3;
+      const symbol = exactMatch.currencies.symbol || "$";
+      result = { code, symbol };
+      this.currencyCache.set(cacheKey, result);
+      return result;
     }
 
-    // ========================================================================
-    // STEP 5: Ultimate fallback
-    // ========================================================================
-    console.warn(
-      `⚠️ No currency found for language: ${language}. Falling back to USD.`
-    );
-    return defaultCurrency;
+    this.currencyCache.set(cacheKey, result);
+    return result;
   }
+
+  // Add this static cache property to your class
+  private static currencyCache = new Map<
+    string,
+    { code: string; symbol: string }
+  >();
 }
 
 // ============================================================================
