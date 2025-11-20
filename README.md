@@ -10,7 +10,7 @@ _Beautiful text that just works - everywhere, in every language_
 [![npm downloads](https://img.shields.io/npm/dm/react-native-apptext?style=for-the-badge)](https://www.npmjs.com/package/react-native-apptext)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![npm version](https://img.shields.io/npm/v/react-native-apptext?style=for-the-badge)](https://www.npmjs.com/package/react-native-apptext)
-[![Install Size](https://packagephobia.com/badge?p=react-native-apptext)](https://packagephobia.com/result?p=react-native-apptext)
+![Install Size](docs/install-size.svg)
 
 </div>
 
