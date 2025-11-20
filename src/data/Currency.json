@@ -3,1994 +3,1500 @@
     "name": "Syria",
     "cca3": "SYR",
     "flag": "🇸🇾",
-    "currencies": {
-      "symbol": "£"
-    }
+    "symbol": "£"
   },
   {
     "name": "New Zealand",
     "cca3": "NZL",
     "flag": "🇳🇿",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Brunei",
     "cca3": "BRN",
     "flag": "🇧🇳",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "British Indian Ocean Territory",
     "cca3": "IOT",
     "flag": "🇮🇴",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Kenya",
     "cca3": "KEN",
     "flag": "🇰🇪",
-    "currencies": {
-      "symbol": "KSh"
-    }
+    "symbol": "KSh"
   },
   {
     "name": "Palau",
     "cca3": "PLW",
     "flag": "🇵🇼",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Oman",
     "cca3": "OMN",
     "flag": "🇴🇲",
-    "currencies": {
-      "symbol": "ر.ع."
-    }
+    "symbol": "ر.ع."
   },
   {
     "name": "Mexico",
     "cca3": "MEX",
     "flag": "🇲🇽",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Palestine",
     "cca3": "PSE",
     "flag": "🇵🇸",
-    "currencies": {
-      "symbol": "E£"
-    }
+    "symbol": "E£"
   },
   {
     "name": "Turks and Caicos Islands",
     "cca3": "TCA",
     "flag": "🇹🇨",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Central African Republic",
     "cca3": "CAF",
     "flag": "🇨🇫",
-    "currencies": {
-      "symbol": "FCFA"
-    }
+    "symbol": "FCFA"
   },
   {
     "name": "Saint Kitts and Nevis",
     "cca3": "KNA",
     "flag": "🇰🇳",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "South Sudan",
     "cca3": "SSD",
     "flag": "🇸🇸",
-    "currencies": {
-      "symbol": "£"
-    }
+    "symbol": "£"
   },
   {
     "name": "Ukraine",
     "cca3": "UKR",
     "flag": "🇺🇦",
-    "currencies": {
-      "symbol": "₴"
-    }
+    "symbol": "₴"
   },
   {
     "name": "Saint Barthélemy",
     "cca3": "BLM",
     "flag": "🇧🇱",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Netherlands",
     "cca3": "NLD",
     "flag": "🇳🇱",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Tanzania",
     "cca3": "TZA",
     "flag": "🇹🇿",
-    "currencies": {
-      "symbol": "Sh"
-    }
+    "symbol": "Sh"
   },
   {
     "name": "Czechia",
     "cca3": "CZE",
     "flag": "🇨🇿",
-    "currencies": {
-      "symbol": "Kč"
-    }
+    "symbol": "Kč"
   },
   {
     "name": "Belarus",
     "cca3": "BLR",
     "flag": "🇧🇾",
-    "currencies": {
-      "symbol": "Br"
-    }
+    "symbol": "Br"
   },
   {
     "name": "Yemen",
     "cca3": "YEM",
     "flag": "🇾🇪",
-    "currencies": {
-      "symbol": "﷼"
-    }
+    "symbol": "﷼"
   },
   {
     "name": "Slovenia",
     "cca3": "SVN",
     "flag": "🇸🇮",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Tokelau",
     "cca3": "TKL",
     "flag": "🇹🇰",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Nigeria",
     "cca3": "NGA",
     "flag": "🇳🇬",
-    "currencies": {
-      "symbol": "₦"
-    }
+    "symbol": "₦"
   },
   {
     "name": "Réunion",
     "cca3": "REU",
     "flag": "🇷🇪",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Guadeloupe",
     "cca3": "GLP",
     "flag": "🇬🇵",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Hungary",
     "cca3": "HUN",
     "flag": "🇭🇺",
-    "currencies": {
-      "symbol": "Ft"
-    }
+    "symbol": "Ft"
   },
   {
     "name": "Heard Island and McDonald Islands",
     "cca3": "HMD",
     "flag": "🇭🇲",
-    "currencies": "-"
+    "symbol": "-"
   },
   {
     "name": "Eswatini",
     "cca3": "SWZ",
     "flag": "🇸🇿",
-    "currencies": {
-      "symbol": "L"
-    }
+    "symbol": "L"
   },
   {
     "name": "Comoros",
     "cca3": "COM",
     "flag": "🇰🇲",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "India",
     "cca3": "IND",
     "flag": "🇮🇳",
-    "currencies": {
-      "symbol": "₹"
-    }
+    "symbol": "₹"
   },
   {
     "name": "Cocos (Keeling) Islands",
     "cca3": "CCK",
     "flag": "🇨🇨",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "United Kingdom",
     "cca3": "GBR",
     "flag": "🇬🇧",
-    "currencies": {
-      "symbol": "£"
-    }
+    "symbol": "£"
   },
   {
     "name": "Angola",
     "cca3": "AGO",
     "flag": "🇦🇴",
-    "currencies": {
-      "symbol": "Kz"
-    }
+    "symbol": "Kz"
   },
   {
     "name": "Macau",
     "cca3": "MAC",
     "flag": "🇲🇴",
-    "currencies": {
-      "symbol": "P"
-    }
+    "symbol": "P"
   },
   {
     "name": "Costa Rica",
     "cca3": "CRI",
     "flag": "🇨🇷",
-    "currencies": {
-      "symbol": "₡"
-    }
+    "symbol": "₡"
   },
   {
     "name": "Niue",
     "cca3": "NIU",
     "flag": "🇳🇺",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Cook Islands",
     "cca3": "COK",
     "flag": "🇨🇰",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Djibouti",
     "cca3": "DJI",
     "flag": "🇩🇯",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "Saint Pierre and Miquelon",
     "cca3": "SPM",
     "flag": "🇵🇲",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Austria",
     "cca3": "AUT",
     "flag": "🇦🇹",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Indonesia",
     "cca3": "IDN",
     "flag": "🇮🇩",
-    "currencies": {
-      "symbol": "Rp"
-    }
+    "symbol": "Rp"
   },
   {
     "name": "Nauru",
     "cca3": "NRU",
     "flag": "🇳🇷",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Kazakhstan",
     "cca3": "KAZ",
     "flag": "🇰🇿",
-    "currencies": {
-      "symbol": "₸"
-    }
+    "symbol": "₸"
   },
   {
     "name": "Malawi",
     "cca3": "MWI",
     "flag": "🇲🇼",
-    "currencies": {
-      "symbol": "MK"
-    }
+    "symbol": "MK"
   },
   {
     "name": "Eritrea",
     "cca3": "ERI",
     "flag": "🇪🇷",
-    "currencies": {
-      "symbol": "Nfk"
-    }
+    "symbol": "Nfk"
   },
   {
     "name": "Tunisia",
     "cca3": "TUN",
     "flag": "🇹🇳",
-    "currencies": {
-      "symbol": "د.ت"
-    }
+    "symbol": "د.ت"
   },
   {
     "name": "Pitcairn Islands",
     "cca3": "PCN",
     "flag": "🇵🇳",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Saudi Arabia",
     "cca3": "SAU",
     "flag": "🇸🇦",
-    "currencies": {
-      "symbol": "ر.س"
-    }
+    "symbol": "ر.س"
   },
   {
     "name": "Turkmenistan",
     "cca3": "TKM",
     "flag": "🇹🇲",
-    "currencies": {
-      "symbol": "m"
-    }
+    "symbol": "m"
   },
   {
     "name": "Western Sahara",
     "cca3": "ESH",
     "flag": "🇪🇭",
-    "currencies": {
-      "symbol": "دج"
-    }
+    "symbol": "دج"
   },
   {
     "name": "Ghana",
     "cca3": "GHA",
     "flag": "🇬🇭",
-    "currencies": {
-      "symbol": "₵"
-    }
+    "symbol": "₵"
   },
   {
     "name": "Tuvalu",
     "cca3": "TUV",
     "flag": "🇹🇻",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Myanmar",
     "cca3": "MMR",
     "flag": "🇲🇲",
-    "currencies": {
-      "symbol": "Ks"
-    }
+    "symbol": "Ks"
   },
   {
     "name": "Gabon",
     "cca3": "GAB",
     "flag": "🇬🇦",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "Cuba",
     "cca3": "CUB",
     "flag": "🇨🇺",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "China",
     "cca3": "CHN",
     "flag": "🇨🇳",
-    "currencies": {
-      "symbol": "¥"
-    }
+    "symbol": "¥"
   },
   {
     "name": "Panama",
     "cca3": "PAN",
     "flag": "🇵🇦",
-    "currencies": {
-      "symbol": "B/."
-    }
+    "symbol": "B/."
   },
   {
     "name": "Thailand",
     "cca3": "THA",
     "flag": "🇹🇭",
-    "currencies": {
-      "symbol": "฿"
-    }
+    "symbol": "฿"
   },
   {
     "name": "Russia",
     "cca3": "RUS",
     "flag": "🇷🇺",
-    "currencies": {
-      "symbol": "₽"
-    }
+    "symbol": "₽"
   },
   {
     "name": "Bosnia and Herzegovina",
     "cca3": "BIH",
     "flag": "🇧🇦",
-    "currencies": {
-      "symbol": "KM"
-    }
+    "symbol": "KM"
   },
   {
     "name": "Qatar",
     "cca3": "QAT",
     "flag": "🇶🇦",
-    "currencies": {
-      "symbol": "ر.ق"
-    }
+    "symbol": "ر.ق"
   },
   {
     "name": "Bouvet Island",
     "cca3": "BVT",
     "flag": "🇧🇻",
-    "currencies": "-"
+    "symbol": "-"
   },
   {
     "name": "Iraq",
     "cca3": "IRQ",
     "flag": "🇮🇶",
-    "currencies": {
-      "symbol": "ع.د"
-    }
+    "symbol": "ع.د"
   },
   {
     "name": "Tajikistan",
     "cca3": "TJK",
     "flag": "🇹🇯",
-    "currencies": {
-      "symbol": "ЅМ"
-    }
+    "symbol": "ЅМ"
   },
   {
     "name": "Guyana",
     "cca3": "GUY",
     "flag": "🇬🇾",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Solomon Islands",
     "cca3": "SLB",
     "flag": "🇸🇧",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Slovakia",
     "cca3": "SVK",
     "flag": "🇸🇰",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Gibraltar",
     "cca3": "GIB",
     "flag": "🇬🇮",
-    "currencies": {
-      "symbol": "£"
-    }
+    "symbol": "£"
   },
   {
     "name": "Peru",
     "cca3": "PER",
     "flag": "🇵🇪",
-    "currencies": {
-      "symbol": "S/ "
-    }
+    "symbol": "S/ "
   },
   {
     "name": "Puerto Rico",
     "cca3": "PRI",
     "flag": "🇵🇷",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Armenia",
     "cca3": "ARM",
     "flag": "🇦🇲",
-    "currencies": {
-      "symbol": "֏"
-    }
+    "symbol": "֏"
   },
   {
     "name": "Azerbaijan",
     "cca3": "AZE",
     "flag": "🇦🇿",
-    "currencies": {
-      "symbol": "₼"
-    }
+    "symbol": "₼"
   },
   {
     "name": "Mauritania",
     "cca3": "MRT",
     "flag": "🇲🇷",
-    "currencies": {
-      "symbol": "UM"
-    }
+    "symbol": "UM"
   },
   {
     "name": "Belize",
     "cca3": "BLZ",
     "flag": "🇧🇿",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Anguilla",
     "cca3": "AIA",
     "flag": "🇦🇮",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Seychelles",
     "cca3": "SYC",
     "flag": "🇸🇨",
-    "currencies": {
-      "symbol": "₨"
-    }
+    "symbol": "₨"
   },
   {
     "name": "Norfolk Island",
     "cca3": "NFK",
     "flag": "🇳🇫",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Philippines",
     "cca3": "PHL",
     "flag": "🇵🇭",
-    "currencies": {
-      "symbol": "₱"
-    }
+    "symbol": "₱"
   },
   {
     "name": "Argentina",
     "cca3": "ARG",
     "flag": "🇦🇷",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Moldova",
     "cca3": "MDA",
     "flag": "🇲🇩",
-    "currencies": {
-      "symbol": "L"
-    }
+    "symbol": "L"
   },
   {
     "name": "Samoa",
     "cca3": "WSM",
     "flag": "🇼🇸",
-    "currencies": {
-      "symbol": "T"
-    }
+    "symbol": "T"
   },
   {
     "name": "Antarctica",
     "cca3": "ATA",
     "flag": "🇦🇶",
-    "currencies": "-"
+    "symbol": "-"
   },
   {
     "name": "Sierra Leone",
     "cca3": "SLE",
     "flag": "🇸🇱",
-    "currencies": {
-      "symbol": "Le"
-    }
+    "symbol": "Le"
   },
   {
     "name": "Cambodia",
     "cca3": "KHM",
     "flag": "🇰🇭",
-    "currencies": {
-      "symbol": "៛"
-    }
+    "symbol": "៛"
   },
   {
     "name": "Vanuatu",
     "cca3": "VUT",
     "flag": "🇻🇺",
-    "currencies": {
-      "symbol": "Vt"
-    }
+    "symbol": "Vt"
   },
   {
     "name": "Jordan",
     "cca3": "JOR",
     "flag": "🇯🇴",
-    "currencies": {
-      "symbol": "د.ا"
-    }
+    "symbol": "د.ا"
   },
   {
     "name": "Martinique",
     "cca3": "MTQ",
     "flag": "🇲🇶",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Tonga",
     "cca3": "TON",
     "flag": "🇹🇴",
-    "currencies": {
-      "symbol": "T$"
-    }
+    "symbol": "T$"
   },
   {
     "name": "British Virgin Islands",
     "cca3": "VGB",
     "flag": "🇻🇬",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Timor-Leste",
     "cca3": "TLS",
     "flag": "🇹🇱",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "French Polynesia",
     "cca3": "PYF",
     "flag": "🇵🇫",
-    "currencies": {
-      "symbol": "₣"
-    }
+    "symbol": "₣"
   },
   {
     "name": "Turkey",
     "cca3": "TUR",
     "flag": "🇹🇷",
-    "currencies": {
-      "symbol": "₺"
-    }
+    "symbol": "₺"
   },
   {
     "name": "Guernsey",
     "cca3": "GGY",
     "flag": "🇬🇬",
-    "currencies": {
-      "symbol": "£"
-    }
+    "symbol": "£"
   },
   {
     "name": "Senegal",
     "cca3": "SEN",
     "flag": "🇸🇳",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "Guatemala",
     "cca3": "GTM",
     "flag": "🇬🇹",
-    "currencies": {
-      "symbol": "Q"
-    }
+    "symbol": "Q"
   },
   {
     "name": "Poland",
     "cca3": "POL",
     "flag": "🇵🇱",
-    "currencies": {
-      "symbol": "zł"
-    }
+    "symbol": "zł"
   },
   {
     "name": "Bahamas",
     "cca3": "BHS",
     "flag": "🇧🇸",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Faroe Islands",
     "cca3": "FRO",
     "flag": "🇫🇴",
-    "currencies": {
-      "symbol": "kr"
-    }
+    "symbol": "kr"
   },
   {
     "name": "Aruba",
     "cca3": "ABW",
     "flag": "🇦🇼",
-    "currencies": {
-      "symbol": "ƒ"
-    }
+    "symbol": "ƒ"
   },
   {
     "name": "Dominican Republic",
     "cca3": "DOM",
     "flag": "🇩🇴",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Hong Kong",
     "cca3": "HKG",
     "flag": "🇭🇰",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "São Tomé and Príncipe",
     "cca3": "STP",
     "flag": "🇸🇹",
-    "currencies": {
-      "symbol": "Db"
-    }
+    "symbol": "Db"
   },
   {
     "name": "Uruguay",
     "cca3": "URY",
     "flag": "🇺🇾",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Bermuda",
     "cca3": "BMU",
     "flag": "🇧🇲",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Wallis and Futuna",
     "cca3": "WLF",
     "flag": "🇼🇫",
-    "currencies": {
-      "symbol": "₣"
-    }
+    "symbol": "₣"
   },
   {
     "name": "South Africa",
     "cca3": "ZAF",
     "flag": "🇿🇦",
-    "currencies": {
-      "symbol": "R"
-    }
+    "symbol": "R"
   },
   {
     "name": "Israel",
     "cca3": "ISR",
     "flag": "🇮🇱",
-    "currencies": {
-      "symbol": "₪"
-    }
+    "symbol": "₪"
   },
   {
     "name": "San Marino",
     "cca3": "SMR",
     "flag": "🇸🇲",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "El Salvador",
     "cca3": "SLV",
     "flag": "🇸🇻",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Mongolia",
     "cca3": "MNG",
     "flag": "🇲🇳",
-    "currencies": {
-      "symbol": "₮"
-    }
+    "symbol": "₮"
   },
   {
     "name": "American Samoa",
     "cca3": "ASM",
     "flag": "🇦🇸",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "French Southern and Antarctic Lands",
     "cca3": "ATF",
     "flag": "🇹🇫",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Zimbabwe",
     "cca3": "ZWE",
     "flag": "🇿🇼",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Falkland Islands",
     "cca3": "FLK",
     "flag": "🇫🇰",
-    "currencies": {
-      "symbol": "£"
-    }
+    "symbol": "£"
   },
   {
     "name": "Croatia",
     "cca3": "HRV",
     "flag": "🇭🇷",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Kiribati",
     "cca3": "KIR",
     "flag": "🇰🇮",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Marshall Islands",
     "cca3": "MHL",
     "flag": "🇲🇭",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Norway",
     "cca3": "NOR",
     "flag": "🇳🇴",
-    "currencies": {
-      "symbol": "kr"
-    }
+    "symbol": "kr"
   },
   {
     "name": "Mali",
     "cca3": "MLI",
     "flag": "🇲🇱",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "Zambia",
     "cca3": "ZMB",
     "flag": "🇿🇲",
-    "currencies": {
-      "symbol": "ZK"
-    }
+    "symbol": "ZK"
   },
   {
     "name": "Maldives",
     "cca3": "MDV",
     "flag": "🇲🇻",
-    "currencies": {
-      "symbol": ".ރ"
-    }
+    "symbol": ".ރ"
   },
   {
     "name": "Antigua and Barbuda",
     "cca3": "ATG",
     "flag": "🇦🇬",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Christmas Island",
     "cca3": "CXR",
     "flag": "🇨🇽",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Iran",
     "cca3": "IRN",
     "flag": "🇮🇷",
-    "currencies": {
-      "symbol": "﷼"
-    }
+    "symbol": "﷼"
   },
   {
     "name": "Italy",
     "cca3": "ITA",
     "flag": "🇮🇹",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Gambia",
     "cca3": "GMB",
     "flag": "🇬🇲",
-    "currencies": {
-      "symbol": "D"
-    }
+    "symbol": "D"
   },
   {
     "name": "South Korea",
     "cca3": "KOR",
     "flag": "🇰🇷",
-    "currencies": {
-      "symbol": "₩"
-    }
+    "symbol": "₩"
   },
   {
     "name": "Papua New Guinea",
     "cca3": "PNG",
     "flag": "🇵🇬",
-    "currencies": {
-      "symbol": "K"
-    }
+    "symbol": "K"
   },
   {
     "name": "Egypt",
     "cca3": "EGY",
     "flag": "🇪🇬",
-    "currencies": {
-      "symbol": "£"
-    }
+    "symbol": "£"
   },
   {
     "name": "Isle of Man",
     "cca3": "IMN",
     "flag": "🇮🇲",
-    "currencies": {
-      "symbol": "£"
-    }
+    "symbol": "£"
   },
   {
     "name": "Latvia",
     "cca3": "LVA",
     "flag": "🇱🇻",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Paraguay",
     "cca3": "PRY",
     "flag": "🇵🇾",
-    "currencies": {
-      "symbol": "₲"
-    }
+    "symbol": "₲"
   },
   {
     "name": "Grenada",
     "cca3": "GRD",
     "flag": "🇬🇩",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Colombia",
     "cca3": "COL",
     "flag": "🇨🇴",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Finland",
     "cca3": "FIN",
     "flag": "🇫🇮",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Bulgaria",
     "cca3": "BGR",
     "flag": "🇧🇬",
-    "currencies": {
-      "symbol": "лв"
-    }
+    "symbol": "лв"
   },
   {
     "name": "Togo",
     "cca3": "TGO",
     "flag": "🇹🇬",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "Chile",
     "cca3": "CHL",
     "flag": "🇨🇱",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Dominica",
     "cca3": "DMA",
     "flag": "🇩🇲",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Ireland",
     "cca3": "IRL",
     "flag": "🇮🇪",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Botswana",
     "cca3": "BWA",
     "flag": "🇧🇼",
-    "currencies": {
-      "symbol": "P"
-    }
+    "symbol": "P"
   },
   {
     "name": "Kosovo",
     "cca3": "UNK",
     "flag": "🇽🇰",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "United States",
     "cca3": "USA",
     "flag": "🇺🇸",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Uzbekistan",
     "cca3": "UZB",
     "flag": "🇺🇿",
-    "currencies": {
-      "symbol": "so'm"
-    }
+    "symbol": "so'm"
   },
   {
     "name": "Brazil",
     "cca3": "BRA",
     "flag": "🇧🇷",
-    "currencies": {
-      "symbol": "R$"
-    }
+    "symbol": "R$"
   },
   {
     "name": "Rwanda",
     "cca3": "RWA",
     "flag": "🇷🇼",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "Liechtenstein",
     "cca3": "LIE",
     "flag": "🇱🇮",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "Bhutan",
     "cca3": "BTN",
     "flag": "🇧🇹",
-    "currencies": {
-      "symbol": "Nu."
-    }
+    "symbol": "Nu."
   },
   {
     "name": "Montenegro",
     "cca3": "MNE",
     "flag": "🇲🇪",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Niger",
     "cca3": "NER",
     "flag": "🇳🇪",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "Albania",
     "cca3": "ALB",
     "flag": "🇦🇱",
-    "currencies": {
-      "symbol": "L"
-    }
+    "symbol": "L"
   },
   {
     "name": "Morocco",
     "cca3": "MAR",
     "flag": "🇲🇦",
-    "currencies": {
-      "symbol": "د.م."
-    }
+    "symbol": "د.م."
   },
   {
     "name": "Venezuela",
     "cca3": "VEN",
     "flag": "🇻🇪",
-    "currencies": {
-      "symbol": "Bs.S."
-    }
+    "symbol": "Bs.S."
   },
   {
     "name": "Republic of the Congo",
     "cca3": "COG",
     "flag": "🇨🇬",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "Burundi",
     "cca3": "BDI",
     "flag": "🇧🇮",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "Jersey",
     "cca3": "JEY",
     "flag": "🇯🇪",
-    "currencies": {
-      "symbol": "£"
-    }
+    "symbol": "£"
   },
   {
     "name": "North Macedonia",
     "cca3": "MKD",
     "flag": "🇲🇰",
-    "currencies": {
-      "symbol": "den"
-    }
+    "symbol": "den"
   },
   {
     "name": "Kyrgyzstan",
     "cca3": "KGZ",
     "flag": "🇰🇬",
-    "currencies": {
-      "symbol": "с"
-    }
+    "symbol": "с"
   },
   {
     "name": "Romania",
     "cca3": "ROU",
     "flag": "🇷🇴",
-    "currencies": {
-      "symbol": "lei"
-    }
+    "symbol": "lei"
   },
   {
     "name": "Guam",
     "cca3": "GUM",
     "flag": "🇬🇺",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Åland Islands",
     "cca3": "ALA",
     "flag": "🇦🇽",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Equatorial Guinea",
     "cca3": "GNQ",
     "flag": "🇬🇶",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "South Georgia",
     "cca3": "SGS",
     "flag": "🇬🇸",
-    "currencies": {
-      "symbol": "£"
-    }
+    "symbol": "£"
   },
   {
     "name": "French Guiana",
     "cca3": "GUF",
     "flag": "🇬🇫",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Germany",
     "cca3": "DEU",
     "flag": "🇩🇪",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Denmark",
     "cca3": "DNK",
     "flag": "🇩🇰",
-    "currencies": {
-      "symbol": "kr"
-    }
+    "symbol": "kr"
   },
   {
     "name": "Iceland",
     "cca3": "ISL",
     "flag": "🇮🇸",
-    "currencies": {
-      "symbol": "kr"
-    }
+    "symbol": "kr"
   },
   {
     "name": "Somalia",
     "cca3": "SOM",
     "flag": "🇸🇴",
-    "currencies": {
-      "symbol": "Sh"
-    }
+    "symbol": "Sh"
   },
   {
     "name": "Micronesia",
     "cca3": "FSM",
     "flag": "🇫🇲",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Laos",
     "cca3": "LAO",
     "flag": "🇱🇦",
-    "currencies": {
-      "symbol": "₭"
-    }
+    "symbol": "₭"
   },
   {
     "name": "Sint Maarten",
     "cca3": "SXM",
     "flag": "🇸🇽",
-    "currencies": {
-      "symbol": "ƒ"
-    }
+    "symbol": "ƒ"
   },
   {
     "name": "Liberia",
     "cca3": "LBR",
     "flag": "🇱🇷",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Chad",
     "cca3": "TCD",
     "flag": "🇹🇩",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "Australia",
     "cca3": "AUS",
     "flag": "🇦🇺",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Burkina Faso",
     "cca3": "BFA",
     "flag": "🇧🇫",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "Malta",
     "cca3": "MLT",
     "flag": "🇲🇹",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Northern Mariana Islands",
     "cca3": "MNP",
     "flag": "🇲🇵",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Uganda",
     "cca3": "UGA",
     "flag": "🇺🇬",
-    "currencies": {
-      "symbol": "Sh"
-    }
+    "symbol": "Sh"
   },
   {
     "name": "Spain",
     "cca3": "ESP",
     "flag": "🇪🇸",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Sudan",
     "cca3": "SDN",
     "flag": "🇸🇩",
-    "currencies": {
-      "symbol": "ج.س"
-    }
+    "symbol": "ج.س"
   },
   {
     "name": "Taiwan",
     "cca3": "TWN",
     "flag": "🇹🇼",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Afghanistan",
     "cca3": "AFG",
     "flag": "🇦🇫",
-    "currencies": {
-      "symbol": "؋"
-    }
+    "symbol": "؋"
   },
   {
     "name": "Svalbard and Jan Mayen",
     "cca3": "SJM",
     "flag": "🇸🇯",
-    "currencies": {
-      "symbol": "kr"
-    }
+    "symbol": "kr"
   },
   {
     "name": "Fiji",
     "cca3": "FJI",
     "flag": "🇫🇯",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Guinea-Bissau",
     "cca3": "GNB",
     "flag": "🇬🇼",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "Andorra",
     "cca3": "AND",
     "flag": "🇦🇩",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Algeria",
     "cca3": "DZA",
     "flag": "🇩🇿",
-    "currencies": {
-      "symbol": "د.ج"
-    }
+    "symbol": "د.ج"
   },
   {
     "name": "Portugal",
     "cca3": "PRT",
     "flag": "🇵🇹",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Mozambique",
     "cca3": "MOZ",
     "flag": "🇲🇿",
-    "currencies": {
-      "symbol": "MT"
-    }
+    "symbol": "MT"
   },
   {
     "name": "Lesotho",
     "cca3": "LSO",
     "flag": "🇱🇸",
-    "currencies": {
-      "symbol": "L"
-    }
+    "symbol": "L"
   },
   {
     "name": "North Korea",
     "cca3": "PRK",
     "flag": "🇰🇵",
-    "currencies": {
-      "symbol": "₩"
-    }
+    "symbol": "₩"
   },
   {
     "name": "Singapore",
     "cca3": "SGP",
     "flag": "🇸🇬",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Monaco",
     "cca3": "MCO",
     "flag": "🇲🇨",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Lebanon",
     "cca3": "LBN",
     "flag": "🇱🇧",
-    "currencies": {
-      "symbol": "ل.ل"
-    }
+    "symbol": "ل.ل"
   },
   {
     "name": "Serbia",
     "cca3": "SRB",
     "flag": "🇷🇸",
-    "currencies": {
-      "symbol": "дин."
-    }
+    "symbol": "дин."
   },
   {
     "name": "Estonia",
     "cca3": "EST",
     "flag": "🇪🇪",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Barbados",
     "cca3": "BRB",
     "flag": "🇧🇧",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Mauritius",
     "cca3": "MUS",
     "flag": "🇲🇺",
-    "currencies": {
-      "symbol": "₨"
-    }
+    "symbol": "₨"
   },
   {
     "name": "Saint Helena, Ascension and Tristan da Cunha",
     "cca3": "SHN",
     "flag": "🇸🇭",
-    "currencies": {
-      "symbol": "£"
-    }
+    "symbol": "£"
   },
   {
     "name": "Belgium",
     "cca3": "BEL",
     "flag": "🇧🇪",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Libya",
     "cca3": "LBY",
     "flag": "🇱🇾",
-    "currencies": {
-      "symbol": "ل.د"
-    }
+    "symbol": "ل.د"
   },
   {
     "name": "Nicaragua",
     "cca3": "NIC",
     "flag": "🇳🇮",
-    "currencies": {
-      "symbol": "C$"
-    }
+    "symbol": "C$"
   },
   {
     "name": "Kuwait",
     "cca3": "KWT",
     "flag": "🇰🇼",
-    "currencies": {
-      "symbol": "د.ك"
-    }
+    "symbol": "د.ك"
   },
   {
     "name": "New Caledonia",
     "cca3": "NCL",
     "flag": "🇳🇨",
-    "currencies": {
-      "symbol": "₣"
-    }
+    "symbol": "₣"
   },
   {
     "name": "France",
     "cca3": "FRA",
     "flag": "🇫🇷",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Vietnam",
     "cca3": "VNM",
     "flag": "🇻🇳",
-    "currencies": {
-      "symbol": "₫"
-    }
+    "symbol": "₫"
   },
   {
     "name": "Saint Vincent and the Grenadines",
     "cca3": "VCT",
     "flag": "🇻🇨",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Bahrain",
     "cca3": "BHR",
     "flag": "🇧🇭",
-    "currencies": {
-      "symbol": ".د.ب"
-    }
+    "symbol": ".د.ب"
   },
   {
     "name": "Curaçao",
     "cca3": "CUW",
     "flag": "🇨🇼",
-    "currencies": {
-      "symbol": "ƒ"
-    }
+    "symbol": "ƒ"
   },
   {
     "name": "Bangladesh",
     "cca3": "BGD",
     "flag": "🇧🇩",
-    "currencies": {
-      "symbol": "৳"
-    }
+    "symbol": "৳"
   },
   {
     "name": "Ivory Coast",
     "cca3": "CIV",
     "flag": "🇨🇮",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "DR Congo",
     "cca3": "COD",
     "flag": "🇨🇩",
-    "currencies": {
-      "symbol": "FC"
-    }
+    "symbol": "FC"
   },
   {
     "name": "Sri Lanka",
     "cca3": "LKA",
     "flag": "🇱🇰",
-    "currencies": {
-      "symbol": "Rs  රු"
-    }
+    "symbol": "Rs  රු"
   },
   {
     "name": "United States Minor Outlying Islands",
     "cca3": "UMI",
     "flag": "🇺🇲",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Caribbean Netherlands",
     "cca3": "BES",
     "flag": "🇧🇶",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Nepal",
     "cca3": "NPL",
     "flag": "🇳🇵",
-    "currencies": {
-      "symbol": "₨"
-    }
+    "symbol": "₨"
   },
   {
     "name": "Bolivia",
     "cca3": "BOL",
     "flag": "🇧🇴",
-    "currencies": {
-      "symbol": "Bs."
-    }
+    "symbol": "Bs."
   },
   {
     "name": "Namibia",
     "cca3": "NAM",
     "flag": "🇳🇦",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Haiti",
     "cca3": "HTI",
     "flag": "🇭🇹",
-    "currencies": {
-      "symbol": "G"
-    }
+    "symbol": "G"
   },
   {
     "name": "Suriname",
     "cca3": "SUR",
     "flag": "🇸🇷",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Saint Martin",
     "cca3": "MAF",
     "flag": "🇲🇫",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Canada",
     "cca3": "CAN",
     "flag": "🇨🇦",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Honduras",
     "cca3": "HND",
     "flag": "🇭🇳",
-    "currencies": {
-      "symbol": "L"
-    }
+    "symbol": "L"
   },
   {
     "name": "Vatican City",
     "cca3": "VAT",
     "flag": "🇻🇦",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "United Arab Emirates",
     "cca3": "ARE",
     "flag": "🇦🇪",
-    "currencies": {
-      "symbol": "د.إ"
-    }
+    "symbol": "د.إ"
   },
   {
     "name": "Guinea",
     "cca3": "GIN",
     "flag": "🇬🇳",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "Cameroon",
     "cca3": "CMR",
     "flag": "🇨🇲",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "Cyprus",
     "cca3": "CYP",
     "flag": "🇨🇾",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Trinidad and Tobago",
     "cca3": "TTO",
     "flag": "🇹🇹",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Sweden",
     "cca3": "SWE",
     "flag": "🇸🇪",
-    "currencies": {
-      "symbol": "kr"
-    }
+    "symbol": "kr"
   },
   {
     "name": "Madagascar",
     "cca3": "MDG",
     "flag": "🇲🇬",
-    "currencies": {
-      "symbol": "Ar"
-    }
+    "symbol": "Ar"
   },
   {
     "name": "Mayotte",
     "cca3": "MYT",
     "flag": "🇾🇹",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Cayman Islands",
     "cca3": "CYM",
     "flag": "🇰🇾",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Malaysia",
     "cca3": "MYS",
     "flag": "🇲🇾",
-    "currencies": {
-      "symbol": "RM"
-    }
+    "symbol": "RM"
   },
   {
     "name": "Benin",
     "cca3": "BEN",
     "flag": "🇧🇯",
-    "currencies": {
-      "symbol": "Fr"
-    }
+    "symbol": "Fr"
   },
   {
     "name": "Greenland",
     "cca3": "GRL",
     "flag": "🇬🇱",
-    "currencies": {
-      "symbol": "kr."
-    }
+    "symbol": "kr."
   },
   {
     "name": "Switzerland",
     "cca3": "CHE",
     "flag": "🇨🇭",
-    "currencies": {
-      "symbol": "Fr."
-    }
+    "symbol": "Fr."
   },
   {
     "name": "Georgia",
     "cca3": "GEO",
     "flag": "🇬🇪",
-    "currencies": {
-      "symbol": "₾"
-    }
+    "symbol": "₾"
   },
   {
     "name": "Ecuador",
     "cca3": "ECU",
     "flag": "🇪🇨",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Cape Verde",
     "cca3": "CPV",
     "flag": "🇨🇻",
-    "currencies": {
-      "symbol": "Esc"
-    }
+    "symbol": "Esc"
   },
   {
     "name": "Luxembourg",
     "cca3": "LUX",
     "flag": "🇱🇺",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Saint Lucia",
     "cca3": "LCA",
     "flag": "🇱🇨",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "United States Virgin Islands",
     "cca3": "VIR",
     "flag": "🇻🇮",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Japan",
     "cca3": "JPN",
     "flag": "🇯🇵",
-    "currencies": {
-      "symbol": "¥"
-    }
+    "symbol": "¥"
   },
   {
     "name": "Jamaica",
     "cca3": "JAM",
     "flag": "🇯🇲",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Ethiopia",
     "cca3": "ETH",
     "flag": "🇪🇹",
-    "currencies": {
-      "symbol": "Br"
-    }
+    "symbol": "Br"
   },
   {
     "name": "Pakistan",
     "cca3": "PAK",
     "flag": "🇵🇰",
-    "currencies": {
-      "symbol": "₨"
-    }
+    "symbol": "₨"
   },
   {
     "name": "Montserrat",
     "cca3": "MSR",
     "flag": "🇲🇸",
-    "currencies": {
-      "symbol": "$"
-    }
+    "symbol": "$"
   },
   {
     "name": "Lithuania",
     "cca3": "LTU",
     "flag": "🇱🇹",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   },
   {
     "name": "Greece",
     "cca3": "GRC",
     "flag": "🇬🇷",
-    "currencies": {
-      "symbol": "€"
-    }
+    "symbol": "€"
   }
 ]
