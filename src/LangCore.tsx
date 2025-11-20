@@ -13,38 +13,283 @@ import CurrencyJsonList from "../src/data/Currency.json";
 // PART 1: ICU MESSAGE FORMAT PARSER
 // ============================================================================
 
-interface CurrencyEntry {
-  languages: any;
-  name?: string;
-  cca3: string;
-  flag?: string;
-  currencies: {
-    symbol: string;
-  };
+// Mapping of country codes (cca3) to actual ISO 4217 currency codes
+const COUNTRY_TO_CURRENCY: Record<string, string> = {
+  USA: "USD",
+  CAN: "CAD",
+  MEX: "MXN",
+  // European Union (Euro)
+  DEU: "EUR",
+  FRA: "EUR",
+  ITA: "EUR",
+  ESP: "EUR",
+  NLD: "EUR",
+  BEL: "EUR",
+  AUT: "EUR",
+  GRC: "EUR",
+  PRT: "EUR",
+  FIN: "EUR",
+  LUX: "EUR",
+  SVN: "EUR",
+  SVK: "EUR",
+  EST: "EUR",
+  LVA: "EUR",
+  LTU: "EUR",
+  MLT: "EUR",
+  CYP: "EUR",
+  IRL: "EUR",
+  HRV: "EUR",
+  AND: "EUR",
+  MCO: "EUR",
+  SMR: "EUR",
+  VAT: "EUR",
+  MNE: "EUR",
+  UNK: "EUR", // Kosovo
+  BLM: "EUR",
+  GLP: "EUR",
+  MAF: "EUR",
+  MTQ: "EUR",
+  REU: "EUR",
+  SPM: "EUR",
+  MYT: "EUR",
+  ATF: "EUR",
+  BES: "EUR",
+  // Asia
+  CHN: "CNY",
+  JPN: "JPY",
+  IND: "INR",
+  KOR: "KRW",
+  IDN: "IDR",
+  THA: "THB",
+  MYS: "MYR",
+  SGP: "SGD",
+  PHL: "PHP",
+  VNM: "VND",
+  BGD: "BDT",
+  PAK: "PKR",
+  LKA: "LKR",
+  NPL: "NPR",
+  AFG: "AFN",
+  MMR: "MMK",
+  KHM: "KHR",
+  LAO: "LAK",
+  BTN: "BTN",
+  MDV: "MVR",
+  TWN: "TWD",
+  HKG: "HKD",
+  MAC: "MOP",
+  MNG: "MNT",
+  PRK: "KPW",
+  // Middle East
+  SAU: "SAR",
+  ARE: "AED",
+  ISR: "ILS",
+  TUR: "TRY",
+  IRN: "IRR",
+  IRQ: "IQD",
+  JOR: "JOD",
+  KWT: "KWT",
+  OMN: "OMR",
+  QAT: "QAR",
+  BHR: "BHR",
+  YEM: "YER",
+  SYR: "SYP",
+  LBN: "LBP",
+  PSE: "ILS",
+  // Oceania
+  AUS: "AUD",
+  NZL: "NZL",
+  FJI: "FJD",
+  PNG: "PGK",
+  SLB: "SBD",
+  VUT: "VUV",
+  NCL: "XPF",
+  PYF: "XPF",
+  WLF: "XPF",
+  WSM: "WST",
+  TON: "TOP",
+  KIR: "AUD",
+  TUV: "AUD",
+  NRU: "AUD",
+  PLW: "USD",
+  FSM: "USD",
+  MHL: "USD",
+  COK: "NZD",
+  NIU: "NZD",
+  TKL: "NZD",
+  // Africa
+  ZAF: "ZAR",
+  EGY: "EGP",
+  NGA: "NGN",
+  KEN: "KES",
+  GHA: "GHS",
+  ETH: "ETB",
+  TZA: "TZS",
+  UGA: "UGX",
+  DZA: "DZD",
+  MAR: "MAD",
+  AGO: "AOA",
+  SDN: "SDG",
+  TUN: "TND",
+  LBY: "LYD",
+  CMR: "XAF",
+  CIV: "XOF",
+  SEN: "XOF",
+  MLI: "XOF",
+  BFA: "XOF",
+  NER: "XOF",
+  TGO: "XOF",
+  BEN: "XOF",
+  GIN: "GNF",
+  RWA: "RWF",
+  SOM: "SOS",
+  ZWE: "ZWL",
+  ZMB: "ZMW",
+  MWI: "MWK",
+  MOZ: "MZN",
+  BWA: "BWP",
+  NAM: "NAD",
+  LSO: "LSL",
+  SWZ: "SZL",
+  MDG: "MGA",
+  MUS: "MUR",
+  SYC: "SCR",
+  COM: "KMF",
+  DJI: "DJF",
+  ERI: "ERN",
+  SSD: "SSP",
+  CAF: "XAF",
+  TCD: "XAF",
+  COG: "XAF",
+  GAB: "XAF",
+  GNQ: "XAF",
+  COD: "CDF",
+  BDI: "BIF",
+  GMB: "GMD",
+  SLE: "SLL",
+  LBR: "LRD",
+  MRT: "MRU",
+  CPV: "CVE",
+  STP: "STN",
+  GNB: "XOF",
+  ESH: "MAD",
+  // South America
+  BRA: "BRL",
+  ARG: "ARS",
+  CHL: "CLP",
+  COL: "COP",
+  PER: "PEN",
+  VEN: "VES",
+  ECU: "USD",
+  BOL: "BOB",
+  PRY: "PYG",
+  URY: "UYU",
+  GUY: "GYD",
+  SUR: "SRD",
+  GUF: "EUR",
+  // Central America & Caribbean
+  CRI: "CRC",
+  PAN: "PAB",
+  GTM: "GTQ",
+  HND: "HNL",
+  NIC: "NIO",
+  SLV: "USD",
+  BLZ: "BZD",
+  CUB: "CUP",
+  DOM: "DOP",
+  HTI: "HTG",
+  JAM: "JMD",
+  TTO: "TTD",
+  BHS: "BSD",
+  BRB: "BBD",
+  ATG: "XCD",
+  DMA: "XCD",
+  GRD: "XCD",
+  KNA: "XCD",
+  LCA: "XCD",
+  VCT: "XCD",
+  AIA: "XCD",
+  MSR: "XCD",
+  VGB: "USD",
+  CYM: "KYD",
+  TCA: "USD",
+  BMU: "BMD",
+  PRI: "USD",
+  VIR: "USD",
+  GUM: "USD",
+  ASM: "USD",
+  MNP: "USD",
+  UMI: "USD",
+  IOT: "USD",
+  // Europe (non-EU)
+  CHE: "CHF",
+  GBR: "GBP",
+  NOR: "NOK",
+  SWE: "SEK",
+  DNK: "DKK",
+  ISL: "ISK",
+  POL: "PLN",
+  CZE: "CZK",
+  HUN: "HUF",
+  ROU: "RON",
+  BGR: "BGN",
+  RUS: "RUB",
+  UKR: "UAH",
+  BLR: "BYN",
+  MDA: "MDL",
+  SRB: "RSD",
+  BIH: "BAM",
+  ALB: "ALL",
+  MKD: "MKD",
+  KAZ: "KZT",
+  UZB: "UZS",
+  TKM: "TMT",
+  TJK: "TJS",
+  KGZ: "KGS",
+  ARM: "AMD",
+  AZE: "AZN",
+  GEO: "GEL",
+  LIE: "CHF",
+  FRO: "DKK",
+  GIB: "GIP",
+  GGY: "GBP",
+  JEY: "GBP",
+  IMN: "GBP",
+  SJM: "NOK",
+  ALA: "EUR",
+  GRL: "DKK",
+  ABW: "AWG",
+  CUW: "ANG",
+  SXM: "ANG",
+  TLS: "USD",
+  PCN: "NZD",
+  SHN: "SHP",
+  FLK: "FKP",
+  SGS: "GBP",
+  NFK: "AUD",
+  CCK: "AUD",
+  CXR: "AUD",
+  HMD: "AUD",
+  BVT: "NOK",
+  ATA: "USD",
+};
+
+interface CurrencyInfo {
+  code: string;
+  symbol: string;
 }
 
-// Convert array to object with locale/cca3 as keys
-const localeToCurrency: Record<string, CurrencyEntry> = CurrencyJsonList.reduce(
+// Convert Currency.json to a usable map
+const localeToCurrency: Record<string, CurrencyInfo> = CurrencyJsonList.reduce(
   (acc, item) => {
-    let symbol = "$";
-
-    if (typeof item.currencies === "object" && item.currencies !== null) {
-      symbol = item.currencies.symbol || "$";
-    } else if (typeof item.currencies === "string") {
-      symbol = item.currencies;
-    }
-
+    const currencyCode = COUNTRY_TO_CURRENCY[item.cca3] || "USD";
     acc[item.cca3] = {
-      cca3: item.cca3,
-      name: item.name,
-      flag: item.flag,
-      currencies: {
-        symbol: symbol,
-      },
+      code: currencyCode,
+      symbol: item.symbol || "$",
     };
     return acc;
   },
-  {} as Record<string, CurrencyEntry>
+  {} as Record<string, CurrencyInfo>
 );
 
 class ICUMessageFormat {
@@ -275,11 +520,8 @@ class ICUMessageFormat {
     }
   }
 
-  private static getCurrencyForLanguage(language: string): {
-    code: string;
-    symbol: string;
-  } {
-    const defaultCurrency = { code: "USD", symbol: "$" };
+  private static getCurrencyForLanguage(language: string): CurrencyInfo {
+    const defaultCurrency: CurrencyInfo = { code: "USD", symbol: "$" };
 
     if (!language || typeof language !== "string") {
       return defaultCurrency;
@@ -302,13 +544,13 @@ class ICUMessageFormat {
     // ========================================================================
     if (region) {
       const regionUpper = region.toUpperCase();
-      const regionEntry = localeToCurrency[regionUpper];
 
-      if (regionEntry?.currencies) {
-        // Use the region as currency code and get symbol directly
-        const code = regionUpper;
-        const symbol = regionEntry.currencies.symbol || "$";
-        result = { code, symbol };
+      // Handle special case: GB -> GBR
+      const countryCode = regionUpper === "GB" ? "GBR" : regionUpper;
+      const regionEntry = localeToCurrency[countryCode];
+
+      if (regionEntry) {
+        result = regionEntry;
         this.currencyCache.set(cacheKey, result);
         return result;
       }
@@ -390,96 +632,20 @@ class ICUMessageFormat {
       const countryCode = PRIMARY_COUNTRY[lang];
       const entry = localeToCurrency[countryCode];
 
-      if (entry?.currencies) {
-        // Use country code as currency code and get symbol directly
-        const code = countryCode;
-        const symbol = entry.currencies.symbol || "$";
-        result = { code, symbol };
+      if (entry) {
+        result = entry;
         this.currencyCache.set(cacheKey, result);
         return result;
       }
     }
 
-    // ========================================================================
-    // STEP 3: Smart language matching (ISO 639-1, 639-2, 639-3)
-    // ========================================================================
-    const ISO_MAP: Record<string, string[]> = {
-      ps: ["pus", "pbt", "pst"],
-      pus: ["pus", "pbt", "pst"],
-      prs: ["prs", "fa"],
-      fa: ["fas", "fa", "prs"],
-      ur: ["urd", "ur"],
-      bn: ["ben", "bn"],
-      hi: ["hin", "hi"],
-      pa: ["pan", "pa"],
-      th: ["tha", "th"],
-      vi: ["vie", "vi"],
-      id: ["ind", "id"],
-      ms: ["msa", "ms"],
-      my: ["mya", "my"],
-      km: ["khm", "km"],
-      lo: ["lao", "lo"],
-      ar: ["ara", "ar"],
-      he: ["heb", "he"],
-      tr: ["tur", "tr"],
-      sw: ["swa", "sw"],
-      am: ["amh", "am"],
-      ha: ["hau", "ha"],
-    };
-
-    const searchCodes = ISO_MAP[lang] || [lang];
-    const matchedEntry = Object.values(localeToCurrency).find((entry) => {
-      if (!entry.languages) return false;
-      const langKeys = Object.keys(entry.languages).map((k) => k.toLowerCase());
-      return searchCodes.some((code) => langKeys.includes(code.toLowerCase()));
-    });
-
-    if (matchedEntry?.currencies) {
-      // Use country code as currency code and get symbol directly
-      const code = matchedEntry.cca3;
-      const symbol = matchedEntry.currencies.symbol || "$";
-      result = { code, symbol };
-      this.currencyCache.set(cacheKey, result);
-      return result;
-    }
-
-    // ========================================================================
-    // STEP 4: Final fallback - exact language match
-    // ========================================================================
-    const exactMatch = Object.values(localeToCurrency).find((entry) => {
-      if (!entry.languages) return false;
-
-      // Check for exact language code match
-      const hasExactCodeMatch = Object.keys(entry.languages).some(
-        (k) => k.toLowerCase() === lang.toLowerCase()
-      );
-
-      // Check for exact language name match
-      const hasExactNameMatch = Object.values(entry.languages).some(
-        (v) => v.toLowerCase().replace(/[^a-z]/g, "") === lang.toLowerCase()
-      );
-
-      return hasExactCodeMatch || hasExactNameMatch;
-    });
-
-    if (exactMatch?.currencies) {
-      // Use country code as currency code and get symbol directly
-      const code = exactMatch.cca3;
-      const symbol = exactMatch.currencies.symbol || "$";
-      result = { code, symbol };
-      this.currencyCache.set(cacheKey, result);
-      return result;
-    }
-
+    // Fallback to default
     this.currencyCache.set(cacheKey, result);
     return result;
   }
 
   // Add this static cache property to your class
-  private static currencyCache = new Map<
-    string,
-    { code: string; symbol: string }
-  >();
+  private static currencyCache = new Map<string, CurrencyInfo>();
 }
 
 // ============================================================================
