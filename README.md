@@ -117,6 +117,8 @@ const designTokens = {
 - **Nested translations** - Organize translations with dot notation
 - **Performance optimized** - Caching and memoization for fast lookups
 - **Type-safe** - Full TypeScript support with autocomplete
+- **Auto currency detection** - Automatic currency formatting based on locale (USD, EUR, GBP, SAR, IRR, JPY, CNY, etc.)
+- **ICU message format** - Full support for ICU plural, select, ordinal, number, and date formatting
 
 ### 📱 **Smart Script Detection**
 
@@ -162,6 +164,10 @@ import AppText, { LocaleProvider, useLang } from "react-native-apptext";
 // 1. Define your translations
 const translations = {
   en: {
+    price: "Total: {amount, number, currency}",
+    price_simple: "Price: {amount, number, currency}",
+    discount: "Save {amount, number, currency}",
+    percent: "Progress: {value, number, percent}",
     greeting: "Hello, {{name}}!",
     welcome: "Welcome to our app",
     itemCount: {
@@ -175,7 +181,23 @@ const translations = {
       },
     },
   },
+  "en-US": {
+    price: "Total: {amount, number, currency}",
+    price_simple: "Price: {amount, number, currency}",
+    discount: "Save {amount, number, currency}",
+    percent: "Progress: {value, number, percent}",
+  },
+  "en-GB": {
+    price: "Total: {amount, number, currency}",
+    price_simple: "Price: {amount, number, currency}",
+    discount: "Save {amount, number, currency}",
+    percent: "Progress: {value, number, percent}",
+  },
   es: {
+    price: "Total: {amount, number, currency}",
+    price_simple: "Precio: {amount, number, currency}",
+    discount: "Ahorra {amount, number, currency}",
+    percent: "Progreso: {value, number, percent}",
     greeting: "¡Hola, {{name}}!",
     welcome: "Bienvenido a nuestra aplicación",
     itemCount: {
@@ -190,6 +212,10 @@ const translations = {
     },
   },
   ar: {
+    price: "الإجمالي: {amount, number, currency}",
+    price_simple: "السعر: {amount, number, currency}",
+    discount: "وفر {amount, number, currency}",
+    percent: "التقدم: {value, number, percent}",
     greeting: "مرحباً، {{name}}!",
     welcome: "مرحباً بك في تطبيقنا",
     itemCount: {
@@ -206,6 +232,18 @@ const translations = {
         email: "عنوان البريد الإلكتروني",
       },
     },
+  },
+  ja: {
+    price: "合計: {amount, number, currency}",
+    price_simple: "価格: {amount, number, currency}",
+    discount: "{amount, number, currency}節約",
+    percent: "進捗: {value, number, percent}",
+  },
+  zh: {
+    price: "总计: {amount, number, currency}",
+    price_simple: "价格: {amount, number, currency}",
+    discount: "节省 {amount, number, currency}",
+    percent: "进度: {value, number, percent}",
   },
 };
 
@@ -236,21 +274,57 @@ function MyApp() {
       {/* Pluralization */}
       <AppText>{tn("itemCount", 5)}</AppText>
 
-      {/* Language switcher */}
-      <View style={{ flexDirection: "row", gap: 10, marginTop: 20 }}>
+      {/* Auto Currency Formatting */}
+      <View style={{ marginTop: 20, gap: 10 }}>
+        <AppText.H3>💰 Auto Currency Detection</AppText.H3>
+        <AppText>Price: {t("price_simple", { amount: 49.99 })}</AppText>
+        <AppText>Total: {t("price", { amount: 1299.99 })}</AppText>
+        <AppText>Discount: {t("discount", { amount: 25.5 })}</AppText>
+        <AppText>Progress: {t("percent", { value: 0.85 })}</AppText>
+      </View>
+
+      {/* Language & Currency Switcher */}
+      <View
+        style={{
+          flexDirection: "row",
+          gap: 10,
+          marginTop: 20,
+          flexWrap: "wrap",
+        }}
+      >
         <TouchableOpacity onPress={() => changeLanguage("en")}>
           <AppText color={language === "en" ? "primary" : "secondary"}>
-            English
+            English (USD $)
+          </AppText>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => changeLanguage("en-US")}>
+          <AppText color={language === "en-US" ? "primary" : "secondary"}>
+            English US (USD $)
+          </AppText>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => changeLanguage("en-GB")}>
+          <AppText color={language === "en-GB" ? "primary" : "secondary"}>
+            English UK (GBP £)
           </AppText>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => changeLanguage("es")}>
           <AppText color={language === "es" ? "primary" : "secondary"}>
-            Español
+            Español (EUR €)
           </AppText>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => changeLanguage("ar")}>
           <AppText color={language === "ar" ? "primary" : "secondary"}>
-            العربية
+            العربية (SAR ر.س)
+          </AppText>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => changeLanguage("ja")}>
+          <AppText color={language === "ja" ? "primary" : "secondary"}>
+            日本語 (JPY ¥)
+          </AppText>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => changeLanguage("zh")}>
+          <AppText color={language === "zh" ? "primary" : "secondary"}>
+            中文 (CNY ¥)
           </AppText>
         </TouchableOpacity>
       </View>
