@@ -5,6 +5,7 @@ import { DEFAULT_THEME } from "./theme";
 import { useResponsiveFont, useScriptDetection, useThemedStyles, } from "./hooks";
 import { AppTextProvider, useAppTextTheme } from "./context";
 import { createSpacingStyles } from "./utils";
+import TransComponent from "./Trans";
 const TruncationComponent = memo(({ children, maxLines, onExpand, expandText = "Read more", collapseText = "Read less", style, }) => {
     const [isExpanded, setIsExpanded] = React.useState(false);
     const [isTruncated, setIsTruncated] = React.useState(false);
@@ -226,5 +227,6 @@ AppText.BodySmall = memo((props) => (<BaseAppText {...props} variant="bodySmall"
 AppText.LabelLarge = memo((props) => (<BaseAppText {...props} variant="labelLarge"/>));
 AppText.LabelMedium = memo((props) => (<BaseAppText {...props} variant="labelMedium"/>));
 AppText.LabelSmall = memo((props) => (<BaseAppText {...props} variant="labelSmall"/>));
+AppText.Trans = TransComponent;
 export default AppText;
-export { AppTextProvider, useAppTextTheme, useResponsiveFont, useScriptDetection, SCRIPT_CONFIGS, DEFAULT_THEME, };
+export { AppTextProvider, useAppTextTheme, useResponsiveFont, useScriptDetection, SCRIPT_CONFIGS, DEFAULT_THEME, TransComponent as Trans, };
