@@ -19,6 +19,7 @@ import {
 } from "./hooks";
 import { AppTextProvider, useAppTextTheme } from "./context";
 import { createSpacingStyles } from "./utils";
+import TransComponent from "./Trans";
 
 /* ========== Truncation Component ========== */
 interface TruncationProps {
@@ -377,7 +378,7 @@ type AppTextCompound = typeof BaseAppText & {
   LabelSmall: VariantFC;
 
   // Trans component
-  Trans: React.FC<import("./Trans").TransProps>;
+  Trans: typeof TransComponent;
 };
 
 const AppText = BaseAppText as AppTextCompound;
@@ -444,6 +445,8 @@ AppText.LabelSmall = memo((props) => (
   <BaseAppText {...props} variant="labelSmall" />
 ));
 
+AppText.Trans = TransComponent;
+
 export default AppText;
 export {
   AppTextProvider,
@@ -452,5 +455,6 @@ export {
   useScriptDetection,
   SCRIPT_CONFIGS,
   DEFAULT_THEME,
+  TransComponent as Trans,
 };
 export type { AppTextProps, AppTextTheme, TypographyVariant };
