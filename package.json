@@ -31,7 +31,18 @@
     "ui",
     "adaptive",
     "font",
-    "design-system"
+    "design-system",
+    "i18n",
+    "internationalization",
+    "localization",
+    "translation",
+    "icu",
+    "messageformat",
+    "rtl",
+    "material-design",
+    "typography",
+    "lazy-loading",
+    "performance"
   ],
   "author": "Ganesh Jayaprakash <ganeshjayaprakash3@gmail.com>",
   "license": "MIT",
@@ -40,12 +51,11 @@
   },
   "homepage": "https://github.com/Ganesh1110/react-native-apptext#readme",
   "peerDependencies": {
-    "react": ">=17.0.0",
-    "react-native": ">=0.70.0"
+    "react": ">=16.8.0",
+    "react-native": ">=0.60.0"
   },
+  "dependencies": {},
   "devDependencies": {
-    "@types/react": "^18.3.0",
-    "@types/react-native": "^0.73.0",
     "badge-maker": "^5.0.2",
     "typescript": "^5.6.0"
   }
