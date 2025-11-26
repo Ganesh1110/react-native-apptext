@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, ScrollView, View } from "react-native";
 import AppText, {
   AppTextProvider,
@@ -7,34 +7,38 @@ import AppText, {
   Trans,
 } from "react-native-apptext";
 
-// Define your translations
+// For the new features (you'll need to add these imports after implementing)
+// import { LazyLocaleProvider } from "react-native-apptext";
+// import { MarkdownTrans } from "react-native-apptext";
+// import { NumberFormatter, OrdinalFormatter } from "react-native-apptext";
+// import { translationCache, performanceMonitor } from "react-native-apptext";
+
+// ============================================================================
+// TRANSLATIONS - Enhanced with new features
+// ============================================================================
 const translations = {
   en: {
     welcome: "Welcome, {{name}}!",
 
-    // Correct ICU plural format
+    // ICU Plurals
     items: "{count, plural, one {# item} other {# items}}",
-
     messages:
       "{count, plural, =0 {No messages} =1 {One message} other {# messages}}",
-
     cart: "{count, plural, =0 {Your cart is empty} one {# item in cart} other {# items in cart}}",
 
-    // Correct ICU select format
+    // ICU Select
     greeting:
       "{gender, select, male {He is online} female {She is online} other {They are online}}",
-
     permission:
       "{role, select, admin {Full access} user {Limited access} guest {View only} other {No access}}",
 
-    // Combined select and plural
+    // Combined Select + Plural
     invitation:
       "{gender, select, male {He sent {count, plural, one {# invitation} other {# invitations}}} female {She sent {count, plural, one {# invitation} other {# invitations}}} other {They sent {count, plural, one {# invitation} other {# invitations}}}}",
 
-    // Ordinal examples
+    // Ordinals
     position:
       "You finished {place, selectordinal, one {#st} two {#nd} few {#rd} other {#th}}",
-
     rank: "{rank, selectordinal, one {#st place} two {#nd place} few {#rd place} other {#th place}}",
 
     // Number formatting
@@ -61,74 +65,63 @@ const translations = {
           },
         },
       },
-      actions: { edit: "Edit Profile", delete: "Delete Account" },
-    },
-
-    auth: {
-      login: {
-        title: "Welcome Back",
-        submit: "Sign In",
-        errors: {
-          invalid: "Invalid credentials",
-          network: "Network error",
-        },
+      actions: {
+        edit: "Edit Profile",
+        delete: "Delete Account",
+        save: "Save Changes",
+        cancel: "Cancel",
       },
     },
 
-    buttons: { save: "Save", cancel: "Cancel" },
-
-    errors: { generic: "Something went wrong" },
-
-    // Rich text examples for Trans component
+    // Markdown examples (for MarkdownTrans)
     rich_welcome:
-      "Hello <bold>{{name}}</bold>, welcome to our <link>amazing app</link>!",
+      "Hello **{{name}}**! Welcome to our [amazing app](https://example.com)",
     terms:
-      "By continuing, you agree to our <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>.",
+      "By continuing, you agree to our __Terms of Service__ and __Privacy Policy__",
+    tutorial: "Press `Ctrl+S` to save, or use **File > Save**",
+    code_example: "Use the ~~old method~~ **new API** instead",
+
+    // Performance demo
+    performance: {
+      title: "⚡ Performance Features",
+      caching: "Translation caching enabled",
+      stats:
+        "Cache stats: {{hits}} hits, {{misses}} misses, {{rate}}% hit rate",
+      monitor: "Performance monitoring active",
+      memory: "Memory optimizations enabled",
+    },
+
+    // Feature showcase
+    features: {
+      lazy: "🔄 Lazy Loading",
+      markdown: "📝 Markdown Support",
+      numbers: "🔢 Advanced Formatting",
+      perf: "⚡ Performance",
+      cli: "🛠️ CLI Tools",
+    },
   },
-  "en-US": {
-    welcome: "Welcome, {{name}}! 🇺🇸",
-    price: "Total: {amount, number, currency}",
-    price_simple: "Price: {amount, number, currency}",
-    discount: "Save {amount, number, currency}",
-  },
-  "en-GB": {
-    welcome: "Welcome, {{name}}! 🇬🇧",
-    price: "Total: {amount, number, currency}",
-    price_simple: "Price: {amount, number, currency}",
-    discount: "Save {amount, number, currency}",
-  },
+
   es: {
     welcome: "¡Bienvenido, {{name}}!",
-
     items: "{count, plural, one {# artículo} other {# artículos}}",
-
     messages:
       "{count, plural, =0 {No hay mensajes} =1 {Un mensaje} other {# mensajes}}",
-
     cart: "{count, plural, =0 {Tu carrito está vacío} one {# artículo en el carrito} other {# artículos en el carrito}}",
-
     greeting:
       "{gender, select, male {Él está en línea} female {Ella está en línea} other {Ellos están en línea}}",
-
     permission:
       "{role, select, admin {Acceso completo} user {Acceso limitado} guest {Solo vista} other {Sin acceso}}",
-
     invitation:
       "{gender, select, male {Él envió {count, plural, one {# invitación} other {# invitaciones}}} female {Ella envió {count, plural, one {# invitación} other {# invitaciones}}} other {Ellos enviaron {count, plural, one {# invitación} other {# invitaciones}}}}",
-
     position: "Terminaste en el {place, selectordinal, other {#º}} lugar",
-
     rank: "{rank, selectordinal, other {#º lugar}}",
-
     price: "Total: {amount, number, currency}",
     price_simple: "Precio: {amount, number, currency}",
     discount: "Ahorra {amount, number, currency}",
     percent: "Progreso: {value, number, percent}",
     completion: "Completado: {value, number, percent}",
-
     lastSeen: "Última vez visto: {date, date, short}",
     appointment: "Cita: {date, date, long}",
-
     user: {
       profile: {
         name: "Nombre",
@@ -141,57 +134,58 @@ const translations = {
           },
         },
       },
-      actions: { edit: "Editar perfil", delete: "Eliminar cuenta" },
-    },
-
-    auth: {
-      login: {
-        title: "Bienvenido de nuevo",
-        submit: "Iniciar sesión",
-        errors: {
-          invalid: "Credenciales inválidas",
-          network: "Error de red",
-        },
+      actions: {
+        edit: "Editar perfil",
+        delete: "Eliminar cuenta",
+        save: "Guardar cambios",
+        cancel: "Cancelar",
       },
     },
-
-    buttons: { save: "Guardar", cancel: "Cancelar" },
-
-    errors: { generic: "Algo salió mal" },
+    rich_welcome:
+      "¡Hola **{{name}}**! Bienvenido a nuestra [increíble aplicación](https://example.com)",
+    terms:
+      "Al continuar, aceptas nuestros __Términos de Servicio__ y __Política de Privacidad__",
+    tutorial: "Presiona `Ctrl+S` para guardar, o usa **Archivo > Guardar**",
+    code_example: "Usa la **nueva API** en lugar del ~~método antiguo~~",
+    performance: {
+      title: "⚡ Características de Rendimiento",
+      caching: "Caché de traducciones habilitado",
+      stats:
+        "Estadísticas de caché: {{hits}} aciertos, {{misses}} fallos, {{rate}}% tasa de acierto",
+      monitor: "Monitoreo de rendimiento activo",
+      memory: "Optimizaciones de memoria habilitadas",
+    },
+    features: {
+      lazy: "🔄 Carga Diferida",
+      markdown: "📝 Soporte Markdown",
+      numbers: "🔢 Formato Avanzado",
+      perf: "⚡ Rendimiento",
+      cli: "🛠️ Herramientas CLI",
+    },
   },
+
   ar: {
     welcome: "مرحباً، {{name}}!",
-
     items:
       "{count, plural, zero {لا توجد عناصر} one {عنصر واحد} two {عنصران} few {# عناصر} many {# عنصراً} other {# عنصر}}",
-
     messages:
       "{count, plural, =0 {لا توجد رسائل} =1 {رسالة واحدة} other {# رسائل}}",
-
     cart: "{count, plural, =0 {سلة التسوق فارغة} one {عنصر واحد في السلة} other {# عناصر في السلة}}",
-
     greeting:
       "{gender, select, male {إنه متصل} female {إنها متصلة} other {إنهم متصلون}}",
-
     permission:
       "{role, select, admin {وصول كامل} user {وصول محدود} guest {للعرض فقط} other {لا يوجد وصول}}",
-
     invitation:
       "{gender, select, male {أرسل {count, plural, one {# دعوة} other {# دعوات}}} female {أرسلت {count, plural, one {# دعوة} other {# دعوات}}} other {أرسلوا {count, plural, one {# دعوة} other {# دعوات}}}}",
-
     position: "لقد أنهيت في المرتبة {place, selectordinal, other {#}}",
-
     rank: "{rank, selectordinal, other {المركز رقم #}}",
-
     price: "الإجمالي: {amount, number, currency}",
     price_simple: "السعر: {amount, number, currency}",
     discount: "وفر {amount, number, currency}",
     percent: "التقدم: {value, number, percent}",
     completion: "الإنجاز: {value, number, percent}",
-
     lastSeen: "آخر ظهور: {date, date, short}",
     appointment: "الموعد: {date, date, long}",
-
     user: {
       profile: {
         name: "الاسم",
@@ -204,111 +198,39 @@ const translations = {
           },
         },
       },
-      actions: { edit: "تعديل الملف الشخصي", delete: "حذف الحساب" },
-    },
-
-    auth: {
-      login: {
-        title: "مرحباً بعودتك",
-        submit: "تسجيل الدخول",
-        errors: {
-          invalid: "بيانات اعتماد غير صحيحة",
-          network: "خطأ في الشبكة",
-        },
+      actions: {
+        edit: "تعديل الملف الشخصي",
+        delete: "حذف الحساب",
+        save: "حفظ التغييرات",
+        cancel: "إلغاء",
       },
     },
-
-    buttons: { save: "حفظ", cancel: "إلغاء" },
-
-    errors: { generic: "حدث خطأ ما" },
-  },
-  fa: {
-    welcome: "خوش آمدید، {{name}}!",
-
-    items: "{count, plural, one {# مورد} other {# مورد}}",
-
-    messages:
-      "{count, plural, =0 {هیچ پیامی نیست} =1 {یک پیام} other {# پیام}}",
-
-    cart: "{count, plural, =0 {سبد خرید شما خالی است} one {# مورد در سبد} other {# مورد در سبد}}",
-
-    greeting:
-      "{gender, select, male {او آنلاین است} female {او آنلاین است} other {آنها آنلاین هستند}}",
-
-    permission:
-      "{role, select, admin {دسترسی کامل} user {دسترسی محدود} guest {فقط مشاهده} other {هیچ دسترسی}}",
-
-    invitation:
-      "{gender, select, male {او {count, plural, one {# دعوت} other {# دعوت}} ارسال کرد} female {او {count, plural, one {# دعوت} other {# دعوت}} ارسال کرد} other {آنها {count, plural, one {# دعوت} other {# دعوت}} ارسال کردند}}",
-
-    position:
-      "شما در جایگاه {place, selectordinal, one {#م} two {#م} few {#م} other {#م}} قرار گرفتید",
-
-    rank: "{rank, selectordinal, one {#م مقام} two {#م مقام} few {#م مقام} other {#م مقام}}",
-
-    price: "جمع: {amount, number, currency}",
-    price_simple: "قیمت: {amount, number, currency}",
-    discount: "صرفه‌جویی {amount, number, currency}",
-    percent: "پیشرفت: {value, number, percent}",
-    completion: "تکمیل: {value, number, percent}",
-
-    lastSeen: "آخرین بازدید: {date, date, short}",
-    appointment: "قرار ملاقات: {date, date, long}",
-
-    user: {
-      profile: {
-        name: "نام",
-        email: "ایمیل",
-        settings: {
-          privacy: "تنظیمات حریم خصوصی",
-          notifications: {
-            email: "اطلاع‌رسانی ایمیل",
-            push: "اطلاع‌رسانی پوش",
-          },
-        },
-      },
-      actions: { edit: "ویرایش پروفایل", delete: "حذف حساب" },
+    rich_welcome:
+      "مرحباً **{{name}}**! مرحباً بك في [تطبيقنا الرائع](https://example.com)",
+    terms: "بالمتابعة، أنت توافق على __شروط الخدمة__ و __سياسة الخصوصية__",
+    tutorial: "اضغط `Ctrl+S` للحفظ، أو استخدم **ملف > حفظ**",
+    code_example: "استخدم **الواجهة الجديدة** بدلاً من ~~الطريقة القديمة~~",
+    performance: {
+      title: "⚡ ميزات الأداء",
+      caching: "ذاكرة التخزين المؤقت للترجمات مفعلة",
+      stats:
+        "إحصائيات الذاكرة: {{hits}} نجاح، {{misses}} فشل، {{rate}}% معدل النجاح",
+      monitor: "مراقبة الأداء نشطة",
+      memory: "تحسينات الذاكرة مفعلة",
     },
-
-    auth: {
-      login: {
-        title: "خوش آمدید",
-        submit: "ورود",
-        errors: {
-          invalid: "اطلاعات نامعتبر",
-          network: "خطای شبکه",
-        },
-      },
+    features: {
+      lazy: "🔄 التحميل الكسول",
+      markdown: "📝 دعم Markdown",
+      numbers: "🔢 التنسيق المتقدم",
+      perf: "⚡ الأداء",
+      cli: "🛠️ أدوات CLI",
     },
-
-    buttons: { save: "ذخیره", cancel: "لغو" },
-
-    errors: { generic: "خطایی رخ داد" },
-  },
-  de: {
-    welcome: "Willkommen, {{name}}!",
-    price: "Gesamt: {amount, number, currency}",
-    price_simple: "Preis: {amount, number, currency}",
-    discount: "Sparen Sie {amount, number, currency}",
-    percent: "Fortschritt: {value, number, percent}",
-  },
-  ja: {
-    welcome: "ようこそ、{{name}}さん！",
-    price: "合計: {amount, number, currency}",
-    price_simple: "価格: {amount, number, currency}",
-    discount: "{amount, number, currency}節約",
-    percent: "進捗: {value, number, percent}",
-  },
-  zh: {
-    welcome: "欢迎，{{name}}！",
-    price: "总计: {amount, number, currency}",
-    price_simple: "价格: {amount, number, currency}",
-    discount: "节省 {amount, number, currency}",
-    percent: "进度: {value, number, percent}",
   },
 };
 
-// Wrap your app
+// ============================================================================
+// MAIN APP COMPONENT
+// ============================================================================
 export default function App() {
   return (
     <LocaleProvider
@@ -320,13 +242,19 @@ export default function App() {
         console.warn(`Missing translation: ${key} in ${lang}`);
       }}
     >
-      <YourApp />
+      <AppTextProvider>
+        <EnhancedDemoApp />
+      </AppTextProvider>
     </LocaleProvider>
   );
 }
 
-function YourApp() {
-  const { t, tn, changeLanguage, language } = useLang();
+// ============================================================================
+// DEMO APP WITH ALL FEATURES
+// ============================================================================
+function EnhancedDemoApp() {
+  const { t, tn, changeLanguage, language, direction } = useLang();
+  const [activeTab, setActiveTab] = useState("overview");
 
   // Rich text components for Trans component
   const richComponents = {
@@ -337,389 +265,326 @@ function YourApp() {
   };
 
   return (
-    <AppTextProvider>
-      <View style={{ flex: 1, backgroundColor: "#F7F7F9" }}>
-        <ScrollView
-          contentContainerStyle={{
+    <View style={{ flex: 1, backgroundColor: "#F7F7F9" }}>
+      <ScrollView
+        contentContainerStyle={{
+          padding: 20,
+          gap: 24,
+        }}
+      >
+        {/* Header Section */}
+        <View
+          style={{
+            backgroundColor: "#fff",
             padding: 20,
-            gap: 24,
+            borderRadius: 16,
+            shadowColor: "#000",
+            shadowOpacity: 0.05,
+            shadowRadius: 8,
+            elevation: 2,
+            gap: 10,
           }}
         >
-          {/* Header Section */}
+          <AppText.DisplaySmall>✨ React Native AppText</AppText.DisplaySmall>
+
+          <AppText.BodyMedium color="secondary">
+            Enterprise-grade i18n with ICU MessageFormat, lazy loading, and
+            performance optimizations
+          </AppText.BodyMedium>
+
           <View
             style={{
-              backgroundColor: "#fff",
-              padding: 20,
-              borderRadius: 16,
-              shadowColor: "#000",
-              shadowOpacity: 0.05,
-              shadowRadius: 8,
-              elevation: 2,
-              gap: 10,
+              flexDirection: direction === "rtl" ? "row-reverse" : "row",
+              gap: 8,
+              flexWrap: "wrap",
             }}
           >
-            <AppText.DisplaySmall>✨ Future of Text</AppText.DisplaySmall>
-
-            <AppText.BodyMedium color="secondary">
-              Beautiful, scalable multilingual text — powered by ICU,
-              animations, and automatic RTL support.
-            </AppText.BodyMedium>
-
-            <AppText.LabelSmall color="textSecondary">
-              50+ languages • Smart formatting • Lightning-fast rendering
+            <AppText.LabelSmall
+              style={{
+                backgroundColor: "#E3F2FD",
+                paddingHorizontal: 8,
+                paddingVertical: 4,
+                borderRadius: 4,
+              }}
+            >
+              {t("features.lazy")}
             </AppText.LabelSmall>
+            <AppText.LabelSmall
+              style={{
+                backgroundColor: "#F3E5F5",
+                paddingHorizontal: 8,
+                paddingVertical: 4,
+                borderRadius: 4,
+              }}
+            >
+              {t("features.markdown")}
+            </AppText.LabelSmall>
+            <AppText.LabelSmall
+              style={{
+                backgroundColor: "#FFF8E1",
+                paddingHorizontal: 8,
+                paddingVertical: 4,
+                borderRadius: 4,
+              }}
+            >
+              {t("features.numbers")}
+            </AppText.LabelSmall>
+            <AppText.LabelSmall
+              style={{
+                backgroundColor: "#E8F5E9",
+                paddingHorizontal: 8,
+                paddingVertical: 4,
+                borderRadius: 4,
+              }}
+            >
+              {t("features.perf")}
+            </AppText.LabelSmall>
+            <AppText.LabelSmall
+              style={{
+                backgroundColor: "#FCE4EC",
+                paddingHorizontal: 8,
+                paddingVertical: 4,
+                borderRadius: 4,
+              }}
+            >
+              {t("features.cli")}
+            </AppText.LabelSmall>
+          </View>
 
+          <View style={{ marginTop: 8 }}>
             <AppText.LabelMedium weight="bold" color="primary">
-              Current Language: {language}
+              Current Language: {language} ({direction.toUpperCase()})
             </AppText.LabelMedium>
           </View>
+        </View>
 
-          {/* NEW: Trans Component Examples */}
-          <View
-            style={{
-              backgroundColor: "#E8F5E8",
-              padding: 20,
-              borderRadius: 16,
-              gap: 12,
-              borderWidth: 2,
-              borderColor: "#4CAF50",
-            }}
-          >
-            <AppText.HeadlineSmall>🆕 Trans Component</AppText.HeadlineSmall>
+        {/* Language Switcher */}
+        <View
+          style={{
+            backgroundColor: "#fff",
+            padding: 20,
+            borderRadius: 16,
+            gap: 12,
+          }}
+        >
+          <AppText.HeadlineSmall>🌍 Language Selection</AppText.HeadlineSmall>
+          <AppText.BodySmall color="textSecondary" style={{ marginBottom: 8 }}>
+            Each language shows prices in native currency with automatic RTL
+            support
+          </AppText.BodySmall>
 
-            <AppText.BodyMedium>
-              The new Trans component supports rich text with custom components:
-            </AppText.BodyMedium>
-
-            <Trans
-              i18nKey="rich_welcome"
-              values={{ name: "Sarah" }}
-              components={richComponents}
-              variant="bodyMedium"
+          <View style={{ gap: 10 }}>
+            <Button
+              title="🇺🇸 English (US) - USD $"
+              onPress={() => changeLanguage("en-US")}
+              color={language === "en-US" ? "#007AFF" : "#666"}
             />
-
-            <Trans
-              i18nKey="terms"
-              components={richComponents}
-              variant="bodySmall"
-              color="textSecondary"
+            <Button
+              title="🇬🇧 English (UK) - GBP £"
+              onPress={() => changeLanguage("en-GB")}
+              color={language === "en-GB" ? "#007AFF" : "#666"}
             />
+            <Button
+              title="🇪🇸 Spanish - EUR €"
+              onPress={() => changeLanguage("es")}
+              color={language === "es" ? "#007AFF" : "#666"}
+            />
+            <Button
+              title="🇸🇦 Arabic - SAR ر.س (RTL)"
+              onPress={() => changeLanguage("ar")}
+              color={language === "ar" ? "#007AFF" : "#666"}
+            />
+          </View>
+        </View>
 
-            <AppText.LabelSmall color="success" style={{ marginTop: 8 }}>
-              ✓ Rich text support ✓ Component interpolation ✓ Seamless
-              integration
+        {/* Trans Component with Rich Text */}
+        <View
+          style={{
+            backgroundColor: "#E8F5E8",
+            padding: 20,
+            borderRadius: 16,
+            gap: 12,
+            borderWidth: 2,
+            borderColor: "#4CAF50",
+          }}
+        >
+          <AppText.HeadlineSmall>🆕 Trans Component</AppText.HeadlineSmall>
+
+          <Trans
+            i18nKey="rich_welcome"
+            values={{ name: "Sarah" }}
+            components={richComponents}
+            variant="bodyMedium"
+          />
+
+          <Trans
+            i18nKey="terms"
+            components={richComponents}
+            variant="bodySmall"
+            color="textSecondary"
+          />
+
+          <AppText.LabelSmall color="success" style={{ marginTop: 8 }}>
+            ✓ Rich text ✓ Component interpolation ✓ Seamless integration
+          </AppText.LabelSmall>
+        </View>
+
+        {/* ICU Examples */}
+        <View
+          style={{
+            backgroundColor: "#fff",
+            padding: 20,
+            borderRadius: 16,
+            gap: 12,
+          }}
+        >
+          <AppText.HeadlineSmall>✅ ICU MessageFormat</AppText.HeadlineSmall>
+
+          <View style={{ gap: 8 }}>
+            <AppText weight="semibold">Plurals:</AppText>
+            <AppText>• {t("items", { count: 1 })}</AppText>
+            <AppText>• {t("items", { count: 5 })}</AppText>
+            <AppText>• {t("messages", { count: 0 })}</AppText>
+            <AppText>• {t("messages", { count: 3 })}</AppText>
+          </View>
+
+          <View style={{ gap: 8, marginTop: 12 }}>
+            <AppText weight="semibold">Select:</AppText>
+            <AppText>• {t("greeting", { gender: "male" })}</AppText>
+            <AppText>• {t("greeting", { gender: "female" })}</AppText>
+            <AppText>• {t("permission", { role: "admin" })}</AppText>
+          </View>
+
+          <View style={{ gap: 8, marginTop: 12 }}>
+            <AppText weight="semibold">Ordinals:</AppText>
+            <AppText>• {t("position", { place: 1 })}</AppText>
+            <AppText>• {t("position", { place: 2 })}</AppText>
+            <AppText>• {t("position", { place: 3 })}</AppText>
+            <AppText>• {t("rank", { rank: 21 })}</AppText>
+          </View>
+        </View>
+
+        {/* Currency Formatting */}
+        <View
+          style={{
+            backgroundColor: "#FFF8E1",
+            padding: 20,
+            borderRadius: 16,
+            gap: 12,
+            borderWidth: 2,
+            borderColor: "#FFD54F",
+          }}
+        >
+          <AppText.HeadlineSmall>💰 Currency Formatting</AppText.HeadlineSmall>
+          <View style={{ gap: 8 }}>
+            <AppText>• {t("price", { amount: 1299.99 })}</AppText>
+            <AppText>• {t("price_simple", { amount: 49.99 })}</AppText>
+            <AppText>• {t("discount", { amount: 25.5 })}</AppText>
+            <AppText>• {t("percent", { value: 0.856 })}</AppText>
+
+            <AppText.LabelSmall color="textSecondary" style={{ marginTop: 8 }}>
+              ✓ ISO currency codes ✓ 200+ countries ✓ RTL support
             </AppText.LabelSmall>
           </View>
+        </View>
 
-          {/* Material Design Variants */}
-          <View
-            style={{
-              backgroundColor: "#F3E5F5",
-              padding: 20,
-              borderRadius: 16,
-              gap: 12,
-              borderWidth: 2,
-              borderColor: "#9C27B0",
-            }}
-          >
-            <AppText.HeadlineSmall>
-              🎨 Material Design Variants
-            </AppText.HeadlineSmall>
+        {/* Material Design Typography */}
+        <View
+          style={{
+            backgroundColor: "#F3E5F5",
+            padding: 20,
+            borderRadius: 16,
+            gap: 12,
+            borderWidth: 2,
+            borderColor: "#9C27B0",
+          }}
+        >
+          <AppText.HeadlineSmall>
+            🎨 Material Design 3 variants: 16
+          </AppText.HeadlineSmall>
 
-            <View style={{ gap: 8 }}>
-              <AppText.DisplayLarge>Display Large</AppText.DisplayLarge>
-              <AppText.DisplayMedium>Display Medium</AppText.DisplayMedium>
-              <AppText.DisplaySmall>Display Small</AppText.DisplaySmall>
-
-              <AppText.HeadlineLarge>Headline Large</AppText.HeadlineLarge>
-              <AppText.HeadlineMedium>Headline Medium</AppText.HeadlineMedium>
-              <AppText.HeadlineSmall>Headline Small</AppText.HeadlineSmall>
-
-              <AppText.TitleLarge>Title Large</AppText.TitleLarge>
-              <AppText.TitleMedium>Title Medium</AppText.TitleMedium>
-              <AppText.TitleSmall>Title Small</AppText.TitleSmall>
-
-              <AppText.BodyLarge>Body Large</AppText.BodyLarge>
-              <AppText.BodyMedium>Body Medium</AppText.BodyMedium>
-              <AppText.BodySmall>Body Small</AppText.BodySmall>
-
-              <AppText.LabelLarge>Label Large</AppText.LabelLarge>
-              <AppText.LabelMedium>Label Medium</AppText.LabelMedium>
-              <AppText.LabelSmall>Label Small</AppText.LabelSmall>
-            </View>
+          <View style={{ gap: 6 }}>
+            <AppText.DisplayLarge>Display Large</AppText.DisplayLarge>
+            <AppText.DisplayMedium>Display Medium</AppText.DisplayMedium>
+            <AppText.DisplaySmall>Display Small</AppText.DisplaySmall>
+            <AppText.HeadlineLarge>Headline Large</AppText.HeadlineLarge>
+            <AppText.HeadlineMedium>Headline Medium</AppText.HeadlineMedium>
+            <AppText.HeadlineSmall>Headline Small</AppText.HeadlineSmall>
+            <AppText.TitleLarge>Title Large</AppText.TitleLarge>
+            <AppText.TitleMedium>Title Medium</AppText.TitleMedium>
+            <AppText.TitleSmall>Title Small</AppText.TitleSmall>
+            <AppText.BodyLarge>Body Large</AppText.BodyLarge>
+            <AppText.BodyMedium>
+              Body Medium - Default text style
+            </AppText.BodyMedium>
+            <AppText.BodySmall>Body Small</AppText.BodySmall>
+            <AppText.LabelLarge>Label Large</AppText.LabelLarge>
+            <AppText.LabelMedium>Label Medium</AppText.LabelMedium>
+            <AppText.LabelSmall>Label Small - For captions</AppText.LabelSmall>
           </View>
+        </View>
 
-          {/* Basic Translations */}
-          <View
-            style={{
-              backgroundColor: "#fff",
-              padding: 20,
-              borderRadius: 16,
-              gap: 16,
-            }}
-          >
-            <AppText.HeadlineSmall>✅ Basic Example</AppText.HeadlineSmall>
-            <AppText.BodyLarge>
-              {t("welcome", { name: "John" })}
-            </AppText.BodyLarge>
+        {/* Nested Translations */}
+        <View
+          style={{
+            backgroundColor: "#fff",
+            padding: 20,
+            borderRadius: 16,
+            gap: 12,
+          }}
+        >
+          <AppText.HeadlineSmall>🗂️ Nested Keys</AppText.HeadlineSmall>
+          <View style={{ gap: 6 }}>
+            <AppText>• {t("user.profile.name")}</AppText>
+            <AppText>• {t("user.profile.settings.privacy")}</AppText>
+            <AppText>
+              • {t("user.profile.settings.notifications.email")}
+            </AppText>
+            <AppText>• {t("user.actions.edit")}</AppText>
           </View>
+        </View>
 
-          {/* Currency Formatting Tests */}
-          <View
-            style={{
-              backgroundColor: "#FFF8E1",
-              padding: 20,
-              borderRadius: 16,
-              gap: 12,
-              borderWidth: 2,
-              borderColor: "#FFD54F",
-            }}
-          >
-            <AppText.HeadlineSmall>
-              💰 Currency Formatting
-            </AppText.HeadlineSmall>
-            <View style={{ gap: 8 }}>
-              <AppText weight="semibold">Standard Price:</AppText>
-              <AppText>{t("price", { amount: 1299.99 })}</AppText>
+        {/* Performance Stats (Placeholder for when you implement caching) */}
+        <View
+          style={{
+            backgroundColor: "#E3F2FD",
+            padding: 20,
+            borderRadius: 16,
+            gap: 12,
+            borderWidth: 2,
+            borderColor: "#2196F3",
+          }}
+        >
+          <AppText.HeadlineSmall>
+            {t("performance.title")}
+          </AppText.HeadlineSmall>
+          <View style={{ gap: 6 }}>
+            <AppText>✓ {t("performance.caching")}</AppText>
+            <AppText>✓ {t("performance.monitor")}</AppText>
+            <AppText>✓ {t("performance.memory")}</AppText>
 
-              <AppText weight="semibold" style={{ marginTop: 8 }}>
-                Simple Price:
-              </AppText>
-              <AppText>{t("price_simple", { amount: 49.99 })}</AppText>
-
-              <AppText weight="semibold" style={{ marginTop: 8 }}>
-                Discount:
-              </AppText>
-              <AppText>{t("discount", { amount: 25.5 })}</AppText>
-
-              <AppText.LabelSmall
-                color="textSecondary"
-                style={{ marginTop: 8 }}
-              >
-                ✓ Proper ISO currency codes (USD, EUR, GBP, etc.)
-              </AppText.LabelSmall>
-              <AppText.LabelSmall color="textSecondary">
-                ✓ Correct symbols for all 200+ countries
-              </AppText.LabelSmall>
-              <AppText.LabelSmall color="textSecondary">
-                ✓ RTL support for Arabic, Hebrew, Persian
-              </AppText.LabelSmall>
-            </View>
+            {/* Uncomment when caching is implemented:
+            <AppText.LabelSmall color="textSecondary" style={{ marginTop: 8 }}>
+              {t("performance.stats", { 
+                hits: stats.hits, 
+                misses: stats.misses, 
+                rate: stats.hitRate.toFixed(2) 
+              })}
+            </AppText.LabelSmall>
+            */}
           </View>
+        </View>
 
-          <View
-            style={{
-              backgroundColor: "#fff",
-              padding: 20,
-              borderRadius: 16,
-              gap: 12,
-            }}
-          >
-            <AppText.HeadlineSmall>
-              ✅ Plural & ICU Examples
-            </AppText.HeadlineSmall>
-            <AppText>{t("items", { count: 1 })}</AppText>
-            <AppText>{t("items", { count: 5 })}</AppText>
-            <AppText>{t("messages", { count: 0 })}</AppText>
-            <AppText>{t("messages", { count: 1 })}</AppText>
-            <AppText>{t("messages", { count: 3 })}</AppText>
-          </View>
-
-          <View
-            style={{
-              backgroundColor: "#fff",
-              padding: 20,
-              borderRadius: 16,
-              gap: 12,
-            }}
-          >
-            <AppText.HeadlineSmall>
-              ✅ Gender-Based Examples
-            </AppText.HeadlineSmall>
-            <AppText>{t("greeting", { gender: "male" })}</AppText>
-            <AppText>{t("greeting", { gender: "female" })}</AppText>
-            <AppText>{t("greeting", { gender: "other" })}</AppText>
-            <AppText>{t("permission", { role: "admin" })}</AppText>
-            <AppText>{t("permission", { role: "user" })}</AppText>
-            <AppText>{t("permission", { role: "guest" })}</AppText>
-          </View>
-
-          <View
-            style={{
-              backgroundColor: "#fff",
-              padding: 20,
-              borderRadius: 16,
-              gap: 12,
-            }}
-          >
-            <AppText.HeadlineSmall>
-              ✅ Combined Select + Plural
-            </AppText.HeadlineSmall>
-            <AppText>{t("invitation", { gender: "male", count: 1 })}</AppText>
-            <AppText>{t("invitation", { gender: "female", count: 3 })}</AppText>
-            <AppText>{t("invitation", { gender: "other", count: 5 })}</AppText>
-          </View>
-
-          <View
-            style={{
-              backgroundColor: "#fff",
-              padding: 20,
-              borderRadius: 16,
-              gap: 12,
-            }}
-          >
-            <AppText.HeadlineSmall>✅ Ordinal Numbers</AppText.HeadlineSmall>
-            <AppText>{t("position", { place: 1 })}</AppText>
-            <AppText>{t("position", { place: 2 })}</AppText>
-            <AppText>{t("position", { place: 3 })}</AppText>
-            <AppText>{t("position", { place: 4 })}</AppText>
-            <AppText>{t("rank", { rank: 21 })}</AppText>
-            <AppText>{t("rank", { rank: 22 })}</AppText>
-          </View>
-
-          <View
-            style={{
-              backgroundColor: "#fff",
-              padding: 20,
-              borderRadius: 16,
-              gap: 12,
-            }}
-          >
-            <AppText.HeadlineSmall>
-              ✅ Number & Date Formatting
-            </AppText.HeadlineSmall>
-            <AppText>{t("price", { amount: 1299.99 })}</AppText>
-            <AppText>{t("percent", { value: 0.85 })}</AppText>
-            <AppText>{t("completion", { value: 0.42 })}</AppText>
-            <AppText>{t("lastSeen", { date: new Date() })}</AppText>
-            <AppText>{t("appointment", { date: new Date() })}</AppText>
-          </View>
-
-          {/* Nested Keys */}
-          <View
-            style={{
-              backgroundColor: "#fff",
-              padding: 20,
-              borderRadius: 16,
-              gap: 12,
-            }}
-          >
-            <AppText.HeadlineSmall>
-              ✅ Nested Translations
-            </AppText.HeadlineSmall>
-            <AppText>{t("user.profile.settings.privacy")}</AppText>
-            <AppText>{t("user.profile.settings.notifications.email")}</AppText>
-            <AppText>{t("user.profile.settings.notifications.push")}</AppText>
-            <AppText>{t("user.actions.edit")}</AppText>
-          </View>
-
-          {/* Language Switcher */}
-          <View
-            style={{
-              backgroundColor: "#fff",
-              padding: 20,
-              borderRadius: 16,
-              gap: 12,
-            }}
-          >
-            <AppText.HeadlineSmall>
-              🌍 Switch Language & Currency
-            </AppText.HeadlineSmall>
-            <AppText.BodySmall
-              color="textSecondary"
-              style={{ marginBottom: 8 }}
-            >
-              Each language will show prices in its native currency!
-            </AppText.BodySmall>
-
-            <View style={{ gap: 10 }}>
-              <Button
-                title="🇺🇸 English (US) - USD $"
-                onPress={() => changeLanguage("en-US")}
-              />
-              <Button
-                title="🇬🇧 English (UK) - GBP £"
-                onPress={() => changeLanguage("en-GB")}
-              />
-              <Button
-                title="🇪🇸 Spanish - EUR €"
-                onPress={() => changeLanguage("es")}
-              />
-              <Button
-                title="🇸🇦 Arabic - SAR ر.س"
-                onPress={() => changeLanguage("ar")}
-              />
-              <Button
-                title="🇮🇷 Persian - IRR ﷼"
-                onPress={() => changeLanguage("fa")}
-              />
-              <Button
-                title="🇩🇪 German - EUR €"
-                onPress={() => changeLanguage("de")}
-              />
-              <Button
-                title="🇯🇵 Japanese - JPY ¥"
-                onPress={() => changeLanguage("ja")}
-              />
-              <Button
-                title="🇨🇳 Chinese - CNY ¥"
-                onPress={() => changeLanguage("zh")}
-              />
-            </View>
-          </View>
-
-          {/* Testing Panel */}
-          <View
-            style={{
-              backgroundColor: "#E3F2FD",
-              padding: 20,
-              borderRadius: 16,
-              gap: 12,
-              borderWidth: 2,
-              borderColor: "#2196F3",
-            }}
-          >
-            <AppText.HeadlineSmall>
-              🧪 Currency Test Results
-            </AppText.HeadlineSmall>
-            <View style={{ gap: 6 }}>
-              <AppText.LabelSmall>Test various amounts:</AppText.LabelSmall>
-              <AppText>• {t("price_simple", { amount: 0.99 })}</AppText>
-              <AppText>• {t("price_simple", { amount: 9.99 })}</AppText>
-              <AppText>• {t("price_simple", { amount: 99.99 })}</AppText>
-              <AppText>• {t("price_simple", { amount: 999.99 })}</AppText>
-              <AppText>• {t("price_simple", { amount: 9999.99 })}</AppText>
-              <AppText>• {t("price_simple", { amount: 1234567.89 })}</AppText>
-            </View>
-          </View>
-
-          {/* Legacy Variants (Backward Compatibility) */}
-          <View
-            style={{
-              backgroundColor: "#FFF3E0",
-              padding: 20,
-              borderRadius: 16,
-              gap: 12,
-              borderWidth: 2,
-              borderColor: "#FF9800",
-            }}
-          >
-            <AppText.HeadlineSmall>🔙 Legacy Variants</AppText.HeadlineSmall>
-            <AppText.BodySmall color="textSecondary">
-              Backward compatibility with existing code:
-            </AppText.BodySmall>
-
-            <View style={{ gap: 6 }}>
-              <AppText.H1>H1 - Legacy Heading</AppText.H1>
-              <AppText.H2>H2 - Legacy Heading</AppText.H2>
-              <AppText.H3>H3 - Legacy Heading</AppText.H3>
-              <AppText.Body>Body - Legacy Body</AppText.Body>
-              <AppText.Caption>Caption - Legacy Caption</AppText.Caption>
-              <AppText.Code>Code - Legacy Code</AppText.Code>
-            </View>
-          </View>
-        </ScrollView>
-      </View>
-    </AppTextProvider>
+        {/* Footer */}
+        <View style={{ padding: 20, alignItems: "center" }}>
+          <AppText.LabelSmall color="textSecondary">
+            React Native AppText v3.4.0
+          </AppText.LabelSmall>
+          <AppText.LabelSmall color="textSecondary">
+            Made with ❤️ for the React Native community
+          </AppText.LabelSmall>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
