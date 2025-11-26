@@ -1,0 +1,339 @@
+/**
+ * Enhanced number formatting with caching and advanced options
+ */
+
+interface NumberFormatterOptions {
+  style?: "decimal" | "currency" | "percent" | "unit";
+  currency?: string;
+  currencyDisplay?: "symbol" | "narrowSymbol" | "code" | "name";
+  unit?: string;
+  unitDisplay?: "short" | "narrow" | "long";
+  minimumIntegerDigits?: number;
+  minimumFractionDigits?: number;
+  maximumFractionDigits?: number;
+  minimumSignificantDigits?: number;
+  maximumSignificantDigits?: number;
+  notation?: "standard" | "scientific" | "engineering" | "compact";
+  compactDisplay?: "short" | "long";
+  signDisplay?: "auto" | "never" | "always" | "exceptZero";
+  useGrouping?: boolean;
+  roundingMode?: "ceil" | "floor" | "expand" | "trunc" | "halfExpand";
+}
+
+export class NumberFormatter {
+  private static cache = new Map<string, Intl.NumberFormat>();
+  private static maxCacheSize = 100;
+
+  /**
+   * Format a number with advanced options and caching
+   */
+  static format(
+    value: number,
+    locale: string,
+    options: NumberFormatterOptions = {}
+  ): string {
+    // Validate input
+    if (typeof value !== "number" || !isFinite(value)) {
+      return String(value);
+    }
+
+    // Create cache key
+    const cacheKey = this.createCacheKey(locale, options);
+
+    // Get or create formatter
+    let formatter = this.cache.get(cacheKey);
+    if (!formatter) {
+      formatter = this.createFormatter(locale, options);
+
+      // Cache management
+      if (this.cache.size >= this.maxCacheSize) {
+        this.evictOldestCacheEntry();
+      }
+
+      this.cache.set(cacheKey, formatter);
+    }
+
+    try {
+      return formatter.format(value);
+    } catch (error) {
+      console.error("Number formatting error:", error);
+      return String(value);
+    }
+  }
+
+  /**
+   * Create an Intl.NumberFormat instance
+   */
+  private static createFormatter(
+    locale: string,
+    options: NumberFormatterOptions
+  ): Intl.NumberFormat {
+    const intlOptions: Intl.NumberFormatOptions = { ...options };
+
+    // Handle special cases
+    if (options.style === "currency" && !options.currency) {
+      intlOptions.currency = "USD";
+    }
+
+    return new Intl.NumberFormat(locale, intlOptions);
+  }
+
+  /**
+   * Create a cache key from locale and options
+   */
+  private static createCacheKey(
+    locale: string,
+    options: NumberFormatterOptions
+  ): string {
+    const sortedOptions = Object.keys(options)
+      .sort()
+      .map((key) => `${key}:${options[key as keyof NumberFormatterOptions]}`)
+      .join("|");
+
+    return `${locale}|${sortedOptions}`;
+  }
+
+  /**
+   * Evict the oldest cache entry safely
+   */
+  private static evictOldestCacheEntry(): void {
+    const firstKey = this.cache.keys().next().value;
+    if (firstKey !== undefined) {
+      this.cache.delete(firstKey);
+    }
+  }
+
+  /**
+   * Format currency with smart defaults
+   */
+  static formatCurrency(
+    value: number,
+    locale: string,
+    currency: string = "USD",
+    options: Partial<NumberFormatterOptions> = {}
+  ): string {
+    return this.format(value, locale, {
+      style: "currency",
+      currency,
+      currencyDisplay: "symbol",
+      ...options,
+    });
+  }
+
+  /**
+   * Format percentage
+   */
+  static formatPercent(
+    value: number,
+    locale: string,
+    options: Partial<NumberFormatterOptions> = {}
+  ): string {
+    return this.format(value, locale, {
+      style: "percent",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+      ...options,
+    });
+  }
+
+  /**
+   * Format compact number (1.2K, 3.4M, etc.)
+   */
+  static formatCompact(
+    value: number,
+    locale: string,
+    options: Partial<NumberFormatterOptions> = {}
+  ): string {
+    return this.format(value, locale, {
+      notation: "compact",
+      compactDisplay: "short",
+      ...options,
+    });
+  }
+
+  /**
+   * Format unit (e.g., 5 km, 3 hours)
+   */
+  static formatUnit(
+    value: number,
+    locale: string,
+    unit: string,
+    options: Partial<NumberFormatterOptions> = {}
+  ): string {
+    return this.format(value, locale, {
+      style: "unit",
+      unit,
+      unitDisplay: "short",
+      ...options,
+    });
+  }
+
+  /**
+   * Format with explicit sign (always show + or -)
+   */
+  static formatSigned(
+    value: number,
+    locale: string,
+    options: Partial<NumberFormatterOptions> = {}
+  ): string {
+    return this.format(value, locale, {
+      signDisplay: "always",
+      ...options,
+    });
+  }
+
+  /**
+   * Format range of numbers
+   */
+  static formatRange(
+    start: number,
+    end: number,
+    locale: string,
+    options: NumberFormatterOptions = {}
+  ): string {
+    try {
+      const formatter = this.createFormatter(locale, options) as any;
+
+      if (formatter.formatRange) {
+        return formatter.formatRange(start, end);
+      }
+
+      // Fallback for environments without formatRange
+      return `${this.format(start, locale, options)} – ${this.format(
+        end,
+        locale,
+        options
+      )}`;
+    } catch (error) {
+      return `${this.format(start, locale, options)} – ${this.format(
+        end,
+        locale,
+        options
+      )}`;
+    }
+  }
+
+  /**
+   * Clear the formatter cache
+   */
+  static clearCache(): void {
+    this.cache.clear();
+  }
+
+  /**
+   * Get cache statistics
+   */
+  static getCacheStats(): { size: number; maxSize: number } {
+    return {
+      size: this.cache.size,
+      maxSize: this.maxCacheSize,
+    };
+  }
+}
+
+/**
+ * Helper function for ICU MessageFormat integration
+ */
+export function formatNumberICU(
+  value: any,
+  format: string | undefined,
+  locale: string
+): string {
+  const num = Number(value);
+
+  if (isNaN(num) || !isFinite(num)) {
+    return String(value);
+  }
+
+  // Parse format string
+  if (!format) {
+    return NumberFormatter.format(num, locale);
+  }
+
+  const parts = format.split(/\s+/);
+  const style = parts[0];
+
+  switch (style) {
+    case "currency":
+      const currency = parts[1] || "USD";
+      return NumberFormatter.formatCurrency(num, locale, currency);
+
+    case "percent":
+      return NumberFormatter.formatPercent(num, locale);
+
+    case "compact":
+      return NumberFormatter.formatCompact(num, locale);
+
+    case "unit":
+      const unit = parts[1] || "kilometer";
+      return NumberFormatter.formatUnit(num, locale, unit);
+
+    case "signed":
+      return NumberFormatter.formatSigned(num, locale);
+
+    default:
+      // Try to parse as decimal with precision
+      const precision = parseInt(style, 10);
+      if (!isNaN(precision)) {
+        return NumberFormatter.format(num, locale, {
+          minimumFractionDigits: precision,
+          maximumFractionDigits: precision,
+        });
+      }
+
+      return NumberFormatter.format(num, locale);
+  }
+}
+
+/**
+ * Ordinal number formatter (1st, 2nd, 3rd, etc.)
+ */
+export class OrdinalFormatter {
+  private static cache = new Map<string, Intl.PluralRules>();
+
+  static format(value: number, locale: string): string {
+    const num = Math.floor(Math.abs(value));
+
+    // Get cached PluralRules or create new one
+    let pluralRules = this.cache.get(locale);
+    if (!pluralRules) {
+      pluralRules = new Intl.PluralRules(locale, { type: "ordinal" });
+      this.cache.set(locale, pluralRules);
+    }
+
+    const rule = pluralRules.select(num);
+    const suffix = this.getSuffix(locale, rule);
+
+    return `${value}${suffix}`;
+  }
+
+  private static getSuffix(locale: string, rule: string): string {
+    const lang = locale.split("-")[0];
+
+    // English
+    if (lang === "en") {
+      const suffixes: Record<string, string> = {
+        one: "st",
+        two: "nd",
+        few: "rd",
+        other: "th",
+      };
+      return suffixes[rule] || "th";
+    }
+
+    // Spanish, French, etc.
+    if (["es", "fr", "it", "pt"].includes(lang)) {
+      return rule === "one" ? "º" : "º";
+    }
+
+    // Default
+    return "";
+  }
+
+  static clearCache(): void {
+    this.cache.clear();
+  }
+}
+
+// Export types
+export type { NumberFormatterOptions };

@@ -27,7 +27,7 @@ export interface TransProps extends Omit<AppTextProps, "children"> {
    * Custom components for rich text translation
    * Example: { bold: <strong />, link: <a /> }
    */
-  components?: Record<string, React.ReactNode>;
+  components?: Record<string, React.ReactElement>;
 
   /**
    * Fallback text when translation is missing
@@ -85,10 +85,10 @@ const TransComponent = memo<TransProps>(
         const Component = components[componentName];
         if (Component && React.isValidElement(Component)) {
           parts.push(
-            React.cloneElement(Component as React.ReactElement, {
+            React.cloneElement(Component, {
               key: `${componentName}-${match.index}`,
               children: content,
-            })
+            } as any)
           );
         } else {
           // Fallback to plain text if component not found
