@@ -26,7 +26,7 @@ interface MarkdownTransProps extends Omit<AppTextProps, "children"> {
   };
 
   /** Custom components for rich formatting */
-  components?: Record<string, React.ReactNode>;
+  components?: Record<string, React.ReactElement>;
 
   /** Styles for markdown elements */
   markdownStyles?: {
@@ -327,10 +327,10 @@ const MarkdownTrans = memo<MarkdownTransProps>(
           case "component":
             const Component = components?.[node.componentName!];
             if (Component && React.isValidElement(Component)) {
-              return React.cloneElement(Component as React.ReactElement, {
+              return React.cloneElement(Component, {
                 key,
                 children: node.content,
-              });
+              } as any);
             }
             return node.content;
 
