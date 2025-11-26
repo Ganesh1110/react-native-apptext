@@ -7,6 +7,10 @@ import React, {
   useEffect,
 } from "react";
 import { LocaleContext, LocaleProviderProps, PluralForm } from "./types";
+import {
+  translationCache,
+  performanceMonitor,
+} from "./PerformanceOptimizations";
 import CurrencyJsonList from "../src/data/Currency.json";
 
 // ============================================================================
@@ -485,8 +489,8 @@ class ICUMessageFormat {
             format === "currency"
               ? "currency"
               : format === "percent"
-                ? "percent"
-                : "decimal",
+              ? "percent"
+              : "decimal",
           currency: "USD",
         }).format(num);
       } catch {
@@ -827,47 +831,80 @@ class TranslationManager {
   ): string {
     const { namespace, context, count } = options || {};
 
-    const cacheKey = this.buildCacheKey(lang, key, params, namespace, context);
-    if (this.cache.has(cacheKey)) {
-      return this.cache.get(cacheKey)!;
+    // Check performance cache first
+    const cached = translationCache.get(key, lang, params);
+    if (cached) {
+      return cached;
     }
 
-    let translation = this.getTranslationValue(lang, key, namespace, context);
+    // Measure performance
+    let result: string = key;
 
-    if (context && !translation) {
-      const contextKey = `${key}_${context}`;
-      translation = this.getTranslationValue(lang, contextKey, namespace);
-    }
-
-    if (!translation) {
-      this.handleMissingKey(lang, key, namespace);
-      return key;
-    }
-
-    if (
-      typeof translation === "object" &&
-      "other" in translation &&
-      count !== undefined
-    ) {
-      return this.translatePlural(lang, key, count, params, { namespace });
-    }
-
-    if (typeof translation === "string") {
-      let result = translation;
-
-      const mergedParams = count !== undefined ? { ...params, count } : params;
-
-      if (this.useICU && this.hasICUSyntax(result)) {
-        result = ICUMessageFormat.format(result, mergedParams || {}, lang);
-      } else {
-        result = mergedParams ? interpolate(result, mergedParams) : result;
+    performanceMonitor.measure(`translate:${key}`, () => {
+      const cacheKey = this.buildCacheKey(
+        lang,
+        key,
+        params,
+        namespace,
+        context
+      );
+      if (this.cache.has(cacheKey)) {
+        result = this.cache.get(cacheKey)!;
+        return;
       }
 
-      this.cache.set(cacheKey, result);
-      return result;
-    }
+      let translation = this.getTranslationValue(lang, key, namespace, context);
 
-    return key;
+      if (context && !translation) {
+        const contextKey = `${key}_${context}`;
+        translation = this.getTranslationValue(lang, contextKey, namespace);
+      }
+
+      if (!translation) {
+        this.handleMissingKey(lang, key, namespace);
+        result = key;
+        return;
+      }
+
+      if (
+        typeof translation === "object" &&
+        "other" in translation &&
+        count !== undefined
+      ) {
+        result = this.translatePlural(lang, key, count, params, { namespace });
+        return;
+      }
+
+      if (typeof translation === "string") {
+        let finalResult = translation;
+
+        const mergedParams =
+          count !== undefined ? { ...params, count } : params;
+
+        if (this.useICU && this.hasICUSyntax(finalResult)) {
+          finalResult = ICUMessageFormat.format(
+            finalResult,
+            mergedParams || {},
+            lang
+          );
+        } else {
+          finalResult = mergedParams
+            ? interpolate(finalResult, mergedParams)
+            : finalResult;
+        }
+
+        this.cache.set(cacheKey, finalResult);
+        result = finalResult;
+        return;
+      }
+
+      result = key;
+    });
+
+    // Store in performance cache
+    translationCache.set(key, lang, params, result);
+
+    return result;
   }
 
   translatePlural(
