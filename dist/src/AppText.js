@@ -12,6 +12,9 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
     const translateYValue = useRef(new Animated.Value(50)).current;
     const translateXValue = useRef(new Animated.Value(100)).current;
     const scaleValue = useRef(new Animated.Value(0.8)).current;
+    const rotateValue = useRef(new Animated.Value(0)).current;
+    const shakeValue = useRef(new Animated.Value(0)).current;
+    const glowValue = useRef(new Animated.Value(0)).current;
     const hasAnimated = useRef(false);
     useEffect(() => {
         if ((animated || animation) && !hasAnimated.current) {
@@ -24,8 +27,12 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
             translateYValue.setValue(50);
             translateXValue.setValue(100);
             scaleValue.setValue(0.8);
+            rotateValue.setValue(0);
+            shakeValue.setValue(0);
+            glowValue.setValue(0);
             let animationPromise;
             switch (type) {
+                // === ENTRANCE ANIMATIONS ===
                 case "fade":
                     animationPromise = Animated.timing(opacityValue, {
                         toValue: 1,
@@ -83,6 +90,23 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
                         }),
                     ]);
                     break;
+                case "slideInDown":
+                    translateYValue.setValue(-50);
+                    animationPromise = Animated.parallel([
+                        Animated.timing(opacityValue, {
+                            toValue: 1,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(translateYValue, {
+                            toValue: 0,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                    ]);
+                    break;
                 case "bounceIn":
                     animationPromise = Animated.parallel([
                         Animated.timing(opacityValue, {
@@ -99,7 +123,470 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
                         }),
                     ]);
                     break;
+                case "zoomIn":
+                    scaleValue.setValue(0.3);
+                    animationPromise = Animated.parallel([
+                        Animated.timing(opacityValue, {
+                            toValue: 1,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                        Animated.spring(scaleValue, {
+                            toValue: 1,
+                            friction: 3,
+                            tension: 40,
+                            useNativeDriver: true,
+                        }),
+                    ]);
+                    break;
+                case "flipInX":
+                    rotateValue.setValue(-90);
+                    animationPromise = Animated.parallel([
+                        Animated.timing(opacityValue, {
+                            toValue: 1,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(rotateValue, {
+                            toValue: 0,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                    ]);
+                    break;
+                case "flipInY":
+                    rotateValue.setValue(90);
+                    animationPromise = Animated.parallel([
+                        Animated.timing(opacityValue, {
+                            toValue: 1,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(rotateValue, {
+                            toValue: 0,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                    ]);
+                    break;
+                case "rotateIn":
+                    rotateValue.setValue(-180);
+                    animationPromise = Animated.parallel([
+                        Animated.timing(opacityValue, {
+                            toValue: 1,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(rotateValue, {
+                            toValue: 0,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                    ]);
+                    break;
+                // === ATTENTION ANIMATIONS (Looping) ===
+                case "pulse":
+                    hasAnimated.current = true; // Don't block looping animations
+                    animationPromise = Animated.loop(Animated.sequence([
+                        Animated.timing(scaleValue, {
+                            toValue: 1.1,
+                            duration: 500,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(scaleValue, {
+                            toValue: 1,
+                            duration: 500,
+                            useNativeDriver: true,
+                        }),
+                    ]));
+                    break;
+                case "bounce":
+                    hasAnimated.current = true;
+                    animationPromise = Animated.loop(Animated.sequence([
+                        Animated.timing(translateYValue, {
+                            toValue: -10,
+                            duration: 300,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(translateYValue, {
+                            toValue: 0,
+                            duration: 300,
+                            useNativeDriver: true,
+                        }),
+                    ]));
+                    break;
+                case "shake":
+                    hasAnimated.current = true;
+                    animationPromise = Animated.loop(Animated.sequence([
+                        Animated.timing(shakeValue, {
+                            toValue: 10,
+                            duration: 50,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(shakeValue, {
+                            toValue: -10,
+                            duration: 100,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(shakeValue, {
+                            toValue: 10,
+                            duration: 100,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(shakeValue, {
+                            toValue: -10,
+                            duration: 100,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(shakeValue, {
+                            toValue: 0,
+                            duration: 50,
+                            useNativeDriver: true,
+                        }),
+                    ]));
+                    break;
+                case "swing":
+                    hasAnimated.current = true;
+                    animationPromise = Animated.loop(Animated.sequence([
+                        Animated.timing(rotateValue, {
+                            toValue: 10,
+                            duration: 200,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(rotateValue, {
+                            toValue: -10,
+                            duration: 400,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(rotateValue, {
+                            toValue: 0,
+                            duration: 200,
+                            useNativeDriver: true,
+                        }),
+                    ]));
+                    break;
+                case "wobble":
+                    hasAnimated.current = true;
+                    animationPromise = Animated.loop(Animated.sequence([
+                        Animated.timing(rotateValue, {
+                            toValue: -5,
+                            duration: 100,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(rotateValue, {
+                            toValue: 5,
+                            duration: 100,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(rotateValue, {
+                            toValue: -3,
+                            duration: 100,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(rotateValue, {
+                            toValue: 3,
+                            duration: 100,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(rotateValue, {
+                            toValue: 0,
+                            duration: 100,
+                            useNativeDriver: true,
+                        }),
+                    ]));
+                    break;
+                case "rubberBand":
+                    hasAnimated.current = true;
+                    animationPromise = Animated.loop(Animated.sequence([
+                        Animated.timing(scaleValue, {
+                            toValue: 1.25,
+                            duration: 300,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(scaleValue, {
+                            toValue: 0.75,
+                            duration: 300,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(scaleValue, {
+                            toValue: 1.15,
+                            duration: 300,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(scaleValue, {
+                            toValue: 1,
+                            duration: 300,
+                            useNativeDriver: true,
+                        }),
+                    ]));
+                    break;
+                case "tada":
+                    hasAnimated.current = true;
+                    animationPromise = Animated.loop(Animated.sequence([
+                        Animated.timing(scaleValue, {
+                            toValue: 0.9,
+                            duration: 100,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(scaleValue, {
+                            toValue: 1.1,
+                            duration: 100,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(rotateValue, {
+                            toValue: -3,
+                            duration: 100,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(rotateValue, {
+                            toValue: 3,
+                            duration: 100,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(rotateValue, {
+                            toValue: -3,
+                            duration: 100,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(rotateValue, {
+                            toValue: 3,
+                            duration: 100,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(rotateValue, {
+                            toValue: 0,
+                            duration: 100,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(scaleValue, {
+                            toValue: 1,
+                            duration: 100,
+                            useNativeDriver: true,
+                        }),
+                    ]));
+                    break;
+                // === EXIT ANIMATIONS ===
+                case "fadeOut":
+                    opacityValue.setValue(1);
+                    animationPromise = Animated.timing(opacityValue, {
+                        toValue: 0,
+                        duration,
+                        delay,
+                        useNativeDriver: true,
+                    });
+                    break;
+                case "slideOutRight":
+                    opacityValue.setValue(1);
+                    translateXValue.setValue(0);
+                    animationPromise = Animated.parallel([
+                        Animated.timing(opacityValue, {
+                            toValue: 0,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(translateXValue, {
+                            toValue: 100,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                    ]);
+                    break;
+                case "slideOutLeft":
+                    opacityValue.setValue(1);
+                    translateXValue.setValue(0);
+                    animationPromise = Animated.parallel([
+                        Animated.timing(opacityValue, {
+                            toValue: 0,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(translateXValue, {
+                            toValue: -100,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                    ]);
+                    break;
+                case "slideOutUp":
+                    opacityValue.setValue(1);
+                    translateYValue.setValue(0);
+                    animationPromise = Animated.parallel([
+                        Animated.timing(opacityValue, {
+                            toValue: 0,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(translateYValue, {
+                            toValue: -50,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                    ]);
+                    break;
+                case "slideOutDown":
+                    opacityValue.setValue(1);
+                    translateYValue.setValue(0);
+                    animationPromise = Animated.parallel([
+                        Animated.timing(opacityValue, {
+                            toValue: 0,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(translateYValue, {
+                            toValue: 50,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                    ]);
+                    break;
+                case "bounceOut":
+                    opacityValue.setValue(1);
+                    scaleValue.setValue(1);
+                    animationPromise = Animated.parallel([
+                        Animated.timing(opacityValue, {
+                            toValue: 0,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                        Animated.spring(scaleValue, {
+                            toValue: 0.3,
+                            friction: 3,
+                            tension: 40,
+                            useNativeDriver: true,
+                        }),
+                    ]);
+                    break;
+                case "zoomOut":
+                    opacityValue.setValue(1);
+                    scaleValue.setValue(1);
+                    animationPromise = Animated.parallel([
+                        Animated.timing(opacityValue, {
+                            toValue: 0,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                        Animated.spring(scaleValue, {
+                            toValue: 0.3,
+                            friction: 3,
+                            tension: 40,
+                            useNativeDriver: true,
+                        }),
+                    ]);
+                    break;
+                case "flipOutX":
+                    opacityValue.setValue(1);
+                    rotateValue.setValue(0);
+                    animationPromise = Animated.parallel([
+                        Animated.timing(opacityValue, {
+                            toValue: 0,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(rotateValue, {
+                            toValue: 90,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                    ]);
+                    break;
+                case "flipOutY":
+                    opacityValue.setValue(1);
+                    rotateValue.setValue(0);
+                    animationPromise = Animated.parallel([
+                        Animated.timing(opacityValue, {
+                            toValue: 0,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(rotateValue, {
+                            toValue: -90,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                    ]);
+                    break;
+                case "rotateOut":
+                    opacityValue.setValue(1);
+                    rotateValue.setValue(0);
+                    animationPromise = Animated.parallel([
+                        Animated.timing(opacityValue, {
+                            toValue: 0,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(rotateValue, {
+                            toValue: 180,
+                            duration,
+                            delay,
+                            useNativeDriver: true,
+                        }),
+                    ]);
+                    break;
+                // === SPECIAL EFFECTS ===
+                case "blink":
+                    hasAnimated.current = true;
+                    animationPromise = Animated.loop(Animated.sequence([
+                        Animated.timing(opacityValue, {
+                            toValue: 1,
+                            duration: 500,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(opacityValue, {
+                            toValue: 0.3,
+                            duration: 500,
+                            useNativeDriver: true,
+                        }),
+                    ]));
+                    break;
+                case "glow":
+                    hasAnimated.current = true;
+                    animationPromise = Animated.loop(Animated.sequence([
+                        Animated.timing(glowValue, {
+                            toValue: 1,
+                            duration: 1000,
+                            useNativeDriver: false,
+                        }),
+                        Animated.timing(glowValue, {
+                            toValue: 0,
+                            duration: 1000,
+                            useNativeDriver: false,
+                        }),
+                    ]));
+                    break;
+                case "wave":
+                    hasAnimated.current = true;
+                    // Wave effect would need more complex per-character animation
+                    animationPromise = Animated.timing(opacityValue, {
+                        toValue: 1,
+                        duration,
+                        delay,
+                        useNativeDriver: true,
+                    });
+                    break;
                 default:
+                    // Default to fade animation
                     animationPromise = Animated.timing(opacityValue, {
                         toValue: 1,
                         duration,
@@ -119,10 +606,9 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
         const config = typeof animation === "object" ? animation : {};
         const type = config.type || "fade";
         switch (type) {
+            // === ENTRANCE ANIMATIONS ===
             case "fade":
-                return {
-                    opacity: opacityValue,
-                };
+                return { opacity: opacityValue };
             case "slideInRight":
                 return {
                     opacity: opacityValue,
@@ -138,15 +624,154 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
                     opacity: opacityValue,
                     transform: [{ translateY: translateYValue }],
                 };
+            case "slideInDown":
+                return {
+                    opacity: opacityValue,
+                    transform: [{ translateY: translateYValue }],
+                };
             case "bounceIn":
+            case "zoomIn":
                 return {
                     opacity: opacityValue,
                     transform: [{ scale: scaleValue }],
                 };
-            default:
+            case "flipInX":
                 return {
                     opacity: opacityValue,
+                    transform: [
+                        { perspective: 1000 },
+                        {
+                            rotateX: rotateValue.interpolate({
+                                inputRange: [-90, 0],
+                                outputRange: ["-90deg", "0deg"],
+                            }),
+                        },
+                    ],
                 };
+            case "flipInY":
+                return {
+                    opacity: opacityValue,
+                    transform: [
+                        { perspective: 1000 },
+                        {
+                            rotateY: rotateValue.interpolate({
+                                inputRange: [90, 0],
+                                outputRange: ["90deg", "0deg"],
+                            }),
+                        },
+                    ],
+                };
+            case "rotateIn":
+                return {
+                    opacity: opacityValue,
+                    transform: [
+                        {
+                            rotate: rotateValue.interpolate({
+                                inputRange: [-180, 0],
+                                outputRange: ["-180deg", "0deg"],
+                            }),
+                        },
+                    ],
+                };
+            // === ATTENTION ANIMATIONS ===
+            case "pulse":
+            case "rubberBand":
+            case "tada":
+                return { transform: [{ scale: scaleValue }] };
+            case "bounce":
+                return { transform: [{ translateY: translateYValue }] };
+            case "shake":
+                return { transform: [{ translateX: shakeValue }] };
+            case "swing":
+            case "wobble":
+                return {
+                    transform: [
+                        {
+                            rotate: rotateValue.interpolate({
+                                inputRange: [-10, 10],
+                                outputRange: ["-10deg", "10deg"],
+                            }),
+                        },
+                    ],
+                };
+            // === EXIT ANIMATIONS ===
+            case "fadeOut":
+                return { opacity: opacityValue };
+            case "slideOutRight":
+            case "slideOutLeft":
+                return {
+                    opacity: opacityValue,
+                    transform: [{ translateX: translateXValue }],
+                };
+            case "slideOutUp":
+            case "slideOutDown":
+                return {
+                    opacity: opacityValue,
+                    transform: [{ translateY: translateYValue }],
+                };
+            case "bounceOut":
+            case "zoomOut":
+                return {
+                    opacity: opacityValue,
+                    transform: [{ scale: scaleValue }],
+                };
+            case "flipOutX":
+                return {
+                    opacity: opacityValue,
+                    transform: [
+                        { perspective: 1000 },
+                        {
+                            rotateX: rotateValue.interpolate({
+                                inputRange: [0, 90],
+                                outputRange: ["0deg", "90deg"],
+                            }),
+                        },
+                    ],
+                };
+            case "flipOutY":
+                return {
+                    opacity: opacityValue,
+                    transform: [
+                        { perspective: 1000 },
+                        {
+                            rotateY: rotateValue.interpolate({
+                                inputRange: [0, -90],
+                                outputRange: ["0deg", "-90deg"],
+                            }),
+                        },
+                    ],
+                };
+            case "rotateOut":
+                return {
+                    opacity: opacityValue,
+                    transform: [
+                        {
+                            rotate: rotateValue.interpolate({
+                                inputRange: [0, 180],
+                                outputRange: ["0deg", "180deg"],
+                            }),
+                        },
+                    ],
+                };
+            // === SPECIAL EFFECTS ===
+            case "blink":
+                return { opacity: opacityValue };
+            case "glow":
+                return {
+                    textShadowColor: glowValue.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ["rgba(0,0,0,0)", "rgba(255,255,255,0.8)"],
+                    }),
+                    textShadowOffset: { width: 0, height: 0 },
+                    textShadowRadius: glowValue.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, 10],
+                    }),
+                };
+            case "wave":
+                return { opacity: opacityValue };
+            default:
+                return { opacity: opacityValue };
         }
     };
     return {
