@@ -71,6 +71,16 @@ interface ParsedNode {
 /**
  * Parse markdown-like syntax into nodes
  */
+const MARKDOWN_PATTERNS = {
+  bold: /\*\*(.+?)\*\*/g,
+  italic: /\*(.+?)\*/g,
+  underline: /__(.+?)__/g,
+  strikethrough: /~~(.+?)~~/g,
+  code: /`(.+?)`/g,
+  link: /\[(.+?)\]\((.+?)\)/g,
+  component: /\{\{(\w+):(.+?)\}\}/g,
+} as const;
+
 function parseMarkdown(
   text: string,
   enabledFeatures: NonNullable<MarkdownTransProps["enabledFeatures"]>
@@ -82,33 +92,37 @@ function parseMarkdown(
   const patterns = [
     {
       type: "bold" as const,
-      regex: /\*\*(.+?)\*\*/g,
+      regex: MARKDOWN_PATTERNS.bold,
       enabled: enabledFeatures.bold,
     },
     {
       type: "italic" as const,
-      regex: /\*(.+?)\*/g,
+      regex: MARKDOWN_PATTERNS.italic,
       enabled: enabledFeatures.italic,
     },
     {
       type: "underline" as const,
-      regex: /__(.+?)__/g,
+      regex: MARKDOWN_PATTERNS.underline,
       enabled: enabledFeatures.underline,
     },
     {
       type: "strikethrough" as const,
-      regex: /~~(.+?)~~/g,
+      regex: MARKDOWN_PATTERNS.strikethrough,
       enabled: enabledFeatures.strikethrough,
     },
-    { type: "code" as const, regex: /`(.+?)`/g, enabled: enabledFeatures.code },
+    {
+      type: "code" as const,
+      regex: MARKDOWN_PATTERNS.code,
+      enabled: enabledFeatures.code,
+    },
     {
       type: "link" as const,
-      regex: /\[(.+?)\]\((.+?)\)/g,
+      regex: MARKDOWN_PATTERNS.link,
       enabled: enabledFeatures.links,
     },
     {
       type: "component" as const,
-      regex: /\{\{(\w+):(.+?)\}\}/g,
+      regex: MARKDOWN_PATTERNS.component,
       enabled: enabledFeatures.components,
     },
   ];

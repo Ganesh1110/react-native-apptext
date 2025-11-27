@@ -35,6 +35,8 @@ export interface TransProps extends Omit<AppTextProps, "children"> {
   fallback?: string;
 }
 
+const COMPONENT_REGEX = /<(\w+)>((?:[^<]|<(?!\/\1>))*)<\/\1>/g;
+
 /**
  * Trans component for seamless translation integration with AppText
  * Supports rich text translation with components and ICU message format
@@ -68,12 +70,12 @@ const TransComponent = memo<TransProps>(
       }
 
       // Simple regex to find component placeholders like <0>content</0>
-      const componentRegex = /<(\w+)>(.*?)<\/\1>/g;
       const parts: React.ReactNode[] = [];
       let lastIndex = 0;
+      COMPONENT_REGEX.lastIndex = 0;
       let match;
 
-      while ((match = componentRegex.exec(translatedText)) !== null) {
+      while ((match = COMPONENT_REGEX.exec(translatedText)) !== null) {
         const [fullMatch, componentName, content] = match;
 
         // Add text before the component
@@ -92,6 +94,9 @@ const TransComponent = memo<TransProps>(
           );
         } else {
           // Fallback to plain text if component not found
+          console.warn(
+            `Trans component "${componentName}" not found, using plain text`
+          );
           parts.push(content);
         }
 

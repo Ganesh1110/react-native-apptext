@@ -213,9 +213,9 @@ export class TranslationBatcher {
     params?: Record<string, any>;
     resolve: (value: string) => void;
   }> = [];
-  private timeout: NodeJS.Timeout | null = null;
+  private timeout: ReturnType<typeof setTimeout> | null = null;
   private batchSize = 50;
-  private delay = 10; // ms
+  private delay = 10;
 
   constructor(
     private processor: (
@@ -268,14 +268,14 @@ export class TranslationBatcher {
  * Memory leak prevention utilities
  */
 export class MemoryManager {
-  private static timers = new Set<NodeJS.Timeout>();
+  private static timers = new Set<ReturnType<typeof setTimeout>>();
   private static listeners = new Map<any, Set<() => void>>();
 
-  static registerTimer(timer: NodeJS.Timeout): void {
+  static registerTimer(timer: ReturnType<typeof setTimeout>): void {
     this.timers.add(timer);
   }
 
-  static clearTimer(timer: NodeJS.Timeout): void {
+  static clearTimer(timer: ReturnType<typeof setTimeout>): void {
     clearTimeout(timer);
     this.timers.delete(timer);
   }

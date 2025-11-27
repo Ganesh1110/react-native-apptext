@@ -63,9 +63,13 @@ const TruncationComponent = memo<TruncationProps>(
           onTextLayout={handleTextLayout}
         >
           {children}
+          {isTruncated && !isExpanded && "... "}
         </Text>
         {isTruncated && (
-          <Text style={[style, { color: "#007AFF" }]} onPress={handleToggle}>
+          <Text
+            style={[style, { color: "#007AFF", marginTop: 4 }]}
+            onPress={handleToggle}
+          >
             {isExpanded ? collapseText : expandText}
           </Text>
         )}
@@ -195,25 +199,7 @@ const BaseAppText = memo(
             textShadowRadius: 2,
           });
         }
-
-        const spacingStyles = createSpacingStyles({
-          m,
-          mt,
-          mr,
-          mb,
-          ml,
-          mx,
-          my,
-          p,
-          pt,
-          pr,
-          pb,
-          pl,
-          px,
-          py,
-        });
-
-        return { ...baseStyle, ...spacingStyles };
+        return baseStyle;
       }, [
         typographyStyle,
         responsive,
@@ -228,30 +214,33 @@ const BaseAppText = memo(
         italic,
         textDirection,
         shadow,
-        m,
-        mt,
-        mr,
-        mb,
-        ml,
-        mx,
-        my,
-        p,
-        pt,
-        pr,
-        pb,
-        pl,
-        px,
-        py,
       ]);
 
-      const finalStyle = useMemo(() => {
-        const styles = [computedStyle];
-        if (propStyle)
-          Array.isArray(propStyle)
-            ? styles.push(...propStyle)
-            : styles.push(propStyle);
-        return styles;
-      }, [computedStyle, propStyle]);
+      const spacingStyles = useMemo(
+        () =>
+          createSpacingStyles({
+            m,
+            mt,
+            mr,
+            mb,
+            ml,
+            mx,
+            my,
+            p,
+            pt,
+            pr,
+            pb,
+            pl,
+            px,
+            py,
+          }),
+        [m, mt, mr, mb, ml, mx, my, p, pt, pr, pb, pl, px, py]
+      );
+
+      const finalComputedStyle = useMemo(
+        () => ({ ...computedStyle, ...spacingStyles }),
+        [computedStyle, spacingStyles]
+      );
 
       const textProps = useMemo(() => {
         const props = {
@@ -303,7 +292,7 @@ const BaseAppText = memo(
         return (
           <TruncationComponent
             maxLines={truncate}
-            style={finalStyle}
+            style={finalComputedStyle}
             onExpand={() => handlePress?.(undefined)}
           >
             {textContent}
@@ -315,7 +304,7 @@ const BaseAppText = memo(
         return (
           <Animated.Text
             ref={ref as any}
-            style={finalStyle}
+            style={finalComputedStyle}
             {...(!hasPressHandlers
               ? { pointerEvents: "none" }
               : { onPress: handlePress, onLongPress: handleLongPress })}
@@ -329,7 +318,7 @@ const BaseAppText = memo(
       return (
         <Text
           ref={ref}
-          style={finalStyle}
+          style={finalComputedStyle}
           {...(!hasPressHandlers
             ? { pointerEvents: "none" }
             : { onPress: handlePress, onLongPress: handleLongPress })}

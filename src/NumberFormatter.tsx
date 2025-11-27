@@ -37,27 +37,31 @@ export class NumberFormatter {
       return String(value);
     }
 
-    // Create cache key
-    const cacheKey = this.createCacheKey(locale, options);
-
-    // Get or create formatter
-    let formatter = this.cache.get(cacheKey);
-    if (!formatter) {
-      formatter = this.createFormatter(locale, options);
-
-      // Cache management
-      if (this.cache.size >= this.maxCacheSize) {
-        this.evictOldestCacheEntry();
+    try {
+      if (typeof Intl === "undefined" || !Intl.NumberFormat) {
+        return this.fallbackFormat(value, options);
       }
 
-      this.cache.set(cacheKey, formatter);
-    }
+      // Create cache key
+      const cacheKey = this.createCacheKey(locale, options);
 
-    try {
+      // Get or create formatter
+      let formatter = this.cache.get(cacheKey);
+      if (!formatter) {
+        formatter = this.createFormatter(locale, options);
+
+        // Cache management
+        if (this.cache.size >= this.maxCacheSize) {
+          this.evictOldestCacheEntry();
+        }
+
+        this.cache.set(cacheKey, formatter);
+      }
+
       return formatter.format(value);
     } catch (error) {
       console.error("Number formatting error:", error);
-      return String(value);
+      return this.fallbackFormat(value, options);
     }
   }
 
@@ -245,43 +249,48 @@ export function formatNumberICU(
     return String(value);
   }
 
-  // Parse format string
-  if (!format) {
-    return NumberFormatter.format(num, locale);
-  }
-
-  const parts = format.split(/\s+/);
-  const style = parts[0];
-
-  switch (style) {
-    case "currency":
-      const currency = parts[1] || "USD";
-      return NumberFormatter.formatCurrency(num, locale, currency);
-
-    case "percent":
-      return NumberFormatter.formatPercent(num, locale);
-
-    case "compact":
-      return NumberFormatter.formatCompact(num, locale);
-
-    case "unit":
-      const unit = parts[1] || "kilometer";
-      return NumberFormatter.formatUnit(num, locale, unit);
-
-    case "signed":
-      return NumberFormatter.formatSigned(num, locale);
-
-    default:
-      // Try to parse as decimal with precision
-      const precision = parseInt(style, 10);
-      if (!isNaN(precision)) {
-        return NumberFormatter.format(num, locale, {
-          minimumFractionDigits: precision,
-          maximumFractionDigits: precision,
-        });
-      }
-
+  try {
+    // Parse format string
+    if (!format) {
       return NumberFormatter.format(num, locale);
+    }
+
+    const parts = format.split(/\s+/);
+    const style = parts[0];
+
+    switch (style) {
+      case "currency":
+        const currency = parts[1] || "USD";
+        return NumberFormatter.formatCurrency(num, locale, currency);
+
+      case "percent":
+        return NumberFormatter.formatPercent(num, locale);
+
+      case "compact":
+        return NumberFormatter.formatCompact(num, locale);
+
+      case "unit":
+        const unit = parts[1] || "kilometer";
+        return NumberFormatter.formatUnit(num, locale, unit);
+
+      case "signed":
+        return NumberFormatter.formatSigned(num, locale);
+
+      default:
+        // Try to parse as decimal with precision
+        const precision = parseInt(style, 10);
+        if (!isNaN(precision)) {
+          return NumberFormatter.format(num, locale, {
+            minimumFractionDigits: precision,
+            maximumFractionDigits: precision,
+          });
+        }
+
+        return NumberFormatter.format(num, locale);
+    }
+  } catch (error) {
+    console.warn("ICU number formatting failed, using fallback:", error);
+    return String(value);
   }
 }
 
@@ -294,23 +303,30 @@ export class OrdinalFormatter {
   static format(value: number, locale: string): string {
     const num = Math.floor(Math.abs(value));
 
-    // Get cached PluralRules or create new one
-    let pluralRules = this.cache.get(locale);
-    if (!pluralRules) {
-      pluralRules = new Intl.PluralRules(locale, { type: "ordinal" });
-      this.cache.set(locale, pluralRules);
+    try {
+      if (typeof Intl === "undefined" || !Intl.PluralRules) {
+        return this.fallbackFormat(value, locale);
+      }
+
+      let pluralRules = this.cache.get(locale);
+      if (!pluralRules) {
+        pluralRules = new Intl.PluralRules(locale, { type: "ordinal" });
+        this.cache.set(locale, pluralRules);
+      }
+
+      const rule = pluralRules.select(num);
+      const suffix = this.getSuffix(locale, rule);
+
+      return `${value}${suffix}`;
+    } catch (error) {
+      console.warn("Ordinal formatting failed, using fallback:", error);
+      return this.fallbackFormat(value, locale);
     }
-
-    const rule = pluralRules.select(num);
-    const suffix = this.getSuffix(locale, rule);
-
-    return `${value}${suffix}`;
   }
 
   private static getSuffix(locale: string, rule: string): string {
     const lang = locale.split("-")[0];
 
-    // English
     if (lang === "en") {
       const suffixes: Record<string, string> = {
         one: "st",
@@ -321,13 +337,38 @@ export class OrdinalFormatter {
       return suffixes[rule] || "th";
     }
 
-    // Spanish, French, etc.
     if (["es", "fr", "it", "pt"].includes(lang)) {
       return rule === "one" ? "º" : "º";
     }
 
-    // Default
     return "";
+  }
+
+  private static fallbackFormat(value: number, locale: string): string {
+    const num = Math.floor(Math.abs(value));
+    const lang = locale.split("-")[0];
+
+    if (lang === "en") {
+      const lastDigit = num % 10;
+      const lastTwoDigits = num % 100;
+
+      if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {
+        return `${value}th`;
+      }
+
+      switch (lastDigit) {
+        case 1:
+          return `${value}st`;
+        case 2:
+          return `${value}nd`;
+        case 3:
+          return `${value}rd`;
+        default:
+          return `${value}th`;
+      }
+    }
+
+    return String(value);
   }
 
   static clearCache(): void {
