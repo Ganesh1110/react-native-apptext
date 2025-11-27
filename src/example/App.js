@@ -309,37 +309,37 @@ export default function App() {
 
   if (useLazy) {
     return (
-      <LazyLocaleProvider
-        loaders={lazyLoaders}
-        defaultLanguage="en"
-        preloadLanguages={["es", "ar"]}
-        onLoadStart={(locale) => console.log(`Loading ${locale}...`)}
-        onLoadComplete={(locale) => console.log(`Loaded ${locale}!`)}
-        onLoadError={(locale, error) =>
-          console.error(`Failed to load ${locale}:`, error)
-        }
-      >
-        <AppTextProvider>
+      <AppTextProvider>
+        <LazyLocaleProvider
+          loaders={lazyLoaders}
+          defaultLanguage="en"
+          preloadLanguages={["es", "ar"]}
+          onLoadStart={(locale) => console.log(`Loading ${locale}...`)}
+          onLoadComplete={(locale) => console.log(`Loaded ${locale}!`)}
+          onLoadError={(locale, error) =>
+            console.error(`Failed to load ${locale}:`, error)
+          }
+        >
           <EnhancedDemoApp onSwitchProvider={() => setUseLazy(false)} />
-        </AppTextProvider>
-      </LazyLocaleProvider>
+        </LazyLocaleProvider>
+      </AppTextProvider>
     );
   }
 
   return (
-    <LocaleProvider
-      translations={translations}
-      defaultLanguage="en"
-      fallbackLanguage="en"
-      useICU={true}
-      onMissingTranslation={(lang, key) => {
-        console.warn(`Missing translation: ${key} in ${lang}`);
-      }}
-    >
-      <AppTextProvider>
+    <AppTextProvider>
+      <LocaleProvider
+        translations={translations}
+        defaultLanguage="en"
+        fallbackLanguage="en"
+        useICU={true}
+        onMissingTranslation={(lang, key) => {
+          console.warn(`Missing translation: ${key} in ${lang}`);
+        }}
+      >
         <EnhancedDemoApp onSwitchProvider={() => setUseLazy(true)} />
-      </AppTextProvider>
-    </LocaleProvider>
+      </LocaleProvider>
+    </AppTextProvider>
   );
 }
 
@@ -445,15 +445,6 @@ function EnhancedDemoApp({ onSwitchProvider }) {
               </AppText.LabelSmall>
             )}
           </View>
-
-          <Button
-            title={
-              onSwitchProvider
-                ? "Switch to Lazy Loading"
-                : "Switch to Static Loading"
-            }
-            onPress={onSwitchProvider}
-          />
         </View>
 
         <View style={styles.container}>
