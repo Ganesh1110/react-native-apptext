@@ -108,6 +108,51 @@ export class NumberFormatter {
   }
 
   /**
+   * Fallback formatting when Intl is not available
+   */
+  private static fallbackFormat(
+    value: number,
+    options: NumberFormatterOptions
+  ): string {
+    // Simple fallback formatting
+    if (options.style === "currency") {
+      const symbol =
+        options.currency === "EUR"
+          ? "€"
+          : options.currency === "GBP"
+          ? "£"
+          : options.currency === "JPY"
+          ? "¥"
+          : "$";
+      return `${symbol}${value.toFixed(options.minimumFractionDigits || 2)}`;
+    } else if (options.style === "percent") {
+      return `${(value * 100).toFixed(options.maximumFractionDigits || 2)}%`;
+    } else if (options.notation === "compact") {
+      return this.compactFallback(value);
+    } else {
+      return value.toLocaleString();
+    }
+  }
+
+  /**
+   * Compact number fallback (1K, 1M, 1B)
+   */
+  private static compactFallback(value: number): string {
+    const absValue = Math.abs(value);
+    const sign = value < 0 ? "-" : "";
+
+    if (absValue >= 1e9) {
+      return `${sign}${(absValue / 1e9).toFixed(1)}B`;
+    } else if (absValue >= 1e6) {
+      return `${sign}${(absValue / 1e6).toFixed(1)}M`;
+    } else if (absValue >= 1e3) {
+      return `${sign}${(absValue / 1e3).toFixed(1)}K`;
+    } else {
+      return String(value);
+    }
+  }
+
+  /**
    * Format currency with smart defaults
    */
   static formatCurrency(
@@ -304,6 +349,7 @@ export class OrdinalFormatter {
     const num = Math.floor(Math.abs(value));
 
     try {
+      // Check if Intl.PluralRules is available
       if (typeof Intl === "undefined" || !Intl.PluralRules) {
         return this.fallbackFormat(value, locale);
       }
@@ -337,10 +383,12 @@ export class OrdinalFormatter {
       return suffixes[rule] || "th";
     }
 
+    // Spanish, French, etc.
     if (["es", "fr", "it", "pt"].includes(lang)) {
       return rule === "one" ? "º" : "º";
     }
 
+    // Default
     return "";
   }
 
@@ -368,6 +416,7 @@ export class OrdinalFormatter {
       }
     }
 
+    // For other languages, just return the number
     return String(value);
   }
 

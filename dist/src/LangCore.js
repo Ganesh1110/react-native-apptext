@@ -265,6 +265,68 @@ const COUNTRY_TO_CURRENCY = {
     BVT: "NOK",
     ATA: "USD",
 };
+const PRIMARY_COUNTRY = {
+    // Major languages
+    en: "USA",
+    es: "ESP",
+    pt: "BRA",
+    fr: "FRA",
+    de: "DEU",
+    it: "ITA",
+    ru: "RUS",
+    ar: "SAU",
+    hi: "IND",
+    zh: "CHN",
+    ja: "JPN",
+    ko: "KOR",
+    el: "GRC",
+    // South Asian languages
+    ur: "PAK",
+    bn: "BGD",
+    ta: "IND",
+    te: "IND",
+    ml: "IND",
+    kn: "IND",
+    pa: "IND",
+    gu: "IND",
+    or: "IND",
+    mr: "IND",
+    // Afghan languages
+    ps: "AFG",
+    pus: "AFG",
+    prs: "AFG",
+    fa: "IRN",
+    fas: "IRN",
+    // Southeast Asian languages
+    th: "THA",
+    vi: "VNM",
+    id: "IDN",
+    ms: "MYS",
+    my: "MMR",
+    km: "KHM",
+    lo: "LAO",
+    // Middle Eastern languages
+    he: "ISR",
+    tr: "TUR",
+    af: "AFG",
+    // African languages
+    sw: "KEN",
+    am: "ETH",
+    ha: "NGA",
+    yo: "NGA",
+    ig: "NGA",
+    // European languages
+    pl: "POL",
+    uk: "UKR",
+    cs: "CZE",
+    ro: "ROU",
+    hu: "HUN",
+    nl: "NLD",
+    sv: "SWE",
+    no: "NOR",
+    da: "DNK",
+    fi: "FIN",
+};
 // Convert Currency.json to a usable map
 const localeToCurrency = CurrencyJsonList.reduce((acc, item) => {
     const currencyCode = COUNTRY_TO_CURRENCY[item.cca3] || "USD";
@@ -442,19 +504,23 @@ class ICUMessageFormat {
         // Normalize language code
         const normalized = language.toLowerCase().replace(/_/g, "-");
         const [lang, region] = normalized.split("-");
-        // Cache for frequently used currencies to improve performance
+        // Cache for frequently used currencies
         const cacheKey = `${lang}-${region || ""}`;
         if (this.currencyCache.has(cacheKey)) {
             return this.currencyCache.get(cacheKey);
         }
         let result = defaultCurrency;
-        // ========================================================================
         // STEP 1: Try exact region match (highest priority)
-        // ========================================================================
         if (region) {
             const regionUpper = region.toUpperCase();
-            // Handle special case: GB -> GBR
-            const countryCode = regionUpper === "GB" ? "GBR" : regionUpper;
+            // Handle special cases
+            const countryCode = regionUpper === "GB"
+                ? "GBR"
+                : regionUpper === "UK"
+                    ? "GBR"
+                    : regionUpper.length === 2
+                        ? this.twoLetterToThreeLetter(regionUpper)
+                        : regionUpper;
             const regionEntry = localeToCurrency[countryCode];
             if (regionEntry) {
                 result = regionEntry;
@@ -462,71 +528,7 @@ class ICUMessageFormat {
                 return result;
             }
         }
-        // ========================================================================
-        // STEP 2: Primary country mapping (most common usage)
-        // ========================================================================
-        const PRIMARY_COUNTRY = {
-            // Major languages
-            en: "USA",
-            es: "ESP",
-            pt: "BRA",
-            fr: "FRA",
-            de: "DEU",
-            it: "ITA",
-            ru: "RUS",
-            ar: "SAU",
-            hi: "IND",
-            zh: "CHN",
-            ja: "JPN",
-            ko: "KOR",
-            el: "GRC",
-            // South Asian languages
-            ur: "PAK",
-            bn: "BGD",
-            ta: "IND",
-            te: "IND",
-            ml: "IND",
-            kn: "IND",
-            pa: "IND",
-            gu: "IND",
-            or: "IND",
-            mr: "IND",
-            // Afghan languages
-            ps: "AFG",
-            pus: "AFG",
-            prs: "AFG",
-            fa: "IRN",
-            fas: "IRN",
-            // Southeast Asian languages
-            th: "THA",
-            vi: "VNM",
-            id: "IDN",
-            ms: "MYS",
-            my: "MMR",
-            km: "KHM",
-            lo: "LAO",
-            // Middle Eastern languages
-            he: "ISR",
-            tr: "TUR",
-            af: "AFG",
-            // African languages
-            sw: "KEN",
-            am: "ETH",
-            ha: "NGA",
-            yo: "NGA",
-            ig: "NGA",
-            // European languages
-            pl: "POL",
-            uk: "UKR",
-            cs: "CZE",
-            ro: "ROU",
-            hu: "HUN",
-            nl: "NLD",
-            sv: "SWE",
-            no: "NOR",
-            da: "DNK",
-            fi: "FIN",
-        };
+        // STEP 2: Use existing PRIMARY_COUNTRY mapping
         if (PRIMARY_COUNTRY[lang]) {
             const countryCode = PRIMARY_COUNTRY[lang];
             const entry = localeToCurrency[countryCode];
@@ -536,9 +538,35 @@ class ICUMessageFormat {
                 return result;
             }
         }
-        // Fallback to default
         this.currencyCache.set(cacheKey, result);
         return result;
+    }
+    // Helper to convert ISO 3166-1 alpha-2 to alpha-3
+    static twoLetterToThreeLetter(code) {
+        const mapping = {
+            US: "USA",
+            CA: "CAN",
+            MX: "MEX",
+            DE: "DEU",
+            FR: "FRA",
+            IT: "ITA",
+            ES: "ESP",
+            NL: "NLD",
+            BE: "BEL",
+            AT: "AUT",
+            GB: "GBR",
+            CH: "CHE",
+            SE: "SWE",
+            NO: "NOR",
+            DK: "DNK",
+            CN: "CHN",
+            JP: "JPN",
+            IN: "IND",
+            KR: "KOR",
+            ID: "IDN",
+            // Add more as needed
+        };
+        return mapping[code] || code;
     }
 }
 ICUMessageFormat.PLURAL_REGEX = /\{(\w+),\s*plural,\s*((?:[^{}]|\{[^{}]*\})*)\}/g;

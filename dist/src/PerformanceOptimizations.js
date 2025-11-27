@@ -158,7 +158,7 @@ export class TranslationBatcher {
         this.queue = [];
         this.timeout = null;
         this.batchSize = 50;
-        this.delay = 10; // ms
+        this.delay = 10;
     }
     add(key, params) {
         return new Promise((resolve) => {

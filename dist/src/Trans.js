@@ -1,6 +1,7 @@
 import React, { memo, useMemo } from "react";
 import { useLang } from "./LangCore";
 import AppText from "./AppText";
+const COMPONENT_REGEX = /<(\w+)>((?:[^<]|<(?!\/\1>))*)<\/\1>/g;
 /**
  * Trans component for seamless translation integration with AppText
  * Supports rich text translation with components and ICU message format
@@ -30,11 +31,11 @@ const TransComponent = memo(({ i18nKey, values, options, components, fallback, .
             return translatedText;
         }
         // Simple regex to find component placeholders like <0>content</0>
-        const componentRegex = /<(\w+)>(.*?)<\/\1>/g;
         const parts = [];
         let lastIndex = 0;
+        COMPONENT_REGEX.lastIndex = 0;
         let match;
-        while ((match = componentRegex.exec(translatedText)) !== null) {
+        while ((match = COMPONENT_REGEX.exec(translatedText)) !== null) {
             const [fullMatch, componentName, content] = match;
             // Add text before the component
             if (match.index > lastIndex) {
@@ -50,6 +51,7 @@ const TransComponent = memo(({ i18nKey, values, options, components, fallback, .
             }
             else {
                 // Fallback to plain text if component not found
+                console.warn(`Trans component "${componentName}" not found, using plain text`);
                 parts.push(content);
             }
             lastIndex = match.index + fullMatch.length;

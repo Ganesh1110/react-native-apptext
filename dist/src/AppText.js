@@ -19,8 +19,9 @@ const TruncationComponent = memo(({ children, maxLines, onExpand, expandText = "
     return (<View>
         <Text style={style} numberOfLines={isExpanded ? undefined : maxLines} onTextLayout={handleTextLayout}>
           {children}
+          {isTruncated && !isExpanded && "... "}
         </Text>
-        {isTruncated && (<Text style={[style, { color: "#007AFF" }]} onPress={handleToggle}>
+        {isTruncated && (<Text style={[style, { color: "#007AFF", marginTop: 4 }]} onPress={handleToggle}>
             {isExpanded ? collapseText : expandText}
           </Text>)}
       </View>);
@@ -87,23 +88,7 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
                 textShadowRadius: 2,
             });
         }
-        const spacingStyles = createSpacingStyles({
-            m,
-            mt,
-            mr,
-            mb,
-            ml,
-            mx,
-            my,
-            p,
-            pt,
-            pr,
-            pb,
-            pl,
-            px,
-            py,
-        });
-        return { ...baseStyle, ...spacingStyles };
+        return baseStyle;
     }, [
         typographyStyle,
         responsive,
@@ -118,6 +103,8 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
         italic,
         textDirection,
         shadow,
+    ]);
+    const spacingStyles = useMemo(() => createSpacingStyles({
         m,
         mt,
         mr,
@@ -132,15 +119,8 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
         pl,
         px,
         py,
-    ]);
-    const finalStyle = useMemo(() => {
-        const styles = [computedStyle];
-        if (propStyle)
-            Array.isArray(propStyle)
-                ? styles.push(...propStyle)
-                : styles.push(propStyle);
-        return styles;
-    }, [computedStyle, propStyle]);
+    }), [m, mt, mr, mb, ml, mx, my, p, pt, pr, pb, pl, px, py]);
+    const finalComputedStyle = useMemo(() => ({ ...computedStyle, ...spacingStyles }), [computedStyle, spacingStyles]);
     const textProps = useMemo(() => {
         const props = {
             ...restProps,
@@ -180,18 +160,18 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
     const handleLongPress = useCallback((e) => onLongPress === null || onLongPress === void 0 ? void 0 : onLongPress(e), [onLongPress]);
     const hasPressHandlers = !!onPress || !!onLongPress;
     if (typeof truncate === "number" && truncate > 0) {
-        return (<TruncationComponent maxLines={truncate} style={finalStyle} onExpand={() => handlePress === null || handlePress === void 0 ? void 0 : handlePress(undefined)}>
+        return (<TruncationComponent maxLines={truncate} style={finalComputedStyle} onExpand={() => handlePress === null || handlePress === void 0 ? void 0 : handlePress(undefined)}>
             {textContent}
           </TruncationComponent>);
     }
     if (animated) {
-        return (<Animated.Text ref={ref} style={finalStyle} {...(!hasPressHandlers
+        return (<Animated.Text ref={ref} style={finalComputedStyle} {...(!hasPressHandlers
             ? { pointerEvents: "none" }
             : { onPress: handlePress, onLongPress: handleLongPress })} {...textProps}>
             {children}
           </Animated.Text>);
     }
-    return (<Text ref={ref} style={finalStyle} {...(!hasPressHandlers
+    return (<Text ref={ref} style={finalComputedStyle} {...(!hasPressHandlers
         ? { pointerEvents: "none" }
         : { onPress: handlePress, onLongPress: handleLongPress })} {...textProps}>
           {children}
