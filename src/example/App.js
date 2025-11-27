@@ -1,20 +1,28 @@
-import React, { useState } from "react";
-import { Button, ScrollView, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  ScrollView,
+  View,
+  Linking,
+  Alert,
+  StyleSheet,
+} from "react-native";
 import AppText, {
   AppTextProvider,
   LocaleProvider,
   useLang,
   Trans,
+  MarkdownTrans,
+  LazyLocaleProvider,
+  useLazyLocale,
+  NumberFormatter,
+  OrdinalFormatter,
+  translationCache,
+  performanceMonitor,
 } from "react-native-apptext";
 
-// For the new features (you'll need to add these imports after implementing)
-// import { LazyLocaleProvider } from "react-native-apptext";
-// import { MarkdownTrans } from "react-native-apptext";
-// import { NumberFormatter, OrdinalFormatter } from "react-native-apptext";
-// import { translationCache, performanceMonitor } from "react-native-apptext";
-
 // ============================================================================
-// TRANSLATIONS - Enhanced with new features
+// TRANSLATIONS - Enhanced with all features
 // ============================================================================
 const translations = {
   en: {
@@ -99,6 +107,22 @@ const translations = {
       perf: "⚡ Performance",
       cli: "🛠️ CLI Tools",
     },
+
+    // Lazy loading demo
+    lazy: {
+      title: "Dynamic Module Loaded!",
+      description: "This translation was loaded on-demand",
+      button: "Load More Languages",
+    },
+
+    // Number formatting examples
+    numbers: {
+      compact: "Downloads: {count, number, compact}",
+      unit: "Distance: {distance, number, unit meter}",
+      signed: "Temperature: {temp, number, signed}",
+      range: "Price range: {start, number, currency} - {end, number, currency}",
+      ordinal: "You came in {position, selectordinal} place!",
+    },
   },
 
   es: {
@@ -161,6 +185,19 @@ const translations = {
       numbers: "🔢 Formato Avanzado",
       perf: "⚡ Rendimiento",
       cli: "🛠️ Herramientas CLI",
+    },
+    lazy: {
+      title: "¡Módulo Dinámico Cargado!",
+      description: "Esta traducción se cargó bajo demanda",
+      button: "Cargar Más Idiomas",
+    },
+    numbers: {
+      compact: "Descargas: {count, number, compact}",
+      unit: "Distancia: {distance, number, unit meter}",
+      signed: "Temperatura: {temp, number, signed}",
+      range:
+        "Rango de precio: {start, number, currency} - {end, number, currency}",
+      ordinal: "¡Llegaste en {position, selectordinal} lugar!",
     },
   },
 
@@ -225,13 +262,70 @@ const translations = {
       perf: "⚡ الأداء",
       cli: "🛠️ أدوات CLI",
     },
+    lazy: {
+      title: "تم تحميل الوحدة الديناميكية!",
+      description: "تم تحميل هذه الترجمة عند الطلب",
+      button: "تحميل المزيد من اللغات",
+    },
+    numbers: {
+      compact: "التحميلات: {count, number, compact}",
+      unit: "المسافة: {distance, number, unit meter}",
+      signed: "درجة الحرارة: {temp, number, signed}",
+      range: "نطاق السعر: {start, number, currency} - {end, number, currency}",
+      ordinal: "لقد وصلت في المركز {position, selectordinal}!",
+    },
   },
+};
+
+// ============================================================================
+// LAZY LOADING CONFIGURATION
+// ============================================================================
+const lazyLoaders = {
+  en: () => Promise.resolve({ default: translations.en }),
+  es: () => Promise.resolve({ default: translations.es }),
+  ar: () => Promise.resolve({ default: translations.ar }),
+  // Add more languages as needed
+  fr: () =>
+    Promise.resolve({
+      default: {
+        welcome: "Bienvenue, {{name}}!",
+        items: "{count, plural, one {# article} other {# articles}}",
+      },
+    }),
+  de: () =>
+    Promise.resolve({
+      default: {
+        welcome: "Willkommen, {{name}}!",
+        items: "{count, plural, one {# Artikel} other {# Artikel}}",
+      },
+    }),
 };
 
 // ============================================================================
 // MAIN APP COMPONENT
 // ============================================================================
 export default function App() {
+  const [useLazy, setUseLazy] = useState(false);
+
+  if (useLazy) {
+    return (
+      <LazyLocaleProvider
+        loaders={lazyLoaders}
+        defaultLanguage="en"
+        preloadLanguages={["es", "ar"]}
+        onLoadStart={(locale) => console.log(`Loading ${locale}...`)}
+        onLoadComplete={(locale) => console.log(`Loaded ${locale}!`)}
+        onLoadError={(locale, error) =>
+          console.error(`Failed to load ${locale}:`, error)
+        }
+      >
+        <AppTextProvider>
+          <EnhancedDemoApp onSwitchProvider={() => setUseLazy(false)} />
+        </AppTextProvider>
+      </LazyLocaleProvider>
+    );
+  }
+
   return (
     <LocaleProvider
       translations={translations}
@@ -243,7 +337,7 @@ export default function App() {
       }}
     >
       <AppTextProvider>
-        <EnhancedDemoApp />
+        <EnhancedDemoApp onSwitchProvider={() => setUseLazy(true)} />
       </AppTextProvider>
     </LocaleProvider>
   );
@@ -252,9 +346,30 @@ export default function App() {
 // ============================================================================
 // DEMO APP WITH ALL FEATURES
 // ============================================================================
-function EnhancedDemoApp() {
+function EnhancedDemoApp({ onSwitchProvider }) {
   const { t, tn, changeLanguage, language, direction } = useLang();
-  const [activeTab, setActiveTab] = useState("overview");
+
+  // Conditionally use lazy locale hook
+  const lazyLocaleData = useLazyLocale ? useLazyLocale() : null;
+  const { loadLocale, loadedLocales, isLoading } = lazyLocaleData || {};
+
+  const [stats, setStats] = useState({ hits: 0, misses: 0, hitRate: 0 });
+
+  // Update cache stats
+  useEffect(() => {
+    const updateStats = () => {
+      const cacheStats = translationCache.getStats();
+      setStats({
+        hits: cacheStats.hits,
+        misses: cacheStats.misses,
+        hitRate: parseFloat(cacheStats.hitRate.toFixed(2)),
+      });
+    };
+
+    updateStats();
+    const interval = setInterval(updateStats, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Rich text components for Trans component
   const richComponents = {
@@ -262,6 +377,20 @@ function EnhancedDemoApp() {
     link: <AppText color="info" style={{ textDecorationLine: "underline" }} />,
     terms: <AppText weight="bold" color="error" />,
     privacy: <AppText weight="bold" color="info" />,
+  };
+
+  const handleLinkPress = (url) => {
+    Alert.alert("Open Link", `Do you want to open ${url}?`, [
+      { text: "Cancel", style: "cancel" },
+      { text: "Open", onPress: () => Linking.openURL(url) },
+    ]);
+  };
+
+  const loadAdditionalLanguage = async (lang) => {
+    if (loadLocale && !loadedLocales?.has(lang)) {
+      await loadLocale(lang);
+      Alert.alert("Success", `${lang.toUpperCase()} loaded dynamically!`);
+    }
   };
 
   return (
@@ -273,18 +402,7 @@ function EnhancedDemoApp() {
         }}
       >
         {/* Header Section */}
-        <View
-          style={{
-            backgroundColor: "#fff",
-            padding: 20,
-            borderRadius: 16,
-            shadowColor: "#000",
-            shadowOpacity: 0.05,
-            shadowRadius: 8,
-            elevation: 2,
-            gap: 10,
-          }}
-        >
+        <View style={styles.card}>
           <AppText.DisplaySmall>✨ React Native AppText</AppText.DisplaySmall>
 
           <AppText.BodyMedium color="secondary">
@@ -293,60 +411,26 @@ function EnhancedDemoApp() {
           </AppText.BodyMedium>
 
           <View
-            style={{
-              flexDirection: direction === "rtl" ? "row-reverse" : "row",
-              gap: 8,
-              flexWrap: "wrap",
-            }}
+            style={[
+              styles.tagContainer,
+              {
+                flexDirection: direction === "rtl" ? "row-reverse" : "row",
+              },
+            ]}
           >
-            <AppText.LabelSmall
-              style={{
-                backgroundColor: "#E3F2FD",
-                paddingHorizontal: 8,
-                paddingVertical: 4,
-                borderRadius: 4,
-              }}
-            >
+            <AppText.LabelSmall style={styles.tag}>
               {t("features.lazy")}
             </AppText.LabelSmall>
-            <AppText.LabelSmall
-              style={{
-                backgroundColor: "#F3E5F5",
-                paddingHorizontal: 8,
-                paddingVertical: 4,
-                borderRadius: 4,
-              }}
-            >
+            <AppText.LabelSmall style={styles.tag}>
               {t("features.markdown")}
             </AppText.LabelSmall>
-            <AppText.LabelSmall
-              style={{
-                backgroundColor: "#FFF8E1",
-                paddingHorizontal: 8,
-                paddingVertical: 4,
-                borderRadius: 4,
-              }}
-            >
+            <AppText.LabelSmall style={styles.tag}>
               {t("features.numbers")}
             </AppText.LabelSmall>
-            <AppText.LabelSmall
-              style={{
-                backgroundColor: "#E8F5E9",
-                paddingHorizontal: 8,
-                paddingVertical: 4,
-                borderRadius: 4,
-              }}
-            >
+            <AppText.LabelSmall style={styles.tag}>
               {t("features.perf")}
             </AppText.LabelSmall>
-            <AppText.LabelSmall
-              style={{
-                backgroundColor: "#FCE4EC",
-                paddingHorizontal: 8,
-                paddingVertical: 4,
-                borderRadius: 4,
-              }}
-            >
+            <AppText.LabelSmall style={styles.tag}>
               {t("features.cli")}
             </AppText.LabelSmall>
           </View>
@@ -355,18 +439,103 @@ function EnhancedDemoApp() {
             <AppText.LabelMedium weight="bold" color="primary">
               Current Language: {language} ({direction.toUpperCase()})
             </AppText.LabelMedium>
+            {isLoading && (
+              <AppText.LabelSmall color="warning">
+                🔄 Loading translations...
+              </AppText.LabelSmall>
+            )}
+          </View>
+
+          <Button
+            title={
+              onSwitchProvider
+                ? "Switch to Lazy Loading"
+                : "Switch to Static Loading"
+            }
+            onPress={onSwitchProvider}
+          />
+        </View>
+
+        <View style={styles.container}>
+          <AppText.H1
+            animated
+            animation={{ type: "typewriter", delay: 150, duration: 2500 }}
+            animationSpeed={35} // optional custom prop
+            cursor={true} // optional blinking cursor
+            style={[styles.spacer, { letterSpacing: 0.5 }]}
+          >
+            Welcome to the Future of Text (Typewriter)
+          </AppText.H1>
+
+          <AppText.HeadlineLarge
+            animated
+            animation={{ type: "fade", duration: 1000 }}
+            style={styles.spacer}
+          >
+            Fade In Headline Large
+          </AppText.HeadlineLarge>
+
+          <AppText.TitleMedium
+            animated
+            animation={{ type: "slideInRight", duration: 800 }}
+            style={styles.spacer}
+          >
+            Slide In From Right
+          </AppText.TitleMedium>
+
+          <AppText.BodyLarge
+            animated
+            animation={{ type: "bounceIn", duration: 1500 }}
+            style={styles.spacer}
+          >
+            Bounce In Body Text
+          </AppText.BodyLarge>
+
+          <View style={styles.sequenceContainer}>
+            <AppText.HeadlineSmall
+              animated
+              animation={{ type: "slideInUp", delay: 0, duration: 400 }}
+            >
+              Item 1 (Delay: 0ms)
+            </AppText.HeadlineSmall>
+            <AppText.BodySmall
+              animated
+              animation={{ type: "slideInUp", delay: 200, duration: 600 }}
+            >
+              Item 2 (Delay: 200ms)
+            </AppText.BodySmall>
+            <AppText.Caption
+              animated
+              animation={{ type: "slideInUp", delay: 400, duration: 400 }}
+            >
+              Item 3 (Delay: 400ms)
+            </AppText.Caption>
+          </View>
+
+          <View style={styles.sequenceContainer}>
+            <AppText.HeadlineSmall
+              animated
+              animation={{ type: "fade", delay: 0, duration: 500 }}
+            >
+              Fade Item 1
+            </AppText.HeadlineSmall>
+            <AppText.BodySmall
+              animated
+              animation={{ type: "slideInRight", delay: 300, duration: 500 }}
+            >
+              Slide Item 2
+            </AppText.BodySmall>
+            <AppText.Caption
+              animated
+              animation={{ type: "bounceIn", delay: 600, duration: 700 }}
+            >
+              Bounce Item 3
+            </AppText.Caption>
           </View>
         </View>
 
         {/* Language Switcher */}
-        <View
-          style={{
-            backgroundColor: "#fff",
-            padding: 20,
-            borderRadius: 16,
-            gap: 12,
-          }}
-        >
+        <View style={styles.card}>
           <AppText.HeadlineSmall>🌍 Language Selection</AppText.HeadlineSmall>
           <AppText.BodySmall color="textSecondary" style={{ marginBottom: 8 }}>
             Each language shows prices in native currency with automatic RTL
@@ -376,13 +545,8 @@ function EnhancedDemoApp() {
           <View style={{ gap: 10 }}>
             <Button
               title="🇺🇸 English (US) - USD $"
-              onPress={() => changeLanguage("en-US")}
-              color={language === "en-US" ? "#007AFF" : "#666"}
-            />
-            <Button
-              title="🇬🇧 English (UK) - GBP £"
-              onPress={() => changeLanguage("en-GB")}
-              color={language === "en-GB" ? "#007AFF" : "#666"}
+              onPress={() => changeLanguage("en")}
+              color={language === "en" ? "#007AFF" : "#666"}
             />
             <Button
               title="🇪🇸 Spanish - EUR €"
@@ -395,18 +559,90 @@ function EnhancedDemoApp() {
               color={language === "ar" ? "#007AFF" : "#666"}
             />
           </View>
+
+          {/* Lazy Loading Section */}
+          {loadLocale && (
+            <View style={{ marginTop: 16, gap: 8 }}>
+              <AppText.LabelMedium weight="bold">
+                🔄 Dynamic Language Loading
+              </AppText.LabelMedium>
+              <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
+                <Button
+                  title="Load French"
+                  onPress={() => loadAdditionalLanguage("fr")}
+                  color={loadedLocales?.has("fr") ? "#34C759" : "#666"}
+                />
+                <Button
+                  title="Load German"
+                  onPress={() => loadAdditionalLanguage("de")}
+                  color={loadedLocales?.has("de") ? "#34C759" : "#666"}
+                />
+              </View>
+              <AppText.LabelSmall color="textSecondary">
+                Loaded: {Array.from(loadedLocales || []).join(", ")}
+              </AppText.LabelSmall>
+            </View>
+          )}
+        </View>
+
+        {/* MarkdownTrans Component */}
+        <View
+          style={[
+            styles.card,
+            styles.highlightCard,
+            { borderColor: "#4CAF50" },
+          ]}
+        >
+          <AppText.HeadlineSmall>
+            📝 MarkdownTrans Component
+          </AppText.HeadlineSmall>
+
+          <MarkdownTrans
+            i18nKey="rich_welcome"
+            values={{ name: "Sarah" }}
+            markdownStyles={{
+              bold: { color: "#007AFF" },
+              link: { color: "#5AC8FA", textDecorationLine: "underline" },
+            }}
+            onLinkPress={handleLinkPress}
+            variant="bodyMedium"
+          />
+
+          <MarkdownTrans
+            i18nKey="terms"
+            markdownStyles={{
+              underline: { color: "#FF3B30", textDecorationLine: "underline" },
+            }}
+            variant="bodySmall"
+            color="textSecondary"
+          />
+
+          <MarkdownTrans
+            i18nKey="tutorial"
+            markdownStyles={{
+              code: {
+                backgroundColor: "#F0F0F0",
+                fontFamily: "monospace",
+                paddingHorizontal: 4,
+                borderRadius: 3,
+              },
+              bold: { color: "#007AFF" },
+            }}
+            variant="bodySmall"
+          />
+
+          <AppText.LabelSmall color="success" style={{ marginTop: 8 }}>
+            ✓ Rich text ✓ Markdown syntax ✓ Link handling ✓ Custom styling
+          </AppText.LabelSmall>
         </View>
 
         {/* Trans Component with Rich Text */}
         <View
-          style={{
-            backgroundColor: "#E8F5E8",
-            padding: 20,
-            borderRadius: 16,
-            gap: 12,
-            borderWidth: 2,
-            borderColor: "#4CAF50",
-          }}
+          style={[
+            styles.card,
+            styles.highlightCard,
+            { borderColor: "#2196F3" },
+          ]}
         >
           <AppText.HeadlineSmall>🆕 Trans Component</AppText.HeadlineSmall>
 
@@ -429,15 +665,53 @@ function EnhancedDemoApp() {
           </AppText.LabelSmall>
         </View>
 
-        {/* ICU Examples */}
+        {/* Advanced Number Formatting */}
         <View
-          style={{
-            backgroundColor: "#fff",
-            padding: 20,
-            borderRadius: 16,
-            gap: 12,
-          }}
+          style={[
+            styles.card,
+            styles.highlightCard,
+            { borderColor: "#FF6B35" },
+          ]}
         >
+          <AppText.HeadlineSmall>
+            🔢 Advanced Number Formatting
+          </AppText.HeadlineSmall>
+
+          <View style={{ gap: 6 }}>
+            <AppText>
+              • Compact: {NumberFormatter.formatCompact(1234567, language)}
+            </AppText>
+            <AppText>
+              • Currency: {NumberFormatter.formatCurrency(1299.99, language)}
+            </AppText>
+            <AppText>
+              • Percent: {NumberFormatter.formatPercent(0.856, language)}
+            </AppText>
+            <AppText>
+              • Unit: {NumberFormatter.formatUnit(5.2, language, "kilometer")}
+            </AppText>
+            <AppText>
+              • Signed: {NumberFormatter.formatSigned(25, language)}°C
+            </AppText>
+            <AppText>
+              • Range:{" "}
+              {NumberFormatter.formatRange(99, 199, language, {
+                style: "currency",
+                currency: "USD",
+              })}
+            </AppText>
+            <AppText>
+              • Ordinal: {OrdinalFormatter.format(3, language)} place
+            </AppText>
+          </View>
+
+          <AppText.LabelSmall color="textSecondary" style={{ marginTop: 8 }}>
+            ✓ Compact numbers ✓ Currency formatting ✓ Unit conversion ✓ Ordinals
+          </AppText.LabelSmall>
+        </View>
+
+        {/* ICU Examples */}
+        <View style={styles.card}>
           <AppText.HeadlineSmall>✅ ICU MessageFormat</AppText.HeadlineSmall>
 
           <View style={{ gap: 8 }}>
@@ -462,18 +736,23 @@ function EnhancedDemoApp() {
             <AppText>• {t("position", { place: 3 })}</AppText>
             <AppText>• {t("rank", { rank: 21 })}</AppText>
           </View>
+
+          <View style={{ gap: 8, marginTop: 12 }}>
+            <AppText weight="semibold">Combined:</AppText>
+            <AppText>• {t("invitation", { gender: "male", count: 1 })}</AppText>
+            <AppText>
+              • {t("invitation", { gender: "female", count: 5 })}
+            </AppText>
+          </View>
         </View>
 
         {/* Currency Formatting */}
         <View
-          style={{
-            backgroundColor: "#FFF8E1",
-            padding: 20,
-            borderRadius: 16,
-            gap: 12,
-            borderWidth: 2,
-            borderColor: "#FFD54F",
-          }}
+          style={[
+            styles.card,
+            styles.highlightCard,
+            { borderColor: "#FFD54F" },
+          ]}
         >
           <AppText.HeadlineSmall>💰 Currency Formatting</AppText.HeadlineSmall>
           <View style={{ gap: 8 }}>
@@ -483,24 +762,22 @@ function EnhancedDemoApp() {
             <AppText>• {t("percent", { value: 0.856 })}</AppText>
 
             <AppText.LabelSmall color="textSecondary" style={{ marginTop: 8 }}>
-              ✓ ISO currency codes ✓ 200+ countries ✓ RTL support
+              ✓ ISO currency codes ✓ 200+ countries ✓ RTL support ✓ Automatic
+              symbol placement
             </AppText.LabelSmall>
           </View>
         </View>
 
         {/* Material Design Typography */}
         <View
-          style={{
-            backgroundColor: "#F3E5F5",
-            padding: 20,
-            borderRadius: 16,
-            gap: 12,
-            borderWidth: 2,
-            borderColor: "#9C27B0",
-          }}
+          style={[
+            styles.card,
+            styles.highlightCard,
+            { borderColor: "#9C27B0" },
+          ]}
         >
           <AppText.HeadlineSmall>
-            🎨 Material Design 3 variants: 16
+            🎨 Material Design 3 Typography
           </AppText.HeadlineSmall>
 
           <View style={{ gap: 6 }}>
@@ -525,14 +802,7 @@ function EnhancedDemoApp() {
         </View>
 
         {/* Nested Translations */}
-        <View
-          style={{
-            backgroundColor: "#fff",
-            padding: 20,
-            borderRadius: 16,
-            gap: 12,
-          }}
-        >
+        <View style={styles.card}>
           <AppText.HeadlineSmall>🗂️ Nested Keys</AppText.HeadlineSmall>
           <View style={{ gap: 6 }}>
             <AppText>• {t("user.profile.name")}</AppText>
@@ -544,16 +814,13 @@ function EnhancedDemoApp() {
           </View>
         </View>
 
-        {/* Performance Stats (Placeholder for when you implement caching) */}
+        {/* Performance Stats */}
         <View
-          style={{
-            backgroundColor: "#E3F2FD",
-            padding: 20,
-            borderRadius: 16,
-            gap: 12,
-            borderWidth: 2,
-            borderColor: "#2196F3",
-          }}
+          style={[
+            styles.card,
+            styles.highlightCard,
+            { borderColor: "#2196F3" },
+          ]}
         >
           <AppText.HeadlineSmall>
             {t("performance.title")}
@@ -563,16 +830,66 @@ function EnhancedDemoApp() {
             <AppText>✓ {t("performance.monitor")}</AppText>
             <AppText>✓ {t("performance.memory")}</AppText>
 
-            {/* Uncomment when caching is implemented:
             <AppText.LabelSmall color="textSecondary" style={{ marginTop: 8 }}>
-              {t("performance.stats", { 
-                hits: stats.hits, 
-                misses: stats.misses, 
-                rate: stats.hitRate.toFixed(2) 
+              {t("performance.stats", {
+                hits: stats.hits,
+                misses: stats.misses,
+                rate: stats.hitRate,
               })}
             </AppText.LabelSmall>
-            */}
           </View>
+
+          <View style={{ marginTop: 12, gap: 8 }}>
+            <AppText.LabelMedium weight="bold">
+              Performance Actions:
+            </AppText.LabelMedium>
+            <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
+              <Button
+                title="Clear Cache"
+                onPress={() => {
+                  translationCache.clear();
+                  const newStats = translationCache.getStats();
+                  setStats({
+                    hits: newStats.hits,
+                    misses: newStats.misses,
+                    hitRate: parseFloat(newStats.hitRate.toFixed(2)),
+                  });
+                }}
+              />
+              <Button
+                title="Get Stats"
+                onPress={() => {
+                  const perfStats = performanceMonitor.getAllStats();
+                  console.log("Performance Stats:", perfStats);
+                  Alert.alert(
+                    "Performance Stats",
+                    "Check console for detailed stats"
+                  );
+                }}
+              />
+            </View>
+          </View>
+        </View>
+
+        {/* Script Detection Demo */}
+        <View style={styles.card}>
+          <AppText.HeadlineSmall>🌐 Multi-Script Support</AppText.HeadlineSmall>
+          <View style={{ gap: 8 }}>
+            <AppText script="Latn">Latin Script: Hello World</AppText>
+            {/* <AppText>العربية: مرحبا بالعالم</AppText> */}
+            <AppText script="Arab" direction="rtl">
+              العربية: مرحبا بالعالم
+            </AppText>
+            <AppText script="Hani">中文: 你好世界</AppText>
+            {/* <AppText>עברית: שלום עולם</AppText> */}
+            <AppText script="Hebr" direction="rtl">
+              עברית: שלום עולם
+            </AppText>
+            <AppText>देवनागरी: नमस्ते दुनिया</AppText>
+          </View>
+          <AppText.LabelSmall color="textSecondary" style={{ marginTop: 8 }}>
+            ✓ 50+ writing systems ✓ Automatic RTL ✓ Line height optimization
+          </AppText.LabelSmall>
         </View>
 
         {/* Footer */}
@@ -588,3 +905,41 @@ function EnhancedDemoApp() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+  spacer: {
+    marginBottom: 20,
+  },
+  sequenceContainer: {
+    marginTop: 40,
+    padding: 10,
+    backgroundColor: "#f0f0f0",
+    borderRadius: 8,
+  },
+  card: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 16,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+    gap: 12,
+  },
+  highlightCard: {
+    borderWidth: 2,
+  },
+  tagContainer: {
+    gap: 8,
+    flexWrap: "wrap",
+  },
+  tag: {
+    backgroundColor: "#E3F2FD",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+  },
+});
