@@ -183,6 +183,50 @@ export interface AppTextProps extends Omit<TextProps, "style">, SpacingProps {
   gradient?: boolean;
   shadow?: boolean;
   animated?: boolean;
+  animation?:
+    | {
+        type?:
+          | "fade"
+          | "slideInRight"
+          | "slideInLeft"
+          | "slideInUp"
+          | "slideInDown"
+          | "bounceIn"
+          | "zoomIn"
+          | "flipInX"
+          | "flipInY"
+          | "rotateIn"
+          | "pulse"
+          | "bounce"
+          | "shake"
+          | "swing"
+          | "wobble"
+          | "rubberBand"
+          | "tada"
+          | "fadeOut"
+          | "slideOutRight"
+          | "slideOutLeft"
+          | "slideOutUp"
+          | "slideOutDown"
+          | "bounceOut"
+          | "zoomOut"
+          | "flipOutX"
+          | "flipOutY"
+          | "rotateOut"
+          | "blink"
+          | "glow"
+          | "neon"
+          | "gradientShift"
+          | "wave"
+          | "typewriter";
+        duration?: number;
+        delay?: number;
+      }
+    | boolean;
+  animationDelay?: number;
+  animationDuration?: number;
+  animationSpeed?: number;
+  cursor?: boolean;
   script?: ScriptCode;
   direction?: "auto" | "ltr" | "rtl";
   responsive?: boolean;

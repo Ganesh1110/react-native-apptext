@@ -1,4 +1,12 @@
-import React, { forwardRef, memo, useCallback, useMemo } from "react";
+import React, {
+  forwardRef,
+  memo,
+  useCallback,
+  useMemo,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Text,
   Animated,
@@ -20,6 +28,247 @@ import {
 import { AppTextProvider, useAppTextTheme } from "./context";
 import { createSpacingStyles } from "./utils";
 import TransComponent from "./Trans";
+
+/* ========== Animation Hook ========== */
+const useTextAnimation = (
+  animated: boolean,
+  animation: any,
+  animationDelay: number = 0,
+  animationDuration: number = 1000,
+  animationSpeed: number = 50,
+  cursor: boolean = false
+) => {
+  const opacityValue = useRef(new Animated.Value(0)).current;
+  const translateYValue = useRef(new Animated.Value(50)).current;
+  const translateXValue = useRef(new Animated.Value(100)).current;
+  const scaleValue = useRef(new Animated.Value(0.8)).current;
+  const hasAnimated = useRef(false);
+
+  useEffect(() => {
+    if ((animated || animation) && !hasAnimated.current) {
+      const config = typeof animation === "object" ? animation : {};
+      const type = config.type || "fade";
+      const duration = config.duration || animationDuration;
+      const delay = config.delay || animationDelay;
+
+      // Reset values first
+      opacityValue.setValue(0);
+      translateYValue.setValue(50);
+      translateXValue.setValue(100);
+      scaleValue.setValue(0.8);
+
+      let animationPromise: Animated.CompositeAnimation;
+
+      switch (type) {
+        case "fade":
+          animationPromise = Animated.timing(opacityValue, {
+            toValue: 1,
+            duration,
+            delay,
+            useNativeDriver: true,
+          });
+          break;
+
+        case "slideInRight":
+          animationPromise = Animated.parallel([
+            Animated.timing(opacityValue, {
+              toValue: 1,
+              duration,
+              delay,
+              useNativeDriver: true,
+            }),
+            Animated.timing(translateXValue, {
+              toValue: 0,
+              duration,
+              delay,
+              useNativeDriver: true,
+            }),
+          ]);
+          break;
+
+        case "slideInLeft":
+          translateXValue.setValue(-100);
+          animationPromise = Animated.parallel([
+            Animated.timing(opacityValue, {
+              toValue: 1,
+              duration,
+              delay,
+              useNativeDriver: true,
+            }),
+            Animated.timing(translateXValue, {
+              toValue: 0,
+              duration,
+              delay,
+              useNativeDriver: true,
+            }),
+          ]);
+          break;
+
+        case "slideInUp":
+          animationPromise = Animated.parallel([
+            Animated.timing(opacityValue, {
+              toValue: 1,
+              duration,
+              delay,
+              useNativeDriver: true,
+            }),
+            Animated.timing(translateYValue, {
+              toValue: 0,
+              duration,
+              delay,
+              useNativeDriver: true,
+            }),
+          ]);
+          break;
+
+        case "bounceIn":
+          animationPromise = Animated.parallel([
+            Animated.timing(opacityValue, {
+              toValue: 1,
+              duration,
+              delay,
+              useNativeDriver: true,
+            }),
+            Animated.spring(scaleValue, {
+              toValue: 1,
+              friction: 8,
+              tension: 40,
+              useNativeDriver: true,
+            }),
+          ]);
+          break;
+
+        default:
+          animationPromise = Animated.timing(opacityValue, {
+            toValue: 1,
+            duration,
+            delay,
+            useNativeDriver: true,
+          });
+      }
+
+      if (animationPromise) {
+        hasAnimated.current = true;
+        animationPromise.start();
+      }
+    }
+  }, []);
+
+  const getAnimatedStyle = () => {
+    if (!animated && !animation) return {};
+
+    const config = typeof animation === "object" ? animation : {};
+    const type = config.type || "fade";
+
+    switch (type) {
+      case "fade":
+        return {
+          opacity: opacityValue,
+        };
+
+      case "slideInRight":
+        return {
+          opacity: opacityValue,
+          transform: [{ translateX: translateXValue }],
+        };
+
+      case "slideInLeft":
+        return {
+          opacity: opacityValue,
+          transform: [{ translateX: translateXValue }],
+        };
+
+      case "slideInUp":
+        return {
+          opacity: opacityValue,
+          transform: [{ translateY: translateYValue }],
+        };
+
+      case "bounceIn":
+        return {
+          opacity: opacityValue,
+          transform: [{ scale: scaleValue }],
+        };
+
+      default:
+        return {
+          opacity: opacityValue,
+        };
+    }
+  };
+
+  return {
+    animatedStyle: getAnimatedStyle(),
+    animationType: typeof animation === "object" ? animation.type : "fade",
+  };
+};
+
+/* ========== Typewriter Component ========== */
+interface TypewriterTextProps {
+  children: React.ReactNode;
+  delay?: number;
+  duration?: number;
+  speed?: number;
+  cursor?: boolean;
+  style: any;
+}
+
+const TypewriterText = memo<TypewriterTextProps>(
+  ({
+    children,
+    delay = 0,
+    duration = 2000,
+    speed = 50,
+    cursor = false,
+    style,
+  }) => {
+    const [displayText, setDisplayText] = useState("");
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const text = useMemo(() => {
+      return React.Children.toArray(children)
+        .filter((child) => typeof child === "string")
+        .join("");
+    }, [children]);
+
+    useEffect(() => {
+      setDisplayText("");
+      setCurrentIndex(0);
+    }, [text]);
+
+    useEffect(() => {
+      if (currentIndex <= text.length) {
+        const timer = setTimeout(() => {
+          setDisplayText(text.substring(0, currentIndex));
+          setCurrentIndex((prev) => prev + 1);
+        }, speed);
+
+        return () => clearTimeout(timer);
+      }
+    }, [currentIndex, text, speed, delay]);
+
+    // Handle initial delay
+    useEffect(() => {
+      if (delay > 0) {
+        const timer = setTimeout(() => {
+          setCurrentIndex(1);
+        }, delay);
+        return () => clearTimeout(timer);
+      } else {
+        setCurrentIndex(1);
+      }
+    }, [delay]);
+
+    return (
+      <Text style={style}>
+        {displayText}
+        {cursor && currentIndex <= text.length && (
+          <Text style={{ color: style.color }}>|</Text>
+        )}
+      </Text>
+    );
+  }
+);
 
 /* ========== Truncation Component ========== */
 interface TruncationProps {
@@ -95,6 +344,11 @@ const BaseAppText = memo(
         truncate = false,
         shadow = false,
         animated = false,
+        animation,
+        animationDelay = 0,
+        animationDuration = 1000,
+        animationSpeed = 50,
+        cursor = false,
         script,
         direction = "auto",
         responsive = true,
@@ -134,6 +388,22 @@ const BaseAppText = memo(
       const rawScheme = useColorScheme();
       const colorScheme = rawScheme === "unspecified" ? "light" : rawScheme;
       const themedStyles = useThemedStyles(theme, colorScheme);
+
+      // Animation hook (for non-typewriter animations)
+      const { animatedStyle, animationType } = useTextAnimation(
+        animated &&
+          (typeof animation === "boolean"
+            ? animation
+            : animation?.type !== "typewriter"),
+        typeof animation === "object" && animation?.type !== "typewriter"
+          ? animation
+          : undefined,
+        animationDelay,
+        animationDuration,
+        animationSpeed,
+        cursor
+      );
+
       const textContent = useMemo(() => {
         if (typeof children === "string") return children;
         if (typeof children === "number") return children.toString();
@@ -238,8 +508,8 @@ const BaseAppText = memo(
       );
 
       const finalComputedStyle = useMemo(
-        () => ({ ...computedStyle, ...spacingStyles }),
-        [computedStyle, spacingStyles]
+        () => ({ ...computedStyle, ...spacingStyles, ...animatedStyle }),
+        [computedStyle, spacingStyles, animatedStyle]
       );
 
       const textProps = useMemo(() => {
@@ -288,19 +558,26 @@ const BaseAppText = memo(
 
       const hasPressHandlers = !!onPress || !!onLongPress;
 
-      if (typeof truncate === "number" && truncate > 0) {
+      // Handle typewriter animation separately
+      if (
+        typeof animation === "object" &&
+        animation?.type === "typewriter" &&
+        (animated || animation)
+      ) {
         return (
-          <TruncationComponent
-            maxLines={truncate}
+          <TypewriterText
+            delay={animationDelay}
+            duration={animationDuration}
+            speed={animationSpeed}
+            cursor={cursor}
             style={finalComputedStyle}
-            onExpand={() => handlePress?.(undefined)}
           >
-            {textContent}
-          </TruncationComponent>
+            {children}
+          </TypewriterText>
         );
       }
 
-      if (animated) {
+      if (animated || animation) {
         return (
           <Animated.Text
             ref={ref as any}
