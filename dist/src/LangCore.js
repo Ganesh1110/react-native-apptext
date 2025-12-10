@@ -879,4 +879,4 @@ export function useNamespace(namespace, loader) {
     }, [namespace, loader, loadNamespace]);
 }
 // Export utilities
-export { TranslationManager, interpolate, getNestedValue, getPluralForm, PLURAL_RULES, };
+export { ICUMessageFormat, TranslationManager, interpolate, getNestedValue, getPluralForm, PLURAL_RULES, };

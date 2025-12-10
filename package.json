@@ -14,6 +14,10 @@
     "build": "tsc --project tsconfig.json",
     "prepare": "npm run build",
     "prepublishOnly": "npm run build",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --maxWorkers=2",
     "lint": "eslint 'src/**/*.{ts,tsx}' --fix"
   },
   "repository": {
@@ -56,10 +60,22 @@
   },
   "devDependencies": {
     "@babel/parser": "^7.23.0",
+    "@babel/plugin-transform-class-properties": "^7.27.1",
+    "@babel/preset-env": "^7.28.5",
+    "@babel/preset-react": "^7.28.5",
+    "@babel/preset-typescript": "^7.28.5",
     "@babel/traverse": "^7.23.0",
-    "glob": "^10.3.0",
+    "@testing-library/jest-native": "^5.4.3",
+    "@testing-library/react-native": "^13.3.3",
+    "@types/jest": "^30.0.0",
     "@types/react": "^18.3.0",
     "@types/react-native": "^0.73.0",
+    "glob": "^10.3.0",
+    "jest": "^30.2.0",
+    "metro-react-native-babel-preset": "^0.77.0",
+    "prettier": "^3.7.4",
+    "react": "^19.2.1",
+    "react-test-renderer": "^19.2.1",
     "typescript": "^5.6.0"
   }
 }

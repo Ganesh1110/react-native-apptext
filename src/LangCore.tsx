@@ -505,7 +505,7 @@ class ICUMessageFormat {
     });
   }
 
-  private static formatNumber(
+  public static formatNumber(
     value: any,
     format?: string,
     language: string = "en"
@@ -593,7 +593,7 @@ class ICUMessageFormat {
     }
   }
 
-  private static getCurrencyForLanguage(language: string): CurrencyInfo {
+  public static getCurrencyForLanguage(language: string): CurrencyInfo {
     const defaultCurrency: CurrencyInfo = { code: "USD", symbol: "$" };
 
     if (!language || typeof language !== "string") {
@@ -1153,6 +1153,7 @@ export function useNamespace(namespace: string, loader: () => Promise<any>) {
 
 // Export utilities
 export {
+  ICUMessageFormat,
   TranslationManager,
   interpolate,
   getNestedValue,

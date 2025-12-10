@@ -1,7 +1,13 @@
 node_modules/
 *.log
-*.ts
+dist/**/*.ts
 *.map
 tests/
 example/
 .vscode/
+!**/__tests__/**/*.ts
+!**/__tests__/**/*.tsx
+!*.test.ts
+!*.test.tsx
+!*.spec.ts
+!*.spec.tsx
