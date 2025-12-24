@@ -2,6 +2,7 @@
   "name": "react-native-apptext",
   "version": "4.0.1",
   "description": "A themeable text component for React Native with typography and responsive scaling",
+  "readme": "README.md",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
