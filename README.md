@@ -3,33 +3,71 @@
 <div align="center">
 
 **The Ultimate Typography & i18n Solution for React Native**  
-_Beautiful text that just works - everywhere, in every language, blazing fast_
+_Beautiful text that works everywhere, in every language, blazing fast_
 
-[![React Native](https://img.shields.io/badge/React_Native-0.73+-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactnative.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.6+-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![npm downloads](https://img.shields.io/npm/dm/react-native-apptext?style=for-the-badge)](https://www.npmjs.com/package/react-native-apptext)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
-[![npm version](https://img.shields.io/npm/v/react-native-apptext?style=for-the-badge)](https://www.npmjs.com/package/react-native-apptext)
-[![Publish Size](https://badgen.net/packagephobia/publish/react-native-apptext)](https://packagephobia.com/result?p=react-native-apptext)
+[![npm](https://img.shields.io/npm/v/react-native-apptext?label=VERSION&style=for-the-badge&logo=npm&color=red)](https://www.npmjs.com/package/react-native-apptext)
+[![npm downloads](https://img.shields.io/npm/dm/react-native-apptext?style=for-the-badge&logo=npm&logoColor=white&color=4caf50)](https://www.npmjs.com/package/react-native-apptext)
+[![bundle size](https://badgen.net/packagephobia/publish/react-native-apptext?style=for-the-badge&color=6a5acd)](https://packagephobia.com/result?p=react-native-apptext)
+[![license](https://img.shields.io/github/license/Ganesh1110/react-native-apptext?style=for-the-badge&color=0aa2ff)](LICENSE)
+
+[📖 Docs](https://github.com/Ganesh1110/react-native-apptext/wiki) • [🐛 Issues](https://github.com/Ganesh1110/react-native-apptext/issues) • [💡 Feature Requests](https://github.com/Ganesh1110/react-native-apptext/issues)
 
 </div>
 
-## 🚀 Why AppText?
+---
 
-Tired of wrestling with text rendering, internationalization, and performance across different languages and screen sizes? **AppText** is here to save the day! We've solved the hard problems so you can focus on building amazing apps.
+## ⚡ Quick Start
 
-### 💡 The Problem
+### Installation
 
-- ❌ Text looks broken in RTL languages
+```bash
+npm install react-native-apptext
+# or
+yarn add react-native-apptext
+```
+
+### 30-Second Demo
+
+```tsx
+import React from "react";
+import AppText, { AppTextProvider } from "react-native-apptext";
+
+export default function App() {
+  return (
+    <AppTextProvider>
+      <AppText.DisplaySmall>Welcome to AppText</AppText.DisplaySmall>
+      <AppText.BodyMedium color="secondary">
+        Beautiful, performant text with i18n built-in
+      </AppText.BodyMedium>
+      <AppText.LabelSmall style={{ marginTop: 8 }}>
+        60FPS • LRU Cache • Lazy Loading • 50+ Scripts
+      </AppText.LabelSmall>
+    </AppTextProvider>
+  );
+}
+```
+
+**No additional setup required for iOS or Android!** 🎉
+
+---
+
+## 🎯 Why AppText?
+
+<!-- Moved "Why" section earlier for immediate value proposition -->
+
+### The Problem We Solve
+
+Building international apps with React Native means fighting:
+
+- ❌ Broken text rendering in RTL languages (Arabic, Hebrew)
 - ❌ Inconsistent font scaling across devices
-- ❌ Poor performance with animations
+- ❌ Poor performance with animations (janky scrolling)
 - ❌ Complex theming systems that are hard to maintain
-- ❌ Limited international script support
-- ❌ No built-in internationalization (i18n) support
-- ❌ Slow translation lookups killing performance
+- ❌ Manual internationalization setup with slow lookups
 - ❌ Large bundle sizes from loading all translations upfront
+- ❌ Limited support for complex scripts (Devanagari, Thai, etc.)
 
-### ✅ The Solution
+### Our Solution
 
 - ✅ **Perfect RTL/LTR** support out of the box
 - ✅ **Smart responsive scaling** that just works
@@ -37,12 +75,16 @@ Tired of wrestling with text rendering, internationalization, and performance ac
 - ✅ **Powerful theming** with design tokens
 - ✅ **50+ writing systems** supported automatically
 - ✅ **Built-in i18n** with ICU message format
-- ✅ **Lightning-fast translations** with LRU caching
-- ✅ **Lazy loading** for code-splitting and smaller bundles
+- ✅ **Lightning-fast translations** with LRU caching (95%+ hit rate)
+- ✅ **Lazy loading** for smaller bundles
 - ✅ **Performance monitoring** built-in
 - ✅ **Error boundaries** for graceful fallbacks
 
-## 📊 Performance Benchmarks
+---
+
+## 📊 Performance That Matters
+
+<!-- Moved benchmarks up for credibility -->
 
 | Operation              | AppText | RN Text | Improvement           |
 | ---------------------- | ------- | ------- | --------------------- |
@@ -53,131 +95,32 @@ Tired of wrestling with text rendering, internationalization, and performance ac
 | Bundle Size (minified) | 18.2KB  | N/A     | **Tree-shakeable** 🌳 |
 | Cache Hit Rate         | 95%+    | N/A     | **Lightning fast** ⚡ |
 
-## 🎯 Key Features
+---
 
-### ⚡ **Performance Optimizations**
+## 🌍 Built-in Internationalization (i18n)
 
-- **LRU Cache**: 95%+ cache hit rate for translations
-- **Memoization**: Smart component memoization prevents unnecessary re-renders
-- **Lazy Loading**: Load translations only when needed
-- **Code Splitting**: Reduce initial bundle size
-- **Debouncing & Throttling**: Optimize rapid updates
-- **Virtual Scrolling**: Handle large translation lists efficiently
+<!-- Consolidated i18n section for clarity -->
 
-### 🌍 **Advanced i18n System**
-
-- **ICU Message Format**: Full support for plural, select, ordinal, number, and date formatting
-- **Automatic Currency Detection**: Smart currency formatting based on locale (USD, EUR, GBP, SAR, etc.)
-- **50+ Languages**: Complete plural rules for all major languages
-- **Nested Translations**: Organize with dot notation (`settings.profile.title`)
-- **Context Support**: Handle gender, formality variations
-- **Namespace Support**: Organize translations by feature/module
-
-### 🎨 **Beautiful Typography**
-
-- **Material Design**: Full typography scale support
-- **Custom Variants**: Create your own text styles
-- **Responsive Scaling**: Perfect text size on any device
-- **Script Detection**: Automatic writing system detection
-- **Complex Shaping**: Support for Indic, Arabic, and other complex scripts
-
-### 🛡️ **Production Ready**
-
-- **Error Boundaries**: Graceful fallbacks for translation errors
-- **Type Guards**: Runtime type validation
-- **Memory Management**: Automatic cleanup to prevent leaks
-- **Performance Monitoring**: Track translation lookup times
-- **Deep Merge**: Proper nested theme updates
-
-## 🎯 Getting Started
-
-### Installation
-
-```bash
-# Using npm
-npm install react-native-apptext
-
-# Using yarn
-yarn add react-native-apptext
-
-# Using pnpm
-pnpm add react-native-apptext
-```
-
-### Quick Setup
+### Simple Translation Setup
 
 ```tsx
-import React from "react";
-import { View } from "react-native";
-import AppText, { AppTextProvider } from "react-native-apptext";
+import { LocaleProvider, useLang } from "react-native-apptext";
 
-export default function App() {
-  return (
-    <AppTextProvider>
-      <View style={{ padding: 20 }}>
-        <AppText.H1>Welcome to AppText</AppText.H1>
-
-        <AppText.Body color="secondary">
-          Beautiful, performant text with i18n built-in
-        </AppText.Body>
-
-        <AppText variant="caption" style={{ marginTop: 8 }}>
-          60FPS • LRU Cache • Lazy Loading • 50+ Scripts
-        </AppText>
-      </View>
-    </AppTextProvider>
-  );
-}
-```
-
-## 🌍 Advanced Internationalization
-
-### 🎯 Quick Start with i18n
-
-```tsx
-import React from "react";
-import { View, TouchableOpacity } from "react-native";
-import AppText, { LocaleProvider, useLang } from "react-native-apptext";
-
-// 1. Define translations
 const translations = {
   en: {
-    welcome: "Welcome",
-    greeting: "Hello, {{name}}!",
-    itemCount: {
-      one: "{{count}} item",
-      other: "{{count}} items",
-    },
-    // ICU Message Format support
-    price: "{amount, number, currency}",
-    date: "{date, date, long}",
-    plural: "{count, plural, one {# item} other {# items}}",
+    welcome: "Welcome, {{name}}!",
+    items: "{count, plural, one {# item} other {# items}}",
   },
   es: {
-    welcome: "Bienvenido",
-    greeting: "¡Hola, {{name}}!",
-    itemCount: {
-      one: "{{count}} artículo",
-      other: "{{count}} artículos",
-    },
-    price: "{amount, number, currency}",
+    welcome: "¡Bienvenido, {{name}}!",
+    items: "{count, plural, one {# artículo} other {# artículos}}",
   },
   ar: {
-    welcome: "مرحباً",
-    greeting: "مرحباً، {{name}}!",
-    itemCount: {
-      zero: "لا توجد عناصر",
-      one: "عنصر واحد",
-      two: "عنصران",
-      few: "{{count}} عناصر",
-      many: "{{count}} عنصراً",
-      other: "{{count}} عنصر",
-    },
-    price: "{amount, number, currency}",
+    welcome: "مرحباً، {{name}}!",
+    items: "{count, plural, zero {لا توجد عناصر} one {عنصر واحد} two {عنصران} few {# عناصر} many {# عنصراً} other {# عنصر}}",
   },
 };
 
-// 2. Wrap with LocaleProvider
 export default function App() {
   return (
     <LocaleProvider
@@ -186,109 +129,190 @@ export default function App() {
       fallbackLanguage="en"
       useICU={true}
       onMissingTranslation={(lang, key) => {
-        console.warn(`Missing: ${lang}.${key}`);
+        console.warn(`Missing translation: ${key} in ${lang}`);
       }}
     >
-      <MyApp />
+      <AppTextProvider>
+        <MyApp />
+      </AppTextProvider>
     </LocaleProvider>
   );
 }
 
-// 3. Use translations
 function MyApp() {
   const { t, tn, changeLanguage, language } = useLang();
 
   return (
-    <View style={{ padding: 20 }}>
+    <>
       {/* Simple translation */}
-      <AppText.H2>{t("welcome")}</AppText.H2>
+      <AppText.HeadlineSmall>{t("welcome", { name: "Alice" })}</AppText.HeadlineSmall>
 
-      {/* Interpolation */}
-      <AppText>{t("greeting", { name: "Alice" })}</AppText>
-
-      {/* Pluralization (auto-detects language rules) */}
-      <AppText>{tn("itemCount", 5)}</AppText>
-
-      {/* ICU format - Currency (auto-detects based on locale) */}
-      <AppText>{t("price", { amount: 99.99 })}</AppText>
-      {/* en-US: $99.99 | en-GB: £99.99 | ar-SA: ٩٩٫٩٩ ر.س */}
+      {/* Automatic pluralization */}
+      <AppText>{t("items", { count: 5 })}</AppText>
 
       {/* Language switcher */}
-      <View style={{ flexDirection: "row", gap: 10, marginTop: 20 }}>
-        {["en", "es", "ar"].map((lang) => (
-          <TouchableOpacity
-            key={lang}
-            onPress={() => changeLanguage(lang)}
-            style={{
-              padding: 10,
-              backgroundColor: language === lang ? "#3b82f6" : "#e5e7eb",
-              borderRadius: 8,
-            }}
-          >
-            <AppText weight="600">{lang.toUpperCase()}</AppText>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </View>
+      <Button title="English" onPress={() => changeLanguage("en")} />
+      <Button title="Español" onPress={() => changeLanguage("es")} />
+      <Button title="العربية" onPress={() => changeLanguage("ar")} />
+    </>
   );
 }
 ```
 
-## ⚡ Performance Features
+### Advanced i18n Features
+
+#### 💰 ICU Message Format - Currency & Numbers
+
+```tsx
+const translations = {
+  en: {
+    price: "Total: {amount, number, currency}",
+    percent: "Progress: {value, number, percent}",
+  },
+};
+
+// Auto-detects currency based on locale
+t("price", { amount: 99.99 });
+// en-US: "Total: $99.99"
+// en-GB: "Total: £99.99" 
+// ar-SA: "الإجمالي: ٩٩٫٩٩ ر.س"
+
+t("percent", { value: 0.856 }); // "Progress: 85.6%"
+```
+
+#### 📅 Date Formatting
+
+```tsx
+const translations = {
+  en: {
+    lastSeen: "Last seen: {date, date, short}",
+    appointment: "Appointment: {date, date, long}",
+  },
+};
+
+const today = new Date();
+t("lastSeen", { date: today }); // "Last seen: 11/27/2024"
+t("appointment", { date: today }); // "Appointment: November 27, 2024"
+```
+
+#### 🔢 Complex Pluralization (50+ Languages)
+
+```tsx
+// Automatically handles all plural forms for each language
+const translations = {
+  en: {
+    items: "{count, plural, one {# item} other {# items}}",
+    messages: "{count, plural, =0 {No messages} =1 {One message} other {# messages}}",
+  },
+  ar: {
+    items: "{count, plural, zero {لا توجد عناصر} one {عنصر واحد} two {عنصران} few {# عناصر} many {# عنصراً} other {# عنصر}}",
+  },
+};
+
+// English
+t("items", { count: 0 }); // "0 items"
+t("items", { count: 1 }); // "1 item"
+t("messages", { count: 0 }); // "No messages"
+
+// Arabic (supports zero, one, two, few, many, other)
+t("items", { count: 0 }); // "لا توجد عناصر"
+t("items", { count: 1 }); // "عنصر واحد"
+t("items", { count: 2 }); // "عنصران"
+```
+
+#### 🎯 Conditional Text (Select)
+
+```tsx
+const translations = {
+  en: {
+    greeting: "{gender, select, male {He is online} female {She is online} other {They are online}}",
+    permission: "{role, select, admin {Full access} user {Limited access} guest {View only} other {No access}}",
+  },
+};
+
+t("greeting", { gender: "male" }); // "He is online"
+t("greeting", { gender: "female" }); // "She is online"
+t("permission", { role: "admin" }); // "Full access"
+```
+
+#### 📊 Ordinal Numbers
+
+```tsx
+const translations = {
+  en: {
+    position: "You finished {place, selectordinal, one {#st} two {#nd} few {#rd} other {#th}}",
+  },
+};
+
+t("position", { place: 1 }); // "You finished 1st"
+t("position", { place: 2 }); // "You finished 2nd"
+t("position", { place: 3 }); // "You finished 3rd"
+t("position", { place: 21 }); // "You finished 21st"
+```
+
+#### 🔗 Combined Plural + Select
+
+```tsx
+const translations = {
+  en: {
+    invitation: "{gender, select, male {He sent {count, plural, one {# invitation} other {# invitations}}} female {She sent {count, plural, one {# invitation} other {# invitations}}} other {They sent {count, plural, one {# invitation} other {# invitations}}}}",
+  },
+};
+
+t("invitation", { gender: "male", count: 1 }); // "He sent 1 invitation"
+t("invitation", { gender: "female", count: 5 }); // "She sent 5 invitations"
+```
+
+---
+
+## ⚡ Performance Optimization Features
+
+<!-- Grouped all performance features together -->
 
 ### 🚀 LRU Cache System
 
-AppText uses a sophisticated LRU (Least Recently Used) cache to achieve 95%+ cache hit rates:
+Achieves 95%+ cache hit rates for instant translation lookups:
 
 ```tsx
-import {
-  translationCache,
-  performanceMonitor,
-} from "react-native-apptext";
+import { translationCache, performanceMonitor } from "react-native-apptext";
 
 // Check cache statistics
 const stats = translationCache.getStats();
 console.log(`Cache hit rate: ${stats.hitRate.toFixed(2)}%`);
 console.log(`Cache size: ${stats.size}/${stats.maxSize}`);
 
-// Monitor performance
-const perfStats = performanceMonitor.getStats("translate:welcome");
-console.log(`Average lookup time: ${perfStats.mean.toFixed(2)}ms`);
-console.log(`95th percentile: ${perfStats.p95.toFixed(2)}ms`);
-
-// Clear cache if needed
-translationCache.clear();
-performanceMonitor.clear();
+// Monitor performance in development
+if (__DEV__) {
+  const perfStats = performanceMonitor.getStats("translate:welcome");
+  console.log(`Average lookup: ${perfStats.mean.toFixed(2)}ms`);
+  console.log(`95th percentile: ${perfStats.p95.toFixed(2)}ms`);
+}
 ```
 
 ### 📦 Lazy Loading Translations
 
-Reduce your initial bundle size by loading translations on demand:
+Reduce initial bundle size by loading translations on demand:
 
 ```tsx
 import { LazyLocaleProvider } from "react-native-apptext";
 
-const App = () => {
-  return (
-    <LazyLocaleProvider
-      loaders={{
-        en: () => import("./locales/en.json"),
-        es: () => import("./locales/es.json"),
-        ar: () => import("./locales/ar.json"),
-        fr: () => import("./locales/fr.json"),
-      }}
-      defaultLanguage="en"
-      preloadLanguages={["en"]} // Preload commonly used languages
-      onLoadStart={(locale) => console.log(`Loading ${locale}...`)}
-      onLoadComplete={(locale) => console.log(`${locale} loaded!`)}
-      onLoadError={(locale, error) =>
-        console.error(`Failed to load ${locale}:`, error)
-      }
-    >
-      <YourApp />
-    </LazyLocaleProvider>
-  );
-};
+const App = () => (
+  <LazyLocaleProvider
+    loaders={{
+      en: () => import("./locales/en.json"),
+      es: () => import("./locales/es.json"),
+      ar: () => import("./locales/ar.json"),
+      fr: () => import("./locales/fr.json"),
+    }}
+    defaultLanguage="en"
+    preloadLanguages={["en"]} // Preload commonly used languages
+    onLoadStart={(locale) => console.log(`Loading ${locale}...`)}
+    onLoadComplete={(locale) => console.log(`${locale} loaded!`)}
+    onLoadError={(locale, error) => console.error(`Failed:`, error)}
+  >
+    <YourApp />
+  </LazyLocaleProvider>
+);
 ```
 
 ### 🎯 Namespace-based Code Splitting
@@ -320,190 +344,162 @@ function DashboardScreen() {
 //   - settings.json     (lazy loaded)
 ```
 
-### 🔥 Performance Monitoring
+### 🛡️ Error Boundaries & Memory Management
 
-Track and optimize translation performance:
-
-```tsx
-import { performanceMonitor } from "react-native-apptext";
-
-// In development, monitor performance
-if (__DEV__) {
-  // Check all translation lookups
-  const allStats = performanceMonitor.getAllStats();
-  console.table(allStats);
-
-  // Get specific translation stats
-  const welcomeStats = performanceMonitor.getStats("translate:welcome");
-  if (welcomeStats) {
-    console.log("Welcome translation performance:", {
-      calls: welcomeStats.count,
-      avgTime: `${welcomeStats.mean.toFixed(2)}ms`,
-      minTime: `${welcomeStats.min.toFixed(2)}ms`,
-      maxTime: `${welcomeStats.max.toFixed(2)}ms`,
-      p95: `${welcomeStats.p95.toFixed(2)}ms`,
-    });
-  }
-}
-```
-
-### 🛡️ Error Boundaries
-
-Gracefully handle translation errors in production:
+Production-ready error handling and automatic cleanup:
 
 ```tsx
-import { TranslationErrorBoundary } from "react-native-apptext";
+import { TranslationErrorBoundary, MemoryManager } from "react-native-apptext";
 
 function App() {
   return (
     <TranslationErrorBoundary
-      fallback={
-        <View style={{ padding: 20 }}>
-          <AppText>Translation system unavailable</AppText>
-        </View>
-      }
+      fallback={<AppText>Translation system unavailable</AppText>}
       onError={(error, errorInfo) => {
-        // Log to your error tracking service
         analytics.logError("TranslationError", { error, errorInfo });
       }}
     >
-      <LocaleProvider translations={translations} defaultLanguage="en">
+      <LocaleProvider translations={translations}>
         <YourApp />
       </LocaleProvider>
     </TranslationErrorBoundary>
   );
 }
+
+// Automatic memory management
+useEffect(() => {
+  const timer = setTimeout(() => {}, 1000);
+  MemoryManager.registerTimer(timer); // Auto-cleaned up
+  
+  return () => MemoryManager.clearAll();
+}, []);
 ```
 
-### 🧹 Memory Management
+---
 
-Prevent memory leaks with built-in cleanup:
+## 🎨 Beautiful Typography
+
+<!-- Simplified typography section -->
+
+### Material Design 3 Support
 
 ```tsx
-import { MemoryManager } from "react-native-apptext";
+// Display variants (largest)
+<AppText.DisplayLarge>Display Large</AppText.DisplayLarge>
+<AppText.DisplayMedium>Display Medium</AppText.DisplayMedium>
+<AppText.DisplaySmall>Display Small</AppText.DisplaySmall>
 
-// Register timers (automatically cleaned up)
-const timer = setTimeout(() => {
-  /* ... */
-}, 1000);
-MemoryManager.registerTimer(timer);
+// Headline variants
+<AppText.HeadlineLarge>Headline Large</AppText.HeadlineLarge>
+<AppText.HeadlineMedium>Headline Medium</AppText.HeadlineMedium>
+<AppText.HeadlineSmall>Headline Small</AppText.HeadlineSmall>
 
-// Register listeners
-const cleanup = () => subscription.remove();
-MemoryManager.registerListener(component, cleanup);
+// Title variants
+<AppText.TitleLarge>Title Large</AppText.TitleLarge>
+<AppText.TitleMedium>Title Medium</AppText.TitleMedium>
+<AppText.TitleSmall>Title Small</AppText.TitleSmall>
 
-// Get memory stats
-const stats = MemoryManager.getStats();
-console.log(`Active timers: ${stats.activeTimers}`);
-console.log(`Registered listeners: ${stats.registeredListeners}`);
+// Body variants (most common)
+<AppText.BodyLarge>Body Large</AppText.BodyLarge>
+<AppText.BodyMedium>Body Medium - Default</AppText.BodyMedium>
+<AppText.BodySmall>Body Small</AppText.BodySmall>
 
-// Clean up everything (useful in tests)
-MemoryManager.clearAll();
+// Label variants (smallest)
+<AppText.LabelLarge>Label Large</AppText.LabelLarge>
+<AppText.LabelMedium>Label Medium</AppText.LabelMedium>
+<AppText.LabelSmall>Label Small</AppText.LabelSmall>
+
+// Flexible base component
+<AppText 
+  variant="bodyMedium" 
+  color="primary" 
+  size={16} 
+  weight="semibold"
+  truncate={2}
+>
+  Customizable text
+</AppText>
 ```
 
-## 🌐 ICU Message Format
+### 🌐 Automatic Script Detection
 
-AppText supports the full ICU Message Format for advanced formatting:
-
-### 💰 Number Formatting
+Supports 50+ writing systems with automatic optimization:
 
 ```tsx
+<View>
+  {/* Latin - Auto-detected, LTR, standard line height */}
+  <AppText>Hello World!</AppText>
+
+  {/* Arabic - Auto-detected, RTL, increased line height */}
+  <AppText>مرحباً بكم في تطبيقنا</AppText>
+
+  {/* Devanagari - Complex shaping, optimized line height */}
+  <AppText>हमारे ऐप में आपका स्वागत है</AppText>
+
+  {/* Japanese - Optimized for mixed scripts */}
+  <AppText>こんにちは、私たちのアプリへようこそ。</AppText>
+
+  {/* Mixed content - Smart per-character handling */}
+  <AppText>Hello 你好 مرحبا 🌍</AppText>
+</View>
+```
+
+**Supported scripts:** Latin, Arabic, Cyrillic, Devanagari, Bengali, Tamil, Telugu, Thai, Chinese, Japanese, Korean, Hebrew, Greek, and 35+ more!
+
+---
+
+## 🎭 Advanced Components
+
+### Rich Text with Trans Component
+
+Use custom components within translations:
+
+```tsx
+import { Trans } from "react-native-apptext";
+
 const translations = {
   en: {
-    price: "{amount, number, currency}",
-    percent: "{value, number, percent}",
-    compact: "{count, number, compact}",
-    decimal: "{value, number}",
+    rich_welcome: "Hello <bold>{{name}}</bold>! Welcome to our <link>amazing app</link>",
+    terms: "By continuing, you agree to our <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>",
   },
 };
 
-// Usage
-t("price", { amount: 1234.56 }); // "$1,234.56" (US)
-// "£1,234.56" (UK)
-// "١٬٢٣٤٫٥٦ ر.س" (Saudi Arabia)
+function MyComponent() {
+  const richComponents = {
+    bold: <AppText weight="bold" color="primary" />,
+    link: <AppText color="info" style={{ textDecorationLine: "underline" }} />,
+    terms: <AppText weight="bold" color="error" />,
+    privacy: <AppText weight="bold" color="info" />,
+  };
 
-t("percent", { value: 0.856 }); // "85.6%"
-t("compact", { count: 1500000 }); // "1.5M"
-t("decimal", { value: 1234.567 }); // "1,234.57"
+  return (
+    <View>
+      <Trans
+        i18nKey="rich_welcome"
+        values={{ name: "Sarah" }}
+        components={richComponents}
+        variant="bodyMedium"
+      />
+      
+      <Trans
+        i18nKey="terms"
+        components={richComponents}
+        variant="bodySmall"
+        color="textSecondary"
+      />
+    </View>
+  );
+}
 ```
 
-### 📅 Date Formatting
-
-```tsx
-const translations = {
-  en: {
-    dateShort: "{date, date, short}",
-    dateLong: "{date, date, long}",
-    datetime: "{date, date, medium} at {date, time, short}",
-  },
-};
-
-const today = new Date();
-t("dateShort", { date: today }); // "11/27/2024"
-t("dateLong", { date: today }); // "November 27, 2024"
-t("datetime", { date: today }); // "Nov 27, 2024 at 2:30 PM"
-```
-
-### 🔢 Plural Forms
-
-```tsx
-const translations = {
-  en: {
-    items: "{count, plural, one {# item} other {# items}}",
-    messages: "{count, plural, =0 {No messages} one {# message} other {# messages}}",
-  },
-  ar: {
-    items:
-      "{count, plural, zero {لا عناصر} one {عنصر واحد} two {عنصران} few {# عناصر} many {# عنصراً} other {# عنصر}}",
-  },
-};
-
-// Handles all plural forms automatically
-t("items", { count: 0 }); // "0 items"
-t("items", { count: 1 }); // "1 item"
-t("items", { count: 5 }); // "5 items"
-```
-
-### 🎯 Select (Conditionals)
-
-```tsx
-const translations = {
-  en: {
-    greeting:
-      "{gender, select, male {Hello Mr. {name}} female {Hello Ms. {name}} other {Hello {name}}}",
-  },
-};
-
-t("greeting", { gender: "male", name: "John" }); // "Hello Mr. John"
-t("greeting", { gender: "female", name: "Jane" }); // "Hello Ms. Jane"
-t("greeting", { gender: "other", name: "Alex" }); // "Hello Alex"
-```
-
-### 📊 Ordinal Numbers
-
-```tsx
-import { OrdinalFormatter } from "react-native-apptext";
-
-OrdinalFormatter.format(1, "en"); // "1st"
-OrdinalFormatter.format(2, "en"); // "2nd"
-OrdinalFormatter.format(3, "en"); // "3rd"
-OrdinalFormatter.format(21, "en"); // "21st"
-OrdinalFormatter.format(100, "en"); // "100th"
-```
-
-## 🎨 Advanced Features
-
-### 🌈 Markdown Support
-
-Format your translations with markdown syntax:
+### Markdown Support (Coming Soon)
 
 ```tsx
 import { MarkdownTrans } from "react-native-apptext";
 
 const translations = {
   en: {
-    welcome:
-      "Welcome **{{name}}**! Check out [our website](https://example.com) for `code` and __underlined__ text.",
+    welcome: "Welcome **{{name}}**! Check out [our website](https://example.com) for `code` examples.",
   },
 };
 
@@ -516,34 +512,10 @@ const translations = {
     code: { backgroundColor: "#f0f0f0", fontFamily: "monospace" },
   }}
   onLinkPress={(url) => Linking.openURL(url)}
-/>;
+/>
 ```
 
-### 🎭 Rich Text Components
-
-Use custom components in translations:
-
-```tsx
-import { Trans } from "react-native-apptext";
-
-const translations = {
-  en: {
-    terms: "I agree to the <link>Terms of Service</link> and <bold>Privacy Policy</bold>",
-  },
-};
-
-<Trans
-  i18nKey="terms"
-  components={{
-    link: <AppText color="primary" onPress={() => openTerms()} />,
-    bold: <AppText weight="700" />,
-  }}
-/>;
-```
-
-### 🎯 Type-Safe Translations
-
-Get autocomplete for your translation keys:
+### Type-Safe Translations
 
 ```typescript
 // translations.ts
@@ -560,133 +532,79 @@ export const translations = {
 } as const;
 
 type TranslationKeys = DeepKeyOf<typeof translations.en>;
-// TranslationKeys = "auth.login" | "auth.signup" | "home.welcome"
+// "auth.login" | "auth.signup" | "home.welcome"
 
-// Use with type safety
+// Use with TypeScript autocomplete
 const { t } = useLang<typeof translations.en>();
 t("auth.login"); // ✅ Type-safe
 t("auth.logout"); // ❌ TypeScript error
 ```
 
-### 📦 Virtual Scrolling
+---
 
-Handle large translation lists efficiently:
-
-```tsx
-import { VirtualListHelper } from "react-native-apptext";
-
-const virtualList = new VirtualListHelper(50); // 50px default height
-
-function TranslationList({ items }) {
-  const [scrollOffset, setScrollOffset] = useState(0);
-  const viewportHeight = 600;
-
-  const { startIndex, endIndex, offsetY } = virtualList.getVisibleRange(
-    scrollOffset,
-    viewportHeight,
-    items
-  );
-
-  const visibleItems = items.slice(startIndex, endIndex + 1);
-
-  return (
-    <ScrollView
-      onScroll={(e) => setScrollOffset(e.nativeEvent.contentOffset.y)}
-      scrollEventThrottle={16}
-    >
-      <View style={{ height: virtualList.getTotalHeight(items) }}>
-        <View style={{ transform: [{ translateY: offsetY }] }}>
-          {visibleItems.map((item) => (
-            <TranslationItem key={item.key} item={item} />
-          ))}
-        </View>
-      </View>
-    </ScrollView>
-  );
-}
-```
-
-## 🌐 Automatic Script Detection
-
-AppText automatically detects and optimizes for 50+ writing systems:
-
-```tsx
-function InternationalApp() {
-  return (
-    <View>
-      {/* Latin - Auto-detected, LTR, standard line height */}
-      <AppText>Hello World!</AppText>
-
-      {/* Arabic - Auto-detected, RTL, increased line height */}
-      <AppText>مرحباً بكم في تطبيقنا</AppText>
-
-      {/* Devanagari - Auto-detected, complex shaping, increased line height */}
-      <AppText>हमारे ऐप में आपका स्वागत है</AppText>
-
-      {/* Japanese - Auto-detected, optimized for mixed scripts */}
-      <AppText>こんにちは、私たちのアプリへようこそ。</AppText>
-
-      {/* Mixed content - Smart per-character handling */}
-      <AppText>Hello 你好 مرحبا 🌍</AppText>
-    </View>
-  );
-}
-```
-
-Supported scripts include: Latin, Arabic, Cyrillic, Devanagari, Bengali, Tamil, Telugu, Thai, Chinese, Japanese, Korean, Hebrew, Greek, and 35+ more!
-
-## 📚 Complete API Reference
+## 📚 API Reference
 
 ### Core Components
 
 ```tsx
-// Base component
-<AppText variant="body1" color="primary" size={16} weight="600">
+// Base component with all options
+<AppText 
+  variant="bodyMedium"
+  color="primary"
+  size={16}
+  weight="semibold"
+  align="center"
+  truncate={2}
+  style={{ marginTop: 10 }}
+>
   Text content
 </AppText>
 
-// Compound components
-<AppText.H1>Heading 1</AppText.H1>
-<AppText.H2>Heading 2</AppText.H2>
-<AppText.Body>Body text</AppText.Body>
-<AppText.Caption>Caption</AppText.Caption>
-
-// Material Design 3 variants
-<AppText.DisplayLarge>Display Large</AppText.DisplayLarge>
-<AppText.HeadlineMedium>Headline Medium</AppText.HeadlineMedium>
-<AppText.BodyLarge>Body Large</AppText.BodyLarge>
-<AppText.LabelSmall>Label Small</AppText.LabelSmall>
+// Material Design 3 variants (16 total)
+<AppText.DisplayLarge />
+<AppText.DisplayMedium />
+<AppText.DisplaySmall />
+<AppText.HeadlineLarge />
+<AppText.HeadlineMedium />
+<AppText.HeadlineSmall />
+<AppText.TitleLarge />
+<AppText.TitleMedium />
+<AppText.TitleSmall />
+<AppText.BodyLarge />
+<AppText.BodyMedium />
+<AppText.BodySmall />
+<AppText.LabelLarge />
+<AppText.LabelMedium />
+<AppText.LabelSmall />
 ```
 
-### i18n API
+### i18n Hooks & Providers
 
 ```tsx
-// LocaleProvider props
+// LocaleProvider
 <LocaleProvider
   translations={translations}
   defaultLanguage="en"
   fallbackLanguage="en"
   useICU={true}
-  onMissingTranslation={(lang, key, namespace) => {}}
+  onMissingTranslation={(lang, key) => {
+    console.warn(`Missing: ${lang}.${key}`);
+  }}
 >
   {children}
 </LocaleProvider>
 
 // useLang hook
 const {
-  t,              // Translate function
-  tn,             // Plural translate function
-  changeLanguage, // Change language
-  language,       // Current language
-  direction,      // Current text direction
+  t,              // Translate: t(key, params?, options?)
+  tn,             // Plural: tn(key, count, params?, options?) [DEPRECATED - use t() with count]
+  changeLanguage, // Switch language: changeLanguage("es")
+  language,       // Current language code
+  direction,      // "ltr" or "rtl"
   loadNamespace,  // Load namespace dynamically
 } = useLang();
 
-// Translation functions
-t(key, params?, options?)
-tn(key, count, params?, options?)
-
-// Options
+// Translation options
 {
   namespace?: string;
   context?: string;
@@ -694,25 +612,41 @@ tn(key, count, params?, options?)
 }
 ```
 
-### Performance API
+### Trans Component
 
 ```tsx
-// Cache management
-import { translationCache } from "react-native-apptext";
+<Trans
+  i18nKey="translation.key"
+  values={{ name: "value" }}
+  components={{
+    bold: <AppText weight="bold" />,
+    link: <AppText color="primary" />,
+  }}
+  variant="bodyMedium"
+  color="textPrimary"
+  style={{ marginTop: 10 }}
+/>
+```
 
-translationCache.getStats(); // Get cache statistics
-translationCache.clear(); // Clear cache
+### Performance Utilities
+
+```tsx
+import { 
+  translationCache, 
+  performanceMonitor, 
+  MemoryManager 
+} from "react-native-apptext";
+
+// Cache management
+translationCache.getStats();
+translationCache.clear();
 
 // Performance monitoring
-import { performanceMonitor } from "react-native-apptext";
-
-performanceMonitor.getStats(name); // Get specific stats
-performanceMonitor.getAllStats(); // Get all stats
-performanceMonitor.clear(name?); // Clear measurements
+performanceMonitor.getStats(name);
+performanceMonitor.getAllStats();
+performanceMonitor.clear(name?);
 
 // Memory management
-import { MemoryManager } from "react-native-apptext";
-
 MemoryManager.registerTimer(timer);
 MemoryManager.clearTimer(timer);
 MemoryManager.getStats();
@@ -732,15 +666,26 @@ NumberFormatter.formatSigned(-42, "en-US"); // "-42"
 NumberFormatter.formatRange(10, 20, "en-US"); // "10 – 20"
 ```
 
-## 🎯 Real-World Examples
-
-### E-commerce App with Lazy Loading
+### Ordinal Formatting
 
 ```tsx
-import {
-  LazyLocaleProvider,
-  useLazyLocale,
-} from "react-native-apptext";
+import { OrdinalFormatter } from "react-native-apptext";
+
+OrdinalFormatter.format(1, "en"); // "1st"
+OrdinalFormatter.format(2, "en"); // "2nd"
+OrdinalFormatter.format(3, "en"); // "3rd"
+OrdinalFormatter.format(21, "en"); // "21st"
+OrdinalFormatter.format(100, "en"); // "100th"
+```
+
+---
+
+## 🎯 Real-World Examples
+
+### E-commerce Product Card
+
+```tsx
+import { LazyLocaleProvider, useLang } from "react-native-apptext";
 
 const App = () => (
   <LazyLocaleProvider
@@ -752,7 +697,9 @@ const App = () => (
     defaultLanguage="en"
     preloadLanguages={["en"]}
   >
-    <ShoppingApp />
+    <AppTextProvider>
+      <ShoppingApp />
+    </AppTextProvider>
   </LazyLocaleProvider>
 );
 
@@ -761,26 +708,28 @@ function ProductCard({ product }) {
 
   return (
     <View style={styles.card}>
-      <AppText.H4>{product.name}</AppText.H4>
-      <AppText color="secondary" truncate={3}>
+      <AppText.TitleMedium>{product.name}</AppText.TitleMedium>
+      
+      <AppText.BodySmall color="secondary" truncate={3}>
         {product.description}
-      </AppText>
-      <AppText.H5 color="primary">
+      </AppText.BodySmall>
+      
+      <AppText.TitleSmall color="primary">
         {t("price", { amount: product.price })}
-      </AppText>
-      <AppText variant="caption">
-        {tn("reviews", product.reviewCount)}
-      </AppText>
+      </AppText.TitleSmall>
+      
+      <AppText.LabelSmall>
+        {t("reviews", { count: product.reviewCount })}
+      </AppText.LabelSmall>
     </View>
   );
 }
 ```
 
-### Dashboard with Namespace Loading
+### Dashboard with Performance Monitoring
 
 ```tsx
 function DashboardScreen() {
-  // Lazy load dashboard translations
   useNamespace("dashboard", () => import("./translations/dashboard"));
 
   const { t } = useLang();
@@ -788,22 +737,26 @@ function DashboardScreen() {
 
   return (
     <View>
-      <AppText.H2>{t("title", {}, { namespace: "dashboard" })}</AppText.H2>
+      <AppText.HeadlineSmall>
+        {t("title", {}, { namespace: "dashboard" })}
+      </AppText.HeadlineSmall>
 
       {__DEV__ && (
-        <AppText variant="caption" color="textSecondary">
-          Cache hit rate: {stats.hitRate.toFixed(1)}% | Size: {stats.size}/
-          {stats.maxSize}
-        </AppText>
+        <AppText.LabelSmall color="textSecondary">
+          Cache hit rate: {stats.hitRate.toFixed(1)}% | 
+          Size: {stats.size}/{stats.maxSize}
+        </AppText.LabelSmall>
       )}
 
-      <AppText>{t("stats.users", { count: 1250 }, { namespace: "dashboard" })}</AppText>
+      <AppText.BodyMedium>
+        {t("stats.users", { count: 1250 }, { namespace: "dashboard" })}
+      </AppText.BodyMedium>
     </View>
   );
 }
 ```
 
-### Multilingual News App with Performance Monitoring
+### News App with Error Boundaries
 
 ```tsx
 function NewsApp() {
@@ -818,7 +771,7 @@ function NewsApp() {
 
   return (
     <TranslationErrorBoundary
-      fallback={<AppText>Error loading translations</AppText>}
+      fallback={<AppText.BodyMedium>Error loading translations</AppText.BodyMedium>}
       onError={(error) => analytics.logError("i18n", error)}
     >
       <View>
@@ -830,66 +783,20 @@ function NewsApp() {
 }
 ```
 
-## 🛠️ Installation & Setup
-
-### Peer Dependencies
-
-```json
-{
-  "react": ">=17.0.0",
-  "react-native": ">=0.70.0"
-}
-```
-
-### Platform-specific Setup
-
-#### iOS & Android
-No additional setup required! 🎉
-
-#### Web
-```typescript
-// For optimal web performance
-module.exports = {
-  resolve: {
-    alias: {
-      'react-native-apptext': 'react-native-apptext'
-    }
-  }
-};
-```
-
-## 🤝 Contributing
-
-We love contributions! Here's how to get started:
-
-```bash
-# Clone and setup
-git clone https://github.com/Ganesh1110/react-native-apptext.git
-cd react-native-apptext
-npm install
-
-# Run tests
-npm test
-
-# Test with coverage
-npm run test:coverage
-
-# Build
-npm run build
-```
+---
 
 ## 🐛 Troubleshooting
 
 ### Cache not working?
+
 ```tsx
-// Clear cache if needed
 import { translationCache } from 'react-native-apptext';
-translationCache.clear();
+translationCache.clear(); // Force clear cache
 ```
 
 ### Memory leaks?
+
 ```tsx
-// Use MemoryManager for cleanup
 import { MemoryManager } from 'react-native-apptext';
 
 useEffect(() => {
@@ -901,13 +808,71 @@ useEffect(() => {
 ```
 
 ### Translations not lazy loading?
+
 ```tsx
-// Ensure dynamic imports are correct
+// ✅ Correct - use dynamic import()
 loaders: {
-  en: () => import('./locales/en.json'),  // ✅ Correct
-  es: () => require('./locales/es.json'), // ❌ Wrong - use import()
+  en: () => import('./locales/en.json'),
+}
+
+// ❌ Wrong - don't use require()
+loaders: {
+  en: () => require('./locales/en.json'),
 }
 ```
+
+### Web platform optimization?
+
+```typescript
+// webpack.config.js
+module.exports = {
+  resolve: {
+    alias: {
+      'react-native-apptext': 'react-native-apptext'
+    }
+  }
+};
+```
+
+---
+
+## 🛠️ Requirements
+
+### Peer Dependencies
+
+```json
+{
+  "react": ">=17.0.0",
+  "react-native": ">=0.70.0"
+}
+```
+
+**Platform Support:** iOS, Android, Web  
+**No additional native setup required!**
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! 
+
+```bash
+# Clone and setup
+git clone https://github.com/Ganesh1110/react-native-apptext.git
+cd react-native-apptext
+npm install
+
+# Run tests
+npm test
+npm run test:coverage
+
+# Build
+npm run build
+```
+
+See [CONTRIBUTING.md](https://github.com/Ganesh1110/react-native-apptext/blob/main/CONTRIBUTING.md) for guidelines.
+
+---
 
 ## 📄 License
 
@@ -921,11 +886,8 @@ MIT © [Ganesh1110](https://github.com/Ganesh1110)
 
 _Making beautiful, performant text accessible to every developer, in every language_
 
-[📖 Documentation](https://github.com/Ganesh1110/react-native-apptext/wiki) •
+[📖 Full Documentation](https://github.com/Ganesh1110/react-native-apptext/wiki) •
 [🐛 Report Bug](https://github.com/Ganesh1110/react-native-apptext/issues) •
-[💡 Request Feature](https://github.com/Ganesh1110/react-native-apptext/issues) •
-[👨‍💻 Contribute](https://github.com/Ganesh1110/react-native-apptext/blob/main/CONTRIBUTING.md)
-
-**⚡ Performance • 🌍 i18n • 📦 Lazy Loading • 🎨 Beautiful**
+[💡 Request Feature](https://github.com/Ganesh1110/react-native-apptext/issues)
 
 </div>
