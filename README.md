@@ -8,7 +8,6 @@ _Beautiful text that works everywhere, in every language, blazing fast_
 [![npm](https://img.shields.io/npm/v/react-native-apptext?label=VERSION&style=for-the-badge&logo=npm&color=red)](https://www.npmjs.com/package/react-native-apptext)
 [![npm downloads](https://img.shields.io/npm/dm/react-native-apptext?style=for-the-badge&logo=npm&logoColor=white&color=4caf50)](https://www.npmjs.com/package/react-native-apptext)
 [![bundle size](https://badgen.net/packagephobia/publish/react-native-apptext?style=for-the-badge&color=6a5acd)](https://packagephobia.com/result?p=react-native-apptext)
-[![license](https://img.shields.io/github/license/Ganesh1110/react-native-apptext?style=for-the-badge&color=0aa2ff)](LICENSE)
 
 [📖 Docs](https://github.com/Ganesh1110/react-native-apptext/wiki) • [🐛 Issues](https://github.com/Ganesh1110/react-native-apptext/issues) • [💡 Feature Requests](https://github.com/Ganesh1110/react-native-apptext/issues)
 
