@@ -478,6 +478,13 @@ const PLURAL_RULES: Record<string, (count: number) => PluralForm> = {
     return "other";
   },
   // Other Edge Cases
+  br: (n) => {
+    if (n === 1) return "one";
+    if (n === 2) return "two";
+    if (n === 3) return "few";
+    if (n === 4) return "many";
+    return "other";
+  },
   mt: (n) => {
     if (n === 1) return "one";
     if (n === 0 || (n % 100 >= 2 && n % 100 <= 10)) return "few";

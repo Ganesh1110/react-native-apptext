@@ -1063,6 +1063,7 @@ const TruncationComponent = memo<TruncationProps>(
   }) => {
     const [isExpanded, setIsExpanded] = React.useState(false);
     const [isTruncated, setIsTruncated] = React.useState(false);
+    const theme = useAppTextTheme();
 
     const handleTextLayout = useCallback(
       (event: NativeSyntheticEvent<TextLayoutEventData>) => {
@@ -1088,7 +1089,7 @@ const TruncationComponent = memo<TruncationProps>(
         </Text>
         {isTruncated && (
           <Text
-            style={[style, { color: "#007AFF", marginTop: 4 }]}
+            style={[style, { color: theme.colors.primary, marginTop: 4 }]}
             onPress={handleToggle}
           >
             {isExpanded ? collapseText : expandText}

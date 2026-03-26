@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Dimensions, ScaledSize, PixelRatio } from "react-native";
+import { Dimensions, ScaledSize, PixelRatio, NativeModules, Platform } from "react-native";
 import { AppTextTheme, ScriptCode } from "./types";
 import { SCRIPT_CONFIGS } from "./scriptConfigs";
 import { BASE_WIDTH, RESPONSIVE_FONT_MIN, RESPONSIVE_FONT_MAX } from "./constants";
@@ -110,4 +110,24 @@ export const useThemedStyles = (
       backgroundColor: isDark ? "#000000" : theme.colors.background,
     };
   }, [theme, colorScheme]);
+};
+
+// ============================================================================
+// Hook for device locale auto-detection
+// ============================================================================
+
+export const useDeviceLocale = (): string => {
+  return useMemo(() => {
+    try {
+      const locale =
+        Platform.OS === "ios"
+          ? NativeModules.SettingsManager.settings.AppleLocale ||
+            NativeModules.SettingsManager.settings.AppleLanguages[0]
+          : NativeModules.I18nManager.localeIdentifier;
+
+      return locale ? locale.replace("_", "-") : "en";
+    } catch (e) {
+      return "en";
+    }
+  }, []);
 };
