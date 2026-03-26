@@ -15,6 +15,8 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
     const rotateValue = useRef(new Animated.Value(0)).current;
     const shakeValue = useRef(new Animated.Value(0)).current;
     const glowValue = useRef(new Animated.Value(0)).current;
+    const neonValue = useRef(new Animated.Value(0)).current;
+    const gradientValue = useRef(new Animated.Value(0)).current;
     const hasAnimated = useRef(false);
     useEffect(() => {
         if ((animated || animation) && !hasAnimated.current) {
@@ -30,6 +32,8 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
             rotateValue.setValue(0);
             shakeValue.setValue(0);
             glowValue.setValue(0);
+            neonValue.setValue(0);
+            gradientValue.setValue(0);
             let animationPromise;
             switch (type) {
                 // === ENTRANCE ANIMATIONS ===
@@ -575,15 +579,44 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
                         }),
                     ]));
                     break;
+                case "neon":
+                    hasAnimated.current = true;
+                    animationPromise = Animated.loop(Animated.sequence([
+                        Animated.timing(neonValue, {
+                            toValue: 1,
+                            duration: 1000,
+                            useNativeDriver: false,
+                        }),
+                        Animated.timing(neonValue, {
+                            toValue: 0,
+                            duration: 1000,
+                            useNativeDriver: false,
+                        }),
+                    ]));
+                    break;
+                case "gradientShift":
+                    hasAnimated.current = true;
+                    animationPromise = Animated.loop(Animated.timing(gradientValue, {
+                        toValue: 1,
+                        duration: 3000,
+                        useNativeDriver: false,
+                    }));
+                    break;
                 case "wave":
                     hasAnimated.current = true;
-                    // Wave effect would need more complex per-character animation
-                    animationPromise = Animated.timing(opacityValue, {
-                        toValue: 1,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    });
+                    // Simple wave effect on opacity for the whole component as fallback
+                    animationPromise = Animated.loop(Animated.sequence([
+                        Animated.timing(opacityValue, {
+                            toValue: 0.7,
+                            duration: 1000,
+                            useNativeDriver: true,
+                        }),
+                        Animated.timing(opacityValue, {
+                            toValue: 1,
+                            duration: 1000,
+                            useNativeDriver: true,
+                        }),
+                    ]));
                     break;
                 default:
                     // Default to fade animation
@@ -768,8 +801,35 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
                         outputRange: [0, 10],
                     }),
                 };
+            case "neon":
+                return {
+                    textShadowColor: neonValue.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ["rgba(0, 255, 255, 0.5)", "rgba(0, 255, 255, 1)"],
+                    }),
+                    textShadowOffset: { width: 0, height: 0 },
+                    textShadowRadius: neonValue.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [5, 20],
+                    }),
+                };
+            case "gradientShift":
+                return {
+                    color: gradientValue.interpolate({
+                        inputRange: [0, 0.25, 0.5, 0.75, 1],
+                        outputRange: [
+                            "rgb(255, 0, 0)", // Red
+                            "rgb(0, 255, 0)", // Green
+                            "rgb(0, 0, 255)", // Blue
+                            "rgb(255, 0, 255)", // Magenta
+                            "rgb(255, 0, 0)", // Red
+                        ],
+                    }),
+                };
             case "wave":
-                return { opacity: opacityValue };
+                return {
+                    opacity: opacityValue,
+                };
             default:
                 return { opacity: opacityValue };
         }
@@ -783,9 +843,19 @@ const TypewriterText = memo(({ children, delay = 0, duration = 2000, speed = 50,
     const [displayText, setDisplayText] = useState("");
     const [currentIndex, setCurrentIndex] = useState(0);
     const text = useMemo(() => {
-        return React.Children.toArray(children)
-            .filter((child) => typeof child === "string")
-            .join("");
+        const extractText = (node) => {
+            if (typeof node === "string" || typeof node === "number") {
+                return String(node);
+            }
+            if (React.isValidElement(node)) {
+                return extractText(node.props.children);
+            }
+            if (Array.isArray(node)) {
+                return node.map(extractText).join("");
+            }
+            return "";
+        };
+        return extractText(children);
     }, [children]);
     useEffect(() => {
         setDisplayText("");
@@ -837,6 +907,57 @@ const TruncationComponent = memo(({ children, maxLines, onExpand, expandText = "
           </Text>)}
       </View>);
 });
+const WaveText = memo(({ children, duration = 1000, delay = 0, style }) => {
+    const text = useMemo(() => {
+        const extractText = (node) => {
+            if (typeof node === "string" || typeof node === "number")
+                return String(node);
+            if (React.isValidElement(node))
+                return extractText(node.props.children);
+            if (Array.isArray(node))
+                return node.map(extractText).join("");
+            return "";
+        };
+        return extractText(children);
+    }, [children]);
+    const characters = useMemo(() => text.split(""), [text]);
+    const animatedValues = useRef(characters.map(() => new Animated.Value(0))).current;
+    useEffect(() => {
+        const animations = characters.map((_, i) => {
+            return Animated.loop(Animated.sequence([
+                Animated.delay(i * 100 + delay),
+                Animated.timing(animatedValues[i], {
+                    toValue: 1,
+                    duration: duration / 2,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(animatedValues[i], {
+                    toValue: 0,
+                    duration: duration / 2,
+                    useNativeDriver: true,
+                }),
+            ]));
+        });
+        Animated.parallel(animations).start();
+        return () => {
+            animations.forEach((anim) => anim.stop());
+        };
+    }, [characters, duration, delay]);
+    return (<Text style={style}>
+      {characters.map((char, i) => (<Animated.Text key={i} style={{
+                transform: [
+                    {
+                        translateY: animatedValues[i].interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [0, -5],
+                        }),
+                    },
+                ],
+            }}>
+          {char}
+        </Animated.Text>))}
+    </Text>);
+});
 /* ========== Main Component ========== */
 const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size, weight, align, transform, decoration, italic = false, truncate = false, shadow = false, animated = false, animation, animationDelay = 0, animationDuration = 1000, animationSpeed = 50, cursor = false, script, direction = "auto", responsive = true, style: propStyle, testID, m, mt, mr, mb, ml, mx, my, p, pt, pr, pb, pl, px, py, numberOfLines, ellipsizeMode, onPress, onLongPress, allowFontScaling, maxFontSizeMultiplier, minimumFontScale, suppressHighlighting, selectable, selectionColor, textBreakStrategy, hyphenationFrequency, ...restProps }, ref) => {
     const theme = useAppTextTheme();
@@ -847,7 +968,7 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
     const { animatedStyle, animationType } = useTextAnimation(animated &&
         (typeof animation === "boolean"
             ? animation
-            : (animation === null || animation === void 0 ? void 0 : animation.type) !== "typewriter"), typeof animation === "object" && (animation === null || animation === void 0 ? void 0 : animation.type) !== "typewriter"
+            : (animation === null || animation === void 0 ? void 0 : animation.type) !== "typewriter"), typeof animation === "object" && (animation === null || animation === void 0 ? void 0 : animation.type) !== "typewriter" && (animation === null || animation === void 0 ? void 0 : animation.type) !== "wave"
         ? animation
         : undefined, animationDelay, animationDuration, animationSpeed, cursor);
     const textContent = useMemo(() => {
@@ -984,6 +1105,13 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
         return (<TypewriterText delay={animationDelay} duration={animationDuration} speed={animationSpeed} cursor={cursor} style={finalComputedStyle}>
             {children}
           </TypewriterText>);
+    }
+    if (typeof animation === "object" &&
+        (animation === null || animation === void 0 ? void 0 : animation.type) === "wave" &&
+        (animated || animation)) {
+        return (<WaveText delay={animationDelay} duration={animationDuration} style={finalComputedStyle}>
+            {children}
+          </WaveText>);
     }
     if (animated || animation) {
         return (<Animated.Text ref={ref} style={finalComputedStyle} {...(!hasPressHandlers

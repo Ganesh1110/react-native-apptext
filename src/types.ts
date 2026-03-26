@@ -180,7 +180,6 @@ export interface AppTextProps extends Omit<TextProps, "style">, SpacingProps {
   decoration?: TextStyle["textDecorationLine"];
   italic?: boolean;
   truncate?: boolean | number;
-  gradient?: boolean;
   shadow?: boolean;
   animated?: boolean;
   animation?:
@@ -232,6 +231,16 @@ export interface AppTextProps extends Omit<TextProps, "style">, SpacingProps {
   responsive?: boolean;
   style?: StyleProp<TextStyle>;
   testID?: string;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
+  accessibilityLiveRegion?: "none" | "polite" | "assertive";
+  accessibilityState?: {
+    disabled?: boolean;
+    selected?: boolean;
+    checked?: boolean | "mixed";
+    busy?: boolean;
+    expanded?: boolean;
+  };
   hyphenationFrequency?: "none" | "normal" | "full";
   textBreakStrategy?: "simple" | "highQuality" | "balanced";
 }

@@ -45,6 +45,8 @@ const useTextAnimation = (
   const rotateValue = useRef(new Animated.Value(0)).current;
   const shakeValue = useRef(new Animated.Value(0)).current;
   const glowValue = useRef(new Animated.Value(0)).current;
+  const neonValue = useRef(new Animated.Value(0)).current;
+  const gradientValue = useRef(new Animated.Value(0)).current;
   const hasAnimated = useRef(false);
 
   useEffect(() => {
@@ -62,6 +64,8 @@ const useTextAnimation = (
       rotateValue.setValue(0);
       shakeValue.setValue(0);
       glowValue.setValue(0);
+      neonValue.setValue(0);
+      gradientValue.setValue(0);
 
       let animationPromise: Animated.CompositeAnimation;
 
@@ -656,15 +660,52 @@ const useTextAnimation = (
           );
           break;
 
+        case "neon":
+          hasAnimated.current = true;
+          animationPromise = Animated.loop(
+            Animated.sequence([
+              Animated.timing(neonValue, {
+                toValue: 1,
+                duration: 1000,
+                useNativeDriver: false,
+              }),
+              Animated.timing(neonValue, {
+                toValue: 0,
+                duration: 1000,
+                useNativeDriver: false,
+              }),
+            ])
+          );
+          break;
+
+        case "gradientShift":
+          hasAnimated.current = true;
+          animationPromise = Animated.loop(
+            Animated.timing(gradientValue, {
+              toValue: 1,
+              duration: 3000,
+              useNativeDriver: false,
+            })
+          );
+          break;
+
         case "wave":
           hasAnimated.current = true;
-          // Wave effect would need more complex per-character animation
-          animationPromise = Animated.timing(opacityValue, {
-            toValue: 1,
-            duration,
-            delay,
-            useNativeDriver: true,
-          });
+          // Simple wave effect on opacity for the whole component as fallback
+          animationPromise = Animated.loop(
+            Animated.sequence([
+              Animated.timing(opacityValue, {
+                toValue: 0.7,
+                duration: 1000,
+                useNativeDriver: true,
+              }),
+              Animated.timing(opacityValue, {
+                toValue: 1,
+                duration: 1000,
+                useNativeDriver: true,
+              }),
+            ])
+          );
           break;
 
         default:
@@ -875,8 +916,37 @@ const useTextAnimation = (
           }),
         };
 
+      case "neon":
+        return {
+          textShadowColor: neonValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: ["rgba(0, 255, 255, 0.5)", "rgba(0, 255, 255, 1)"],
+          }),
+          textShadowOffset: { width: 0, height: 0 },
+          textShadowRadius: neonValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [5, 20],
+          }),
+        };
+
+      case "gradientShift":
+        return {
+          color: gradientValue.interpolate({
+            inputRange: [0, 0.25, 0.5, 0.75, 1],
+            outputRange: [
+              "rgb(255, 0, 0)", // Red
+              "rgb(0, 255, 0)", // Green
+              "rgb(0, 0, 255)", // Blue
+              "rgb(255, 0, 255)", // Magenta
+              "rgb(255, 0, 0)", // Red
+            ],
+          }),
+        };
+
       case "wave":
-        return { opacity: opacityValue };
+        return {
+          opacity: opacityValue,
+        };
 
       default:
         return { opacity: opacityValue };
@@ -909,46 +979,62 @@ const TypewriterText = memo<TypewriterTextProps>(
     style,
   }) => {
     const [displayText, setDisplayText] = useState("");
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isDone, setIsDone] = useState(false);
 
     const text = useMemo(() => {
-      return React.Children.toArray(children)
-        .filter((child) => typeof child === "string")
-        .join("");
+      const extractText = (node: React.ReactNode): string => {
+        if (typeof node === "string" || typeof node === "number") {
+          return String(node);
+        }
+        if (React.isValidElement(node)) {
+          return extractText(node.props.children);
+        }
+        if (Array.isArray(node)) {
+          return node.map(extractText).join("");
+        }
+        return "";
+      };
+      return extractText(children);
     }, [children]);
 
     useEffect(() => {
+      // Reset state whenever text, speed, or delay changes
       setDisplayText("");
-      setCurrentIndex(0);
-    }, [text]);
+      setIsDone(false);
 
-    useEffect(() => {
-      if (currentIndex <= text.length) {
-        const timer = setTimeout(() => {
-          setDisplayText(text.substring(0, currentIndex));
-          setCurrentIndex((prev) => prev + 1);
-        }, speed);
+      let startTimer: ReturnType<typeof setTimeout>;
+      let characterTimer: ReturnType<typeof setTimeout>;
+      let index = 0;
 
-        return () => clearTimeout(timer);
-      }
-    }, [currentIndex, text, speed, delay]);
+      // Single recursive chain: no dependency on component state,
+      // so there is only ever ONE timer active at a time.
+      const typeNextChar = () => {
+        if (index > text.length) {
+          setIsDone(true);
+          return;
+        }
+        setDisplayText(text.substring(0, index));
+        index++;
+        characterTimer = setTimeout(typeNextChar, speed);
+      };
 
-    // Handle initial delay
-    useEffect(() => {
-      if (delay > 0) {
-        const timer = setTimeout(() => {
-          setCurrentIndex(1);
-        }, delay);
-        return () => clearTimeout(timer);
-      } else {
-        setCurrentIndex(1);
-      }
-    }, [delay]);
+      // Honour the initial delay before typing begins
+      startTimer = setTimeout(typeNextChar, delay);
+
+      return () => {
+        clearTimeout(startTimer);
+        clearTimeout(characterTimer);
+      };
+    }, [text, speed, delay]);
 
     return (
-      <Text style={style}>
+      <Text
+        style={style}
+        accessibilityLiveRegion="polite"
+        accessibilityState={{ busy: !isDone }}
+      >
         {displayText}
-        {cursor && currentIndex <= text.length && (
+        {cursor && !isDone && (
           <Text style={{ color: style.color }}>|</Text>
         )}
       </Text>
@@ -1013,6 +1099,90 @@ const TruncationComponent = memo<TruncationProps>(
   }
 );
 
+/* ========== Wave Component ========== */
+interface WaveTextProps {
+  children: React.ReactNode;
+  duration?: number;
+  delay?: number;
+  style: any;
+}
+
+const WaveText = memo<WaveTextProps>(({ children, duration = 1000, delay = 0, style }) => {
+  const text = useMemo(() => {
+    const extractText = (node: React.ReactNode): string => {
+      if (typeof node === "string" || typeof node === "number") return String(node);
+      if (React.isValidElement(node)) return extractText(node.props.children);
+      if (Array.isArray(node)) return node.map(extractText).join("");
+      return "";
+    };
+    return extractText(children);
+  }, [children]);
+
+  const characters = useMemo(() => text.split(""), [text]);
+
+  // Recreate Animated.Value array whenever the text actually changes
+  // (not just on every render) to prevent value/character mismatches.
+  const animatedValuesRef = useRef<Animated.Value[]>([]);
+  const textRef = useRef<string>("");
+
+  if (textRef.current !== text) {
+    textRef.current = text;
+    animatedValuesRef.current = characters.map(() => new Animated.Value(0));
+  }
+
+  useEffect(() => {
+    const animatedValues = animatedValuesRef.current;
+    const animations = characters.map((_, i) =>
+      Animated.loop(
+        Animated.sequence([
+          Animated.delay(i * 100 + delay),
+          Animated.timing(animatedValues[i], {
+            toValue: 1,
+            duration: duration / 2,
+            useNativeDriver: true,
+          }),
+          Animated.timing(animatedValues[i], {
+            toValue: 0,
+            duration: duration / 2,
+            useNativeDriver: true,
+          }),
+        ])
+      )
+    );
+
+    const composite = Animated.parallel(animations);
+    composite.start();
+
+    return () => {
+      // Stop the composite loop and reset individual values on unmount/text change
+      composite.stop();
+      animatedValues.forEach((v) => v.setValue(0));
+    };
+  }, [characters.join(""), duration, delay]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+    <Text style={style}>
+      {characters.map((char, i) => (
+        <Animated.Text
+          key={i}
+          style={{
+            transform: [
+              {
+                translateY: animatedValuesRef.current[i]?.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, -5],
+                }) ?? 0,
+              },
+            ],
+          }}
+        >
+          {char}
+        </Animated.Text>
+      ))}
+    </Text>
+  );
+});
+
 /* ========== Main Component ========== */
 const BaseAppText = memo(
   forwardRef<Text, AppTextProps>(
@@ -1066,6 +1236,10 @@ const BaseAppText = memo(
         selectionColor,
         textBreakStrategy,
         hyphenationFrequency,
+        accessibilityLabel,
+        accessibilityHint,
+        accessibilityLiveRegion,
+        accessibilityState,
         ...restProps
       },
       ref
@@ -1081,7 +1255,7 @@ const BaseAppText = memo(
           (typeof animation === "boolean"
             ? animation
             : animation?.type !== "typewriter"),
-        typeof animation === "object" && animation?.type !== "typewriter"
+        typeof animation === "object" && animation?.type !== "typewriter" && animation?.type !== "wave"
           ? animation
           : undefined,
         animationDelay,
@@ -1213,11 +1387,15 @@ const BaseAppText = memo(
           textBreakStrategy,
           hyphenationFrequency,
           testID: testID || `apptext-${variant}`,
+          accessibilityLabel,
+          accessibilityHint,
+          accessibilityLiveRegion,
+          accessibilityState,
         };
 
         return {
           ...props,
-          accessibilityRole: "text" as AccessibilityRole,
+          accessibilityRole: (onPress ? "button" : "text") as AccessibilityRole,
         };
       }, [
         restProps,
@@ -1234,6 +1412,11 @@ const BaseAppText = memo(
         hyphenationFrequency,
         testID,
         variant,
+        accessibilityLabel,
+        accessibilityHint,
+        accessibilityLiveRegion,
+        accessibilityState,
+        onPress,
       ]);
 
       const handlePress = useCallback((e: any) => onPress?.(e), [onPress]);
@@ -1260,6 +1443,22 @@ const BaseAppText = memo(
           >
             {children}
           </TypewriterText>
+        );
+      }
+
+      if (
+        typeof animation === "object" &&
+        animation?.type === "wave" &&
+        (animated || animation)
+      ) {
+        return (
+          <WaveText
+            delay={animationDelay}
+            duration={animationDuration}
+            style={finalComputedStyle}
+          >
+            {children}
+          </WaveText>
         );
       }
 

@@ -107,4 +107,55 @@ describe("NumberFormatter", () => {
       expect(stats.size).toBeLessThanOrEqual(stats.maxSize);
     });
   });
+
+  describe("Edge Cases — NaN / Infinity", () => {
+    it("should return 'NaN' string for NaN input", () => {
+      expect(NumberFormatter.format(NaN, "en-US")).toBe("NaN");
+    });
+
+    it("should return 'Infinity' string for Infinity input", () => {
+      expect(NumberFormatter.format(Infinity, "en-US")).toBe("Infinity");
+    });
+
+    it("should return '-Infinity' string for negative Infinity input", () => {
+      expect(NumberFormatter.format(-Infinity, "en-US")).toBe("-Infinity");
+    });
+
+    it("should format negative numbers correctly", () => {
+      const result = NumberFormatter.format(-1234.56, "en-US");
+      expect(result).toContain("1,234.56");
+      expect(result).toContain("-");
+    });
+
+    it("should format zero", () => {
+      const result = NumberFormatter.format(0, "en-US");
+      expect(result).toMatch(/^0/);
+    });
+  });
+
+  describe("Fallback when Intl is not available", () => {
+    let originalIntl: typeof Intl;
+
+    beforeEach(() => {
+      originalIntl = (global as any).Intl;
+    });
+
+    afterEach(() => {
+      (global as any).Intl = originalIntl;
+    });
+
+    it("uses fallback formatter when Intl is undefined", () => {
+      (global as any).Intl = undefined;
+      // Should not throw — fallback formatter is used
+      const result = NumberFormatter.format(42.5, "en-US");
+      expect(result).toBeTruthy();
+    });
+
+    it("uses currency fallback when Intl is undefined", () => {
+      (global as any).Intl = undefined;
+      const result = NumberFormatter.formatCurrency(99.99, "en-US", "USD");
+      expect(result).toContain("99.99");
+    });
+  });
 });
+

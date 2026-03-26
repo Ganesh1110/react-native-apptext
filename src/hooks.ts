@@ -1,36 +1,78 @@
-import { useEffect, useMemo, useState } from "react";
-import { Dimensions, PixelRatio } from "react-native";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Dimensions, ScaledSize, PixelRatio } from "react-native";
 import { AppTextTheme, ScriptCode } from "./types";
 import { SCRIPT_CONFIGS } from "./scriptConfigs";
+import { BASE_WIDTH, RESPONSIVE_FONT_MIN, RESPONSIVE_FONT_MAX } from "./constants";
 
+// ============================================================================
+// Shared Dimensions Singleton
+// ============================================================================
+// Instead of each AppText instance registering its own Dimensions listener,
+// we maintain a single module-level listener and distribute updates via a
+// subscriber set. This prevents O(n) listeners for n AppText components.
+
+type DimensionListener = (dims: ScaledSize) => void;
+
+let _currentDimensions: ScaledSize = Dimensions.get("window");
+const _listeners = new Set<DimensionListener>();
+
+// Register the shared listener once at module load time
+Dimensions.addEventListener("change", ({ window }) => {
+  _currentDimensions = window;
+  _listeners.forEach((fn) => fn(window));
+});
+
+function subscribeToWindowDimensions(listener: DimensionListener): () => void {
+  _listeners.add(listener);
+  return () => _listeners.delete(listener);
+}
+
+// ============================================================================
 // Hook for responsive font scaling
+// ============================================================================
+
 export const useResponsiveFont = (
   baseSize: number,
   bounds?: { min?: number; max?: number }
 ) => {
-  const [dimensions, setDimensions] = useState(() => Dimensions.get("window"));
+  const [dimensions, setDimensions] = useState(() => _currentDimensions);
 
   useEffect(() => {
-    const subscription = Dimensions.addEventListener("change", ({ window }) =>
-      setDimensions(window)
-    );
-    return () => subscription?.remove();
+    // Subscribe to the shared singleton listener — O(1) per component
+    const unsubscribe = subscribeToWindowDimensions(setDimensions);
+    return unsubscribe;
   }, []);
 
   return useMemo(() => {
     const { width } = dimensions;
-    const BASE_WIDTH = 375;
     const scale = (width / BASE_WIDTH) * PixelRatio.getFontScale();
     let scaledSize = Math.round(baseSize * scale * 100) / 100;
 
-    if (bounds?.min) scaledSize = Math.max(scaledSize, bounds.min);
-    if (bounds?.max) scaledSize = Math.min(scaledSize, bounds.max);
+    const min = bounds?.min ?? RESPONSIVE_FONT_MIN;
+    const max = bounds?.max ?? RESPONSIVE_FONT_MAX;
+    scaledSize = Math.max(scaledSize, min);
+    scaledSize = Math.min(scaledSize, max);
 
     return scaledSize;
   }, [baseSize, dimensions, bounds?.min, bounds?.max]);
 };
 
+// ============================================================================
 // Hook for script detection
+// ============================================================================
+// Sorted script config entries (by Unicode range span, largest first) are
+// computed once at module load time so the hot-path loop exits as early as
+// possible for the most common scripts.
+
+const SORTED_SCRIPT_ENTRIES = Object.entries(SCRIPT_CONFIGS).sort(
+  ([, a], [, b]) => {
+    // Sum the span of all Unicode ranges for each script
+    const span = (ranges: [number, number][]) =>
+      ranges.reduce((s, [lo, hi]) => s + (hi - lo + 1), 0);
+    return span(b.unicodeRanges) - span(a.unicodeRanges);
+  }
+);
+
 export const useScriptDetection = (text: string): ScriptCode => {
   return useMemo(() => {
     if (!text || text.length === 0) return "Unknown";
@@ -38,7 +80,8 @@ export const useScriptDetection = (text: string): ScriptCode => {
     const codePoint = text.codePointAt(0);
     if (!codePoint) return "Unknown";
 
-    for (const [scriptCode, config] of Object.entries(SCRIPT_CONFIGS)) {
+    // Iterate sorted entries — exits on first match (early-exit optimisation)
+    for (const [scriptCode, config] of SORTED_SCRIPT_ENTRIES) {
       if (
         config.unicodeRanges.some(
           ([start, end]) => codePoint >= start && codePoint <= end
@@ -51,7 +94,10 @@ export const useScriptDetection = (text: string): ScriptCode => {
   }, [text]);
 };
 
+// ============================================================================
 // Hook for theme-aware styles
+// ============================================================================
+
 export const useThemedStyles = (
   theme: AppTextTheme,
   colorScheme: "light" | "dark" | null | undefined

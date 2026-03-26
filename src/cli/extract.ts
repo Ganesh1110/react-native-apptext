@@ -14,6 +14,8 @@ import * as path from "path";
 import { parse } from "@babel/parser";
 import traverse from "@babel/traverse";
 import * as glob from "glob";
+// @ts-ignore
+import * as yaml from "js-yaml";
 
 interface ExtractOptions {
   src: string[];
@@ -228,13 +230,38 @@ class TranslationExtractor {
   }
 
   private extractJSXParams(attr: any): string[] | undefined {
-    // Simplified JSX param extraction
-    return undefined;
+    if (!attr.value || attr.value.type !== "JSXExpressionContainer")
+      return undefined;
+    const expression = attr.value.expression;
+    if (expression.type !== "ObjectExpression") return undefined;
+
+    return expression.properties
+      .map((prop: any) => prop.key?.name || prop.key?.value)
+      .filter(Boolean);
   }
 
   private extractJSXOptions(attr: any): Partial<TranslationKey> {
-    // Simplified JSX options extraction
-    return {};
+    if (!attr.value || attr.value.type !== "JSXExpressionContainer") return {};
+    const expression = attr.value.expression;
+    if (expression.type !== "ObjectExpression") return {};
+
+    const options: Partial<TranslationKey> = {};
+
+    for (const prop of expression.properties) {
+      const keyName = prop.key?.name || prop.key?.value;
+
+      if (keyName === "namespace" && prop.value.type === "StringLiteral") {
+        options.namespace = prop.value.value;
+      }
+      if (keyName === "context" && prop.value.type === "StringLiteral") {
+        options.context = prop.value.value;
+      }
+      if (keyName === "defaultValue" && prop.value.type === "StringLiteral") {
+        options.defaultValue = prop.value.value;
+      }
+    }
+
+    return options;
   }
 
   private addKey(key: TranslationKey): void {
@@ -260,8 +287,8 @@ class TranslationExtractor {
         );
         break;
       case "yaml":
-        // Would need yaml library
-        throw new Error("YAML format not yet implemented");
+        fs.writeFileSync(this.options.output, yaml.dump(template), "utf-8");
+        break;
       case "csv":
         this.writeCSV(template);
         break;

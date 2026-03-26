@@ -5,347 +5,22 @@ import React, {
   useCallback,
   useMemo,
   useEffect,
+  useRef,
 } from "react";
 import { LocaleContext, LocaleProviderProps, PluralForm } from "./types";
 import {
   translationCache,
   performanceMonitor,
+  debounce,
 } from "./PerformanceOptimizations";
-import CurrencyJsonList from "../src/data/Currency.json";
+import { AccessibilityInfo } from "react-native";
+import CurrencyJsonList from "./data/Currency.json";
 
 // ============================================================================
 // PART 1: ICU MESSAGE FORMAT PARSER
 // ============================================================================
 
-// Mapping of country codes (cca3) to actual ISO 4217 currency codes
-const COUNTRY_TO_CURRENCY: Record<string, string> = {
-  USA: "USD",
-  CAN: "CAD",
-  MEX: "MXN",
-  // European Union (Euro)
-  DEU: "EUR",
-  FRA: "EUR",
-  ITA: "EUR",
-  ESP: "EUR",
-  NLD: "EUR",
-  BEL: "EUR",
-  AUT: "EUR",
-  GRC: "EUR",
-  PRT: "EUR",
-  FIN: "EUR",
-  LUX: "EUR",
-  SVN: "EUR",
-  SVK: "EUR",
-  EST: "EUR",
-  LVA: "EUR",
-  LTU: "EUR",
-  MLT: "EUR",
-  CYP: "EUR",
-  IRL: "EUR",
-  HRV: "EUR",
-  AND: "EUR",
-  MCO: "EUR",
-  SMR: "EUR",
-  VAT: "EUR",
-  MNE: "EUR",
-  UNK: "EUR", // Kosovo
-  BLM: "EUR",
-  GLP: "EUR",
-  MAF: "EUR",
-  MTQ: "EUR",
-  REU: "EUR",
-  SPM: "EUR",
-  MYT: "EUR",
-  ATF: "EUR",
-  BES: "EUR",
-  // Asia
-  CHN: "CNY",
-  JPN: "JPY",
-  IND: "INR",
-  KOR: "KRW",
-  IDN: "IDR",
-  THA: "THB",
-  MYS: "MYR",
-  SGP: "SGD",
-  PHL: "PHP",
-  VNM: "VND",
-  BGD: "BDT",
-  PAK: "PKR",
-  LKA: "LKR",
-  NPL: "NPR",
-  AFG: "AFN",
-  MMR: "MMK",
-  KHM: "KHR",
-  LAO: "LAK",
-  BTN: "BTN",
-  MDV: "MVR",
-  TWN: "TWD",
-  HKG: "HKD",
-  MAC: "MOP",
-  MNG: "MNT",
-  PRK: "KPW",
-  // Middle East
-  SAU: "SAR",
-  ARE: "AED",
-  ISR: "ILS",
-  TUR: "TRY",
-  IRN: "IRR",
-  IRQ: "IQD",
-  JOR: "JOD",
-  KWT: "KWT",
-  OMN: "OMR",
-  QAT: "QAR",
-  BHR: "BHR",
-  YEM: "YER",
-  SYR: "SYP",
-  LBN: "LBP",
-  PSE: "ILS",
-  // Oceania
-  AUS: "AUD",
-  NZL: "NZL",
-  FJI: "FJD",
-  PNG: "PGK",
-  SLB: "SBD",
-  VUT: "VUV",
-  NCL: "XPF",
-  PYF: "XPF",
-  WLF: "XPF",
-  WSM: "WST",
-  TON: "TOP",
-  KIR: "AUD",
-  TUV: "AUD",
-  NRU: "AUD",
-  PLW: "USD",
-  FSM: "USD",
-  MHL: "USD",
-  COK: "NZD",
-  NIU: "NZD",
-  TKL: "NZD",
-  // Africa
-  ZAF: "ZAR",
-  EGY: "EGP",
-  NGA: "NGN",
-  KEN: "KES",
-  GHA: "GHS",
-  ETH: "ETB",
-  TZA: "TZS",
-  UGA: "UGX",
-  DZA: "DZD",
-  MAR: "MAD",
-  AGO: "AOA",
-  SDN: "SDG",
-  TUN: "TND",
-  LBY: "LYD",
-  CMR: "XAF",
-  CIV: "XOF",
-  SEN: "XOF",
-  MLI: "XOF",
-  BFA: "XOF",
-  NER: "XOF",
-  TGO: "XOF",
-  BEN: "XOF",
-  GIN: "GNF",
-  RWA: "RWF",
-  SOM: "SOS",
-  ZWE: "ZWL",
-  ZMB: "ZMW",
-  MWI: "MWK",
-  MOZ: "MZN",
-  BWA: "BWP",
-  NAM: "NAD",
-  LSO: "LSL",
-  SWZ: "SZL",
-  MDG: "MGA",
-  MUS: "MUR",
-  SYC: "SCR",
-  COM: "KMF",
-  DJI: "DJF",
-  ERI: "ERN",
-  SSD: "SSP",
-  CAF: "XAF",
-  TCD: "XAF",
-  COG: "XAF",
-  GAB: "XAF",
-  GNQ: "XAF",
-  COD: "CDF",
-  BDI: "BIF",
-  GMB: "GMD",
-  SLE: "SLL",
-  LBR: "LRD",
-  MRT: "MRU",
-  CPV: "CVE",
-  STP: "STN",
-  GNB: "XOF",
-  ESH: "MAD",
-  // South America
-  BRA: "BRL",
-  ARG: "ARS",
-  CHL: "CLP",
-  COL: "COP",
-  PER: "PEN",
-  VEN: "VES",
-  ECU: "USD",
-  BOL: "BOB",
-  PRY: "PYG",
-  URY: "UYU",
-  GUY: "GYD",
-  SUR: "SRD",
-  GUF: "EUR",
-  // Central America & Caribbean
-  CRI: "CRC",
-  PAN: "PAB",
-  GTM: "GTQ",
-  HND: "HNL",
-  NIC: "NIO",
-  SLV: "USD",
-  BLZ: "BZD",
-  CUB: "CUP",
-  DOM: "DOP",
-  HTI: "HTG",
-  JAM: "JMD",
-  TTO: "TTD",
-  BHS: "BSD",
-  BRB: "BBD",
-  ATG: "XCD",
-  DMA: "XCD",
-  GRD: "XCD",
-  KNA: "XCD",
-  LCA: "XCD",
-  VCT: "XCD",
-  AIA: "XCD",
-  MSR: "XCD",
-  VGB: "USD",
-  CYM: "KYD",
-  TCA: "USD",
-  BMU: "BMD",
-  PRI: "USD",
-  VIR: "USD",
-  GUM: "USD",
-  ASM: "USD",
-  MNP: "USD",
-  UMI: "USD",
-  IOT: "USD",
-  // Europe (non-EU)
-  CHE: "CHF",
-  GBR: "GBP",
-  NOR: "NOK",
-  SWE: "SEK",
-  DNK: "DKK",
-  ISL: "ISK",
-  POL: "PLN",
-  CZE: "CZK",
-  HUN: "HUF",
-  ROU: "RON",
-  BGR: "BGN",
-  RUS: "RUB",
-  UKR: "UAH",
-  BLR: "BYN",
-  MDA: "MDL",
-  SRB: "RSD",
-  BIH: "BAM",
-  ALB: "ALL",
-  MKD: "MKD",
-  KAZ: "KZT",
-  UZB: "UZS",
-  TKM: "TMT",
-  TJK: "TJS",
-  KGZ: "KGS",
-  ARM: "AMD",
-  AZE: "AZN",
-  GEO: "GEL",
-  LIE: "CHF",
-  FRO: "DKK",
-  GIB: "GIP",
-  GGY: "GBP",
-  JEY: "GBP",
-  IMN: "GBP",
-  SJM: "NOK",
-  ALA: "EUR",
-  GRL: "DKK",
-  ABW: "AWG",
-  CUW: "ANG",
-  SXM: "ANG",
-  TLS: "USD",
-  PCN: "NZD",
-  SHN: "SHP",
-  FLK: "FKP",
-  SGS: "GBP",
-  NFK: "AUD",
-  CCK: "AUD",
-  CXR: "AUD",
-  HMD: "AUD",
-  BVT: "NOK",
-  ATA: "USD",
-};
-
-const PRIMARY_COUNTRY: Record<string, string> = {
-  // Major languages
-  en: "USA",
-  es: "ESP",
-  pt: "BRA",
-  fr: "FRA",
-  de: "DEU",
-  it: "ITA",
-  ru: "RUS",
-  ar: "SAU",
-  hi: "IND",
-  zh: "CHN",
-  ja: "JPN",
-  ko: "KOR",
-  el: "GRC",
-
-  // South Asian languages
-  ur: "PAK",
-  bn: "BGD",
-  ta: "IND",
-  te: "IND",
-  ml: "IND",
-  kn: "IND",
-  pa: "IND",
-  gu: "IND",
-  or: "IND",
-  mr: "IND",
-
-  // Afghan languages
-  ps: "AFG",
-  pus: "AFG",
-  prs: "AFG",
-  fa: "IRN",
-  fas: "IRN",
-
-  // Southeast Asian languages
-  th: "THA",
-  vi: "VNM",
-  id: "IDN",
-  ms: "MYS",
-  my: "MMR",
-  km: "KHM",
-  lo: "LAO",
-
-  // Middle Eastern languages
-  he: "ISR",
-  tr: "TUR",
-  af: "AFG",
-
-  // African languages
-  sw: "KEN",
-  am: "ETH",
-  ha: "NGA",
-  yo: "NGA",
-  ig: "NGA",
-
-  // European languages
-  pl: "POL",
-  uk: "UKR",
-  cs: "CZE",
-  ro: "ROU",
-  hu: "HUN",
-  nl: "NLD",
-  sv: "SWE",
-  no: "NOR",
-  da: "DNK",
-  fi: "FIN",
-};
+import { COUNTRY_TO_CURRENCY, PRIMARY_COUNTRY } from "./data/LocaleData";
 
 interface CurrencyInfo {
   code: string;
@@ -685,17 +360,32 @@ class ICUMessageFormat {
 // ============================================================================
 
 const PLURAL_RULES: Record<string, (count: number) => PluralForm> = {
+  // Germanic
   en: (n) => (n === 1 ? "one" : "other"),
+  de: (n) => (n === 1 ? "one" : "other"),
+  nl: (n) => (n === 1 ? "one" : "other"),
+  sv: (n) => (n === 1 ? "one" : "other"),
+  da: (n) => (n === 1 ? "one" : "other"),
+  nb: (n) => (n === 1 ? "one" : "other"), // Norwegian Bokmål
+  // Romance
   fr: (n) => (n === 0 || n === 1 ? "one" : "other"),
-  ar: (n) => {
-    if (n === 0) return "zero";
+  es: (n) => (n === 1 ? "one" : "other"),
+  it: (n) => (n === 1 ? "one" : "other"),
+  pt: (n) => (n === 0 || n === 1 ? "one" : "other"),
+  ro: (n) => {
     if (n === 1) return "one";
-    if (n === 2) return "two";
-    if (n % 100 >= 3 && n % 100 <= 10) return "few";
-    if (n % 100 >= 11) return "many";
+    if (n === 0 || (n % 100 >= 1 && n % 100 <= 19)) return "few";
     return "other";
   },
+  // Slavic
   ru: (n) => {
+    const mod10 = n % 10;
+    const mod100 = n % 100;
+    if (mod10 === 1 && mod100 !== 11) return "one";
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "few";
+    return "many";
+  },
+  uk: (n) => {
     const mod10 = n % 10;
     const mod100 = n % 100;
     if (mod10 === 1 && mod100 !== 11) return "one";
@@ -714,13 +404,86 @@ const PLURAL_RULES: Record<string, (count: number) => PluralForm> = {
     if (n >= 2 && n <= 4) return "few";
     return "many";
   },
+  // Semitic
+  ar: (n) => {
+    if (n === 0) return "zero";
+    if (n === 1) return "one";
+    if (n === 2) return "two";
+    if (n % 100 >= 3 && n % 100 <= 10) return "few";
+    if (n % 100 >= 11) return "many";
+    return "other";
+  },
+  he: (n) => {
+    if (n === 1) return "one";
+    if (n === 2) return "two";
+    if (n >= 11 && n % 10 === 0) return "many";
+    return "other";
+  },
+  // CJK — all are invariant
   zh: () => "other",
   ja: () => "other",
   ko: () => "other",
-  es: (n) => (n === 1 ? "one" : "other"),
-  de: (n) => (n === 1 ? "one" : "other"),
-  it: (n) => (n === 1 ? "one" : "other"),
-  pt: (n) => (n === 0 || n === 1 ? "one" : "other"),
+  // South / Southeast Asian
+  hi: (n) => (n === 0 || n === 1 ? "one" : "other"),
+  bn: (n) => (n === 0 || n === 1 ? "one" : "other"),
+  vi: () => "other",
+  th: () => "other",
+  id: () => "other",
+  ms: () => "other",
+  // Turkic
+  tr: (n) => (n === 1 ? "one" : "other"),
+  // Finno-Ugric
+  fi: (n) => (n === 1 ? "one" : "other"),
+  hu: (n) => (n === 1 ? "one" : "other"),
+  // Hellenic
+  el: (n) => (n === 1 ? "one" : "other"),
+  // Iranian / Iranic
+  fa: () => "other",
+  ur: (n) => (n === 1 ? "one" : "other"),
+  // Celtic
+  cy: (n) => {
+    if (n === 0) return "zero";
+    if (n === 1) return "one";
+    if (n === 2) return "two";
+    if (n === 3) return "few";
+    if (n === 6) return "many";
+    return "other";
+  },
+  ga: (n) => {
+    if (n === 1) return "one";
+    if (n === 2) return "two";
+    if (n >= 3 && n <= 6) return "few";
+    if (n >= 7 && n <= 10) return "many";
+    return "other";
+  },
+  // Baltic
+  lt: (n) => {
+    const mod10 = n % 10;
+    const mod100 = n % 100;
+    if (mod10 === 1 && mod100 !== 11) return "one";
+    if (mod10 >= 2 && mod10 <= 9 && (mod100 < 11 || mod100 > 19)) return "few";
+    return "many";
+  },
+  lv: (n) => {
+    if (n % 10 === 1 && n % 100 !== 11) return "one";
+    if (n === 0 || (n % 100 >= 11 && n % 100 <= 19)) return "zero";
+    return "other";
+  },
+  // More Slavic
+  sl: (n) => {
+    const mod100 = n % 100;
+    if (mod100 === 1) return "one";
+    if (mod100 === 2) return "two";
+    if (mod100 === 3 || mod100 === 4) return "few";
+    return "other";
+  },
+  // Other Edge Cases
+  mt: (n) => {
+    if (n === 1) return "one";
+    if (n === 0 || (n % 100 >= 2 && n % 100 <= 10)) return "few";
+    if (n % 100 >= 11 && n % 100 <= 19) return "many";
+    return "other";
+  },
 };
 
 const ORDINAL_RULES: Record<string, (count: number) => PluralForm> = {
@@ -818,7 +581,8 @@ interface TranslationManagerOptions {
 }
 
 class TranslationManager {
-  private cache: Map<string, string> = new Map();
+  // Internal cache removed — all caching is delegated to the
+  // translationCache singleton to avoid dual-cache synchronisation bugs.
   private translations: Record<string, Translations>;
   private namespaces: Record<string, NamespacedTranslations> = {};
   private fallbackLanguage: string;
@@ -859,28 +623,15 @@ class TranslationManager {
   ): string {
     const { namespace, context, count } = options || {};
 
-    // Check performance cache first
+    // Check the singleton cache first (single source of truth)
     const cached = translationCache.get(key, lang, params);
     if (cached) {
       return cached;
     }
 
-    // Measure performance
     let result: string = key;
 
     performanceMonitor.measure(`translate:${key}`, () => {
-      const cacheKey = this.buildCacheKey(
-        lang,
-        key,
-        params,
-        namespace,
-        context
-      );
-      if (this.cache.has(cacheKey)) {
-        result = this.cache.get(cacheKey)!;
-        return;
-      }
-
       let translation = this.getTranslationValue(lang, key, namespace, context);
 
       if (context && !translation) {
@@ -921,7 +672,6 @@ class TranslationManager {
             : finalResult;
         }
 
-        this.cache.set(cacheKey, finalResult);
         result = finalResult;
         return;
       }
@@ -929,7 +679,7 @@ class TranslationManager {
       result = key;
     });
 
-    // Store in performance cache
+    // Store result in singleton cache
     translationCache.set(key, lang, params, result);
 
     return result;
@@ -1023,7 +773,8 @@ class TranslationManager {
   }
 
   clearCache() {
-    this.cache.clear();
+    // Delegate to the singleton cache — the single source of truth
+    translationCache.clear();
   }
 }
 
@@ -1052,6 +803,18 @@ export function LocaleProvider({
     new Set(["main"])
   );
 
+  const initialMount = useRef(true);
+
+  useEffect(() => {
+    if (initialMount.current) {
+      initialMount.current = false;
+      return;
+    }
+    if (AccessibilityInfo?.announceForAccessibility) {
+      AccessibilityInfo.announceForAccessibility(`Language changed to ${language}`);
+    }
+  }, [language]);
+
   const RTL_LANGUAGES = ["ar", "he", "fa", "ur"];
 
   const direction: "rtl" | "ltr" = useMemo(() => {
@@ -1079,6 +842,10 @@ export function LocaleProvider({
     [language, manager]
   );
 
+  /**
+   * @deprecated Use `t(key, params, { count })` instead.
+   * `tn` will be removed in a future major version.
+   */
   const tn = useCallback(
     (
       key: string,
@@ -1091,12 +858,21 @@ export function LocaleProvider({
     [language, manager]
   );
 
+  // Debounced to prevent rapid successive cache clears on quick language switches
+  const debouncedChangeLanguage = useMemo(
+    () =>
+      debounce((lang: string) => {
+        setLanguage(lang);
+        manager.clearCache();
+      }, 150),
+    [manager]
+  );
+
   const changeLanguage = useCallback(
     (lang: string) => {
-      setLanguage(lang);
-      manager.clearCache();
+      debouncedChangeLanguage(lang);
     },
-    [manager]
+    [debouncedChangeLanguage]
   );
 
   const loadNamespace = useCallback(

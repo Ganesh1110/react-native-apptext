@@ -12,6 +12,8 @@ import * as path from "path";
 import { parse } from "@babel/parser";
 import traverse from "@babel/traverse";
 import * as glob from "glob";
+// @ts-ignore
+import * as yaml from "js-yaml";
 class TranslationExtractor {
     constructor(options) {
         this.keys = new Map();
@@ -164,12 +166,36 @@ class TranslationExtractor {
         return options;
     }
     extractJSXParams(attr) {
-        // Simplified JSX param extraction
-        return undefined;
+        if (!attr.value || attr.value.type !== "JSXExpressionContainer")
+            return undefined;
+        const expression = attr.value.expression;
+        if (expression.type !== "ObjectExpression")
+            return undefined;
+        return expression.properties
+            .map((prop) => { var _a, _b; return ((_a = prop.key) === null || _a === void 0 ? void 0 : _a.name) || ((_b = prop.key) === null || _b === void 0 ? void 0 : _b.value); })
+            .filter(Boolean);
     }
     extractJSXOptions(attr) {
-        // Simplified JSX options extraction
-        return {};
+        var _a, _b;
+        if (!attr.value || attr.value.type !== "JSXExpressionContainer")
+            return {};
+        const expression = attr.value.expression;
+        if (expression.type !== "ObjectExpression")
+            return {};
+        const options = {};
+        for (const prop of expression.properties) {
+            const keyName = ((_a = prop.key) === null || _a === void 0 ? void 0 : _a.name) || ((_b = prop.key) === null || _b === void 0 ? void 0 : _b.value);
+            if (keyName === "namespace" && prop.value.type === "StringLiteral") {
+                options.namespace = prop.value.value;
+            }
+            if (keyName === "context" && prop.value.type === "StringLiteral") {
+                options.context = prop.value.value;
+            }
+            if (keyName === "defaultValue" && prop.value.type === "StringLiteral") {
+                options.defaultValue = prop.value.value;
+            }
+        }
+        return options;
     }
     addKey(key) {
         const existing = this.keys.get(key.key) || [];
@@ -187,8 +213,8 @@ class TranslationExtractor {
                 fs.writeFileSync(this.options.output, JSON.stringify(template, null, 2), "utf-8");
                 break;
             case "yaml":
-                // Would need yaml library
-                throw new Error("YAML format not yet implemented");
+                fs.writeFileSync(this.options.output, yaml.dump(template), "utf-8");
+                break;
             case "csv":
                 this.writeCSV(template);
                 break;
