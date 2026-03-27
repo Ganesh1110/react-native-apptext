@@ -22,16 +22,38 @@ _Beautiful text. Global-ready. Blazing fast._
 </div>
 
 ---
-
 ## 🎬 Preview
 
-![Localization](./src/gif/Localization.gif)
-![Bounce](./src/gif/Bounce.gif)
-![Fade](./src/gif/Fade.gif)
-![Rotate](./src/gif/Rotate.gif)
-![Slide](./src/gif/Slide.gif)
-![Special](./src/gif/Special.gif)
-![TypeWritter](./src/gif/TypeWtitter.gif)
+<!-- Hero Demo -->
+<p align="center">
+  <img src="./src/gif/Localization.gif" width="320" />
+</p>
+<p align="center">
+  <strong>🌍 Localization & RTL Support</strong>
+</p>
+
+<br/>
+
+<!-- Animations Grid -->
+<p align="center">
+  <img src="./src/gif/Bounce.gif" width="160" />
+  <img src="./src/gif/Fade.gif" width="160" />
+  <img src="./src/gif/Slide.gif" width="160" />
+</p>
+<p align="center">
+  <sub>Bounce • Fade • Slide</sub>
+</p>
+
+<br/>
+
+<p align="center">
+  <img src="./src/gif/Rotate.gif" width="160" />
+  <img src="./src/gif/Special.gif" width="160" />
+  <img src="./src/gif/TypeWtitter.gif" width="160" />
+</p>
+<p align="center">
+  <sub>Rotate • Special • Typewriter</sub>
+</p>
 
 ---
 
