@@ -21,3 +21,5 @@ export { NumberFormatter, formatNumberICU, OrdinalFormatter, } from "./src/Numbe
 export { default as MarkdownTrans, useMarkdownTranslation, } from "./src/MarkdownTrans";
 // Performance Optimizations
 export { LRUCache, TranslationCache, TranslationBatcher, VirtualListHelper, PerformanceMonitor, MemoryManager, debounce, throttle, memoize, translationCache, performanceMonitor, } from "./src/PerformanceOptimizations";
+// Error Boundary
+export { TranslationErrorBoundary } from "./src/ErrorBoundary";

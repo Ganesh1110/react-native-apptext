@@ -1,7 +1,8 @@
-import React, { useContext, useState, useCallback, useMemo, useEffect, } from "react";
+import React, { useContext, useState, useCallback, useMemo, useEffect, useRef, } from "react";
 import { LocaleContext } from "./types";
-import { translationCache, performanceMonitor, } from "./PerformanceOptimizations";
-import CurrencyJsonList from "../src/data/Currency.json";
+import { translationCache, performanceMonitor, debounce, } from "./PerformanceOptimizations";
+import { AccessibilityInfo } from "react-native";
+import CurrencyJsonList from "./data/Currency.json";
 // ============================================================================
 // PART 1: ICU MESSAGE FORMAT PARSER
 // ============================================================================
@@ -258,22 +259,36 @@ ICUMessageFormat.currencyCache = new Map();
 // PART 2: ENHANCED PLURAL RULES (CLDR-compliant)
 // ============================================================================
 const PLURAL_RULES = {
+    // Germanic
     en: (n) => (n === 1 ? "one" : "other"),
+    de: (n) => (n === 1 ? "one" : "other"),
+    nl: (n) => (n === 1 ? "one" : "other"),
+    sv: (n) => (n === 1 ? "one" : "other"),
+    da: (n) => (n === 1 ? "one" : "other"),
+    nb: (n) => (n === 1 ? "one" : "other"), // Norwegian Bokmål
+    // Romance
     fr: (n) => (n === 0 || n === 1 ? "one" : "other"),
-    ar: (n) => {
-        if (n === 0)
-            return "zero";
+    es: (n) => (n === 1 ? "one" : "other"),
+    it: (n) => (n === 1 ? "one" : "other"),
+    pt: (n) => (n === 0 || n === 1 ? "one" : "other"),
+    ro: (n) => {
         if (n === 1)
             return "one";
-        if (n === 2)
-            return "two";
-        if (n % 100 >= 3 && n % 100 <= 10)
+        if (n === 0 || (n % 100 >= 1 && n % 100 <= 19))
             return "few";
-        if (n % 100 >= 11)
-            return "many";
         return "other";
     },
+    // Slavic
     ru: (n) => {
+        const mod10 = n % 10;
+        const mod100 = n % 100;
+        if (mod10 === 1 && mod100 !== 11)
+            return "one";
+        if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14))
+            return "few";
+        return "many";
+    },
+    uk: (n) => {
         const mod10 = n % 10;
         const mod100 = n % 100;
         if (mod10 === 1 && mod100 !== 11)
@@ -298,13 +313,124 @@ const PLURAL_RULES = {
             return "few";
         return "many";
     },
+    // Semitic
+    ar: (n) => {
+        if (n === 0)
+            return "zero";
+        if (n === 1)
+            return "one";
+        if (n === 2)
+            return "two";
+        if (n % 100 >= 3 && n % 100 <= 10)
+            return "few";
+        if (n % 100 >= 11)
+            return "many";
+        return "other";
+    },
+    he: (n) => {
+        if (n === 1)
+            return "one";
+        if (n === 2)
+            return "two";
+        if (n >= 11 && n % 10 === 0)
+            return "many";
+        return "other";
+    },
+    // CJK — all are invariant
     zh: () => "other",
     ja: () => "other",
     ko: () => "other",
-    es: (n) => (n === 1 ? "one" : "other"),
-    de: (n) => (n === 1 ? "one" : "other"),
-    it: (n) => (n === 1 ? "one" : "other"),
-    pt: (n) => (n === 0 || n === 1 ? "one" : "other"),
+    // South / Southeast Asian
+    hi: (n) => (n === 0 || n === 1 ? "one" : "other"),
+    bn: (n) => (n === 0 || n === 1 ? "one" : "other"),
+    vi: () => "other",
+    th: () => "other",
+    id: () => "other",
+    ms: () => "other",
+    // Turkic
+    tr: (n) => (n === 1 ? "one" : "other"),
+    // Finno-Ugric
+    fi: (n) => (n === 1 ? "one" : "other"),
+    hu: (n) => (n === 1 ? "one" : "other"),
+    // Hellenic
+    el: (n) => (n === 1 ? "one" : "other"),
+    // Iranian / Iranic
+    fa: () => "other",
+    ur: (n) => (n === 1 ? "one" : "other"),
+    // Celtic
+    cy: (n) => {
+        if (n === 0)
+            return "zero";
+        if (n === 1)
+            return "one";
+        if (n === 2)
+            return "two";
+        if (n === 3)
+            return "few";
+        if (n === 6)
+            return "many";
+        return "other";
+    },
+    ga: (n) => {
+        if (n === 1)
+            return "one";
+        if (n === 2)
+            return "two";
+        if (n >= 3 && n <= 6)
+            return "few";
+        if (n >= 7 && n <= 10)
+            return "many";
+        return "other";
+    },
+    // Baltic
+    lt: (n) => {
+        const mod10 = n % 10;
+        const mod100 = n % 100;
+        if (mod10 === 1 && mod100 !== 11)
+            return "one";
+        if (mod10 >= 2 && mod10 <= 9 && (mod100 < 11 || mod100 > 19))
+            return "few";
+        return "many";
+    },
+    lv: (n) => {
+        if (n % 10 === 1 && n % 100 !== 11)
+            return "one";
+        if (n === 0 || (n % 100 >= 11 && n % 100 <= 19))
+            return "zero";
+        return "other";
+    },
+    // More Slavic
+    sl: (n) => {
+        const mod100 = n % 100;
+        if (mod100 === 1)
+            return "one";
+        if (mod100 === 2)
+            return "two";
+        if (mod100 === 3 || mod100 === 4)
+            return "few";
+        return "other";
+    },
+    // Other Edge Cases
+    br: (n) => {
+        if (n === 1)
+            return "one";
+        if (n === 2)
+            return "two";
+        if (n === 3)
+            return "few";
+        if (n === 4)
+            return "many";
+        return "other";
+    },
+    mt: (n) => {
+        if (n === 1)
+            return "one";
+        if (n === 0 || (n % 100 >= 2 && n % 100 <= 10))
+            return "few";
+        if (n % 100 >= 11 && n % 100 <= 19)
+            return "many";
+        return "other";
+    },
 };
 const ORDINAL_RULES = {
     en: (n) => {
@@ -364,7 +490,6 @@ function getNestedValue(obj, path) {
 class TranslationManager {
     constructor(translations, options = {}) {
         var _a, _b;
-        this.cache = new Map();
         this.namespaces = {};
         this.translations = translations;
         this.fallbackLanguage = options.fallbackLanguage || "en";
@@ -380,19 +505,13 @@ class TranslationManager {
     }
     translate(lang, key, params, options) {
         const { namespace, context, count } = options || {};
-        // Check performance cache first
+        // Check the singleton cache first (single source of truth)
         const cached = translationCache.get(key, lang, params);
         if (cached) {
             return cached;
         }
-        // Measure performance
         let result = key;
         performanceMonitor.measure(`translate:${key}`, () => {
-            const cacheKey = this.buildCacheKey(lang, key, params, namespace, context);
-            if (this.cache.has(cacheKey)) {
-                result = this.cache.get(cacheKey);
-                return;
-            }
             let translation = this.getTranslationValue(lang, key, namespace, context);
             if (context && !translation) {
                 const contextKey = `${key}_${context}`;
@@ -420,13 +539,12 @@ class TranslationManager {
                         ? interpolate(finalResult, mergedParams)
                         : finalResult;
                 }
-                this.cache.set(cacheKey, finalResult);
                 result = finalResult;
                 return;
             }
             result = key;
         });
-        // Store in performance cache
+        // Store result in singleton cache
         translationCache.set(key, lang, params, result);
         return result;
     }
@@ -487,7 +605,8 @@ class TranslationManager {
         (_a = this.onMissingKey) === null || _a === void 0 ? void 0 : _a.call(this, lang, key, namespace);
     }
     clearCache() {
-        this.cache.clear();
+        // Delegate to the singleton cache — the single source of truth
+        translationCache.clear();
     }
 }
 // ============================================================================
@@ -496,6 +615,16 @@ class TranslationManager {
 export function LocaleProvider({ translations, defaultLanguage, fallbackLanguage = "en", useICU = true, onMissingTranslation, children, }) {
     const [language, setLanguage] = useState(defaultLanguage);
     const [loadedNamespaces, setLoadedNamespaces] = useState(new Set(["main"]));
+    const initialMount = useRef(true);
+    useEffect(() => {
+        if (initialMount.current) {
+            initialMount.current = false;
+            return;
+        }
+        if (AccessibilityInfo === null || AccessibilityInfo === void 0 ? void 0 : AccessibilityInfo.announceForAccessibility) {
+            AccessibilityInfo.announceForAccessibility(`Language changed to ${language}`);
+        }
+    }, [language]);
     const RTL_LANGUAGES = ["ar", "he", "fa", "ur"];
     const direction = useMemo(() => {
         const langCode = language.split("-")[0];
@@ -512,13 +641,21 @@ export function LocaleProvider({ translations, defaultLanguage, fallbackLanguage
     const t = useCallback((key, params, options) => {
         return manager.translate(language, key, params, options);
     }, [language, manager]);
+    /**
+     * @deprecated Use `t(key, params, { count })` instead.
+     * `tn` will be removed in a future major version.
+     */
     const tn = useCallback((key, count, params, options) => {
         return manager.translatePlural(language, key, count, params, options);
     }, [language, manager]);
-    const changeLanguage = useCallback((lang) => {
+    // Debounced to prevent rapid successive cache clears on quick language switches
+    const debouncedChangeLanguage = useMemo(() => debounce((lang) => {
         setLanguage(lang);
         manager.clearCache();
-    }, [manager]);
+    }, 150), [manager]);
+    const changeLanguage = useCallback((lang) => {
+        debouncedChangeLanguage(lang);
+    }, [debouncedChangeLanguage]);
     const loadNamespace = useCallback(async (namespace, loader) => {
         if (loadedNamespaces.has(namespace))
             return;
