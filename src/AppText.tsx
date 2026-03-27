@@ -1133,10 +1133,10 @@ const WaveText = memo<WaveTextProps>(
     useEffect(() => {
       isMountedRef.current = true;
 
-      const animations = animatedValuesRef.current.map((value, i) =>
-        Animated.loop(
+      // Create animations for each character
+      const animations = animatedValuesRef.current.map((value, i) => {
+        const charLoop = Animated.loop(
           Animated.sequence([
-            Animated.delay(i * 100 + delay),
             Animated.timing(value, {
               toValue: 1,
               duration: duration / 2,
@@ -1148,38 +1148,51 @@ const WaveText = memo<WaveTextProps>(
               useNativeDriver: true,
             }),
           ]),
-        ),
-      );
+        );
+
+        // One-time staggered start
+        return Animated.sequence([
+          Animated.delay(i * (duration / characters.length || 50) + delay),
+          charLoop,
+        ]);
+      });
 
       animationsRef.current = animations;
-      const parallel = Animated.parallel(animations, { stopTogether: false });
-      parallel.start();
+
+      // Start all sequences in parallel - each will wait for its delay before looping
+      const masterAnimation = Animated.parallel(animations, {
+        stopTogether: false,
+      });
+      masterAnimation.start();
 
       return () => {
         isMountedRef.current = false;
+        masterAnimation.stop();
         animationsRef.current.forEach((anim) => {
           try {
             anim.stop();
           } catch (e) {
-            // Ignore errors during cleanup
+            // Ignore
           }
         });
       };
-    }, [text, duration, delay]);
+    }, [text, duration, delay, characters.length]);
 
-    const interpolatedStyles = animatedValuesRef.current.map((value) => ({
-      transform: [
-        {
-          translateY: value.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, -5],
-          }),
-        },
-      ],
-    }));
+    const interpolatedStyles = useMemo(() => {
+      return animatedValuesRef.current.map((value) => ({
+        transform: [
+          {
+            translateY: value.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, -20],
+            }),
+          },
+        ],
+      }));
+    }, [characters.length]);
 
     return (
-      <Text style={style}>
+      <Text style={[style, { overflow: "visible" }]}>
         {characters.map((char, i) => (
           <Animated.Text key={`wave-${i}`} style={interpolatedStyles[i]}>
             {char}
@@ -1428,14 +1441,18 @@ const BaseAppText = memo(
       );
 
       const hasPressHandlers = !!onPress || !!onLongPress;
+      const animationConfig = typeof animation === "object" ? animation : {};
+      const finalDelay = animationConfig.delay ?? animationDelay;
+      const finalDuration = animationConfig.duration ?? animationDuration;
+      const finalSpeed = animationConfig.speed ?? animationSpeed;
 
       // Special animation handling
       if ((animated || animation) && animationType === "typewriter") {
         return (
           <TypewriterText
-            delay={animationDelay}
-            duration={animationDuration}
-            speed={animationSpeed}
+            delay={finalDelay}
+            duration={finalDuration}
+            speed={finalSpeed}
             cursor={cursor}
             style={finalComputedStyle}
           >
@@ -1444,21 +1461,19 @@ const BaseAppText = memo(
         );
       }
 
-      const animationConfig = typeof animation === "object" ? animation : {};
-      const waveDelay = animationConfig.delay ?? animationDelay;
-      const waveDuration = animationConfig.duration ?? animationDuration;
-
+      /* 
       if ((animated || animation) && animationType === "wave") {
         return (
           <WaveText
-            delay={waveDelay}
-            duration={waveDuration}
+            delay={finalDelay}
+            duration={finalDuration}
             style={finalComputedStyle}
           >
             {children}
           </WaveText>
         );
       }
+      */
 
       if (animated || (animation && animationType !== "none")) {
         return (

@@ -1093,7 +1093,7 @@ function Content() {
       <RotateFlipAnimationsDemo />
       <SpecialAnimationsDemo />
       <TypewriterDemo />
-      <WaveDemo />
+      {/* <WaveDemo /> */}
       <TruncationDemo />
       <LocalizationDemo />
       <TransComponentDemo />

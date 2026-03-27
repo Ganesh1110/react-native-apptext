@@ -220,6 +220,7 @@ export interface AppTextProps extends Omit<TextProps, "style">, SpacingProps {
           | "typewriter";
         duration?: number;
         delay?: number;
+        speed?: number;
       }
     | boolean;
   animationDelay?: number;

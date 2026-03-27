@@ -8,6 +8,8 @@ _Beautiful text that works everywhere, in every language, blazing fast_
 [![npm](https://img.shields.io/npm/v/react-native-apptext?label=VERSION&style=for-the-badge&logo=npm&color=red)](https://www.npmjs.com/package/react-native-apptext)
 [![npm downloads](https://img.shields.io/npm/dm/react-native-apptext?style=for-the-badge&logo=npm&logoColor=white&color=4caf50)](https://www.npmjs.com/package/react-native-apptext)
 [![bundle size](https://badgen.net/packagephobia/publish/react-native-apptext?style=for-the-badge&color=6a5acd)](https://packagephobia.com/result?p=react-native-apptext)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Tests](https://img.shields.io/badge/Tests-18%20Passed-success?style=for-the-badge&logo=jest)](https://github.com/Ganesh1110/react-native-apptext/actions)
 
 [📖 Docs](https://github.com/Ganesh1110/react-native-apptext/wiki) • [🐛 Issues](https://github.com/Ganesh1110/react-native-apptext/issues) • [💡 Feature Requests](https://github.com/Ganesh1110/react-native-apptext/issues)
 
@@ -116,7 +118,8 @@ const translations = {
   },
   ar: {
     welcome: "مرحباً، {{name}}!",
-    items: "{count, plural, zero {لا توجد عناصر} one {عنصر واحد} two {عنصران} few {# عناصر} many {# عنصراً} other {# عنصر}}",
+    items:
+      "{count, plural, zero {لا توجد عناصر} one {عنصر واحد} two {عنصران} few {# عناصر} many {# عنصراً} other {# عنصر}}",
   },
 };
 
@@ -144,7 +147,9 @@ function MyApp() {
   return (
     <>
       {/* Simple translation */}
-      <AppText.HeadlineSmall>{t("welcome", { name: "Alice" })}</AppText.HeadlineSmall>
+      <AppText.HeadlineSmall>
+        {t("welcome", { name: "Alice" })}
+      </AppText.HeadlineSmall>
 
       {/* Automatic pluralization */}
       <AppText>{t("items", { count: 5 })}</AppText>
@@ -173,7 +178,7 @@ const translations = {
 // Auto-detects currency based on locale
 t("price", { amount: 99.99 });
 // en-US: "Total: $99.99"
-// en-GB: "Total: £99.99" 
+// en-GB: "Total: £99.99"
 // ar-SA: "الإجمالي: ٩٩٫٩٩ ر.س"
 
 t("percent", { value: 0.856 }); // "Progress: 85.6%"
@@ -201,10 +206,12 @@ t("appointment", { date: today }); // "Appointment: November 27, 2024"
 const translations = {
   en: {
     items: "{count, plural, one {# item} other {# items}}",
-    messages: "{count, plural, =0 {No messages} =1 {One message} other {# messages}}",
+    messages:
+      "{count, plural, =0 {No messages} =1 {One message} other {# messages}}",
   },
   ar: {
-    items: "{count, plural, zero {لا توجد عناصر} one {عنصر واحد} two {عنصران} few {# عناصر} many {# عنصراً} other {# عنصر}}",
+    items:
+      "{count, plural, zero {لا توجد عناصر} one {عنصر واحد} two {عنصران} few {# عناصر} many {# عنصراً} other {# عنصر}}",
   },
 };
 
@@ -224,8 +231,10 @@ t("items", { count: 2 }); // "عنصران"
 ```tsx
 const translations = {
   en: {
-    greeting: "{gender, select, male {He is online} female {She is online} other {They are online}}",
-    permission: "{role, select, admin {Full access} user {Limited access} guest {View only} other {No access}}",
+    greeting:
+      "{gender, select, male {He is online} female {She is online} other {They are online}}",
+    permission:
+      "{role, select, admin {Full access} user {Limited access} guest {View only} other {No access}}",
   },
 };
 
@@ -239,7 +248,8 @@ t("permission", { role: "admin" }); // "Full access"
 ```tsx
 const translations = {
   en: {
-    position: "You finished {place, selectordinal, one {#st} two {#nd} few {#rd} other {#th}}",
+    position:
+      "You finished {place, selectordinal, one {#st} two {#nd} few {#rd} other {#th}}",
   },
 };
 
@@ -254,7 +264,8 @@ t("position", { place: 21 }); // "You finished 21st"
 ```tsx
 const translations = {
   en: {
-    invitation: "{gender, select, male {He sent {count, plural, one {# invitation} other {# invitations}}} female {She sent {count, plural, one {# invitation} other {# invitations}}} other {They sent {count, plural, one {# invitation} other {# invitations}}}}",
+    invitation:
+      "{gender, select, male {He sent {count, plural, one {# invitation} other {# invitations}}} female {She sent {count, plural, one {# invitation} other {# invitations}}} other {They sent {count, plural, one {# invitation} other {# invitations}}}}",
   },
 };
 
@@ -369,7 +380,7 @@ function App() {
 useEffect(() => {
   const timer = setTimeout(() => {}, 1000);
   MemoryManager.registerTimer(timer); // Auto-cleaned up
-  
+
   return () => MemoryManager.clearAll();
 }, []);
 ```
@@ -409,10 +420,10 @@ useEffect(() => {
 <AppText.LabelSmall>Label Small</AppText.LabelSmall>
 
 // Flexible base component
-<AppText 
-  variant="bodyMedium" 
-  color="primary" 
-  size={16} 
+<AppText
+  variant="bodyMedium"
+  color="primary"
+  size={16}
   weight="semibold"
   truncate={2}
 >
@@ -447,6 +458,136 @@ Supports 50+ writing systems with automatic optimization:
 
 ---
 
+## ✨ Text Animations
+
+AppText includes **built-in text animations** for engaging user experiences:
+
+### Entrance Animations
+
+```tsx
+<AppText animation="fadeIn">Fade In Text</AppText>
+<AppText animation="slideInRight">Slide In From Right</AppText>
+<AppText animation="slideInLeft">Slide In From Left</AppText>
+<AppText animation="slideInUp">Slide In Up</AppText>
+<AppText animation="slideInDown">Slide In Down</AppText>
+<AppText animation="bounceIn">Bounce In</AppText>
+<AppText animation="zoomIn">Zoom In</AppText>
+<AppText animation="flipInX">Flip In X</AppText>
+<AppText animation="flipInY">Flip In Y</AppText>
+<AppText animation="rotateIn">Rotate In</AppText>
+```
+
+### Attention Animations
+
+```tsx
+<AppText animated animation="pulse">Pulse Effect</AppText>
+<AppText animated animation="bounce">Bounce Effect</AppText>
+<AppText animated animation="shake">Shake Effect</AppText>
+<AppText animated animation="rubberBand">Rubber Band</AppText>
+<AppText animated animation="tada">Tada Effect</AppText>
+<AppText animated animation="swing">Swing Effect</AppText>
+<AppText animated animation="wobble">Wobble Effect</AppText>
+```
+
+### Exit Animations
+
+```tsx
+<AppText animation={{ type: "fadeOut", duration: 500 }}>Fade Out</AppText>
+<AppText animation="slideOutRight">Slide Out Right</AppText>
+<AppText animation="slideOutLeft">Slide Out Left</AppText>
+<AppText animation="slideOutUp">Slide Out Up</AppText>
+<AppText animation="slideOutDown">Slide Out Down</AppText>
+<AppText animation="zoomOut">Zoom Out</AppText>
+```
+
+### Special Effects
+
+```tsx
+<AppText animated animation="blink">Blinking Text</AppText>
+<AppText animated animation="glow">Glowing Text</AppText>
+<AppText animated animation="neon">Neon Effect</AppText>
+<AppText animated animation="gradientShift">Gradient Shift</AppText>
+<AppText animation="typewriter" cursor speed={50}>Typewriter Effect</AppText>
+```
+
+### Animation Configuration
+
+```tsx
+<AppText
+  animated
+  animation={{
+    type: "fadeIn",
+    duration: 1000,
+    delay: 200,
+    speed: 50,
+  }}
+>
+  Custom Animation
+</AppText>
+```
+
+---
+
+## 🔧 Truncation & Expandable Text
+
+AppText provides built-in support for text truncation with "Read more" expansion:
+
+```tsx
+<AppText truncate={3} expandText="Read more" collapseText="Read less">
+  This is a long text that will be truncated after 3 lines...
+</AppText>
+```
+
+**Props:**
+
+- `truncate` - Boolean or number (lines to show)
+- `expandText` - Custom "Read more" text
+- `collapseText` - Custom "Read less" text
+- `onExpand` - Callback when text is expanded
+
+---
+
+## 🎨 Spacing Props
+
+AppText supports inline spacing via props (similar to styled-system):
+
+```tsx
+// Margin props
+<AppText m={10} mt={10} mr={10} mb={10} ml={10} mx={10} my={10} />
+
+// Padding props
+<AppText p={10} pt={10} pr={10} pb={10} pl={10} px={10} py={10} />
+
+// Combined
+<AppText m={10} p={5}>Spacing Example</AppText>
+```
+
+---
+
+## ♿ Accessibility Support
+
+AppText includes comprehensive accessibility support out of the box:
+
+```tsx
+<AppText
+  accessibilityLabel="Welcome heading"
+  accessibilityHint="Displays the main welcome message"
+  accessibilityLiveRegion="polite"
+  accessibilityState={{ selected: true, disabled: false }}
+>
+  Welcome
+</AppText>
+```
+
+**Accessibility Props:**
+
+- `accessibilityLabel` - Screen reader label
+- `accessibilityHint` - Additional context for screen readers
+- `accessibilityLiveRegion` - "none", "polite", or "assertive"
+- `accessibilityState` - Object with disabled, selected, checked, busy, expanded
+
+---
+
 ## 🎭 Advanced Components
 
 ### Rich Text with Trans Component
@@ -458,8 +599,10 @@ import { Trans } from "react-native-apptext";
 
 const translations = {
   en: {
-    rich_welcome: "Hello <bold>{{name}}</bold>! Welcome to our <link>amazing app</link>",
-    terms: "By continuing, you agree to our <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>",
+    rich_welcome:
+      "Hello <bold>{{name}}</bold>! Welcome to our <link>amazing app</link>",
+    terms:
+      "By continuing, you agree to our <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>",
   },
 };
 
@@ -479,7 +622,7 @@ function MyComponent() {
         components={richComponents}
         variant="bodyMedium"
       />
-      
+
       <Trans
         i18nKey="terms"
         components={richComponents}
@@ -498,7 +641,8 @@ import { MarkdownTrans } from "react-native-apptext";
 
 const translations = {
   en: {
-    welcome: "Welcome **{{name}}**! Check out [our website](https://example.com) for `code` examples.",
+    welcome:
+      "Welcome **{{name}}**! Check out [our website](https://example.com) for `code` examples.",
   },
 };
 
@@ -511,7 +655,7 @@ const translations = {
     code: { backgroundColor: "#f0f0f0", fontFamily: "monospace" },
   }}
   onLinkPress={(url) => Linking.openURL(url)}
-/>
+/>;
 ```
 
 ### Type-Safe Translations
@@ -547,7 +691,7 @@ t("auth.logout"); // ❌ TypeScript error
 
 ```tsx
 // Base component with all options
-<AppText 
+<AppText
   variant="bodyMedium"
   color="primary"
   size={16}
@@ -627,13 +771,91 @@ const {
 />
 ```
 
+### Lazy Loading (Code-Splitting)
+
+```tsx
+import { LazyLocaleProvider } from "react-native-apptext";
+
+<LazyLocaleProvider
+  loaders={{
+    en: () => import("./locales/en.json"),
+    es: () => import("./locales/es.json"),
+    ar: () => import("./locales/ar.json"),
+  }}
+  defaultLanguage="en"
+  preloadLanguages={["en"]}
+  onLoadStart={(locale) => console.log(`Loading ${locale}...`)}
+  onLoadComplete={(locale) => console.log(`${locale} loaded!`)}
+  onLoadError={(locale, error) => console.error(error)}
+>
+  {children}
+</LazyLocaleProvider>;
+```
+
+### Error Boundary
+
+```tsx
+import { TranslationErrorBoundary } from "react-native-apptext";
+
+<TranslationErrorBoundary
+  fallback={<AppText>Translation unavailable</AppText>}
+  onError={(error, errorInfo) => {
+    analytics.logError("i18n", error);
+  }}
+>
+  <YourApp />
+</TranslationErrorBoundary>;
+```
+
+### Spacing Props API
+
+```tsx
+// Margin
+<AppText m={10} />      // margin
+<AppText mt={10} />     // marginTop
+<AppText mr={10} />     // marginRight
+<AppText mb={10} />     // marginBottom
+<AppText ml={10} />     // marginLeft
+<AppText mx={10} />     // marginHorizontal
+<AppText my={10} />     // marginVertical
+
+// Padding
+<AppText p={10} />      // padding
+<AppText pt={10} />     // paddingTop
+<AppText pr={10} />     // paddingRight
+<AppText pb={10} />     // paddingBottom
+<AppText pl={10} />     // paddingLeft
+<AppText px={10} />     // paddingHorizontal
+<AppText py={10} />     // paddingVertical
+```
+
+### Animation API
+
+```tsx
+// Basic animations
+<AppText animated animation="fadeIn" />
+<AppText animation="slideInRight" />
+<AppText animation={{ type: "bounceIn", duration: 800 }} />
+
+// Typewriter effect
+<AppText animation="typewriter" cursor speed={50}>Hello World</AppText>
+
+// Available animations:
+// Entrance: fadeIn, slideInRight, slideInLeft, slideInUp, slideInDown,
+//           bounceIn, zoomIn, flipInX, flipInY, rotateIn
+// Attention: pulse, bounce, shake, rubberBand, tada, swing, wobble
+// Exit: fadeOut, slideOutRight, slideOutLeft, slideOutUp, slideOutDown,
+//       bounceOut, zoomOut, flipOutX, flipOutY, rotateOut
+// Special: blink, glow, neon, gradientShift, typewriter
+```
+
 ### Performance Utilities
 
 ```tsx
-import { 
-  translationCache, 
-  performanceMonitor, 
-  MemoryManager 
+import {
+  translationCache,
+  performanceMonitor,
+  MemoryManager
 } from "react-native-apptext";
 
 // Cache management
@@ -708,15 +930,15 @@ function ProductCard({ product }) {
   return (
     <View style={styles.card}>
       <AppText.TitleMedium>{product.name}</AppText.TitleMedium>
-      
+
       <AppText.BodySmall color="secondary" truncate={3}>
         {product.description}
       </AppText.BodySmall>
-      
+
       <AppText.TitleSmall color="primary">
         {t("price", { amount: product.price })}
       </AppText.TitleSmall>
-      
+
       <AppText.LabelSmall>
         {t("reviews", { count: product.reviewCount })}
       </AppText.LabelSmall>
@@ -742,8 +964,8 @@ function DashboardScreen() {
 
       {__DEV__ && (
         <AppText.LabelSmall color="textSecondary">
-          Cache hit rate: {stats.hitRate.toFixed(1)}% | 
-          Size: {stats.size}/{stats.maxSize}
+          Cache hit rate: {stats.hitRate.toFixed(1)}% | Size: {stats.size}/
+          {stats.maxSize}
         </AppText.LabelSmall>
       )}
 
@@ -770,7 +992,9 @@ function NewsApp() {
 
   return (
     <TranslationErrorBoundary
-      fallback={<AppText.BodyMedium>Error loading translations</AppText.BodyMedium>}
+      fallback={
+        <AppText.BodyMedium>Error loading translations</AppText.BodyMedium>
+      }
       onError={(error) => analytics.logError("i18n", error)}
     >
       <View>
@@ -789,19 +1013,19 @@ function NewsApp() {
 ### Cache not working?
 
 ```tsx
-import { translationCache } from 'react-native-apptext';
+import { translationCache } from "react-native-apptext";
 translationCache.clear(); // Force clear cache
 ```
 
 ### Memory leaks?
 
 ```tsx
-import { MemoryManager } from 'react-native-apptext';
+import { MemoryManager } from "react-native-apptext";
 
 useEffect(() => {
   const timer = setTimeout(/*...*/);
   MemoryManager.registerTimer(timer);
-  
+
   return () => MemoryManager.clearAll();
 }, []);
 ```
@@ -827,9 +1051,9 @@ loaders: {
 module.exports = {
   resolve: {
     alias: {
-      'react-native-apptext': 'react-native-apptext'
-    }
-  }
+      "react-native-apptext": "react-native-apptext",
+    },
+  },
 };
 ```
 
@@ -853,7 +1077,7 @@ module.exports = {
 
 ## 🤝 Contributing
 
-We welcome contributions! 
+We welcome contributions!
 
 ```bash
 # Clone and setup

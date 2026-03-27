@@ -932,45 +932,58 @@ const WaveText = memo(({ children, duration = 1000, delay = 0, style }) => {
     }
     useEffect(() => {
         isMountedRef.current = true;
-        const animations = animatedValuesRef.current.map((value, i) => Animated.loop(Animated.sequence([
-            Animated.delay(i * 100 + delay),
-            Animated.timing(value, {
-                toValue: 1,
-                duration: duration / 2,
-                useNativeDriver: true,
-            }),
-            Animated.timing(value, {
-                toValue: 0,
-                duration: duration / 2,
-                useNativeDriver: true,
-            }),
-        ])));
+        // Create animations for each character
+        const animations = animatedValuesRef.current.map((value, i) => {
+            const charLoop = Animated.loop(Animated.sequence([
+                Animated.timing(value, {
+                    toValue: 1,
+                    duration: duration / 2,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(value, {
+                    toValue: 0,
+                    duration: duration / 2,
+                    useNativeDriver: true,
+                }),
+            ]));
+            // One-time staggered start
+            return Animated.sequence([
+                Animated.delay(i * (duration / characters.length || 50) + delay),
+                charLoop,
+            ]);
+        });
         animationsRef.current = animations;
-        const parallel = Animated.parallel(animations, { stopTogether: false });
-        parallel.start();
+        // Start all sequences in parallel - each will wait for its delay before looping
+        const masterAnimation = Animated.parallel(animations, {
+            stopTogether: false,
+        });
+        masterAnimation.start();
         return () => {
             isMountedRef.current = false;
+            masterAnimation.stop();
             animationsRef.current.forEach((anim) => {
                 try {
                     anim.stop();
                 }
                 catch (e) {
-                    // Ignore errors during cleanup
+                    // Ignore
                 }
             });
         };
-    }, [text, duration, delay]);
-    const interpolatedStyles = animatedValuesRef.current.map((value) => ({
-        transform: [
-            {
-                translateY: value.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0, -5],
-                }),
-            },
-        ],
-    }));
-    return (<Text style={style}>
+    }, [text, duration, delay, characters.length]);
+    const interpolatedStyles = useMemo(() => {
+        return animatedValuesRef.current.map((value) => ({
+            transform: [
+                {
+                    translateY: value.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, -20],
+                    }),
+                },
+            ],
+        }));
+    }, [characters.length]);
+    return (<Text style={[style, { overflow: "visible" }]}>
         {characters.map((char, i) => (<Animated.Text key={`wave-${i}`} style={interpolatedStyles[i]}>
             {char}
           </Animated.Text>))}
@@ -978,7 +991,7 @@ const WaveText = memo(({ children, duration = 1000, delay = 0, style }) => {
 });
 /* ========== Main Component ========== */
 const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size, weight, align, transform, decoration, italic = false, truncate = false, shadow = false, animated = false, animation, animationDelay = 0, animationDuration = 1000, animationSpeed = 50, cursor = false, script, direction = "auto", responsive = true, style: propStyle, testID, m, mt, mr, mb, ml, mx, my, p, pt, pr, pb, pl, px, py, numberOfLines, ellipsizeMode, onPress, onLongPress, allowFontScaling, maxFontSizeMultiplier, minimumFontScale, suppressHighlighting, selectable, selectionColor, textBreakStrategy, hyphenationFrequency, accessibilityLabel, accessibilityHint, accessibilityLiveRegion, accessibilityState, ...restProps }, ref) => {
-    var _a, _b;
+    var _a, _b, _c;
     const theme = useAppTextTheme();
     const rawScheme = useColorScheme();
     const colorScheme = rawScheme === "unspecified" ? "light" : rawScheme;
@@ -1121,20 +1134,29 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
     const handlePress = useCallback((e) => onPress === null || onPress === void 0 ? void 0 : onPress(e), [onPress]);
     const handleLongPress = useCallback((e) => onLongPress === null || onLongPress === void 0 ? void 0 : onLongPress(e), [onLongPress]);
     const hasPressHandlers = !!onPress || !!onLongPress;
+    const animationConfig = typeof animation === "object" ? animation : {};
+    const finalDelay = (_a = animationConfig.delay) !== null && _a !== void 0 ? _a : animationDelay;
+    const finalDuration = (_b = animationConfig.duration) !== null && _b !== void 0 ? _b : animationDuration;
+    const finalSpeed = (_c = animationConfig.speed) !== null && _c !== void 0 ? _c : animationSpeed;
     // Special animation handling
     if ((animated || animation) && animationType === "typewriter") {
-        return (<TypewriterText delay={animationDelay} duration={animationDuration} speed={animationSpeed} cursor={cursor} style={finalComputedStyle}>
+        return (<TypewriterText delay={finalDelay} duration={finalDuration} speed={finalSpeed} cursor={cursor} style={finalComputedStyle}>
             {children}
           </TypewriterText>);
     }
-    const animationConfig = typeof animation === "object" ? animation : {};
-    const waveDelay = (_a = animationConfig.delay) !== null && _a !== void 0 ? _a : animationDelay;
-    const waveDuration = (_b = animationConfig.duration) !== null && _b !== void 0 ? _b : animationDuration;
+    /*
     if ((animated || animation) && animationType === "wave") {
-        return (<WaveText delay={waveDelay} duration={waveDuration} style={finalComputedStyle}>
-            {children}
-          </WaveText>);
+      return (
+        <WaveText
+          delay={finalDelay}
+          duration={finalDuration}
+          style={finalComputedStyle}
+        >
+          {children}
+        </WaveText>
+      );
     }
+    */
     if (animated || (animation && animationType !== "none")) {
         return (<Animated.Text ref={ref} style={finalComputedStyle} {...(!hasPressHandlers
             ? { pointerEvents: "none" }
