@@ -73,7 +73,15 @@ export function LazyLocaleProvider({ loaders, defaultLanguage, preloadLanguages 
 export function useLazyLocale() {
     const context = useContext(LazyLocaleContext);
     if (!context) {
-        throw new Error("useLazyLocale must be used within LazyLocaleProvider");
+        // Return a safe fallback instead of throwing
+        return {
+            language: "",
+            isLoading: false,
+            loadedLocales: new Set(),
+            loadLocale: async () => { },
+            changeLanguage: async () => { },
+            translations: {},
+        };
     }
     return context;
 }

@@ -180,14 +180,68 @@ export interface AppTextProps extends Omit<TextProps, "style">, SpacingProps {
   decoration?: TextStyle["textDecorationLine"];
   italic?: boolean;
   truncate?: boolean | number;
-  gradient?: boolean;
   shadow?: boolean;
   animated?: boolean;
+  animation?:
+    | {
+        type?:
+          | "fade"
+          | "slideInRight"
+          | "slideInLeft"
+          | "slideInUp"
+          | "slideInDown"
+          | "bounceIn"
+          | "zoomIn"
+          | "flipInX"
+          | "flipInY"
+          | "rotateIn"
+          | "pulse"
+          | "bounce"
+          | "shake"
+          | "swing"
+          | "wobble"
+          | "rubberBand"
+          | "tada"
+          | "fadeOut"
+          | "slideOutRight"
+          | "slideOutLeft"
+          | "slideOutUp"
+          | "slideOutDown"
+          | "bounceOut"
+          | "zoomOut"
+          | "flipOutX"
+          | "flipOutY"
+          | "rotateOut"
+          | "blink"
+          | "glow"
+          | "neon"
+          | "gradientShift"
+          | "wave"
+          | "typewriter";
+        duration?: number;
+        delay?: number;
+        speed?: number;
+      }
+    | boolean;
+  animationDelay?: number;
+  animationDuration?: number;
+  animationSpeed?: number;
+  cursor?: boolean;
   script?: ScriptCode;
   direction?: "auto" | "ltr" | "rtl";
   responsive?: boolean;
   style?: StyleProp<TextStyle>;
   testID?: string;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
+  accessibilityLiveRegion?: "none" | "polite" | "assertive";
+  accessibilityState?: {
+    disabled?: boolean;
+    selected?: boolean;
+    checked?: boolean | "mixed";
+    busy?: boolean;
+    expanded?: boolean;
+  };
   hyphenationFrequency?: "none" | "normal" | "full";
   textBreakStrategy?: "simple" | "highQuality" | "balanced";
 }

@@ -14,12 +14,16 @@
 export class LRUCache {
     constructor(maxSize = 1000) {
         this.cache = new Map();
+        this.hits = 0;
+        this.misses = 0;
         this.maxSize = maxSize;
     }
     get(key) {
         if (!this.cache.has(key)) {
+            this.misses++;
             return undefined;
         }
+        this.hits++;
         // Move to end (most recently used)
         const value = this.cache.get(key);
         this.cache.delete(key);
@@ -43,6 +47,8 @@ export class LRUCache {
     }
     clear() {
         this.cache.clear();
+        this.hits = 0;
+        this.misses = 0;
     }
     get size() {
         return this.cache.size;
@@ -54,10 +60,13 @@ export class LRUCache {
         }
     }
     getStats() {
+        const total = this.hits + this.misses;
         return {
             size: this.cache.size,
             maxSize: this.maxSize,
-            hitRate: 0, // Would need to track hits/misses
+            hits: this.hits,
+            misses: this.misses,
+            hitRate: total === 0 ? 0 : Math.round((this.hits / total) * 100) / 100,
         };
     }
 }
@@ -158,7 +167,7 @@ export class TranslationBatcher {
         this.queue = [];
         this.timeout = null;
         this.batchSize = 50;
-        this.delay = 10; // ms
+        this.delay = 10;
     }
     add(key, params) {
         return new Promise((resolve) => {

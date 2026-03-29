@@ -15,6 +15,8 @@
 export class LRUCache<K, V> {
   private cache = new Map<K, V>();
   private maxSize: number;
+  private hits = 0;
+  private misses = 0;
 
   constructor(maxSize: number = 1000) {
     this.maxSize = maxSize;
@@ -22,9 +24,11 @@ export class LRUCache<K, V> {
 
   get(key: K): V | undefined {
     if (!this.cache.has(key)) {
+      this.misses++;
       return undefined;
     }
 
+    this.hits++;
     // Move to end (most recently used)
     const value = this.cache.get(key)!;
     this.cache.delete(key);
@@ -54,6 +58,8 @@ export class LRUCache<K, V> {
 
   clear(): void {
     this.cache.clear();
+    this.hits = 0;
+    this.misses = 0;
   }
 
   get size(): number {
@@ -67,11 +73,14 @@ export class LRUCache<K, V> {
     }
   }
 
-  getStats(): { size: number; maxSize: number; hitRate: number } {
+  getStats(): { size: number; maxSize: number; hitRate: number; hits: number; misses: number } {
+    const total = this.hits + this.misses;
     return {
       size: this.cache.size,
       maxSize: this.maxSize,
-      hitRate: 0, // Would need to track hits/misses
+      hits: this.hits,
+      misses: this.misses,
+      hitRate: total === 0 ? 0 : Math.round((this.hits / total) * 100) / 100,
     };
   }
 }
@@ -213,9 +222,9 @@ export class TranslationBatcher {
     params?: Record<string, any>;
     resolve: (value: string) => void;
   }> = [];
-  private timeout: NodeJS.Timeout | null = null;
+  private timeout: ReturnType<typeof setTimeout> | null = null;
   private batchSize = 50;
-  private delay = 10; // ms
+  private delay = 10;
 
   constructor(
     private processor: (
@@ -268,14 +277,14 @@ export class TranslationBatcher {
  * Memory leak prevention utilities
  */
 export class MemoryManager {
-  private static timers = new Set<NodeJS.Timeout>();
+  private static timers = new Set<ReturnType<typeof setTimeout>>();
   private static listeners = new Map<any, Set<() => void>>();
 
-  static registerTimer(timer: NodeJS.Timeout): void {
+  static registerTimer(timer: ReturnType<typeof setTimeout>): void {
     this.timers.add(timer);
   }
 
-  static clearTimer(timer: NodeJS.Timeout): void {
+  static clearTimer(timer: ReturnType<typeof setTimeout>): void {
     clearTimeout(timer);
     this.timers.delete(timer);
   }

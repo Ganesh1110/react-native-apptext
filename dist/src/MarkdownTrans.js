@@ -5,6 +5,15 @@ import AppText from "./AppText";
 /**
  * Parse markdown-like syntax into nodes
  */
+const MARKDOWN_PATTERNS = {
+    bold: /\*\*(.+?)\*\*/g,
+    italic: /\*(.+?)\*/g,
+    underline: /__(.+?)__/g,
+    strikethrough: /~~(.+?)~~/g,
+    code: /`(.+?)`/g,
+    link: /\[(.+?)\]\((.+?)\)/g,
+    component: /\{\{(\w+):(.+?)\}\}/g,
+};
 function parseMarkdown(text, enabledFeatures) {
     const nodes = [];
     let currentIndex = 0;
@@ -12,33 +21,37 @@ function parseMarkdown(text, enabledFeatures) {
     const patterns = [
         {
             type: "bold",
-            regex: /\*\*(.+?)\*\*/g,
+            regex: MARKDOWN_PATTERNS.bold,
             enabled: enabledFeatures.bold,
         },
         {
             type: "italic",
-            regex: /\*(.+?)\*/g,
+            regex: MARKDOWN_PATTERNS.italic,
             enabled: enabledFeatures.italic,
         },
         {
             type: "underline",
-            regex: /__(.+?)__/g,
+            regex: MARKDOWN_PATTERNS.underline,
             enabled: enabledFeatures.underline,
         },
         {
             type: "strikethrough",
-            regex: /~~(.+?)~~/g,
+            regex: MARKDOWN_PATTERNS.strikethrough,
             enabled: enabledFeatures.strikethrough,
         },
-        { type: "code", regex: /`(.+?)`/g, enabled: enabledFeatures.code },
+        {
+            type: "code",
+            regex: MARKDOWN_PATTERNS.code,
+            enabled: enabledFeatures.code,
+        },
         {
             type: "link",
-            regex: /\[(.+?)\]\((.+?)\)/g,
+            regex: MARKDOWN_PATTERNS.link,
             enabled: enabledFeatures.links,
         },
         {
             type: "component",
-            regex: /\{\{(\w+):(.+?)\}\}/g,
+            regex: MARKDOWN_PATTERNS.component,
             enabled: enabledFeatures.components,
         },
     ];

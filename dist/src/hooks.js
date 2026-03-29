@@ -1,26 +1,51 @@
 import { useEffect, useMemo, useState } from "react";
-import { Dimensions, PixelRatio } from "react-native";
+import { Dimensions, PixelRatio, NativeModules, Platform } from "react-native";
 import { SCRIPT_CONFIGS } from "./scriptConfigs";
+import { BASE_WIDTH, RESPONSIVE_FONT_MIN, RESPONSIVE_FONT_MAX } from "./constants";
+let _currentDimensions = Dimensions.get("window");
+const _listeners = new Set();
+// Register the shared listener once at module load time
+Dimensions.addEventListener("change", ({ window }) => {
+    _currentDimensions = window;
+    _listeners.forEach((fn) => fn(window));
+});
+function subscribeToWindowDimensions(listener) {
+    _listeners.add(listener);
+    return () => _listeners.delete(listener);
+}
+// ============================================================================
 // Hook for responsive font scaling
+// ============================================================================
 export const useResponsiveFont = (baseSize, bounds) => {
-    const [dimensions, setDimensions] = useState(() => Dimensions.get("window"));
+    const [dimensions, setDimensions] = useState(() => _currentDimensions);
     useEffect(() => {
-        const subscription = Dimensions.addEventListener("change", ({ window }) => setDimensions(window));
-        return () => subscription === null || subscription === void 0 ? void 0 : subscription.remove();
+        // Subscribe to the shared singleton listener — O(1) per component
+        const unsubscribe = subscribeToWindowDimensions(setDimensions);
+        return unsubscribe;
     }, []);
     return useMemo(() => {
+        var _a, _b;
         const { width } = dimensions;
-        const BASE_WIDTH = 375;
         const scale = (width / BASE_WIDTH) * PixelRatio.getFontScale();
         let scaledSize = Math.round(baseSize * scale * 100) / 100;
-        if (bounds === null || bounds === void 0 ? void 0 : bounds.min)
-            scaledSize = Math.max(scaledSize, bounds.min);
-        if (bounds === null || bounds === void 0 ? void 0 : bounds.max)
-            scaledSize = Math.min(scaledSize, bounds.max);
+        const min = (_a = bounds === null || bounds === void 0 ? void 0 : bounds.min) !== null && _a !== void 0 ? _a : RESPONSIVE_FONT_MIN;
+        const max = (_b = bounds === null || bounds === void 0 ? void 0 : bounds.max) !== null && _b !== void 0 ? _b : RESPONSIVE_FONT_MAX;
+        scaledSize = Math.max(scaledSize, min);
+        scaledSize = Math.min(scaledSize, max);
         return scaledSize;
     }, [baseSize, dimensions, bounds === null || bounds === void 0 ? void 0 : bounds.min, bounds === null || bounds === void 0 ? void 0 : bounds.max]);
 };
+// ============================================================================
 // Hook for script detection
+// ============================================================================
+// Sorted script config entries (by Unicode range span, largest first) are
+// computed once at module load time so the hot-path loop exits as early as
+// possible for the most common scripts.
+const SORTED_SCRIPT_ENTRIES = Object.entries(SCRIPT_CONFIGS).sort(([, a], [, b]) => {
+    // Sum the span of all Unicode ranges for each script
+    const span = (ranges) => ranges.reduce((s, [lo, hi]) => s + (hi - lo + 1), 0);
+    return span(b.unicodeRanges) - span(a.unicodeRanges);
+});
 export const useScriptDetection = (text) => {
     return useMemo(() => {
         if (!text || text.length === 0)
@@ -28,7 +53,8 @@ export const useScriptDetection = (text) => {
         const codePoint = text.codePointAt(0);
         if (!codePoint)
             return "Unknown";
-        for (const [scriptCode, config] of Object.entries(SCRIPT_CONFIGS)) {
+        // Iterate sorted entries — exits on first match (early-exit optimisation)
+        for (const [scriptCode, config] of SORTED_SCRIPT_ENTRIES) {
             if (config.unicodeRanges.some(([start, end]) => codePoint >= start && codePoint <= end)) {
                 return scriptCode;
             }
@@ -36,7 +62,9 @@ export const useScriptDetection = (text) => {
         return "Unknown";
     }, [text]);
 };
+// ============================================================================
 // Hook for theme-aware styles
+// ============================================================================
 export const useThemedStyles = (theme, colorScheme) => {
     return useMemo(() => {
         const isDark = colorScheme === "dark";
@@ -46,4 +74,21 @@ export const useThemedStyles = (theme, colorScheme) => {
             backgroundColor: isDark ? "#000000" : theme.colors.background,
         };
     }, [theme, colorScheme]);
+};
+// ============================================================================
+// Hook for device locale auto-detection
+// ============================================================================
+export const useDeviceLocale = () => {
+    return useMemo(() => {
+        try {
+            const locale = Platform.OS === "ios"
+                ? NativeModules.SettingsManager.settings.AppleLocale ||
+                    NativeModules.SettingsManager.settings.AppleLanguages[0]
+                : NativeModules.I18nManager.localeIdentifier;
+            return locale ? locale.replace("_", "-") : "en";
+        }
+        catch (e) {
+            return "en";
+        }
+    }, []);
 };

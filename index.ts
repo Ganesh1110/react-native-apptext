@@ -89,3 +89,6 @@ export type {
   DeepKeyOf,
   TypedLocaleContextValue,
 } from "./src/types";
+
+// Error Boundary
+export { TranslationErrorBoundary } from "./src/ErrorBoundary";
