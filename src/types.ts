@@ -1,5 +1,10 @@
 import React, { createContext } from "react";
-import { TextProps, TextStyle, StyleProp } from "react-native";
+import {
+  TextProps,
+  TextStyle,
+  StyleProp,
+  AccessibilityActionEvent,
+} from "react-native";
 
 // ============================================================================
 // SCRIPT & TYPOGRAPHY TYPES (Keep existing)
@@ -110,6 +115,7 @@ export type LegacyTypographyVariant =
 // Combined variant type
 export type TypographyVariant =
   | MaterialTypographyVariant
+  /** @deprecated Use MaterialTypographyVariant instead */
   | LegacyTypographyVariant;
 
 export interface TypographyBlock {
@@ -170,59 +176,67 @@ export interface SpacingProps {
   py?: number;
 }
 
-export interface AppTextProps extends Omit<TextProps, "style">, SpacingProps {
+export type AnimationType =
+  | "fade"
+  | "fadeIn"
+  | "slideInRight"
+  | "slideInLeft"
+  | "slideInUp"
+  | "slideInDown"
+  | "bounceIn"
+  | "zoomIn"
+  | "flipInX"
+  | "flipInY"
+  | "rotateIn"
+  | "pulse"
+  | "bounce"
+  | "shake"
+  | "swing"
+  | "wobble"
+  | "rubberBand"
+  | "tada"
+  | "fadeOut"
+  | "slideOutRight"
+  | "slideOutLeft"
+  | "slideOutUp"
+  | "slideOutDown"
+  | "bounceOut"
+  | "zoomOut"
+  | "flipOutX"
+  | "flipOutY"
+  | "rotateOut"
+  | "blink"
+  | "glow"
+  | "neon"
+  | "gradientShift"
+  | "wave"
+  | "typewriter"
+  | "none";
+
+export interface AnimationConfig {
+  duration?: number;
+  delay?: number;
+  speed?: number;
+}
+
+export interface AppTextProps extends TextProps, SpacingProps {
   variant?: TypographyVariant;
-  color?: keyof AppTextTheme["colors"] | string;
+  color?: keyof AppTextTheme["colors"] | (string & {});
   size?: number | "auto";
   weight?: TextStyle["fontWeight"];
   align?: TextStyle["textAlign"];
   transform?: TextStyle["textTransform"];
   decoration?: TextStyle["textDecorationLine"];
   italic?: boolean;
+  /** @deprecated Use maxLines and truncate boolean instead */
   truncate?: boolean | number;
+  maxLines?: number;
+  /** Whether to show ellipsis when text overflows maxLines */
+  truncateText?: boolean;
   shadow?: boolean;
   animated?: boolean;
-  animation?:
-    | {
-        type?:
-          | "fade"
-          | "slideInRight"
-          | "slideInLeft"
-          | "slideInUp"
-          | "slideInDown"
-          | "bounceIn"
-          | "zoomIn"
-          | "flipInX"
-          | "flipInY"
-          | "rotateIn"
-          | "pulse"
-          | "bounce"
-          | "shake"
-          | "swing"
-          | "wobble"
-          | "rubberBand"
-          | "tada"
-          | "fadeOut"
-          | "slideOutRight"
-          | "slideOutLeft"
-          | "slideOutUp"
-          | "slideOutDown"
-          | "bounceOut"
-          | "zoomOut"
-          | "flipOutX"
-          | "flipOutY"
-          | "rotateOut"
-          | "blink"
-          | "glow"
-          | "neon"
-          | "gradientShift"
-          | "wave"
-          | "typewriter";
-        duration?: number;
-        delay?: number;
-        speed?: number;
-      }
-    | boolean;
+  animation?: AnimationType | boolean;
+  animationConfig?: AnimationConfig;
   animationDelay?: number;
   animationDuration?: number;
   animationSpeed?: number;
@@ -230,6 +244,8 @@ export interface AppTextProps extends Omit<TextProps, "style">, SpacingProps {
   script?: ScriptCode;
   direction?: "auto" | "ltr" | "rtl";
   responsive?: boolean;
+  linkDetection?: boolean;
+  onLinkPress?: (link: string) => void;
   style?: StyleProp<TextStyle>;
   testID?: string;
   accessibilityLabel?: string;
@@ -244,6 +260,8 @@ export interface AppTextProps extends Omit<TextProps, "style">, SpacingProps {
   };
   hyphenationFrequency?: "none" | "normal" | "full";
   textBreakStrategy?: "simple" | "highQuality" | "balanced";
+  accessibilityActions?: Array<{ name: string; label?: string }>;
+  onAccessibilityAction?: (event: AccessibilityActionEvent) => void;
 }
 
 // ============================================================================
@@ -365,7 +383,7 @@ export interface LocaleContextValue {
   t: (
     key: string,
     params?: Record<string, any>,
-    options?: TranslationOptions
+    options?: TranslationOptions,
   ) => string;
 
   /**
@@ -383,7 +401,7 @@ export interface LocaleContextValue {
     key: string,
     count: number,
     params?: Record<string, any>,
-    options?: { namespace?: string }
+    options?: { namespace?: string },
   ) => string;
 
   /**
@@ -402,7 +420,7 @@ export interface LocaleContextValue {
    */
   loadNamespace: (
     namespace: string,
-    loader: () => Promise<any>
+    loader: () => Promise<any>,
   ) => Promise<void>;
 }
 
@@ -428,7 +446,7 @@ export interface LocaleProviderProps {
   onMissingTranslation?: (
     lang: string,
     key: string,
-    namespace?: string
+    namespace?: string,
   ) => void;
 
   /** Child components */
@@ -463,18 +481,18 @@ export interface TypedLocaleContextValue<T extends Translations> {
   t: (
     key: DeepKeyOf<T>,
     params?: Record<string, any>,
-    options?: TranslationOptions
+    options?: TranslationOptions,
   ) => string;
   tn: (
     key: DeepKeyOf<T>,
     count: number,
     params?: Record<string, any>,
-    options?: { namespace?: string }
+    options?: { namespace?: string },
   ) => string;
   changeLanguage: (lang: string) => void;
   loadNamespace: (
     namespace: string,
-    loader: () => Promise<any>
+    loader: () => Promise<any>,
   ) => Promise<void>;
 }
 

@@ -10,7 +10,6 @@ import React, {
 import { LocaleContext, LocaleProviderProps, PluralForm } from "./types";
 import {
   translationCache,
-  performanceMonitor,
   debounce,
 } from "./PerformanceOptimizations";
 import { AccessibilityInfo } from "react-native";
@@ -638,7 +637,6 @@ class TranslationManager {
 
     let result: string = key;
 
-    performanceMonitor.measure(`translate:${key}`, () => {
       let translation = this.getTranslationValue(lang, key, namespace, context);
 
       if (context && !translation) {
@@ -649,19 +647,13 @@ class TranslationManager {
       if (!translation) {
         this.handleMissingKey(lang, key, namespace);
         result = key;
-        return;
-      }
-
-      if (
+      } else if (
         typeof translation === "object" &&
         "other" in translation &&
         count !== undefined
       ) {
         result = this.translatePlural(lang, key, count, params, { namespace });
-        return;
-      }
-
-      if (typeof translation === "string") {
+      } else if (typeof translation === "string") {
         let finalResult = translation;
 
         const mergedParams =
@@ -680,11 +672,9 @@ class TranslationManager {
         }
 
         result = finalResult;
-        return;
+      } else {
+        result = key;
       }
-
-      result = key;
-    });
 
     // Store result in singleton cache
     translationCache.set(key, lang, params, result);

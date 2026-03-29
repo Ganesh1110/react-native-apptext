@@ -1,24 +1,31 @@
 import React, { Component, ErrorInfo, ReactNode } from "react";
-import { Text, View } from "react-native";
+import { Text, View, TextStyle } from "react-native";
 
-interface Props {
+interface ErrorBoundaryProps {
   children: ReactNode;
   fallback?: ReactNode;
+  fallbackText?: string;
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
+  style?: TextStyle;
 }
 
-interface State {
+interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
 }
 
-export class TranslationErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
+const DEFAULT_FALLBACK_TEXT = "An error occurred in the translation system.";
+
+export class TranslationErrorBoundary extends Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error: Error): State {
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true, error };
   }
 
@@ -31,8 +38,15 @@ export class TranslationErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         this.props.fallback || (
-          <View>
-            <Text>Translation system error occurred</Text>
+          <View
+            style={[
+              this.props.style,
+              { padding: 10, backgroundColor: "#FF000010" },
+            ]}
+          >
+            <Text style={{ color: "#FF0000" }}>
+              {this.props.fallbackText || DEFAULT_FALLBACK_TEXT}
+            </Text>
           </View>
         )
       );
@@ -41,3 +55,5 @@ export class TranslationErrorBoundary extends Component<Props, State> {
     return this.props.children;
   }
 }
+
+export default TranslationErrorBoundary;

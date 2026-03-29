@@ -65,14 +65,10 @@ export {
   LRUCache,
   TranslationCache,
   TranslationBatcher,
-  VirtualListHelper,
-  PerformanceMonitor,
-  MemoryManager,
   debounce,
   throttle,
   memoize,
   translationCache,
-  performanceMonitor,
 } from "./src/PerformanceOptimizations";
 
 // Type exports for TypeScript users

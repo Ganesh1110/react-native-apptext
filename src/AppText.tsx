@@ -15,9 +15,17 @@ import {
   NativeSyntheticEvent,
   TextLayoutEventData,
   AccessibilityRole,
+  TextStyle,
+  AccessibilityInfo,
 } from "react-native";
 
-import { AppTextProps, AppTextTheme, TypographyVariant } from "./types";
+import {
+  AppTextProps,
+  AppTextTheme,
+  TypographyVariant,
+  AnimationType,
+  AnimationConfig,
+} from "./types";
 import { SCRIPT_CONFIGS } from "./scriptConfigs";
 import { DEFAULT_THEME } from "./theme";
 import {
@@ -32,29 +40,35 @@ import TransComponent from "./Trans";
 /* ========== Animation Hook ========== */
 const useTextAnimation = (
   animated: boolean,
-  animation: any,
+  animation: AnimationType | boolean | undefined,
+  animationConfig?: AnimationConfig,
   animationDelay: number = 0,
   animationDuration: number = 1000,
   animationSpeed: number = 50,
   cursor: boolean = false,
 ) => {
-  const opacityValue = useRef(new Animated.Value(0)).current;
-  const translateYValue = useRef(new Animated.Value(50)).current;
-  const translateXValue = useRef(new Animated.Value(100)).current;
-  const scaleValue = useRef(new Animated.Value(0.8)).current;
-  const rotateValue = useRef(new Animated.Value(0)).current;
-  const shakeValue = useRef(new Animated.Value(0)).current;
-  const glowValue = useRef(new Animated.Value(0)).current;
-  const neonValue = useRef(new Animated.Value(0)).current;
-  const gradientValue = useRef(new Animated.Value(0)).current;
+  const getAnimatedValue = (val: number) => {
+    const ref = useRef<Animated.Value | null>(null);
+    if (!ref.current) ref.current = new Animated.Value(val);
+    return ref.current;
+  };
+
+  const opacityValue = getAnimatedValue(0);
+  const translateYValue = getAnimatedValue(50);
+  const translateXValue = getAnimatedValue(100);
+  const scaleValue = getAnimatedValue(0.8);
+  const rotateValue = getAnimatedValue(0);
+  const shakeValue = getAnimatedValue(0);
+  const glowValue = getAnimatedValue(0);
+  const neonValue = getAnimatedValue(0);
+  const gradientValue = getAnimatedValue(0);
   const currentAnimation = useRef<Animated.CompositeAnimation | null>(null);
   const hasAnimated = useRef(false);
 
   // Derived type - used for branching in the parent component
   const animationType = useMemo(() => {
-    if (!animation) return "fade";
-    if (typeof animation === "string") return animation;
-    if (typeof animation === "object") return animation.type || "fade";
+    if (!animation || animation === true) return "fade";
+    if (typeof animation === "string") return animation as AnimationType;
     return "fade";
   }, [animation]);
 
@@ -66,7 +80,9 @@ const useTextAnimation = (
     if (!animated || !animation || isSpecialAnimation) return;
     if (hasAnimated.current) return;
 
-    const config = typeof animation === "object" ? animation : {};
+    const config =
+      animationConfig ||
+      (typeof animation === "object" ? (animation as any) : {});
     const type = animationType;
     const duration = config.duration || animationDuration;
     const delay = config.delay || animationDelay;
@@ -711,9 +727,10 @@ const useTextAnimation = (
     animationDuration,
     animationType,
     isSpecialAnimation,
+    animationConfig,
   ]);
 
-  const getAnimatedStyle = () => {
+  const getAnimatedStyle = (): any => {
     // Return empty if not animated/animation context, or if special animation handled by standard components
     if (!animated || !animation || isSpecialAnimation) return {};
 
@@ -950,7 +967,7 @@ interface TypewriterTextProps {
   duration?: number;
   speed?: number;
   cursor?: boolean;
-  style: any;
+  style: TextStyle;
 }
 
 const TypewriterText = memo<TypewriterTextProps>(
@@ -1011,6 +1028,14 @@ const TypewriterText = memo<TypewriterTextProps>(
       };
     }, [text, speed, delay]);
 
+    useEffect(() => {
+      if (isDone) {
+        AccessibilityInfo.announceForAccessibility(
+          "Typewriter animation completed",
+        );
+      }
+    }, [isDone]);
+
     return (
       <Text
         style={style}
@@ -1031,7 +1056,7 @@ interface TruncationProps {
   onExpand?: () => void;
   expandText?: string;
   collapseText?: string;
-  style?: any;
+  style?: TextStyle;
 }
 
 const TruncationComponent = memo<TruncationProps>(
@@ -1087,7 +1112,7 @@ interface WaveTextProps {
   children: React.ReactNode;
   duration?: number;
   delay?: number;
-  style: any;
+  style: TextStyle;
 }
 
 const WaveText = memo<WaveTextProps>(
@@ -1116,25 +1141,16 @@ const WaveText = memo<WaveTextProps>(
 
     // Create animated values - these persist but get replaced when text changes
     // Using a ref that we manually manage to avoid React's strict mode issues
-    const animatedValuesRef = useRef<Animated.Value[]>([]);
-    const prevTextRef = useRef<string>("");
-
-    // Only create new values when text actually changes (not on every render)
-    if (prevTextRef.current !== text) {
-      prevTextRef.current = text;
-      // Don't recreate here - we let useEffect handle it
-    }
-
-    // Initialize values on first render or text change
-    if (animatedValuesRef.current.length !== characters.length) {
-      animatedValuesRef.current = characters.map(() => new Animated.Value(0));
-    }
+    // Memoize animated values to avoid recreation during render
+    const animatedValues = useMemo(() => {
+      return characters.map(() => new Animated.Value(0));
+    }, [characters.length]);
 
     useEffect(() => {
       isMountedRef.current = true;
 
       // Create animations for each character
-      const animations = animatedValuesRef.current.map((value, i) => {
+      const animations = animatedValues.map((value, i) => {
         const charLoop = Animated.loop(
           Animated.sequence([
             Animated.timing(value, {
@@ -1176,10 +1192,10 @@ const WaveText = memo<WaveTextProps>(
           }
         });
       };
-    }, [text, duration, delay, characters.length]);
+    }, [animatedValues, duration, delay, characters.length]);
 
     const interpolatedStyles = useMemo(() => {
-      return animatedValuesRef.current.map((value) => ({
+      return animatedValues.map((value) => ({
         transform: [
           {
             translateY: value.interpolate({
@@ -1189,7 +1205,7 @@ const WaveText = memo<WaveTextProps>(
           },
         ],
       }));
-    }, [characters.length]);
+    }, [animatedValues]);
 
     return (
       <Text style={[style, { overflow: "visible" }]}>
@@ -1218,9 +1234,12 @@ const BaseAppText = memo(
         decoration,
         italic = false,
         truncate = false,
+        maxLines,
+        truncateText = false,
         shadow = false,
         animated = false,
         animation,
+        animationConfig,
         animationDelay = 0,
         animationDuration = 1000,
         animationSpeed = 50,
@@ -1260,6 +1279,10 @@ const BaseAppText = memo(
         accessibilityHint,
         accessibilityLiveRegion,
         accessibilityState,
+        accessibilityActions,
+        onAccessibilityAction,
+        linkDetection = false,
+        onLinkPress,
         ...restProps
       },
       ref,
@@ -1273,6 +1296,7 @@ const BaseAppText = memo(
       const { animatedStyle, animationType } = useTextAnimation(
         animated,
         animation,
+        animationConfig,
         animationDelay,
         animationDuration,
         animationSpeed,
@@ -1323,8 +1347,8 @@ const BaseAppText = memo(
         return scriptConfig.direction;
       }, [direction, scriptConfig.direction]);
 
-      const computedStyle = useMemo(() => {
-        const baseStyle: any = {
+      const computedStyle = useMemo((): TextStyle => {
+        const baseStyle: TextStyle = {
           ...typographyStyle,
           fontSize: responsive ? responsiveFontSize : baseFontSize,
           lineHeight: calculatedLineHeight,
@@ -1391,8 +1415,10 @@ const BaseAppText = memo(
         const props = {
           ...restProps,
           numberOfLines:
-            typeof truncate === "number" ? truncate : numberOfLines,
-          ellipsizeMode: truncate ? ellipsizeMode || "tail" : ellipsizeMode,
+            maxLines ||
+            (typeof truncate === "number" ? truncate : numberOfLines),
+          ellipsizeMode:
+            truncate || truncateText ? ellipsizeMode || "tail" : ellipsizeMode,
           allowFontScaling: allowFontScaling !== false,
           maxFontSizeMultiplier: maxFontSizeMultiplier || 3,
           minimumFontScale,
@@ -1402,16 +1428,19 @@ const BaseAppText = memo(
           textBreakStrategy,
           hyphenationFrequency,
           testID: testID || `apptext-${variant}`,
-          accessibilityLabel,
+          accessibilityLabel: accessibilityLabel || textContent,
           accessibilityHint,
           accessibilityLiveRegion,
           accessibilityState,
+          accessibilityActions,
+          onAccessibilityAction,
         };
 
         return {
+          accessibilityRole:
+            restProps.accessibilityRole || (onPress ? "button" : "text"),
           ...props,
-          accessibilityRole: (onPress ? "button" : "text") as AccessibilityRole,
-        };
+        } as any;
       }, [
         restProps,
         truncate,
@@ -1434,17 +1463,22 @@ const BaseAppText = memo(
         onPress,
       ]);
 
-      const handlePress = useCallback((e: any) => onPress?.(e), [onPress]);
+      const handlePress = useCallback(
+        (e: NativeSyntheticEvent<any>) => onPress?.(e),
+        [onPress],
+      );
       const handleLongPress = useCallback(
-        (e: any) => onLongPress?.(e),
+        (e: NativeSyntheticEvent<any>) => onLongPress?.(e),
         [onLongPress],
       );
 
       const hasPressHandlers = !!onPress || !!onLongPress;
-      const animationConfig = typeof animation === "object" ? animation : {};
-      const finalDelay = animationConfig.delay ?? animationDelay;
-      const finalDuration = animationConfig.duration ?? animationDuration;
-      const finalSpeed = animationConfig.speed ?? animationSpeed;
+      const finalConfig =
+        animationConfig ||
+        (typeof animation === "object" ? (animation as any) : {});
+      const finalDelay = finalConfig.delay ?? animationDelay;
+      const finalDuration = finalConfig.duration ?? animationDuration;
+      const finalSpeed = finalConfig.speed ?? animationSpeed;
 
       // Special animation handling
       if ((animated || animation) && animationType === "typewriter") {
@@ -1461,7 +1495,6 @@ const BaseAppText = memo(
         );
       }
 
-      /* 
       if ((animated || animation) && animationType === "wave") {
         return (
           <WaveText
@@ -1473,19 +1506,43 @@ const BaseAppText = memo(
           </WaveText>
         );
       }
-      */
+
+      const renderChildren = () => {
+        if (!linkDetection || typeof children !== "string") return children;
+
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        const parts = children.split(urlRegex);
+
+        return parts.map((part, i) => {
+          if (part.match(urlRegex)) {
+            return (
+              <Text
+                key={`link-${i}`}
+                style={{
+                  color: resolvedColor,
+                  textDecorationLine: "underline",
+                }}
+                onPress={() => onLinkPress?.(part)}
+              >
+                {part}
+              </Text>
+            );
+          }
+          return part;
+        });
+      };
 
       if (animated || (animation && animationType !== "none")) {
         return (
           <Animated.Text
-            ref={ref as any}
+            ref={ref}
             style={finalComputedStyle}
             {...(!hasPressHandlers
               ? { pointerEvents: "none" }
               : { onPress: handlePress, onLongPress: handleLongPress })}
             {...textProps}
           >
-            {children}
+            {renderChildren()}
           </Animated.Text>
         );
       }
@@ -1499,7 +1556,7 @@ const BaseAppText = memo(
             : { onPress: handlePress, onLongPress: handleLongPress })}
           {...textProps}
         >
-          {children}
+          {renderChildren()}
         </Text>
       );
     },

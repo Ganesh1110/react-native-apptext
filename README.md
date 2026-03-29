@@ -175,10 +175,19 @@ Custom:
 ## ✨ Animations (60FPS)
 
 ```tsx
+// Simple usage
 <AppText animation="fadeIn">Fade In</AppText>
 <AppText animation="slideInRight">Slide</AppText>
-<AppText animated animation="pulse">Pulse</AppText>
-<AppText animation="typewriter">Typing...</AppText>
+
+// Custom configuration
+<AppText 
+  animation="pulse" 
+  animationConfig={{ duration: 2000, delay: 500 }}
+>
+  Pulse
+</AppText>
+
+<AppText animation="typewriter" animationSpeed={40}>Typing...</AppText>
 ```
 
 ---
@@ -198,10 +207,41 @@ Custom:
 - 🌐 Automatic script detection (Arabic, Hindi, Japanese…)
 - 🔤 Rich text via `<Trans />`
 - 📉 Truncation + “Read more”
-- ♿ Accessibility-first
+  ```tsx
+  <AppText maxLines={3} truncateText>Long text here...</AppText>
+  ```
+- 🔗 Link Detection
+  ```tsx
+  <AppText linkDetection onLinkPress={url => Linking.openURL(url)}>
+    Visit https://google.com
+  </AppText>
+  ```
+- ♿ Accessibility-first (Dynamic Type, ARIA roles)
 - 🎨 Spacing props (m, p, mx, py)
 
 ---
+
+## 📚 API Reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `variant` | `TypographyVariant` | `undefined` | MD3 or Legacy variant |
+| `animation` | `AnimationType \| boolean` | `undefined` | The animation to play |
+| `animationConfig` | `AnimationConfig` | `{}` | Duration, delay, speed |
+| `maxLines` | `number` | `undefined` | Line limit (replaces numeric `truncate`) |
+| `truncateText` | `boolean` | `false` | Shows ellipsis when truncated |
+| `linkDetection` | `boolean` | `false` | Auto-detect and style URLs |
+| `onLinkPress` | `(link: string) => void` | `undefined` | Callback for link clicks |
+
+## 🔄 Migration Guide (v4.1 → v4.2)
+
+### 1. Truncation
+- **Legacy:** `<AppText truncate={3}>`
+- **Modern:** `<AppText maxLines={3} truncateText>`
+
+### 2. Animations
+- **Legacy:** `<AppText animation={{ type: 'fade', duration: 500 }}>`
+- **Modern:** `<AppText animation="fade" animationConfig={{ duration: 500 }}>`
 
 ## 📚 Documentation
 
