@@ -146,6 +146,7 @@ export interface AppTextTheme {
     onBackground: string;
     surfaceVariant: string;
     outline: string;
+    [key: string]: string;
   };
   typography: {
     [K in TypographyVariant]: TypographyBlock;
@@ -158,6 +159,12 @@ export interface AppTextTheme {
     xl: number;
   };
 }
+
+type Branded<T, Brand extends string> = T & { __brand: Brand };
+
+export type ThemeColor = keyof AppTextTheme["colors"];
+export type CustomColor = Branded<string, "CustomColor">;
+export type AppTextColor = ThemeColor | CustomColor;
 
 export interface SpacingProps {
   m?: number;
@@ -230,7 +237,7 @@ export interface AnimationWithConfig {
 
 export interface AppTextProps extends TextProps, SpacingProps {
   variant?: TypographyVariant;
-  color?: keyof AppTextTheme["colors"] | string;
+  color?: AppTextColor;
   size?: number | "auto";
   weight?: TextStyle["fontWeight"];
   align?: TextStyle["textAlign"];

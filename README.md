@@ -180,8 +180,8 @@ Custom:
 <AppText animation="slideInRight">Slide</AppText>
 
 // Custom configuration
-<AppText 
-  animation="pulse" 
+<AppText
+  animation="pulse"
   animationConfig={{ duration: 2000, delay: 500 }}
 >
   Pulse
@@ -208,40 +208,114 @@ Custom:
 - 🔤 Rich text via `<Trans />`
 - 📉 Truncation + “Read more”
   ```tsx
-  <AppText maxLines={3} truncateText>Long text here...</AppText>
+  <AppText maxLines={3} truncateText>
+    Long text here...
+  </AppText>
   ```
 - 🔗 Link Detection
   ```tsx
-  <AppText linkDetection onLinkPress={url => Linking.openURL(url)}>
+  <AppText linkDetection onLinkPress={(url) => Linking.openURL(url)}>
     Visit https://google.com
   </AppText>
   ```
-- ♿ Accessibility-first (Dynamic Type, ARIA roles)
+- ♿ Accessibility-first (Dynamic Type, ARIA roles, reduced motion)
 - 🎨 Spacing props (m, p, mx, py)
+
+---
+
+## ♿ Accessibility Features
+
+### Reduced Motion
+
+Animations automatically respect system reduced motion settings:
+
+```tsx
+// Animations are automatically disabled when user prefers reduced motion
+<AppText animation="fadeIn">
+  This won't animate for users who prefer reduced motion
+</AppText>
+```
+
+### Dynamic Type (Font Scaling)
+
+Full support for iOS/Android Dynamic Type:
+
+```tsx
+<AppText
+  allowFontScaling={true}
+  minimumFontScale={0.5} // Minimum 50% of base size
+  maxFontSizeMultiplier={3} // Maximum 300% of base size
+>
+  Scalable text
+</AppText>
+```
+
+### Screen Reader Support
+
+Typewriter animations announce completion:
+
+```tsx
+<TypewriterText announceCompletion={true}>
+  Text announced when complete
+</TypewriterText>
+```
 
 ---
 
 ## 📚 API Reference
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `variant` | `TypographyVariant` | `undefined` | MD3 or Legacy variant |
-| `animation` | `AnimationType \| boolean` | `undefined` | The animation to play |
-| `animationConfig` | `AnimationConfig` | `{}` | Duration, delay, speed |
-| `maxLines` | `number` | `undefined` | Line limit (replaces numeric `truncate`) |
-| `truncateText` | `boolean` | `false` | Shows ellipsis when truncated |
-| `linkDetection` | `boolean` | `false` | Auto-detect and style URLs |
-| `onLinkPress` | `(link: string) => void` | `undefined` | Callback for link clicks |
+| Prop                    | Type                                              | Default     | Description                     |
+| ----------------------- | ------------------------------------------------- | ----------- | ------------------------------- |
+| `variant`               | `TypographyVariant`                               | `undefined` | MD3 or Legacy variant           |
+| `color`                 | `keyof ThemeColors \| string`                     | `undefined` | Theme color or hex value        |
+| `animation`             | `AnimationType \| boolean \| AnimationWithConfig` | `undefined` | Animation to play               |
+| `animationConfig`       | `AnimationConfig`                                 | `{}`        | Duration, delay, speed          |
+| `animationDelay`        | `number`                                          | `0`         | Delay before animation starts   |
+| `animationDuration`     | `number`                                          | `1000`      | Animation duration in ms        |
+| `maxLines`              | `number`                                          | `undefined` | Line limit                      |
+| `truncateText`          | `boolean`                                         | `false`     | Shows ellipsis when truncated   |
+| `linkDetection`         | `boolean`                                         | `false`     | Auto-detect and style URLs      |
+| `onLinkPress`           | `(link: string) => void`                          | `undefined` | Callback for link clicks        |
+| `allowFontScaling`      | `boolean`                                         | `true`      | Respect system font scaling     |
+| `minimumFontScale`      | `number`                                          | `0.5`       | Minimum font scale factor (0-1) |
+| `maxFontSizeMultiplier` | `number`                                          | `3`         | Maximum font scale multiplier   |
+| `responsive`            | `boolean`                                         | `true`      | Enable responsive font scaling  |
+| `direction`             | `'auto' \| 'ltr' \| 'rtl'`                        | `'auto'`    | Text direction                  |
+
+### Animation API
+
+```tsx
+// String shorthand - simplest usage
+<AppText animation="fadeIn">Hello</AppText>
+
+// Boolean - enable default fade animation
+<AppText animation>Hello</AppText>
+<AppText animation={false}>Hello</AppText>
+
+// Object form - with configuration
+<AppText animation={{ type: "slideInRight", duration: 500, delay: 100 }}>Hello</AppText>
+
+// Using animationConfig prop
+<AppText animation="pulse" animationConfig={{ duration: 2000 }}>Hello</AppText>
+```
 
 ## 🔄 Migration Guide (v4.1 → v4.2)
 
 ### 1. Truncation
+
 - **Legacy:** `<AppText truncate={3}>`
 - **Modern:** `<AppText maxLines={3} truncateText>`
 
 ### 2. Animations
+
 - **Legacy:** `<AppText animation={{ type: 'fade', duration: 500 }}>`
 - **Modern:** `<AppText animation="fade" animationConfig={{ duration: 500 }}>`
+- **Or use new object form:** `<AppText animation={{ type: 'fade', duration: 500 }}>`
+
+### 3. Font Scaling
+
+- **New props added:** `allowFontScaling`, `minimumFontScale`, `maxFontSizeMultiplier`
+- These replace manual font size calculations for Dynamic Type support
 
 ## 📚 Documentation
 

@@ -1456,12 +1456,12 @@ const BaseAppText = memo(
         scriptConfig.lineHeightMultiplier,
       ]);
 
-      const resolvedColor = useMemo(() => {
+      const resolvedColor = useMemo((): string => {
         if (!color) return themedStyles.defaultTextColor;
         if (color in theme.colors) {
           return theme.colors[color as keyof typeof theme.colors];
         }
-        return color;
+        return color as string;
       }, [color, theme.colors, themedStyles.defaultTextColor]);
 
       const textDirection = useMemo(() => {

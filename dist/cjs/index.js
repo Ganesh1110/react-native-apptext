@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TranslationErrorBoundary = exports.translationCache = exports.memoize = exports.throttle = exports.debounce = exports.TranslationBatcher = exports.TranslationCache = exports.LRUCache = exports.useMarkdownTranslation = exports.MarkdownTrans = exports.OrdinalFormatter = exports.formatNumberICU = exports.NumberFormatter = exports.NamespaceLoader = exports.withLazyTranslations = exports.useLazyLocale = exports.LazyLocaleProvider = exports.PLURAL_RULES = exports.getPluralForm = exports.interpolate = exports.TranslationManager = exports.useLang = exports.LocaleProvider = exports.SCRIPT_CONFIGS = exports.DEFAULT_THEME = exports.useReducedMotion = exports.useThemedStyles = exports.useResponsiveFont = exports.useAppTextTheme = exports.AppTextProvider = exports.Trans = void 0;
+exports.TranslationErrorBoundary = exports.translationCache = exports.memoize = exports.throttle = exports.debounce = exports.TranslationBatcher = exports.TranslationCache = exports.LRUCache = exports.useMarkdownTranslation = exports.MarkdownTrans = exports.OrdinalFormatter = exports.formatNumberICU = exports.NumberFormatter = exports.NamespaceLoader = exports.withLazyTranslations = exports.useLazyLocale = exports.LazyLocaleProvider = exports.PLURAL_RULES = exports.getPluralForm = exports.interpolate = exports.TranslationManager = exports.useLang = exports.LocaleProvider = exports.SCRIPT_CONFIGS = exports.DEFAULT_THEME = exports.useDynamicTypeScale = exports.useReducedMotion = exports.useThemedStyles = exports.useResponsiveFont = exports.useAppTextTheme = exports.AppTextProvider = exports.Trans = void 0;
 // Main Component
 const AppText_1 = __importDefault(require("./src/AppText"));
 exports.default = AppText_1.default;
@@ -19,6 +19,7 @@ var hooks_1 = require("./src/hooks");
 Object.defineProperty(exports, "useResponsiveFont", { enumerable: true, get: function () { return hooks_1.useResponsiveFont; } });
 Object.defineProperty(exports, "useThemedStyles", { enumerable: true, get: function () { return hooks_1.useThemedStyles; } });
 Object.defineProperty(exports, "useReducedMotion", { enumerable: true, get: function () { return hooks_1.useReducedMotion; } });
+Object.defineProperty(exports, "useDynamicTypeScale", { enumerable: true, get: function () { return hooks_1.useDynamicTypeScale; } });
 // Theme
 var theme_1 = require("./src/theme");
 Object.defineProperty(exports, "DEFAULT_THEME", { enumerable: true, get: function () { return theme_1.DEFAULT_THEME; } });

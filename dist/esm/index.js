@@ -6,7 +6,7 @@ export { Trans } from "./src/AppText";
 // Named exports for tree-shaking and explicit imports
 export { AppTextProvider, useAppTextTheme } from "./src/context";
 // Hooks
-export { useResponsiveFont, useThemedStyles, useReducedMotion, } from "./src/hooks";
+export { useResponsiveFont, useThemedStyles, useReducedMotion, useDynamicTypeScale, } from "./src/hooks";
 // Theme
 export { DEFAULT_THEME } from "./src/theme";
 // Scripts

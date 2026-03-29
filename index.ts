@@ -93,6 +93,9 @@ export type {
   AnimationConfig,
   AnimationProp,
   AnimationWithConfig,
+  AppTextColor,
+  ThemeColor,
+  CustomColor,
 } from "./src/types";
 
 // Error Boundary
