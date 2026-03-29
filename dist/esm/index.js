@@ -20,6 +20,6 @@ export { NumberFormatter, formatNumberICU, OrdinalFormatter, } from "./src/Numbe
 // Markdown Support
 export { default as MarkdownTrans, useMarkdownTranslation, } from "./src/MarkdownTrans";
 // Performance Optimizations
-export { LRUCache, TranslationCache, TranslationBatcher, debounce, throttle, memoize, translationCache, } from "./src/PerformanceOptimizations";
+export { LRUCache, TranslationCache, TranslationBatcher, debounce, throttle, memoize, translationCache, performanceMonitor, } from "./src/PerformanceOptimizations";
 // Error Boundary
 export { TranslationErrorBoundary } from "./src/ErrorBoundary";

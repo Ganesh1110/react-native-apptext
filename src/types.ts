@@ -244,11 +244,15 @@ export interface AppTextProps extends TextProps, SpacingProps {
   transform?: TextStyle["textTransform"];
   decoration?: TextStyle["textDecorationLine"];
   italic?: boolean;
-  /** @deprecated Use maxLines and truncate boolean instead */
+  /** @deprecated Use maxLines and truncateText instead */
   truncate?: boolean | number;
   maxLines?: number;
   /** Whether to show ellipsis when text overflows maxLines */
   truncateText?: boolean;
+  /** Text for "Read more" button (default: "Read more") */
+  expandText?: string;
+  /** Text for "Read less" button (default: "Read less") */
+  collapseText?: string;
   shadow?: boolean;
   animated?: boolean;
   animation?: AnimationProp;

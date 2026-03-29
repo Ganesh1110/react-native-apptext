@@ -278,5 +278,188 @@ export class TranslationBatcher {
   }
 }
 
+
+/**
+ * Memory leak prevention utilities
+ */
+export class MemoryManager {
+  private static timers = new Set<NodeJS.Timeout>();
+  private static listeners = new Map<any, Set<() => void>>();
+
+  static registerTimer(timer: NodeJS.Timeout): void {
+    this.timers.add(timer);
+  }
+
+  static clearTimer(timer: NodeJS.Timeout): void {
+    clearTimeout(timer);
+    this.timers.delete(timer);
+  }
+
+  static registerListener(target: any, cleanup: () => void): void {
+    if (!this.listeners.has(target)) {
+      this.listeners.set(target, new Set());
+    }
+    this.listeners.get(target)!.add(cleanup);
+  }
+
+  static cleanupListeners(target: any): void {
+    const cleanups = this.listeners.get(target);
+    if (cleanups) {
+      cleanups.forEach((cleanup) => cleanup());
+      this.listeners.delete(target);
+    }
+  }
+
+  static clearAll(): void {
+    // Clear all timers
+    this.timers.forEach((timer) => clearTimeout(timer));
+    this.timers.clear();
+
+    // Clear all listeners
+    this.listeners.forEach((cleanups) => {
+      cleanups.forEach((cleanup) => cleanup());
+    });
+    this.listeners.clear();
+  }
+
+  static getStats(): { activeTimers: number; registeredListeners: number } {
+    return {
+      activeTimers: this.timers.size,
+      registeredListeners: this.listeners.size,
+    };
+  }
+}
+
+export class VirtualListHelper {
+  private itemHeights = new Map<string, number>();
+  private defaultHeight: number;
+
+  constructor(defaultHeight: number = 50) {
+    this.defaultHeight = defaultHeight;
+  }
+
+  getItemHeight(key: string): number {
+    return this.itemHeights.get(key) || this.defaultHeight;
+  }
+
+  setItemHeight(key: string, height: number): void {
+    this.itemHeights.set(key, height);
+  }
+
+  getVisibleRange(
+    scrollOffset: number,
+    viewportHeight: number,
+    items: Array<{ key: string }>
+  ): { startIndex: number; endIndex: number; offsetY: number } {
+    let currentOffset = 0;
+    let startIndex = 0;
+    let endIndex = 0;
+    let offsetY = 0;
+
+    // Find start index
+    for (let i = 0; i < items.length; i++) {
+      const height = this.getItemHeight(items[i].key);
+      if (currentOffset + height > scrollOffset) {
+        startIndex = i;
+        offsetY = currentOffset;
+        break;
+      }
+      currentOffset += height;
+    }
+
+    // Find end index
+    currentOffset = offsetY;
+    for (let i = startIndex; i < items.length; i++) {
+      const height = this.getItemHeight(items[i].key);
+      currentOffset += height;
+      if (currentOffset > scrollOffset + viewportHeight) {
+        endIndex = i;
+        break;
+      }
+    }
+
+    if (endIndex === 0) {
+      endIndex = items.length - 1;
+    }
+
+    return { startIndex, endIndex, offsetY };
+  }
+
+  getTotalHeight(items: Array<{ key: string }>): number {
+    return items.reduce((sum, item) => sum + this.getItemHeight(item.key), 0);
+  }
+}
+
+/**
+ * Performance monitoring
+ */
+export class PerformanceMonitor {
+  private measurements = new Map<string, number[]>();
+
+  private now(): number {
+    if (typeof performance !== "undefined" && performance.now) {
+      return performance.now();
+    }
+    return Date.now();
+  }
+
+  measure(name: string, fn: () => void): void {
+    const start = this.now();
+    fn();
+    const duration = this.now() - start;
+    if (!this.measurements.has(name)) {
+      this.measurements.set(name, []);
+    }
+    this.measurements.get(name)!.push(duration);
+  }
+
+  async measureAsync(name: string, fn: () => Promise<void>): Promise<void> {
+    const start = this.now();
+    await fn();
+    const duration = this.now() - start;
+    if (!this.measurements.has(name)) {
+      this.measurements.set(name, []);
+    }
+    this.measurements.get(name)!.push(duration);
+  }
+
+  getStats(name: string): any {
+    const measurements = this.measurements.get(name) || [];
+    if (measurements.length === 0) {
+      return null;
+    }
+
+    const sorted = [...measurements].sort((a, b) => a - b);
+    const sum = measurements.reduce((a, b) => a + b, 0);
+
+    return {
+      count: measurements.length,
+      min: sorted[0],
+      max: sorted[sorted.length - 1],
+      mean: sum / measurements.length,
+      median: sorted[Math.floor(sorted.length / 2)],
+      p95: sorted[Math.floor(sorted.length * 0.95)],
+      p99: sorted[Math.floor(sorted.length * 0.99)],
+    };
+  }
+
+  getAllStats(): Record<string, any> {
+    const stats: Record<string, any> = {};
+    for (const [name] of this.measurements) {
+      stats[name] = this.getStats(name);
+    }
+    return stats;
+  }
+
+  clear(name?: string): void {
+    if (name) {
+      this.measurements.delete(name);
+    } else {
+      this.measurements.clear();
+    }
+  }
+}
+
 // Singleton instances
 export const translationCache = new TranslationCache(1000);
+export const performanceMonitor = new PerformanceMonitor();

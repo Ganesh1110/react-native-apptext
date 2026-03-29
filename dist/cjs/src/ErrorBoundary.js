@@ -52,6 +52,10 @@ class TranslationErrorBoundary extends react_1.Component {
     }
     render() {
         if (this.state.hasError) {
+            if (typeof this.props.fallback === "function") {
+                const FallbackComponent = this.props.fallback;
+                return <FallbackComponent error={this.state.error}/>;
+            }
             return (this.props.fallback || (<react_native_1.View style={[
                     this.props.style,
                     { padding: 10, backgroundColor: "#FF000010" },

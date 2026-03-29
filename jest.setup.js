@@ -25,6 +25,14 @@ beforeAll(() => {
   });
 });
 
+const { translationCache, performanceMonitor } = require("./src/PerformanceOptimizations");
+
+beforeEach(() => {
+  // Clear singleton caches between tests
+  if (translationCache) translationCache.clear();
+  if (performanceMonitor) performanceMonitor.clear();
+});
+
 afterAll(() => {
   console.warn = originalWarn;
   console.error = originalError;

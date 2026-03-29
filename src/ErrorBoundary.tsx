@@ -3,7 +3,7 @@ import { Text, View, TextStyle } from "react-native";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
-  fallback?: ReactNode;
+  fallback?: ReactNode | React.ComponentType<{ error?: Error }>;
   fallbackText?: string;
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
   style?: TextStyle;
@@ -36,8 +36,14 @@ export class TranslationErrorBoundary extends Component<
 
   render() {
     if (this.state.hasError) {
+      if (typeof this.props.fallback === "function") {
+        const FallbackComponent = this.props.fallback as React.ComponentType<{
+          error?: Error;
+        }>;
+        return <FallbackComponent error={this.state.error} />;
+      }
       return (
-        this.props.fallback || (
+        (this.props.fallback as ReactNode) || (
           <View
             style={[
               this.props.style,

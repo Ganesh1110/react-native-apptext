@@ -117,4 +117,23 @@ module.exports = {
   FlatList: ({ children, ...props }) =>
     React.createElement("FlatList", props, children),
   TextInput: (props) => React.createElement("TextInput", props),
+  AccessibilityInfo: {
+    isReduceMotionEnabled: jest.fn(() => Promise.resolve(false)),
+    announceForAccessibility: jest.fn(),
+    addEventListener: jest.fn(() => ({
+      remove: jest.fn(),
+    })),
+    removeEventListener: jest.fn(),
+  },
+  NativeModules: {
+    SettingsManager: {
+      settings: {
+        AppleLocale: "en_US",
+        AppleLanguages: ["en"],
+      },
+    },
+    I18nManager: {
+      localeIdentifier: "en_US",
+    },
+  },
 };

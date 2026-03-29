@@ -74,6 +74,7 @@ export {
   throttle,
   memoize,
   translationCache,
+  performanceMonitor,
 } from "./src/PerformanceOptimizations";
 
 // Type exports for TypeScript users

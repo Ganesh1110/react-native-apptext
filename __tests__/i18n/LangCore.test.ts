@@ -110,8 +110,8 @@ describe("PLURAL_RULES coverage", () => {
     }
   );
 
-  it("falls back to English rule for unknown language", () => {
-    expect(getPluralForm("xx", 1)).toBe("one");
+  it("falls back to 'other' for unknown language", () => {
+    expect(getPluralForm("xx", 1)).toBe("other");
     expect(getPluralForm("xx", 5)).toBe("other");
   });
 

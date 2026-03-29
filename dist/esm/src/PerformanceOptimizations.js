@@ -209,5 +209,158 @@ export class TranslationBatcher {
         }
     }
 }
+/**
+ * Memory leak prevention utilities
+ */
+export class MemoryManager {
+    static registerTimer(timer) {
+        this.timers.add(timer);
+    }
+    static clearTimer(timer) {
+        clearTimeout(timer);
+        this.timers.delete(timer);
+    }
+    static registerListener(target, cleanup) {
+        if (!this.listeners.has(target)) {
+            this.listeners.set(target, new Set());
+        }
+        this.listeners.get(target).add(cleanup);
+    }
+    static cleanupListeners(target) {
+        const cleanups = this.listeners.get(target);
+        if (cleanups) {
+            cleanups.forEach((cleanup) => cleanup());
+            this.listeners.delete(target);
+        }
+    }
+    static clearAll() {
+        // Clear all timers
+        this.timers.forEach((timer) => clearTimeout(timer));
+        this.timers.clear();
+        // Clear all listeners
+        this.listeners.forEach((cleanups) => {
+            cleanups.forEach((cleanup) => cleanup());
+        });
+        this.listeners.clear();
+    }
+    static getStats() {
+        return {
+            activeTimers: this.timers.size,
+            registeredListeners: this.listeners.size,
+        };
+    }
+}
+MemoryManager.timers = new Set();
+MemoryManager.listeners = new Map();
+export class VirtualListHelper {
+    constructor(defaultHeight = 50) {
+        this.itemHeights = new Map();
+        this.defaultHeight = defaultHeight;
+    }
+    getItemHeight(key) {
+        return this.itemHeights.get(key) || this.defaultHeight;
+    }
+    setItemHeight(key, height) {
+        this.itemHeights.set(key, height);
+    }
+    getVisibleRange(scrollOffset, viewportHeight, items) {
+        let currentOffset = 0;
+        let startIndex = 0;
+        let endIndex = 0;
+        let offsetY = 0;
+        // Find start index
+        for (let i = 0; i < items.length; i++) {
+            const height = this.getItemHeight(items[i].key);
+            if (currentOffset + height > scrollOffset) {
+                startIndex = i;
+                offsetY = currentOffset;
+                break;
+            }
+            currentOffset += height;
+        }
+        // Find end index
+        currentOffset = offsetY;
+        for (let i = startIndex; i < items.length; i++) {
+            const height = this.getItemHeight(items[i].key);
+            currentOffset += height;
+            if (currentOffset > scrollOffset + viewportHeight) {
+                endIndex = i;
+                break;
+            }
+        }
+        if (endIndex === 0) {
+            endIndex = items.length - 1;
+        }
+        return { startIndex, endIndex, offsetY };
+    }
+    getTotalHeight(items) {
+        return items.reduce((sum, item) => sum + this.getItemHeight(item.key), 0);
+    }
+}
+/**
+ * Performance monitoring
+ */
+export class PerformanceMonitor {
+    constructor() {
+        this.measurements = new Map();
+    }
+    now() {
+        if (typeof performance !== "undefined" && performance.now) {
+            return performance.now();
+        }
+        return Date.now();
+    }
+    measure(name, fn) {
+        const start = this.now();
+        fn();
+        const duration = this.now() - start;
+        if (!this.measurements.has(name)) {
+            this.measurements.set(name, []);
+        }
+        this.measurements.get(name).push(duration);
+    }
+    async measureAsync(name, fn) {
+        const start = this.now();
+        await fn();
+        const duration = this.now() - start;
+        if (!this.measurements.has(name)) {
+            this.measurements.set(name, []);
+        }
+        this.measurements.get(name).push(duration);
+    }
+    getStats(name) {
+        const measurements = this.measurements.get(name) || [];
+        if (measurements.length === 0) {
+            return null;
+        }
+        const sorted = [...measurements].sort((a, b) => a - b);
+        const sum = measurements.reduce((a, b) => a + b, 0);
+        return {
+            count: measurements.length,
+            min: sorted[0],
+            max: sorted[sorted.length - 1],
+            mean: sum / measurements.length,
+            median: sorted[Math.floor(sorted.length / 2)],
+            p95: sorted[Math.floor(sorted.length * 0.95)],
+            p99: sorted[Math.floor(sorted.length * 0.99)],
+        };
+    }
+    getAllStats() {
+        const stats = {};
+        for (const [name] of this.measurements) {
+            stats[name] = this.getStats(name);
+        }
+        return stats;
+    }
+    clear(name) {
+        if (name) {
+            this.measurements.delete(name);
+        }
+        else {
+            this.measurements.clear();
+        }
+    }
+}
 // Singleton instances
 export const translationCache = new TranslationCache(1000);
+export const performanceMonitor = new PerformanceMonitor();

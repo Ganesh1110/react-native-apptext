@@ -24,6 +24,7 @@ interface ExtractOptions {
   ignore: string[];
   format: "json" | "yaml" | "csv";
   verbose: boolean;
+  ai?: boolean;
 }
 
 interface TranslationKey {
@@ -105,6 +106,9 @@ class TranslationExtractor {
         JSXElement: (path) => {
           this.handleJSXElement(path, filePath);
         },
+        TaggedTemplateExpression: (path) => {
+          this.handleTaggedTemplate(path, filePath);
+        },
       });
 
       if (this.options.verbose) {
@@ -142,6 +146,33 @@ class TranslationExtractor {
     // Check for MarkdownTrans component
     if (node.openingElement.name.name === "MarkdownTrans") {
       this.extractTransComponent(node, filePath);
+    }
+  }
+
+  private handleTaggedTemplate(path: any, filePath: string): void {
+    const { node } = path;
+    if (node.tag.name === "trans") {
+      const template = node.quasi;
+      let key = "";
+      const params: string[] = [];
+
+      template.quasis.forEach((element: any, index: number) => {
+        key += element.value.raw;
+        if (index < template.expressions.length) {
+          const expression = template.expressions[index];
+          const paramName = expression.name || `param${index}`;
+          key += `{{${paramName}}}`;
+          params.push(paramName);
+        }
+      });
+
+      this.addKey({
+        key,
+        file: path.relative(process.cwd(), filePath),
+        line: node.loc.start.line,
+        column: node.loc.start.column,
+        params,
+      });
     }
   }
 
@@ -189,6 +220,12 @@ class TranslationExtractor {
     const params = valuesAttr ? this.extractJSXParams(valuesAttr) : undefined;
     const options = optionsAttr ? this.extractJSXOptions(optionsAttr) : {};
 
+    // Improved: Extract default value from children if not provided as prop
+    let defaultValue = options.defaultValue;
+    if (!defaultValue) {
+      defaultValue = this.extractTextFromJSXChildren(node.children);
+    }
+
     this.addKey({
       key,
       file: path.relative(process.cwd(), filePath),
@@ -196,7 +233,30 @@ class TranslationExtractor {
       column: node.loc.start.column,
       params,
       ...options,
+      defaultValue,
     });
+  }
+
+  private extractTextFromJSXChildren(children: any[]): string | undefined {
+    if (!children || children.length === 0) return undefined;
+
+    let text = "";
+    for (const child of children) {
+      if (child.type === "JSXText") {
+        text += child.value.trim();
+      } else if (child.type === "JSXExpressionContainer") {
+        if (child.expression.type === "Identifier") {
+          text += `{{${child.expression.name}}}`;
+        }
+      } else if (child.type === "JSXElement") {
+        // Handle nested elements as tags
+        const tagName = child.openingElement.name.name;
+        const innerText = this.extractTextFromJSXChildren(child.children);
+        text += `<${tagName}>${innerText || ""}</${tagName}>`;
+      }
+    }
+
+    return text || undefined;
   }
 
   private extractParams(node: any): string[] | undefined {
@@ -293,6 +353,22 @@ class TranslationExtractor {
         this.writeCSV(template);
         break;
     }
+
+    if (this.options.ai) {
+      await this.generateAISuggestions(template);
+    }
+  }
+
+  private async generateAISuggestions(template: any): Promise<void> {
+    console.log("🤖 Generating AI translation suggestions (Stub)...");
+    // In a real implementation, this would call an LLM API
+    // For now, we'll just mock it
+    const suggestionsFile = this.options.output.replace(
+      /\.(json|yaml|csv)$/,
+      ".suggestions.$1"
+    );
+
+    console.log(`🤖 AI suggestions would be written to ${suggestionsFile}`);
   }
 
   private buildTemplate(): any {
@@ -417,6 +493,9 @@ function parseArgs(): Partial<ExtractOptions> {
       case "--verbose":
       case "-v":
         options.verbose = true;
+        break;
+      case "--ai":
+        options.ai = true;
         break;
       case "--help":
       case "-h":

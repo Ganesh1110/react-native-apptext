@@ -1,0 +1,251 @@
+  console.error
+    react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/i18n/LangCore.test.ts:132:36
+
+  console.error
+    react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/i18n/LangCore.test.ts:132:36
+
+  console.error
+    react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/i18n/LangCore.test.ts:132:36
+
+  console.error
+    react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/i18n/LangCore.test.ts:132:36
+
+  console.error
+    react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at Object.<anonymous> (__tests__/i18n/LangCore.test.ts:140:34)
+
+  console.error
+    react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at Object.<anonymous> (__tests__/i18n/LangCore.test.ts:153:34)
+      at asyncGeneratorStep (__tests__/i18n/LangCore.test.ts:8:27)
+      at asyncGeneratorStep (__tests__/i18n/LangCore.test.ts:8:27)
+      at _next (__tests__/i18n/LangCore.test.ts:8:27)
+      at Object.<anonymous> (__tests__/i18n/LangCore.test.ts:8:27)
+
+  console.error
+    react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at Object.<anonymous> (__tests__/i18n/LangCore.test.ts:195:34)
+
+FAIL __tests__/i18n/LangCore.test.ts
+  PLURAL_RULES coverage
+    ✓ getPluralForm('en', 1) === 'one' (1 ms)
+    ✓ getPluralForm('en', 2) === 'other'
+    ✓ getPluralForm('de', 1) === 'one' (1 ms)
+    ✓ getPluralForm('nl', 2) === 'other'
+    ✓ getPluralForm('sv', 1) === 'one'
+    ✓ getPluralForm('da', 2) === 'other'
+    ✓ getPluralForm('nb', 1) === 'one'
+    ✓ getPluralForm('fr', 0) === 'one'
+    ✓ getPluralForm('fr', 2) === 'other'
+    ✓ getPluralForm('es', 1) === 'one'
+    ✓ getPluralForm('it', 1) === 'one'
+    ✓ getPluralForm('pt', 1) === 'one'
+    ✓ getPluralForm('ro', 1) === 'one'
+    ✓ getPluralForm('ro', 0) === 'few'
+    ✓ getPluralForm('ro', 20) === 'other'
+    ✓ getPluralForm('ru', 1) === 'one'
+    ✓ getPluralForm('ru', 2) === 'few'
+    ✓ getPluralForm('ru', 5) === 'many'
+    ✓ getPluralForm('uk', 1) === 'one'
+    ✓ getPluralForm('uk', 2) === 'few'
+    ✓ getPluralForm('pl', 1) === 'one'
+    ✓ getPluralForm('pl', 2) === 'few'
+    ✓ getPluralForm('pl', 5) === 'many'
+    ✓ getPluralForm('cs', 1) === 'one'
+    ✓ getPluralForm('cs', 3) === 'few'
+    ✓ getPluralForm('cs', 5) === 'many'
+    ✓ getPluralForm('ar', 1) === 'one'
+    ✓ getPluralForm('ar', 2) === 'two' (1 ms)
+    ✓ getPluralForm('ar', 5) === 'few'
+    ✓ getPluralForm('ar', 15) === 'many'
+    ✓ getPluralForm('he', 1) === 'one'
+    ✓ getPluralForm('he', 2) === 'two'
+    ✓ getPluralForm('zh', 1) === 'other'
+    ✓ getPluralForm('ja', 100) === 'other'
+    ✓ getPluralForm('ko', 1) === 'other' (1 ms)
+    ✓ getPluralForm('hi', 0) === 'one'
+    ✓ getPluralForm('hi', 2) === 'other'
+    ✓ getPluralForm('bn', 1) === 'one'
+    ✓ getPluralForm('vi', 5) === 'other'
+    ✓ getPluralForm('th', 1) === 'other'
+    ✓ getPluralForm('id', 100) === 'other'
+    ✓ getPluralForm('ms', 1) === 'other' (1 ms)
+    ✓ getPluralForm('tr', 1) === 'one' (3 ms)
+    ✓ getPluralForm('tr', 5) === 'other'
+    ✓ getPluralForm('fi', 1) === 'one'
+    ✓ getPluralForm('hu', 1) === 'one'
+    ✓ getPluralForm('el', 1) === 'one'
+    ✓ getPluralForm('fa', 1) === 'other'
+    ✓ getPluralForm('ur', 1) === 'one'
+    ✕ falls back to English rule for unknown language (2 ms)
+    ✓ handles non-finite count gracefully
+  RTL language direction
+    ✓ reports rtl direction for ar (22 ms)
+    ✓ reports rtl direction for he (1 ms)
+    ✓ reports rtl direction for fa (2 ms)
+    ✓ reports rtl direction for ur (1 ms)
+    ✓ reports ltr direction for Latin languages (1 ms)
+  Language change invalidates singleton cache
+    ✓ returns translated text in both old and new language after change (204 ms)
+  Missing plural form falls back to other
+    ✓ falls back to other when one form is missing (4 ms)
+
+  ● PLURAL_RULES coverage › falls back to English rule for unknown language
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "one"
+    Received: "other"
+
+      112 |
+      113 |   it("falls back to English rule for unknown language", () => {
+    > 114 |     expect(getPluralForm("xx", 1)).toBe("one");
+          |                                    ^
+      115 |     expect(getPluralForm("xx", 5)).toBe("other");
+      116 |   });
+      117 |
+
+      at Object.toBe (__tests__/i18n/LangCore.test.ts:114:36)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 57 passed, 58 total
+Snapshots:   0 total
+Time:        0.582 s, estimated 1 s
+Ran all test suites matching __tests__/i18n/LangCore.test.ts.

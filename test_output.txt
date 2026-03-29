@@ -1,0 +1,2565 @@
+
+> react-native-apptext@4.2.0 test
+> jest
+
+FAIL __tests__/i18n/LangCore.test.ts
+  ● Console
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/i18n/LangCore.test.ts:132:36
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/i18n/LangCore.test.ts:132:36
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/i18n/LangCore.test.ts:132:36
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/i18n/LangCore.test.ts:132:36
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at Object.<anonymous> (__tests__/i18n/LangCore.test.ts:140:34)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at Object.<anonymous> (__tests__/i18n/LangCore.test.ts:153:34)
+      at asyncGeneratorStep (__tests__/i18n/LangCore.test.ts:8:27)
+      at asyncGeneratorStep (__tests__/i18n/LangCore.test.ts:8:27)
+      at _next (__tests__/i18n/LangCore.test.ts:8:27)
+      at Object.<anonymous> (__tests__/i18n/LangCore.test.ts:8:27)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at Object.<anonymous> (__tests__/i18n/LangCore.test.ts:195:34)
+
+  ● PLURAL_RULES coverage › falls back to English rule for unknown language
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "one"
+    Received: "other"
+
+      112 |
+      113 |   it("falls back to English rule for unknown language", () => {
+    > 114 |     expect(getPluralForm("xx", 1)).toBe("one");
+          |                                    ^
+      115 |     expect(getPluralForm("xx", 5)).toBe("other");
+      116 |   });
+      117 |
+
+      at Object.toBe (__tests__/i18n/LangCore.test.ts:114:36)
+
+PASS __tests__/i18n/PluralRules.test.ts
+PASS __tests__/components/ErrorBoundary.test.tsx
+PASS __tests__/components/StaticVariants.test.tsx
+  ● Console
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:23:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:20:14)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:23:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:20:14)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:23:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:20:14)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:23:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:20:14)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:23:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:20:14)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:23:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:20:14)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:23:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:20:14)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:23:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:20:14)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:23:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:20:14)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:23:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:20:14)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:23:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:20:14)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:23:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:20:14)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:23:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:20:14)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:23:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:20:14)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:23:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:20:14)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:36:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:33:20)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:36:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:33:20)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:36:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:33:20)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:36:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:33:20)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:36:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:33:20)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:36:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:33:20)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:36:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:33:20)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:36:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:33:20)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:36:29)
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/components/StaticVariants.test.tsx:33:20)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/StaticVariants.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/StaticVariants.test.tsx:44:27)
+
+PASS __tests__/components/AppText.test.tsx
+  ● Console
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:13:29)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:18:29)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:27:29)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:39:29)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:46:29)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:53:29)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:62:29)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:69:29)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:76:29)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:85:29)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:95:29)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:102:29)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:112:29)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:124:29)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:132:29)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:144:29)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:152:31)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:161:29)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/AppText.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/AppText.test.tsx:168:29)
+
+PASS __tests__/components/TruncationComponent.test.tsx
+  ● Console
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/TruncationComponent.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/TruncationComponent.test.tsx:12:27)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/TruncationComponent.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/TruncationComponent.test.tsx:21:40)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/TruncationComponent.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/TruncationComponent.test.tsx:43:40)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/TruncationComponent.test.tsx:8:18)
+      at Object.renderWithProvider (__tests__/components/TruncationComponent.test.tsx:67:27)
+
+PASS __tests__/formatters/NumberFormatter.test.ts
+PASS __tests__/animations/useTextAnimation.test.ts
+  ● Console
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at Object.<anonymous> (__tests__/animations/useTextAnimation.test.ts:7:34)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at Object.<anonymous> (__tests__/animations/useTextAnimation.test.ts:12:34)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:20:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:19:24)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:20:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:19:24)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:20:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:19:24)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:20:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:19:24)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:20:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:19:24)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:20:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:19:24)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:29:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:28:25)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:29:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:28:25)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:29:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:28:25)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:29:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:28:25)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:29:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:28:25)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:29:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:28:25)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:29:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:28:25)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:38:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:37:20)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:38:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:37:20)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:38:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:37:20)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:38:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:37:20)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:38:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:37:20)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:47:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:46:23)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:47:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:46:23)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at __tests__/animations/useTextAnimation.test.ts:47:36
+          at Array.forEach (<anonymous>)
+      at Object.forEach (__tests__/animations/useTextAnimation.test.ts:46:23)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderHook (node_modules/@testing-library/react-native/src/render-hook.tsx:55:58)
+      at Object.<anonymous> (__tests__/animations/useTextAnimation.test.ts:58:34)
+
+PASS __tests__/i18n/Trans.test.tsx
+  ● Console
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at Object.<anonymous> (__tests__/i18n/Trans.test.tsx:29:35)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at Object.<anonymous> (__tests__/i18n/Trans.test.tsx:38:35)
+
+    console.warn
+      [i18n] Missing translation: "nonexistent.key" (lang: en)
+
+      13 |       return;
+      14 |     }
+    > 15 |     originalWarn(...args);
+         |                 ^
+      16 |   });
+      17 |
+      18 |   console.error = jest.fn((...args) => {
+
+      at console.apply (jest.setup.js:15:17)
+      at TranslationManager.warn [as handleMissingKey] (src/i18n/TranslationManager.ts:191:15)
+      at TranslationManager.handleMissingKey [as translate] (src/i18n/TranslationManager.ts:91:12)
+      at translate (src/i18n/LocaleProvider.tsx:69:22)
+      at t (src/Trans.tsx:169:16)
+      at mountMemo (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:5897:23)
+      at Object.useMemo (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15986:18)
+      at process.env.NODE_ENV.exports.useMemo (node_modules/react/cjs/react.development.js:1251:34)
+      at Trans (src/Trans.tsx:161:35)
+      at Object.react_stack_bottom_frame (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15670:20)
+      at renderWithHooks (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:4863:22)
+      at updateFunctionComponent (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:7018:19)
+      at updateSimpleMemoComponent (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:6811:14)
+      at updateMemoComponent (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:6744:13)
+      at beginWork (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:8698:18)
+      at runWithFiberInDEV (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2315:13)
+      at performUnitOfWork (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:13224:22)
+      at workLoopSync (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:13068:41)
+      at renderRootSync (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:13049:11)
+      at performWorkOnRoot (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:12181:11)
+      at performWorkOnRootViaSchedulerTask (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2908:7)
+      at flushActQueue (node_modules/react/cjs/react.development.js:590:34)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:884:10)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at Object.<anonymous> (__tests__/i18n/Trans.test.tsx:38:35)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at __tests__/i18n/Trans.test.tsx:52:15
+      at Object.<anonymous> (node_modules/expect/build/index.js:1824:9)
+      at Object.throwingMatcher [as toThrow] (node_modules/expect/build/index.js:2235:93)
+      at Object.toThrow (__tests__/i18n/Trans.test.tsx:57:13)
+
+    console.warn
+      [i18n] Missing translation: "nonexistent.key" (lang: en)
+
+      13 |       return;
+      14 |     }
+    > 15 |     originalWarn(...args);
+         |                 ^
+      16 |   });
+      17 |
+      18 |   console.error = jest.fn((...args) => {
+
+      at console.apply (jest.setup.js:15:17)
+      at TranslationManager.warn [as handleMissingKey] (src/i18n/TranslationManager.ts:191:15)
+      at TranslationManager.handleMissingKey [as translate] (src/i18n/TranslationManager.ts:91:12)
+      at translate (src/i18n/LocaleProvider.tsx:69:22)
+      at t (src/Trans.tsx:169:16)
+      at mountMemo (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:5897:23)
+      at Object.useMemo (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15986:18)
+      at process.env.NODE_ENV.exports.useMemo (node_modules/react/cjs/react.development.js:1251:34)
+      at Trans (src/Trans.tsx:161:35)
+      at Object.react_stack_bottom_frame (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:15670:20)
+      at renderWithHooks (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:4863:22)
+      at updateFunctionComponent (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:7018:19)
+      at updateSimpleMemoComponent (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:6811:14)
+      at updateMemoComponent (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:6744:13)
+      at beginWork (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:8698:18)
+      at runWithFiberInDEV (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2315:13)
+      at performUnitOfWork (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:13224:22)
+      at workLoopSync (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:13068:41)
+      at renderRootSync (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:13049:11)
+      at performWorkOnRoot (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:12181:11)
+      at performWorkOnRootViaSchedulerTask (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2908:7)
+      at flushActQueue (node_modules/react/cjs/react.development.js:590:34)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:884:10)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at __tests__/i18n/Trans.test.tsx:52:15
+      at Object.<anonymous> (node_modules/expect/build/index.js:1824:9)
+      at Object.throwingMatcher [as toThrow] (node_modules/expect/build/index.js:2235:93)
+      at Object.toThrow (__tests__/i18n/Trans.test.tsx:57:13)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at __tests__/i18n/Trans.test.tsx:68:15
+      at Object.<anonymous> (node_modules/expect/build/index.js:1824:9)
+      at Object.throwingMatcher [as toThrow] (node_modules/expect/build/index.js:2235:93)
+      at Object.toThrow (__tests__/i18n/Trans.test.tsx:76:13)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at __tests__/i18n/Trans.test.tsx:85:15
+      at Object.<anonymous> (node_modules/expect/build/index.js:1824:9)
+      at Object.throwingMatcher [as toThrow] (node_modules/expect/build/index.js:2235:93)
+      at Object.toThrow (__tests__/i18n/Trans.test.tsx:96:13)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at __tests__/i18n/Trans.test.tsx:108:15
+      at Object.<anonymous> (node_modules/expect/build/index.js:1824:9)
+      at Object.throwingMatcher [as toThrow] (node_modules/expect/build/index.js:2235:93)
+      at Object.toThrow (__tests__/i18n/Trans.test.tsx:116:13)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at Object.<anonymous> (__tests__/i18n/Trans.test.tsx:127:37)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at Object.<anonymous> (__tests__/i18n/Trans.test.tsx:149:35)
+
+PASS __tests__/components/WaveText.test.tsx
+  ● Console
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/WaveText.test.tsx:7:9)
+      at Object.renderWithProvider (__tests__/components/WaveText.test.tsx:11:27)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/WaveText.test.tsx:7:9)
+      at Object.renderWithProvider (__tests__/components/WaveText.test.tsx:23:25)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/WaveText.test.tsx:7:9)
+      at Object.renderWithProvider (__tests__/components/WaveText.test.tsx:32:26)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/WaveText.test.tsx:7:9)
+      at Object.renderWithProvider (__tests__/components/WaveText.test.tsx:51:26)
+
+PASS __tests__/components/TypewriterText.test.tsx
+  ● Console
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/TypewriterText.test.tsx:12:9)
+      at Object.renderWithProvider (__tests__/components/TypewriterText.test.tsx:20:40)
+
+    console.error
+      An update to null inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at node_modules/react-test-renderer/cjs/react-test-renderer.development.js:14402:19
+      at runWithFiberInDEV (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2315:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:14401:9)
+      at scheduleUpdateOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:12086:9)
+      at dispatchSetStateInternal (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:6208:13)
+      at dispatchSetState (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:6165:7)
+      at setReducedMotion (src/hooks.ts:179:9)
+      at asyncGeneratorStep (src/hooks.ts:17:22)
+      at asyncGeneratorStep (src/hooks.ts:17:22)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/TypewriterText.test.tsx:12:9)
+      at Object.renderWithProvider (__tests__/components/TypewriterText.test.tsx:38:25)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/TypewriterText.test.tsx:12:9)
+      at Object.renderWithProvider (__tests__/components/TypewriterText.test.tsx:60:39)
+
+    console.error
+      An update to null inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at node_modules/react-test-renderer/cjs/react-test-renderer.development.js:14402:19
+      at runWithFiberInDEV (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2315:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:14401:9)
+      at scheduleUpdateOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:12086:9)
+      at dispatchSetStateInternal (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:6208:13)
+      at dispatchSetState (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:6165:7)
+      at setReducedMotion (src/hooks.ts:179:9)
+      at asyncGeneratorStep (src/hooks.ts:17:22)
+      at asyncGeneratorStep (src/hooks.ts:17:22)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at renderWithProvider (__tests__/components/TypewriterText.test.tsx:12:9)
+      at Object.renderWithProvider (__tests__/components/TypewriterText.test.tsx:95:26)
+
+    console.error
+      An update to null inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at node_modules/react-test-renderer/cjs/react-test-renderer.development.js:14402:19
+      at runWithFiberInDEV (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:2315:13)
+      at warnIfUpdatesNotWrappedWithActDEV (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:14401:9)
+      at scheduleUpdateOnFiber (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:12086:9)
+      at dispatchSetStateInternal (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:6208:13)
+      at dispatchSetState (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:6165:7)
+      at setReducedMotion (src/hooks.ts:179:9)
+      at asyncGeneratorStep (src/hooks.ts:17:22)
+      at asyncGeneratorStep (src/hooks.ts:17:22)
+
+PASS __tests__/performance/LRUCache.test.ts
+PASS __tests__/typeGuards.test.ts
+PASS __tests__/integration/ProviderNesting.test.tsx
+  ● Console
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at Object.<anonymous> (__tests__/integration/ProviderNesting.test.tsx:19:35)
+
+    console.error
+      react-test-renderer is deprecated. See https://react.dev/warnings/react-test-renderer
+
+      22 |       return;
+      23 |     }
+    > 24 |     originalError(...args);
+         |                  ^
+      25 |   });
+      26 | });
+      27 |
+
+      at console.apply (jest.setup.js:24:18)
+      at Object.process.env.NODE_ENV.exports.create (node_modules/react-test-renderer/cjs/react-test-renderer.development.js:17337:17)
+      at create (node_modules/@testing-library/react-native/src/render-act.ts:15:29)
+      at callback (node_modules/@testing-library/react-native/src/act.ts:31:24)
+      at process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:814:22)
+      at actImplementation (node_modules/@testing-library/react-native/src/act.ts:30:25)
+      at renderWithAct (node_modules/@testing-library/react-native/src/render-act.ts:13:11)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:69:33)
+      at renderInternal (node_modules/@testing-library/react-native/src/render.tsx:44:10)
+      at Object.<anonymous> (__tests__/integration/ProviderNesting.test.tsx:33:35)
+
+PASS __tests__/i18n/IC UMessageFormat.test.ts
+PASS __tests__/PerformanceOptimizations.test.ts
+PASS __tests__/i18n/i18nUtils.test.ts
+
+Test Suites: 1 failed, 16 passed, 17 total
+Tests:       1 failed, 183 passed, 184 total
+Snapshots:   0 total
+Time:        1.016 s
+Ran all test suites.

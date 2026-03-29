@@ -68,6 +68,9 @@ class TranslationExtractor {
                 JSXElement: (path) => {
                     this.handleJSXElement(path, filePath);
                 },
+                TaggedTemplateExpression: (path) => {
+                    this.handleTaggedTemplate(path, filePath);
+                },
             });
             if (this.options.verbose) {
                 console.log(`✓ ${path.relative(process.cwd(), filePath)}`);
@@ -101,6 +104,30 @@ class TranslationExtractor {
             this.extractTransComponent(node, filePath);
         }
     }
+    handleTaggedTemplate(path, filePath) {
+        const { node } = path;
+        if (node.tag.name === "trans") {
+            const template = node.quasi;
+            let key = "";
+            const params = [];
+            template.quasis.forEach((element, index) => {
+                key += element.value.raw;
+                if (index < template.expressions.length) {
+                    const expression = template.expressions[index];
+                    const paramName = expression.name || `param${index}`;
+                    key += `{{${paramName}}}`;
+                    params.push(paramName);
+                }
+            });
+            this.addKey({
+                key,
+                file: path.relative(process.cwd(), filePath),
+                line: node.loc.start.line,
+                column: node.loc.start.column,
+                params,
+            });
+        }
+    }
     extractTranslationCall(node, filePath, isPlural) {
         if (node.arguments.length === 0)
             return;
@@ -130,6 +157,11 @@ class TranslationExtractor {
         const optionsAttr = attributes.find((attr) => { var _a; return ((_a = attr.name) === null || _a === void 0 ? void 0 : _a.name) === "options"; });
         const params = valuesAttr ? this.extractJSXParams(valuesAttr) : undefined;
         const options = optionsAttr ? this.extractJSXOptions(optionsAttr) : {};
+        // Improved: Extract default value from children if not provided as prop
+        let defaultValue = options.defaultValue;
+        if (!defaultValue) {
+            defaultValue = this.extractTextFromJSXChildren(node.children);
+        }
         this.addKey({
             key,
             file: path.relative(process.cwd(), filePath),
@@ -137,7 +169,30 @@ class TranslationExtractor {
             column: node.loc.start.column,
             params,
             ...options,
+            defaultValue,
         });
+    }
+    extractTextFromJSXChildren(children) {
+        if (!children || children.length === 0)
+            return undefined;
+        let text = "";
+        for (const child of children) {
+            if (child.type === "JSXText") {
+                text += child.value.trim();
+            }
+            else if (child.type === "JSXExpressionContainer") {
+                if (child.expression.type === "Identifier") {
+                    text += `{{${child.expression.name}}}`;
+                }
+            }
+            else if (child.type === "JSXElement") {
+                // Handle nested elements as tags
+                const tagName = child.openingElement.name.name;
+                const innerText = this.extractTextFromJSXChildren(child.children);
+                text += `<${tagName}>${innerText || ""}</${tagName}>`;
+            }
+        }
+        return text || undefined;
     }
     extractParams(node) {
         if (!node || node.type !== "ObjectExpression")
@@ -219,6 +274,16 @@ class TranslationExtractor {
                 this.writeCSV(template);
                 break;
         }
+        if (this.options.ai) {
+            await this.generateAISuggestions(template);
+        }
+    }
+    async generateAISuggestions(template) {
+        console.log("🤖 Generating AI translation suggestions (Stub)...");
+        // In a real implementation, this would call an LLM API
+        // For now, we'll just mock it
+        const suggestionsFile = this.options.output.replace(/\.(json|yaml|csv)$/, ".suggestions.$1");
+        console.log(`🤖 AI suggestions would be written to ${suggestionsFile}`);
     }
     buildTemplate() {
         const template = {};
@@ -317,6 +382,9 @@ function parseArgs() {
             case "--verbose":
             case "-v":
                 options.verbose = true;
+                break;
+            case "--ai":
+                options.ai = true;
                 break;
             case "--help":
             case "-h":

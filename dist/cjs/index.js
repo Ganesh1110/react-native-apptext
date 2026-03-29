@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TranslationErrorBoundary = exports.translationCache = exports.memoize = exports.throttle = exports.debounce = exports.TranslationBatcher = exports.TranslationCache = exports.LRUCache = exports.useMarkdownTranslation = exports.MarkdownTrans = exports.OrdinalFormatter = exports.formatNumberICU = exports.NumberFormatter = exports.NamespaceLoader = exports.withLazyTranslations = exports.useLazyLocale = exports.LazyLocaleProvider = exports.PLURAL_RULES = exports.getPluralForm = exports.interpolate = exports.TranslationManager = exports.useLang = exports.LocaleProvider = exports.SCRIPT_CONFIGS = exports.DEFAULT_THEME = exports.useDynamicTypeScale = exports.useReducedMotion = exports.useThemedStyles = exports.useResponsiveFont = exports.useAppTextTheme = exports.AppTextProvider = exports.Trans = void 0;
+exports.TranslationErrorBoundary = exports.performanceMonitor = exports.translationCache = exports.memoize = exports.throttle = exports.debounce = exports.TranslationBatcher = exports.TranslationCache = exports.LRUCache = exports.useMarkdownTranslation = exports.MarkdownTrans = exports.OrdinalFormatter = exports.formatNumberICU = exports.NumberFormatter = exports.NamespaceLoader = exports.withLazyTranslations = exports.useLazyLocale = exports.LazyLocaleProvider = exports.PLURAL_RULES = exports.getPluralForm = exports.interpolate = exports.TranslationManager = exports.useLang = exports.LocaleProvider = exports.SCRIPT_CONFIGS = exports.DEFAULT_THEME = exports.useDynamicTypeScale = exports.useReducedMotion = exports.useThemedStyles = exports.useResponsiveFont = exports.useAppTextTheme = exports.AppTextProvider = exports.Trans = void 0;
 // Main Component
 const AppText_1 = __importDefault(require("./src/AppText"));
 exports.default = AppText_1.default;
@@ -58,6 +58,7 @@ Object.defineProperty(exports, "debounce", { enumerable: true, get: function () 
 Object.defineProperty(exports, "throttle", { enumerable: true, get: function () { return PerformanceOptimizations_1.throttle; } });
 Object.defineProperty(exports, "memoize", { enumerable: true, get: function () { return PerformanceOptimizations_1.memoize; } });
 Object.defineProperty(exports, "translationCache", { enumerable: true, get: function () { return PerformanceOptimizations_1.translationCache; } });
+Object.defineProperty(exports, "performanceMonitor", { enumerable: true, get: function () { return PerformanceOptimizations_1.performanceMonitor; } });
 // Error Boundary
 var ErrorBoundary_1 = require("./src/ErrorBoundary");
 Object.defineProperty(exports, "TranslationErrorBoundary", { enumerable: true, get: function () { return ErrorBoundary_1.TranslationErrorBoundary; } });
