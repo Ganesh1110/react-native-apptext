@@ -219,9 +219,18 @@ export interface AnimationConfig {
   speed?: number;
 }
 
+export type AnimationProp = AnimationType | boolean | AnimationWithConfig;
+
+export interface AnimationWithConfig {
+  type: AnimationType;
+  duration?: number;
+  delay?: number;
+  speed?: number;
+}
+
 export interface AppTextProps extends TextProps, SpacingProps {
   variant?: TypographyVariant;
-  color?: keyof AppTextTheme["colors"] | (string & {});
+  color?: keyof AppTextTheme["colors"] | string;
   size?: number | "auto";
   weight?: TextStyle["fontWeight"];
   align?: TextStyle["textAlign"];
@@ -235,7 +244,7 @@ export interface AppTextProps extends TextProps, SpacingProps {
   truncateText?: boolean;
   shadow?: boolean;
   animated?: boolean;
-  animation?: AnimationType | boolean;
+  animation?: AnimationProp;
   animationConfig?: AnimationConfig;
   animationDelay?: number;
   animationDuration?: number;
@@ -248,6 +257,9 @@ export interface AppTextProps extends TextProps, SpacingProps {
   onLinkPress?: (link: string) => void;
   style?: StyleProp<TextStyle>;
   testID?: string;
+  allowFontScaling?: boolean;
+  minimumFontScale?: number;
+  maxFontSizeMultiplier?: number;
   accessibilityLabel?: string;
   accessibilityHint?: string;
   accessibilityLiveRegion?: "none" | "polite" | "assertive";

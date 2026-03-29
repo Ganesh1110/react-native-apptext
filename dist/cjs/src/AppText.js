@@ -52,25 +52,52 @@ Object.defineProperty(exports, "useAppTextTheme", { enumerable: true, get: funct
 const utils_1 = require("./utils");
 const Trans_1 = __importDefault(require("./Trans"));
 exports.Trans = Trans_1.default;
-/* ========== Animation Hook ========== */
+const isAnimationWithConfig = (anim) => {
+    return (typeof anim === "object" &&
+        anim !== null &&
+        "type" in anim &&
+        typeof anim.type === "string");
+};
 const useTextAnimation = (animated, animation, animationConfig, animationDelay = 0, animationDuration = 1000, animationSpeed = 50, cursor = false) => {
-    const getAnimatedValue = (val) => {
-        const ref = (0, react_1.useRef)(null);
-        if (!ref.current)
-            ref.current = new react_native_1.Animated.Value(val);
-        return ref.current;
-    };
-    const opacityValue = getAnimatedValue(0);
-    const translateYValue = getAnimatedValue(50);
-    const translateXValue = getAnimatedValue(100);
-    const scaleValue = getAnimatedValue(0.8);
-    const rotateValue = getAnimatedValue(0);
-    const shakeValue = getAnimatedValue(0);
-    const glowValue = getAnimatedValue(0);
-    const neonValue = getAnimatedValue(0);
-    const gradientValue = getAnimatedValue(0);
+    const reducedMotion = (0, hooks_1.useReducedMotion)();
+    const opacityValue = (0, react_1.useRef)(new react_native_1.Animated.Value(0)).current;
+    const translateYValue = (0, react_1.useRef)(new react_native_1.Animated.Value(50)).current;
+    const translateXValue = (0, react_1.useRef)(new react_native_1.Animated.Value(100)).current;
+    const scaleValue = (0, react_1.useRef)(new react_native_1.Animated.Value(0.8)).current;
+    const rotateValue = (0, react_1.useRef)(new react_native_1.Animated.Value(0)).current;
+    const shakeValue = (0, react_1.useRef)(new react_native_1.Animated.Value(0)).current;
+    const glowValue = (0, react_1.useRef)(new react_native_1.Animated.Value(0)).current;
+    const neonValue = (0, react_1.useRef)(new react_native_1.Animated.Value(0)).current;
+    const gradientValue = (0, react_1.useRef)(new react_native_1.Animated.Value(0)).current;
     const currentAnimation = (0, react_1.useRef)(null);
     const hasAnimated = (0, react_1.useRef)(false);
+    (0, react_1.useEffect)(() => {
+        return () => {
+            if (currentAnimation.current) {
+                currentAnimation.current.stop();
+            }
+            opacityValue.setValue(0);
+            translateYValue.setValue(50);
+            translateXValue.setValue(100);
+            scaleValue.setValue(0.8);
+            rotateValue.setValue(0);
+            shakeValue.setValue(0);
+            glowValue.setValue(0);
+            neonValue.setValue(0);
+            gradientValue.setValue(0);
+            hasAnimated.current = false;
+        };
+    }, [
+        opacityValue,
+        translateYValue,
+        translateXValue,
+        scaleValue,
+        rotateValue,
+        shakeValue,
+        glowValue,
+        neonValue,
+        gradientValue,
+    ]);
     // Derived type - used for branching in the parent component
     const animationType = (0, react_1.useMemo)(() => {
         if (!animation || animation === true)
@@ -82,15 +109,15 @@ const useTextAnimation = (animated, animation, animationConfig, animationDelay =
     const isSpecialAnimation = animationType === "typewriter" || animationType === "wave";
     (0, react_1.useEffect)(() => {
         // Return early if not enabled, or if it's a special animation handled by separate components
-        if (!animated || !animation || isSpecialAnimation)
+        // Also skip animation if user prefers reduced motion (accessibility)
+        if (!animated || !animation || isSpecialAnimation || reducedMotion)
             return;
         if (hasAnimated.current)
             return;
-        const config = animationConfig ||
-            (typeof animation === "object" ? animation : {});
+        const config = animationConfig || (isAnimationWithConfig(animation) ? animation : {});
         const type = animationType;
-        const duration = config.duration || animationDuration;
-        const delay = config.delay || animationDelay;
+        const duration = (config === null || config === void 0 ? void 0 : config.duration) || animationDuration;
+        const delay = (config === null || config === void 0 ? void 0 : config.delay) || animationDelay;
         // Stop previous animation safely
         if (currentAnimation.current) {
             currentAnimation.current.stop();
@@ -667,6 +694,12 @@ const useTextAnimation = (animated, animation, animationConfig, animationDelay =
             if (currentAnimation.current) {
                 currentAnimation.current.stop();
             }
+            opacityValue.setValue(0);
+            translateYValue.setValue(type.includes("slide") ? (type.includes("Down") ? -50 : 50) : 0);
+            translateXValue.setValue(type.includes("slide") ? (type.includes("Left") ? -100 : 100) : 0);
+            scaleValue.setValue(type.includes("zoom") || type === "bounceIn" ? 0.8 : 1);
+            rotateValue.setValue(0);
+            hasAnimated.current = false;
         };
     }, [
         animated,
@@ -676,6 +709,16 @@ const useTextAnimation = (animated, animation, animationConfig, animationDelay =
         animationType,
         isSpecialAnimation,
         animationConfig,
+        reducedMotion,
+        opacityValue,
+        translateYValue,
+        translateXValue,
+        scaleValue,
+        rotateValue,
+        shakeValue,
+        glowValue,
+        neonValue,
+        gradientValue,
     ]);
     const getAnimatedStyle = () => {
         // Return empty if not animated/animation context, or if special animation handled by standard components
@@ -863,11 +906,11 @@ const useTextAnimation = (animated, animation, animationConfig, animationDelay =
                     color: gradientValue.interpolate({
                         inputRange: [0, 0.25, 0.5, 0.75, 1],
                         outputRange: [
-                            "rgb(255, 0, 0)", // Red
-                            "rgb(0, 255, 0)", // Green
-                            "rgb(0, 0, 255)", // Blue
-                            "rgb(255, 0, 255)", // Magenta
-                            "rgb(255, 0, 0)", // Red
+                            "rgb(255, 0, 0)",
+                            "rgb(0, 255, 0)",
+                            "rgb(0, 0, 255)",
+                            "rgb(255, 0, 255)",
+                            "rgb(255, 0, 0)",
                         ],
                     }),
                 };
@@ -880,9 +923,11 @@ const useTextAnimation = (animated, animation, animationConfig, animationDelay =
         animationType,
     };
 };
-const TypewriterText = (0, react_1.memo)(({ children, delay = 0, duration = 2000, speed = 50, cursor = false, style, }) => {
+const TypewriterText = (0, react_1.memo)(({ children, delay = 0, duration = 2000, speed = 50, cursor = false, style, announceCompletion = true, }) => {
+    const reducedMotion = (0, hooks_1.useReducedMotion)();
     const [displayText, setDisplayText] = (0, react_1.useState)("");
     const [isDone, setIsDone] = (0, react_1.useState)(false);
+    const [currentIndex, setCurrentIndex] = (0, react_1.useState)(0);
     const text = (0, react_1.useMemo)(() => {
         const extractText = (node) => {
             if (typeof node === "string" || typeof node === "number") {
@@ -898,39 +943,52 @@ const TypewriterText = (0, react_1.memo)(({ children, delay = 0, duration = 2000
         };
         return extractText(children);
     }, [children]);
+    const fullText = (0, react_1.useMemo)(() => {
+        if (typeof children === "string")
+            return children;
+        if (typeof children === "number")
+            return String(children);
+        return text;
+    }, [children, text]);
     (0, react_1.useEffect)(() => {
-        // Reset state whenever text, speed, or delay changes
+        if (reducedMotion) {
+            setDisplayText(text);
+            setIsDone(true);
+            return;
+        }
         setDisplayText("");
         setIsDone(false);
+        setCurrentIndex(0);
         let startTimer;
         let characterTimer;
         let index = 0;
-        // Single recursive chain: no dependency on component state,
-        // so there is only ever ONE timer active at a time.
         const typeNextChar = () => {
             if (index > text.length) {
                 setIsDone(true);
                 return;
             }
             setDisplayText(text.substring(0, index));
+            setCurrentIndex(index);
             index++;
             characterTimer = setTimeout(typeNextChar, speed);
         };
-        // Honour the initial delay before typing begins
         startTimer = setTimeout(typeNextChar, delay);
         return () => {
             clearTimeout(startTimer);
             clearTimeout(characterTimer);
         };
-    }, [text, speed, delay]);
+    }, [text, speed, delay, reducedMotion]);
     (0, react_1.useEffect)(() => {
-        if (isDone) {
-            react_native_1.AccessibilityInfo.announceForAccessibility("Typewriter animation completed");
+        if (isDone && announceCompletion && !reducedMotion) {
+            react_native_1.AccessibilityInfo.announceForAccessibility(`Text fully displayed: ${fullText}`);
         }
-    }, [isDone]);
-    return (<react_native_1.Text style={style} accessibilityLiveRegion="polite" accessibilityState={{ busy: !isDone }}>
-        {displayText}
-        {cursor && !isDone && <react_native_1.Text style={{ color: style.color }}>|</react_native_1.Text>}
+    }, [isDone, announceCompletion, reducedMotion, fullText]);
+    const accessibilityLabel = (0, react_1.useMemo)(() => {
+        return isDone ? fullText : `${fullText}, typing in progress`;
+    }, [fullText, isDone]);
+    return (<react_native_1.Text style={style} accessibilityLabel={accessibilityLabel} accessibilityLiveRegion="polite" accessibilityState={{ busy: !isDone, disabled: false }}>
+        {reducedMotion ? text : displayText}
+        {cursor && !isDone && !reducedMotion && (<react_native_1.Text style={{ color: style.color }}>|</react_native_1.Text>)}
       </react_native_1.Text>);
 });
 const TruncationComponent = (0, react_1.memo)(({ children, maxLines, onExpand, expandText = "Read more", collapseText = "Read less", style, }) => {
@@ -971,14 +1029,43 @@ const WaveText = (0, react_1.memo)(({ children, duration = 1000, delay = 0, styl
         return extractText(children);
     }, [children]);
     const characters = (0, react_1.useMemo)(() => text.split(""), [text]);
-    // Track mounted state
+    // Track mounted state and previous animated values for cleanup
     const isMountedRef = (0, react_1.useRef)(true);
     const animationsRef = (0, react_1.useRef)([]);
+    const prevLengthRef = (0, react_1.useRef)(characters.length);
+    const prevAnimatedValuesRef = (0, react_1.useRef)([]);
+    const currentAnimatedValuesRef = (0, react_1.useRef)([]);
     // Create animated values - these persist but get replaced when text changes
     // Using a ref that we manually manage to avoid React's strict mode issues
     // Memoize animated values to avoid recreation during render
     const animatedValues = (0, react_1.useMemo)(() => {
         return characters.map(() => new react_native_1.Animated.Value(0));
+    }, [characters.length]);
+    // Keep ref in sync with animated values
+    (0, react_1.useEffect)(() => {
+        currentAnimatedValuesRef.current = animatedValues;
+    }, [animatedValues]);
+    // Cleanup previous animations when character count changes
+    (0, react_1.useEffect)(() => {
+        if (prevLengthRef.current !== characters.length &&
+            prevAnimatedValuesRef.current.length > 0) {
+            prevAnimatedValuesRef.current.forEach((value) => {
+                var _a;
+                (_a = value.stopAnimation) === null || _a === void 0 ? void 0 : _a.call(value);
+                value.setValue(0);
+            });
+        }
+        prevLengthRef.current = characters.length;
+        prevAnimatedValuesRef.current = currentAnimatedValuesRef.current;
+        return () => {
+            if (prevAnimatedValuesRef.current.length > 0) {
+                prevAnimatedValuesRef.current.forEach((value) => {
+                    var _a;
+                    (_a = value.stopAnimation) === null || _a === void 0 ? void 0 : _a.call(value);
+                    value.setValue(0);
+                });
+            }
+        };
     }, [characters.length]);
     (0, react_1.useEffect)(() => {
         isMountedRef.current = true;
@@ -1046,6 +1133,7 @@ const BaseAppText = (0, react_1.memo)((0, react_1.forwardRef)(({ children, varia
     const rawScheme = (0, react_native_1.useColorScheme)();
     const colorScheme = rawScheme === "unspecified" ? "light" : rawScheme;
     const themedStyles = (0, hooks_1.useThemedStyles)(theme, colorScheme);
+    const fontScaling = (0, hooks_1.useDynamicTypeScale)(allowFontScaling, minimumFontScale, maxFontSizeMultiplier);
     // Animation hook
     const { animatedStyle, animationType } = useTextAnimation(animated, animation, animationConfig, animationDelay, animationDuration, animationSpeed, cursor);
     const textContent = (0, react_1.useMemo)(() => {
@@ -1143,9 +1231,9 @@ const BaseAppText = (0, react_1.memo)((0, react_1.forwardRef)(({ children, varia
             numberOfLines: maxLines ||
                 (typeof truncate === "number" ? truncate : numberOfLines),
             ellipsizeMode: truncate || truncateText ? ellipsizeMode || "tail" : ellipsizeMode,
-            allowFontScaling: allowFontScaling !== false,
-            maxFontSizeMultiplier: maxFontSizeMultiplier || 3,
-            minimumFontScale,
+            allowFontScaling: fontScaling.allowFontScaling,
+            maxFontSizeMultiplier: fontScaling.maxFontSizeMultiplier,
+            minimumFontScale: fontScaling.minimumFontScale,
             suppressHighlighting,
             selectable,
             selectionColor,
@@ -1171,6 +1259,7 @@ const BaseAppText = (0, react_1.memo)((0, react_1.forwardRef)(({ children, varia
         allowFontScaling,
         maxFontSizeMultiplier,
         minimumFontScale,
+        fontScaling,
         suppressHighlighting,
         selectable,
         selectionColor,
@@ -1187,11 +1276,10 @@ const BaseAppText = (0, react_1.memo)((0, react_1.forwardRef)(({ children, varia
     const handlePress = (0, react_1.useCallback)((e) => onPress === null || onPress === void 0 ? void 0 : onPress(e), [onPress]);
     const handleLongPress = (0, react_1.useCallback)((e) => onLongPress === null || onLongPress === void 0 ? void 0 : onLongPress(e), [onLongPress]);
     const hasPressHandlers = !!onPress || !!onLongPress;
-    const finalConfig = animationConfig ||
-        (typeof animation === "object" ? animation : {});
-    const finalDelay = (_a = finalConfig.delay) !== null && _a !== void 0 ? _a : animationDelay;
-    const finalDuration = (_b = finalConfig.duration) !== null && _b !== void 0 ? _b : animationDuration;
-    const finalSpeed = (_c = finalConfig.speed) !== null && _c !== void 0 ? _c : animationSpeed;
+    const finalConfig = animationConfig || (isAnimationWithConfig(animation) ? animation : {});
+    const finalDelay = (_a = finalConfig === null || finalConfig === void 0 ? void 0 : finalConfig.delay) !== null && _a !== void 0 ? _a : animationDelay;
+    const finalDuration = (_b = finalConfig === null || finalConfig === void 0 ? void 0 : finalConfig.duration) !== null && _b !== void 0 ? _b : animationDuration;
+    const finalSpeed = (_c = finalConfig === null || finalConfig === void 0 ? void 0 : finalConfig.speed) !== null && _c !== void 0 ? _c : animationSpeed;
     // Special animation handling
     if ((animated || animation) && animationType === "typewriter") {
         return (<TypewriterText delay={finalDelay} duration={finalDuration} speed={finalSpeed} cursor={cursor} style={finalComputedStyle}>
@@ -1206,14 +1294,15 @@ const BaseAppText = (0, react_1.memo)((0, react_1.forwardRef)(({ children, varia
     const renderChildren = () => {
         if (!linkDetection || typeof children !== "string")
             return children;
-        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        const urlRegex = /((?:https?:\/\/)?(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*))/gi;
         const parts = children.split(urlRegex);
         return parts.map((part, i) => {
             if (part.match(urlRegex)) {
+                const url = part.match(/^https?:\/\//) ? part : `https://${part}`;
                 return (<react_native_1.Text key={`link-${i}`} style={{
                         color: resolvedColor,
                         textDecorationLine: "underline",
-                    }} onPress={() => onLinkPress === null || onLinkPress === void 0 ? void 0 : onLinkPress(part)}>
+                    }} onPress={() => onLinkPress === null || onLinkPress === void 0 ? void 0 : onLinkPress(url)}>
                 {part}
               </react_native_1.Text>);
             }

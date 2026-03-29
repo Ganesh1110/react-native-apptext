@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useDeviceLocale = exports.useThemedStyles = exports.useScriptDetection = exports.useResponsiveFont = void 0;
+exports.useDynamicTypeScale = exports.useReducedMotion = exports.useDeviceLocale = exports.useThemedStyles = exports.useScriptDetection = exports.useResponsiveFont = void 0;
 const react_1 = require("react");
 const react_native_1 = require("react-native");
 const scriptConfigs_1 = require("./scriptConfigs");
@@ -103,11 +103,12 @@ exports.useThemedStyles = useThemedStyles;
 // ============================================================================
 const useDeviceLocale = () => {
     return (0, react_1.useMemo)(() => {
+        var _a, _b, _c, _d, _e, _f;
         try {
             const locale = react_native_1.Platform.OS === "ios"
-                ? react_native_1.NativeModules.SettingsManager.settings.AppleLocale ||
-                    react_native_1.NativeModules.SettingsManager.settings.AppleLanguages[0]
-                : react_native_1.NativeModules.I18nManager.localeIdentifier;
+                ? ((_b = (_a = react_native_1.NativeModules.SettingsManager) === null || _a === void 0 ? void 0 : _a.settings) === null || _b === void 0 ? void 0 : _b.AppleLocale) ||
+                    ((_e = (_d = (_c = react_native_1.NativeModules.SettingsManager) === null || _c === void 0 ? void 0 : _c.settings) === null || _d === void 0 ? void 0 : _d.AppleLanguages) === null || _e === void 0 ? void 0 : _e[0])
+                : (_f = react_native_1.NativeModules.I18nManager) === null || _f === void 0 ? void 0 : _f.localeIdentifier;
             return locale ? locale.replace("_", "-") : "en";
         }
         catch (e) {
@@ -116,3 +117,38 @@ const useDeviceLocale = () => {
     }, []);
 };
 exports.useDeviceLocale = useDeviceLocale;
+// ============================================================================
+// Hook for reduced motion preference (Accessibility)
+// ============================================================================
+const useReducedMotion = () => {
+    const [reducedMotion, setReducedMotion] = (0, react_1.useState)(false);
+    (0, react_1.useEffect)(() => {
+        let subscription = null;
+        const checkReducedMotion = async () => {
+            try {
+                const isReduced = await react_native_1.AccessibilityInfo.isReduceMotionEnabled();
+                setReducedMotion(isReduced);
+            }
+            catch (_a) {
+                setReducedMotion(false);
+            }
+        };
+        checkReducedMotion();
+        subscription = react_native_1.AccessibilityInfo.addEventListener("reduceMotionChanged", (isReduced) => {
+            setReducedMotion(isReduced);
+        });
+        return () => {
+            subscription === null || subscription === void 0 ? void 0 : subscription.remove();
+        };
+    }, []);
+    return reducedMotion;
+};
+exports.useReducedMotion = useReducedMotion;
+const useDynamicTypeScale = (allowFontScaling, minimumFontScale, maxFontSizeMultiplier) => {
+    return {
+        allowFontScaling: allowFontScaling !== false,
+        minimumFontScale: minimumFontScale !== null && minimumFontScale !== void 0 ? minimumFontScale : 0.5,
+        maxFontSizeMultiplier: maxFontSizeMultiplier !== null && maxFontSizeMultiplier !== void 0 ? maxFontSizeMultiplier : 3,
+    };
+};
+exports.useDynamicTypeScale = useDynamicTypeScale;

@@ -9,7 +9,12 @@ export { Trans } from "./src/AppText";
 export { AppTextProvider, useAppTextTheme } from "./src/context";
 
 // Hooks
-export { useResponsiveFont, useThemedStyles } from "./src/hooks";
+export {
+  useResponsiveFont,
+  useThemedStyles,
+  useReducedMotion,
+  useDynamicTypeScale,
+} from "./src/hooks";
 
 // Theme
 export { DEFAULT_THEME } from "./src/theme";
@@ -84,6 +89,10 @@ export type {
   TranslationOptions,
   DeepKeyOf,
   TypedLocaleContextValue,
+  AnimationType,
+  AnimationConfig,
+  AnimationProp,
+  AnimationWithConfig,
 } from "./src/types";
 
 // Error Boundary

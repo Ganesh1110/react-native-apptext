@@ -6,6 +6,7 @@ import {
   NativeModules,
   Platform,
   EmitterSubscription,
+  AccessibilityInfo,
 } from "react-native";
 import { AppTextTheme, ScriptCode } from "./types";
 import { SCRIPT_CONFIGS } from "./scriptConfigs";
@@ -151,13 +152,65 @@ export const useDeviceLocale = (): string => {
     try {
       const locale =
         Platform.OS === "ios"
-          ? NativeModules.SettingsManager.settings.AppleLocale ||
-            NativeModules.SettingsManager.settings.AppleLanguages[0]
-          : NativeModules.I18nManager.localeIdentifier;
+          ? NativeModules.SettingsManager?.settings?.AppleLocale ||
+            NativeModules.SettingsManager?.settings?.AppleLanguages?.[0]
+          : NativeModules.I18nManager?.localeIdentifier;
 
       return locale ? locale.replace("_", "-") : "en";
     } catch (e) {
       return "en";
     }
   }, []);
+};
+
+// ============================================================================
+// Hook for reduced motion preference (Accessibility)
+// ============================================================================
+
+export const useReducedMotion = (): boolean => {
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    let subscription: EmitterSubscription | null = null;
+
+    const checkReducedMotion = async () => {
+      try {
+        const isReduced = await AccessibilityInfo.isReduceMotionEnabled();
+        setReducedMotion(isReduced);
+      } catch {
+        setReducedMotion(false);
+      }
+    };
+
+    checkReducedMotion();
+
+    subscription = AccessibilityInfo.addEventListener(
+      "reduceMotionChanged",
+      (isReduced) => {
+        setReducedMotion(isReduced);
+      },
+    );
+
+    return () => {
+      subscription?.remove();
+    };
+  }, []);
+
+  return reducedMotion;
+};
+
+export const useDynamicTypeScale = (
+  allowFontScaling?: boolean,
+  minimumFontScale?: number,
+  maxFontSizeMultiplier?: number,
+): {
+  allowFontScaling: boolean;
+  minimumFontScale: number;
+  maxFontSizeMultiplier: number;
+} => {
+  return {
+    allowFontScaling: allowFontScaling !== false,
+    minimumFontScale: minimumFontScale ?? 0.5,
+    maxFontSizeMultiplier: maxFontSizeMultiplier ?? 3,
+  };
 };

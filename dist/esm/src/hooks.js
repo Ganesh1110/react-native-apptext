@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Dimensions, PixelRatio, NativeModules, Platform, } from "react-native";
+import { Dimensions, PixelRatio, NativeModules, Platform, AccessibilityInfo, } from "react-native";
 import { SCRIPT_CONFIGS } from "./scriptConfigs";
 import { BASE_WIDTH, RESPONSIVE_FONT_MIN, RESPONSIVE_FONT_MAX, } from "./constants";
 let _currentDimensions = Dimensions.get("window");
@@ -97,15 +97,49 @@ export const useThemedStyles = (theme, colorScheme) => {
 // ============================================================================
 export const useDeviceLocale = () => {
     return useMemo(() => {
+        var _a, _b, _c, _d, _e, _f;
         try {
             const locale = Platform.OS === "ios"
-                ? NativeModules.SettingsManager.settings.AppleLocale ||
-                    NativeModules.SettingsManager.settings.AppleLanguages[0]
-                : NativeModules.I18nManager.localeIdentifier;
+                ? ((_b = (_a = NativeModules.SettingsManager) === null || _a === void 0 ? void 0 : _a.settings) === null || _b === void 0 ? void 0 : _b.AppleLocale) ||
+                    ((_e = (_d = (_c = NativeModules.SettingsManager) === null || _c === void 0 ? void 0 : _c.settings) === null || _d === void 0 ? void 0 : _d.AppleLanguages) === null || _e === void 0 ? void 0 : _e[0])
+                : (_f = NativeModules.I18nManager) === null || _f === void 0 ? void 0 : _f.localeIdentifier;
             return locale ? locale.replace("_", "-") : "en";
         }
         catch (e) {
             return "en";
         }
     }, []);
+};
+// ============================================================================
+// Hook for reduced motion preference (Accessibility)
+// ============================================================================
+export const useReducedMotion = () => {
+    const [reducedMotion, setReducedMotion] = useState(false);
+    useEffect(() => {
+        let subscription = null;
+        const checkReducedMotion = async () => {
+            try {
+                const isReduced = await AccessibilityInfo.isReduceMotionEnabled();
+                setReducedMotion(isReduced);
+            }
+            catch (_a) {
+                setReducedMotion(false);
+            }
+        };
+        checkReducedMotion();
+        subscription = AccessibilityInfo.addEventListener("reduceMotionChanged", (isReduced) => {
+            setReducedMotion(isReduced);
+        });
+        return () => {
+            subscription === null || subscription === void 0 ? void 0 : subscription.remove();
+        };
+    }, []);
+    return reducedMotion;
+};
+export const useDynamicTypeScale = (allowFontScaling, minimumFontScale, maxFontSizeMultiplier) => {
+    return {
+        allowFontScaling: allowFontScaling !== false,
+        minimumFontScale: minimumFontScale !== null && minimumFontScale !== void 0 ? minimumFontScale : 0.5,
+        maxFontSizeMultiplier: maxFontSizeMultiplier !== null && maxFontSizeMultiplier !== void 0 ? maxFontSizeMultiplier : 3,
+    };
 };

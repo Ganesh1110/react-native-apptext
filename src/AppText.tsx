@@ -17,6 +17,7 @@ import {
   AccessibilityRole,
   TextStyle,
   AccessibilityInfo,
+  TextProps,
 } from "react-native";
 
 import {
@@ -26,44 +27,86 @@ import {
   AnimationType,
   AnimationConfig,
 } from "./types";
+
+type AnimationStyle = TextStyle;
+
 import { SCRIPT_CONFIGS } from "./scriptConfigs";
 import { DEFAULT_THEME } from "./theme";
 import {
   useResponsiveFont,
   useScriptDetection,
   useThemedStyles,
+  useReducedMotion,
+  useDynamicTypeScale,
 } from "./hooks";
 import { AppTextProvider, useAppTextTheme } from "./context";
 import { createSpacingStyles } from "./utils";
 import TransComponent from "./Trans";
 
 /* ========== Animation Hook ========== */
+import { AnimationProp, AnimationWithConfig } from "./types";
+
+const isAnimationWithConfig = (
+  anim: AnimationProp | undefined,
+): anim is AnimationWithConfig => {
+  return (
+    typeof anim === "object" &&
+    anim !== null &&
+    "type" in anim &&
+    typeof (anim as AnimationWithConfig).type === "string"
+  );
+};
+
 const useTextAnimation = (
   animated: boolean,
-  animation: AnimationType | boolean | undefined,
+  animation: AnimationProp | undefined,
   animationConfig?: AnimationConfig,
   animationDelay: number = 0,
   animationDuration: number = 1000,
   animationSpeed: number = 50,
   cursor: boolean = false,
 ) => {
-  const getAnimatedValue = (val: number) => {
-    const ref = useRef<Animated.Value | null>(null);
-    if (!ref.current) ref.current = new Animated.Value(val);
-    return ref.current;
-  };
+  const reducedMotion = useReducedMotion();
 
-  const opacityValue = getAnimatedValue(0);
-  const translateYValue = getAnimatedValue(50);
-  const translateXValue = getAnimatedValue(100);
-  const scaleValue = getAnimatedValue(0.8);
-  const rotateValue = getAnimatedValue(0);
-  const shakeValue = getAnimatedValue(0);
-  const glowValue = getAnimatedValue(0);
-  const neonValue = getAnimatedValue(0);
-  const gradientValue = getAnimatedValue(0);
+  const opacityValue = useRef(new Animated.Value(0)).current;
+  const translateYValue = useRef(new Animated.Value(50)).current;
+  const translateXValue = useRef(new Animated.Value(100)).current;
+  const scaleValue = useRef(new Animated.Value(0.8)).current;
+  const rotateValue = useRef(new Animated.Value(0)).current;
+  const shakeValue = useRef(new Animated.Value(0)).current;
+  const glowValue = useRef(new Animated.Value(0)).current;
+  const neonValue = useRef(new Animated.Value(0)).current;
+  const gradientValue = useRef(new Animated.Value(0)).current;
   const currentAnimation = useRef<Animated.CompositeAnimation | null>(null);
   const hasAnimated = useRef(false);
+
+  useEffect(() => {
+    return () => {
+      if (currentAnimation.current) {
+        currentAnimation.current.stop();
+      }
+      opacityValue.setValue(0);
+      translateYValue.setValue(50);
+      translateXValue.setValue(100);
+      scaleValue.setValue(0.8);
+      rotateValue.setValue(0);
+      shakeValue.setValue(0);
+      glowValue.setValue(0);
+      neonValue.setValue(0);
+      gradientValue.setValue(0);
+      hasAnimated.current = false;
+    };
+  }, [
+    opacityValue,
+    translateYValue,
+    translateXValue,
+    scaleValue,
+    rotateValue,
+    shakeValue,
+    glowValue,
+    neonValue,
+    gradientValue,
+  ]);
 
   // Derived type - used for branching in the parent component
   const animationType = useMemo(() => {
@@ -77,15 +120,15 @@ const useTextAnimation = (
 
   useEffect(() => {
     // Return early if not enabled, or if it's a special animation handled by separate components
-    if (!animated || !animation || isSpecialAnimation) return;
+    // Also skip animation if user prefers reduced motion (accessibility)
+    if (!animated || !animation || isSpecialAnimation || reducedMotion) return;
     if (hasAnimated.current) return;
 
     const config =
-      animationConfig ||
-      (typeof animation === "object" ? (animation as any) : {});
+      animationConfig || (isAnimationWithConfig(animation) ? animation : {});
     const type = animationType;
-    const duration = config.duration || animationDuration;
-    const delay = config.delay || animationDelay;
+    const duration = config?.duration || animationDuration;
+    const delay = config?.delay || animationDelay;
 
     // Stop previous animation safely
     if (currentAnimation.current) {
@@ -719,6 +762,18 @@ const useTextAnimation = (
       if (currentAnimation.current) {
         currentAnimation.current.stop();
       }
+      opacityValue.setValue(0);
+      translateYValue.setValue(
+        type.includes("slide") ? (type.includes("Down") ? -50 : 50) : 0,
+      );
+      translateXValue.setValue(
+        type.includes("slide") ? (type.includes("Left") ? -100 : 100) : 0,
+      );
+      scaleValue.setValue(
+        type.includes("zoom") || type === "bounceIn" ? 0.8 : 1,
+      );
+      rotateValue.setValue(0);
+      hasAnimated.current = false;
     };
   }, [
     animated,
@@ -728,9 +783,19 @@ const useTextAnimation = (
     animationType,
     isSpecialAnimation,
     animationConfig,
+    reducedMotion,
+    opacityValue,
+    translateYValue,
+    translateXValue,
+    scaleValue,
+    rotateValue,
+    shakeValue,
+    glowValue,
+    neonValue,
+    gradientValue,
   ]);
 
-  const getAnimatedStyle = (): any => {
+  const getAnimatedStyle = (): AnimationStyle => {
     // Return empty if not animated/animation context, or if special animation handled by standard components
     if (!animated || !animation || isSpecialAnimation) return {};
 
@@ -914,12 +979,12 @@ const useTextAnimation = (
           textShadowColor: glowValue.interpolate({
             inputRange: [0, 1],
             outputRange: ["rgba(0,0,0,0)", "rgba(255,255,255,0.8)"],
-          }),
+          }) as unknown as TextStyle["textShadowColor"],
           textShadowOffset: { width: 0, height: 0 },
           textShadowRadius: glowValue.interpolate({
             inputRange: [0, 1],
             outputRange: [0, 10],
-          }),
+          }) as unknown as TextStyle["textShadowRadius"],
         };
 
       case "neon":
@@ -927,12 +992,12 @@ const useTextAnimation = (
           textShadowColor: neonValue.interpolate({
             inputRange: [0, 1],
             outputRange: ["rgba(0, 255, 255, 0.5)", "rgba(0, 255, 255, 1)"],
-          }),
+          }) as unknown as TextStyle["textShadowColor"],
           textShadowOffset: { width: 0, height: 0 },
           textShadowRadius: neonValue.interpolate({
             inputRange: [0, 1],
             outputRange: [5, 20],
-          }),
+          }) as unknown as TextStyle["textShadowRadius"],
         };
 
       case "gradientShift":
@@ -940,13 +1005,13 @@ const useTextAnimation = (
           color: gradientValue.interpolate({
             inputRange: [0, 0.25, 0.5, 0.75, 1],
             outputRange: [
-              "rgb(255, 0, 0)", // Red
-              "rgb(0, 255, 0)", // Green
-              "rgb(0, 0, 255)", // Blue
-              "rgb(255, 0, 255)", // Magenta
-              "rgb(255, 0, 0)", // Red
+              "rgb(255, 0, 0)",
+              "rgb(0, 255, 0)",
+              "rgb(0, 0, 255)",
+              "rgb(255, 0, 255)",
+              "rgb(255, 0, 0)",
             ],
-          }),
+          }) as unknown as TextStyle["color"],
         };
 
       default:
@@ -968,6 +1033,7 @@ interface TypewriterTextProps {
   speed?: number;
   cursor?: boolean;
   style: TextStyle;
+  announceCompletion?: boolean;
 }
 
 const TypewriterText = memo<TypewriterTextProps>(
@@ -978,9 +1044,12 @@ const TypewriterText = memo<TypewriterTextProps>(
     speed = 50,
     cursor = false,
     style,
+    announceCompletion = true,
   }) => {
+    const reducedMotion = useReducedMotion();
     const [displayText, setDisplayText] = useState("");
     const [isDone, setIsDone] = useState(false);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
     const text = useMemo(() => {
       const extractText = (node: React.ReactNode): string => {
@@ -998,52 +1067,69 @@ const TypewriterText = memo<TypewriterTextProps>(
       return extractText(children);
     }, [children]);
 
+    const fullText = useMemo(() => {
+      if (typeof children === "string") return children;
+      if (typeof children === "number") return String(children);
+      return text;
+    }, [children, text]);
+
     useEffect(() => {
-      // Reset state whenever text, speed, or delay changes
+      if (reducedMotion) {
+        setDisplayText(text);
+        setIsDone(true);
+        return;
+      }
+
       setDisplayText("");
       setIsDone(false);
+      setCurrentIndex(0);
 
       let startTimer: ReturnType<typeof setTimeout>;
       let characterTimer: ReturnType<typeof setTimeout>;
       let index = 0;
 
-      // Single recursive chain: no dependency on component state,
-      // so there is only ever ONE timer active at a time.
       const typeNextChar = () => {
         if (index > text.length) {
           setIsDone(true);
           return;
         }
         setDisplayText(text.substring(0, index));
+        setCurrentIndex(index);
         index++;
         characterTimer = setTimeout(typeNextChar, speed);
       };
 
-      // Honour the initial delay before typing begins
       startTimer = setTimeout(typeNextChar, delay);
 
       return () => {
         clearTimeout(startTimer);
         clearTimeout(characterTimer);
       };
-    }, [text, speed, delay]);
+    }, [text, speed, delay, reducedMotion]);
 
     useEffect(() => {
-      if (isDone) {
+      if (isDone && announceCompletion && !reducedMotion) {
         AccessibilityInfo.announceForAccessibility(
-          "Typewriter animation completed",
+          `Text fully displayed: ${fullText}`,
         );
       }
-    }, [isDone]);
+    }, [isDone, announceCompletion, reducedMotion, fullText]);
+
+    const accessibilityLabel = useMemo(() => {
+      return isDone ? fullText : `${fullText}, typing in progress`;
+    }, [fullText, isDone]);
 
     return (
       <Text
         style={style}
+        accessibilityLabel={accessibilityLabel}
         accessibilityLiveRegion="polite"
-        accessibilityState={{ busy: !isDone }}
+        accessibilityState={{ busy: !isDone, disabled: false }}
       >
-        {displayText}
-        {cursor && !isDone && <Text style={{ color: style.color }}>|</Text>}
+        {reducedMotion ? text : displayText}
+        {cursor && !isDone && !reducedMotion && (
+          <Text style={{ color: style.color }}>|</Text>
+        )}
       </Text>
     );
   },
@@ -1135,15 +1221,46 @@ const WaveText = memo<WaveTextProps>(
 
     const characters = useMemo(() => text.split(""), [text]);
 
-    // Track mounted state
+    // Track mounted state and previous animated values for cleanup
     const isMountedRef = useRef(true);
     const animationsRef = useRef<Animated.CompositeAnimation[]>([]);
+    const prevLengthRef = useRef<number>(characters.length);
+    const prevAnimatedValuesRef = useRef<Animated.Value[]>([]);
+    const currentAnimatedValuesRef = useRef<Animated.Value[]>([]);
 
     // Create animated values - these persist but get replaced when text changes
     // Using a ref that we manually manage to avoid React's strict mode issues
     // Memoize animated values to avoid recreation during render
     const animatedValues = useMemo(() => {
       return characters.map(() => new Animated.Value(0));
+    }, [characters.length]);
+
+    // Keep ref in sync with animated values
+    useEffect(() => {
+      currentAnimatedValuesRef.current = animatedValues;
+    }, [animatedValues]);
+
+    // Cleanup previous animations when character count changes
+    useEffect(() => {
+      if (
+        prevLengthRef.current !== characters.length &&
+        prevAnimatedValuesRef.current.length > 0
+      ) {
+        prevAnimatedValuesRef.current.forEach((value) => {
+          value.stopAnimation?.();
+          value.setValue(0);
+        });
+      }
+      prevLengthRef.current = characters.length;
+      prevAnimatedValuesRef.current = currentAnimatedValuesRef.current;
+      return () => {
+        if (prevAnimatedValuesRef.current.length > 0) {
+          prevAnimatedValuesRef.current.forEach((value) => {
+            value.stopAnimation?.();
+            value.setValue(0);
+          });
+        }
+      };
     }, [characters.length]);
 
     useEffect(() => {
@@ -1291,6 +1408,11 @@ const BaseAppText = memo(
       const rawScheme = useColorScheme();
       const colorScheme = rawScheme === "unspecified" ? "light" : rawScheme;
       const themedStyles = useThemedStyles(theme, colorScheme);
+      const fontScaling = useDynamicTypeScale(
+        allowFontScaling,
+        minimumFontScale,
+        maxFontSizeMultiplier,
+      );
 
       // Animation hook
       const { animatedStyle, animationType } = useTextAnimation(
@@ -1419,9 +1541,9 @@ const BaseAppText = memo(
             (typeof truncate === "number" ? truncate : numberOfLines),
           ellipsizeMode:
             truncate || truncateText ? ellipsizeMode || "tail" : ellipsizeMode,
-          allowFontScaling: allowFontScaling !== false,
-          maxFontSizeMultiplier: maxFontSizeMultiplier || 3,
-          minimumFontScale,
+          allowFontScaling: fontScaling.allowFontScaling,
+          maxFontSizeMultiplier: fontScaling.maxFontSizeMultiplier,
+          minimumFontScale: fontScaling.minimumFontScale,
           suppressHighlighting,
           selectable,
           selectionColor,
@@ -1440,7 +1562,7 @@ const BaseAppText = memo(
           accessibilityRole:
             restProps.accessibilityRole || (onPress ? "button" : "text"),
           ...props,
-        } as any;
+        } as TextProps;
       }, [
         restProps,
         truncate,
@@ -1449,6 +1571,7 @@ const BaseAppText = memo(
         allowFontScaling,
         maxFontSizeMultiplier,
         minimumFontScale,
+        fontScaling,
         suppressHighlighting,
         selectable,
         selectionColor,
@@ -1474,11 +1597,10 @@ const BaseAppText = memo(
 
       const hasPressHandlers = !!onPress || !!onLongPress;
       const finalConfig =
-        animationConfig ||
-        (typeof animation === "object" ? (animation as any) : {});
-      const finalDelay = finalConfig.delay ?? animationDelay;
-      const finalDuration = finalConfig.duration ?? animationDuration;
-      const finalSpeed = finalConfig.speed ?? animationSpeed;
+        animationConfig || (isAnimationWithConfig(animation) ? animation : {});
+      const finalDelay = finalConfig?.delay ?? animationDelay;
+      const finalDuration = finalConfig?.duration ?? animationDuration;
+      const finalSpeed = finalConfig?.speed ?? animationSpeed;
 
       // Special animation handling
       if ((animated || animation) && animationType === "typewriter") {
@@ -1510,11 +1632,13 @@ const BaseAppText = memo(
       const renderChildren = () => {
         if (!linkDetection || typeof children !== "string") return children;
 
-        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        const urlRegex =
+          /((?:https?:\/\/)?(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*))/gi;
         const parts = children.split(urlRegex);
 
         return parts.map((part, i) => {
           if (part.match(urlRegex)) {
+            const url = part.match(/^https?:\/\//) ? part : `https://${part}`;
             return (
               <Text
                 key={`link-${i}`}
@@ -1522,7 +1646,7 @@ const BaseAppText = memo(
                   color: resolvedColor,
                   textDecorationLine: "underline",
                 }}
-                onPress={() => onLinkPress?.(part)}
+                onPress={() => onLinkPress?.(url)}
               >
                 {part}
               </Text>

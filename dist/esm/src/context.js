@@ -2,28 +2,24 @@ import React, { useCallback, useContext, useMemo, useState } from "react";
 import { DEFAULT_THEME } from "./theme";
 const AppTextContext = React.createContext(null);
 function deepMerge(target, source) {
-    const result = { ...target };
-    for (const key in source) {
-        if (source.hasOwnProperty(key)) {
-            const sourceValue = source[key];
-            const targetValue = result[key];
-            if (sourceValue &&
-                typeof sourceValue === "object" &&
-                !Array.isArray(sourceValue) &&
-                targetValue &&
-                typeof targetValue === "object" &&
-                !Array.isArray(targetValue)) {
-                result[key] = deepMerge(targetValue, sourceValue);
-            }
-            else if (sourceValue !== undefined) {
-                result[key] = sourceValue;
-            }
-        }
+    const result = {
+        colors: { ...target.colors },
+        typography: { ...target.typography },
+        spacing: { ...target.spacing },
+    };
+    if (source.colors) {
+        result.colors = { ...result.colors, ...source.colors };
+    }
+    if (source.typography) {
+        result.typography = { ...result.typography, ...source.typography };
+    }
+    if (source.spacing) {
+        result.spacing = { ...result.spacing, ...source.spacing };
     }
     return result;
 }
 export const AppTextProvider = ({ theme: customTheme, children }) => {
-    const [theme, setTheme] = useState(() => deepMerge(DEFAULT_THEME, customTheme || {}));
+    const [theme, setTheme] = useState(() => deepMerge(DEFAULT_THEME, customTheme !== null && customTheme !== void 0 ? customTheme : {}));
     const updateTheme = useCallback((newTheme) => {
         setTheme((prevTheme) => deepMerge(prevTheme, newTheme));
     }, []);
