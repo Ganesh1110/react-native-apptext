@@ -4,6 +4,7 @@ import React, {
   useState,
   useCallback,
   useEffect,
+  useRef,
 } from "react";
 import { Translations } from "./types";
 
@@ -72,11 +73,18 @@ export function LazyLocaleProvider({
     Record<string, Translations>
   >({});
 
+  const inflightRequests = useRef<Map<string, Promise<void>>>(new Map());
+
   const loadLocale = useCallback(
     async (locale: string) => {
       // Skip if already loaded
       if (loadedLocales.has(locale)) {
         return;
+      }
+
+      // Return inflight request if exists (concurrency safety)
+      if (inflightRequests.current.has(locale)) {
+        return inflightRequests.current.get(locale);
       }
 
       const loader = loaders[locale];
@@ -85,26 +93,32 @@ export function LazyLocaleProvider({
         return;
       }
 
-      try {
-        setIsLoading(true);
-        onLoadStart?.(locale);
+      const promise = (async () => {
+        try {
+          setIsLoading(true);
+          onLoadStart?.(locale);
 
-        const module = await loader();
-        const localeTranslations = module.default;
+          const module = await loader();
+          const localeTranslations = module.default;
 
-        setTranslations((prev) => ({
-          ...prev,
-          [locale]: localeTranslations,
-        }));
+          setTranslations((prev) => ({
+            ...prev,
+            [locale]: localeTranslations,
+          }));
 
-        setLoadedLocales((prev) => new Set([...prev, locale]));
-        onLoadComplete?.(locale);
-      } catch (error) {
-        console.warn(`Failed to load locale: ${locale}`, error);
-        onLoadError?.(locale, error as Error);
-      } finally {
-        setIsLoading(false);
-      }
+          setLoadedLocales((prev) => new Set([...prev, locale]));
+          onLoadComplete?.(locale);
+        } catch (error) {
+          console.warn(`Failed to load locale: ${locale}`, error);
+          onLoadError?.(locale, error as Error);
+        } finally {
+          setIsLoading(false);
+          inflightRequests.current.delete(locale);
+        }
+      })();
+
+      inflightRequests.current.set(locale, promise);
+      return promise;
     },
     [loaders, loadedLocales, onLoadStart, onLoadComplete, onLoadError],
   );
@@ -125,11 +139,9 @@ export function LazyLocaleProvider({
   // Preload specified languages
   useEffect(() => {
     preloadLanguages.forEach((locale) => {
-      if (!loadedLocales.has(locale)) {
-        loadLocale(locale);
-      }
+      loadLocale(locale);
     });
-  }, [preloadLanguages, loadedLocales, loadLocale]);
+  }, [preloadLanguages, loadLocale]);
 
   const value: LazyLocaleContextValue = {
     language,
@@ -154,15 +166,7 @@ export function useLazyLocale() {
   const context = useContext(LazyLocaleContext);
 
   if (!context) {
-    // Return a safe fallback instead of throwing
-    return {
-      language: "",
-      isLoading: false,
-      loadedLocales: new Set(),
-      loadLocale: async () => {},
-      changeLanguage: async () => {},
-      translations: {},
-    };
+    throw new Error("useLazyLocale must be used within a LazyLocaleProvider");
   }
 
   return context;
@@ -229,10 +233,15 @@ export class NamespaceLoader {
       throw new Error(`No loader found for namespace: ${namespace}`);
     }
 
-    const promise = loader().then((module) => {
-      this.loaded.add(namespace);
-      return module.default;
-    });
+    const promise = loader()
+      .then((module) => {
+        this.loaded.add(namespace);
+        return module.default;
+      })
+      .catch((err) => {
+        this.cache.delete(namespace);
+        throw err;
+      });
 
     this.cache.set(namespace, promise);
     return promise;

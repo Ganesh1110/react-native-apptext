@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useEffect, } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef, } from "react";
 const LazyLocaleContext = createContext(null);
 /**
  * LazyLocaleProvider with code-splitting support
@@ -9,35 +9,45 @@ export function LazyLocaleProvider({ loaders, defaultLanguage, preloadLanguages 
     const [isLoading, setIsLoading] = useState(false);
     const [loadedLocales, setLoadedLocales] = useState(new Set());
     const [translations, setTranslations] = useState({});
+    const inflightRequests = useRef(new Map());
     const loadLocale = useCallback(async (locale) => {
         // Skip if already loaded
         if (loadedLocales.has(locale)) {
             return;
+        }
+        // Return inflight request if exists (concurrency safety)
+        if (inflightRequests.current.has(locale)) {
+            return inflightRequests.current.get(locale);
         }
         const loader = loaders[locale];
         if (!loader) {
             console.warn(`No loader found for locale: ${locale}`);
             return;
         }
-        try {
-            setIsLoading(true);
-            onLoadStart === null || onLoadStart === void 0 ? void 0 : onLoadStart(locale);
-            const module = await loader();
-            const localeTranslations = module.default;
-            setTranslations((prev) => ({
-                ...prev,
-                [locale]: localeTranslations,
-            }));
-            setLoadedLocales((prev) => new Set([...prev, locale]));
-            onLoadComplete === null || onLoadComplete === void 0 ? void 0 : onLoadComplete(locale);
-        }
-        catch (error) {
-            console.warn(`Failed to load locale: ${locale}`, error);
-            onLoadError === null || onLoadError === void 0 ? void 0 : onLoadError(locale, error);
-        }
-        finally {
-            setIsLoading(false);
-        }
+        const promise = (async () => {
+            try {
+                setIsLoading(true);
+                onLoadStart === null || onLoadStart === void 0 ? void 0 : onLoadStart(locale);
+                const module = await loader();
+                const localeTranslations = module.default;
+                setTranslations((prev) => ({
+                    ...prev,
+                    [locale]: localeTranslations,
+                }));
+                setLoadedLocales((prev) => new Set([...prev, locale]));
+                onLoadComplete === null || onLoadComplete === void 0 ? void 0 : onLoadComplete(locale);
+            }
+            catch (error) {
+                console.warn(`Failed to load locale: ${locale}`, error);
+                onLoadError === null || onLoadError === void 0 ? void 0 : onLoadError(locale, error);
+            }
+            finally {
+                setIsLoading(false);
+                inflightRequests.current.delete(locale);
+            }
+        })();
+        inflightRequests.current.set(locale, promise);
+        return promise;
     }, [loaders, loadedLocales, onLoadStart, onLoadComplete, onLoadError]);
     const changeLanguage = useCallback(async (locale) => {
         await loadLocale(locale);
@@ -50,11 +60,9 @@ export function LazyLocaleProvider({ loaders, defaultLanguage, preloadLanguages 
     // Preload specified languages
     useEffect(() => {
         preloadLanguages.forEach((locale) => {
-            if (!loadedLocales.has(locale)) {
-                loadLocale(locale);
-            }
+            loadLocale(locale);
         });
-    }, [preloadLanguages, loadedLocales, loadLocale]);
+    }, [preloadLanguages, loadLocale]);
     const value = {
         language,
         isLoading,
@@ -73,15 +81,7 @@ export function LazyLocaleProvider({ loaders, defaultLanguage, preloadLanguages 
 export function useLazyLocale() {
     const context = useContext(LazyLocaleContext);
     if (!context) {
-        // Return a safe fallback instead of throwing
-        return {
-            language: "",
-            isLoading: false,
-            loadedLocales: new Set(),
-            loadLocale: async () => { },
-            changeLanguage: async () => { },
-            translations: {},
-        };
+        throw new Error("useLazyLocale must be used within a LazyLocaleProvider");
     }
     return context;
 }
@@ -131,9 +131,14 @@ export class NamespaceLoader {
         if (!loader) {
             throw new Error(`No loader found for namespace: ${namespace}`);
         }
-        const promise = loader().then((module) => {
+        const promise = loader()
+            .then((module) => {
             this.loaded.add(namespace);
             return module.default;
+        })
+            .catch((err) => {
+            this.cache.delete(namespace);
+            throw err;
         });
         this.cache.set(namespace, promise);
         return promise;

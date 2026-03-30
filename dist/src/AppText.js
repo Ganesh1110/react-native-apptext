@@ -28,6 +28,7 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
     const gradientValue = useRef(new Animated.Value(0)).current;
     const currentAnimation = useRef(null);
     const hasAnimated = useRef(false);
+    const prevAnimationType = useRef(null);
     // Derived type - used for branching in the parent component
     const animationType = useMemo(() => {
         if (!animation)
@@ -44,8 +45,11 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
         // Return early if not enabled, or if it's a special animation handled by separate components
         if (!animated || !animation || isSpecialAnimation)
             return;
-        if (hasAnimated.current)
+        // Skip if the same animation type has already played (but allow re-triggering on type change)
+        if (hasAnimated.current && prevAnimationType.current === animationType)
             return;
+        prevAnimationType.current = animationType;
+        hasAnimated.current = true;
         const config = typeof animation === "object" ? animation : {};
         const type = animationType;
         const duration = config.duration || animationDuration;
@@ -632,8 +636,7 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
         animation,
         animationDelay,
         animationDuration,
-        animationType,
-        isSpecialAnimation,
+        animationType, // isSpecialAnimation is derived from this, so it's redundant as a dep
         opacityValue,
         translateYValue,
         translateXValue,
@@ -644,7 +647,9 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
         neonValue,
         gradientValue,
     ]);
-    const getAnimatedStyle = useCallback(() => {
+    // Compute the animated style (as a value, not a callback)
+    // IMPORTANT: Must list all Animated.Values that are referenced inside.
+    const animatedStyle = useMemo(() => {
         // Return empty if not animated/animation context, or if special animation handled by standard components
         if (!animated || !animation || isSpecialAnimation)
             return {};
@@ -728,13 +733,25 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
             case "shake":
                 return { transform: [{ translateX: shakeValue }] };
             case "swing":
+                return {
+                    transform: [
+                        {
+                            rotate: rotateValue.interpolate({
+                                inputRange: [-10, 15],
+                                outputRange: ["-10deg", "15deg"],
+                                extrapolate: "clamp",
+                            }),
+                        },
+                    ],
+                };
             case "wobble":
                 return {
                     transform: [
                         {
                             rotate: rotateValue.interpolate({
-                                inputRange: [-10, 10],
-                                outputRange: ["-10deg", "10deg"],
+                                inputRange: [-5, 5],
+                                outputRange: ["-5deg", "5deg"],
+                                extrapolate: "clamp",
                             }),
                         },
                     ],
@@ -841,9 +858,23 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
             default:
                 return { opacity: opacityValue };
         }
-    }, []);
+    }, [
+        animated,
+        animation,
+        animationType,
+        isSpecialAnimation,
+        opacityValue,
+        translateYValue,
+        translateXValue,
+        scaleValue,
+        rotateValue,
+        shakeValue,
+        glowValue,
+        neonValue,
+        gradientValue,
+    ]);
     return {
-        animatedStyle: getAnimatedStyle(),
+        animatedStyle,
         animationType,
     };
 };
@@ -866,6 +897,7 @@ const TypewriterText = memo(({ children, delay = 0, duration = 2000, speed = 50,
         return extractText(children);
     }, [children]);
     useEffect(() => {
+        let isMounted = true;
         // Reset state whenever text, speed, or delay changes
         setDisplayText("");
         setIsDone(false);
@@ -875,6 +907,8 @@ const TypewriterText = memo(({ children, delay = 0, duration = 2000, speed = 50,
         // Single recursive chain: no dependency on component state,
         // so there is only ever ONE timer active at a time.
         const typeNextChar = () => {
+            if (!isMounted)
+                return;
             if (index > text.length) {
                 setIsDone(true);
                 return;
@@ -886,6 +920,7 @@ const TypewriterText = memo(({ children, delay = 0, duration = 2000, speed = 50,
         // Honour the initial delay before typing begins
         startTimer = setTimeout(typeNextChar, delay);
         return () => {
+            isMounted = false;
             clearTimeout(startTimer);
             clearTimeout(characterTimer);
         };
@@ -911,29 +946,59 @@ const TypewriterText = memo(({ children, delay = 0, duration = 2000, speed = 50,
       </Text>);
 });
 const TruncationComponent = memo(({ children, maxLines, onExpand, onCollapse, expandText = "Read more", collapseText = "Read less", style, }) => {
-    const [isExpanded, setIsExpanded] = React.useState(false);
-    const [isTruncated, setIsTruncated] = React.useState(false);
+    const [isExpanded, setIsExpanded] = useState(false); // Issue #11: use imported useState
+    const [isTruncated, setIsTruncated] = useState(false);
     const theme = useAppTextTheme();
+    // Issue #19: track mounted state to skip callback on first render
+    const isFirstRender = useRef(true);
     const handleTextLayout = useCallback((event) => {
         setIsTruncated(event.nativeEvent.lines.length > maxLines);
     }, [maxLines]);
+    // Issue #19: Side effects moved OUT of setState updater
     const handleToggle = useCallback(() => {
-        setIsExpanded((prev) => {
-            if (!prev) {
-                onExpand === null || onExpand === void 0 ? void 0 : onExpand();
-            }
-            else {
-                onCollapse === null || onCollapse === void 0 ? void 0 : onCollapse();
-            }
-            return !prev;
-        });
-    }, [onExpand, onCollapse]);
-    return (<View>
-        <Text style={style} numberOfLines={isExpanded ? undefined : maxLines} onTextLayout={handleTextLayout}>
+        setIsExpanded((prev) => !prev);
+    }, []);
+    // Issue #19: Fire callbacks after state settles, skip initial mount
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+        if (isExpanded) {
+            onExpand === null || onExpand === void 0 ? void 0 : onExpand();
+        }
+        else {
+            onCollapse === null || onCollapse === void 0 ? void 0 : onCollapse();
+        }
+    }, [isExpanded, onExpand, onCollapse]);
+    // Derive base font size for the "Read more" button from the style object
+    const baseFontSize = useMemo(() => {
+        var _a;
+        const flat = Array.isArray(style) ? style[0] : style;
+        return (_a = flat === null || flat === void 0 ? void 0 : flat.fontSize) !== null && _a !== void 0 ? _a : 14;
+    }, [style]);
+    return (
+    // Issue #5 & #16: overflow:hidden ensures ghost text is measured within container bounds
+    <View style={{ overflow: "hidden" }}>
+        {/* Hidden ghost text — measures untruncated line count */}
+        {!isExpanded && (<Text style={[style, { position: "absolute", opacity: 0, zIndex: -1 }]} onTextLayout={handleTextLayout} pointerEvents="none" aria-hidden={true}>
+            {children}
+          </Text>)}
+
+        <Text style={style} numberOfLines={isExpanded ? undefined : maxLines} ellipsizeMode="tail">
           {children}
-          {isTruncated && !isExpanded && "... "}
         </Text>
-        {isTruncated && (<Text style={[style, { color: theme.colors.primary, marginTop: 4 }]} onPress={handleToggle}>
+
+        {/* Issue #12: "Read more" button uses isolated styles — does not inherit harmful text styling */}
+        {isTruncated && (<Text style={{
+                fontSize: baseFontSize,
+                color: theme.colors.primary,
+                marginTop: 4,
+                fontWeight: "600",
+                textTransform: "none",
+                textDecorationLine: "none",
+                fontStyle: "normal",
+            }} onPress={handleToggle}>
             {isExpanded ? collapseText : expandText}
           </Text>)}
       </View>);
@@ -961,17 +1026,12 @@ const WaveText = memo(({ children, duration = 1000, delay = 0, style }) => {
     // Create animated values - these persist but get replaced when text changes
     const animatedValuesRef = useRef([]);
     const prevTextRef = useRef(text);
-    // Initialize values on first render or text change - properly in useEffect
+    // Initialize synchronously so useMemo can read correct values on the same render
+    if (prevTextRef.current !== text || animatedValuesRef.current.length !== characters.length) {
+        prevTextRef.current = text;
+        animatedValuesRef.current = characters.map(() => new Animated.Value(0));
+    }
     useEffect(() => {
-        if (prevTextRef.current !== text) {
-            prevTextRef.current = text;
-        }
-        if (animatedValuesRef.current.length !== characters.length) {
-            animatedValuesRef.current = characters.map(() => new Animated.Value(0));
-        }
-    }, [text, characters.length]);
-    useEffect(() => {
-        isMountedRef.current = true;
         // Create animations for each character
         const animations = animatedValuesRef.current.map((value, i) => {
             const charLoop = Animated.loop(Animated.sequence([
@@ -1040,11 +1100,16 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
     // Animation hook
     const { animatedStyle, animationType } = useTextAnimation(animated, animation, animationDelay, animationDuration, animationSpeed, cursor);
     const textContent = useMemo(() => {
-        if (typeof children === "string")
-            return children;
-        if (typeof children === "number")
-            return children.toString();
-        return String(children || "");
+        const extractText = (node) => {
+            if (typeof node === "string" || typeof node === "number")
+                return String(node);
+            if (React.isValidElement(node))
+                return extractText(node.props.children);
+            if (Array.isArray(node))
+                return node.map(extractText).join("");
+            return "";
+        };
+        return extractText(children);
     }, [children]);
     const detectedScript = useScriptDetection(textContent);
     const finalScript = script || detectedScript;
@@ -1204,6 +1269,11 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
             {children}
           </TypewriterText>);
     }
+    if ((animated || animation) && animationType === "wave") {
+        return (<WaveText delay={finalDelay} duration={finalDuration} style={finalComputedStyle}>
+            {children}
+          </WaveText>);
+    }
     if (animated || (animation && animationType !== "none")) {
         return (<Animated.Text ref={ref} style={finalComputedStyle} {...(!hasPressHandlers
             ? { pointerEvents: "none" }
@@ -1220,7 +1290,7 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
         </Text>);
     if (hasExpandCollapse && maxLines) {
         return (<TruncationComponent maxLines={maxLines} onExpand={onExpand} onCollapse={onCollapse} expandText={expandText} collapseText={collapseText} style={finalComputedStyle}>
-            {typeof children === "string" ? children : String(children || "")}
+            {children}
           </TruncationComponent>);
     }
     return textElement;

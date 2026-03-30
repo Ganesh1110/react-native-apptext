@@ -108,6 +108,7 @@ const useTextAnimation = (
   const gradientValue = useRef(new Animated.Value(0)).current;
   const currentAnimation = useRef<Animated.CompositeAnimation | null>(null);
   const hasAnimated = useRef(false);
+  const prevAnimationType = useRef<string | null>(null);
 
   // Derived type - used for branching in the parent component
   const animationType = useMemo(() => {
@@ -126,7 +127,10 @@ const useTextAnimation = (
   useEffect(() => {
     // Return early if not enabled, or if it's a special animation handled by separate components
     if (!animated || !animation || isSpecialAnimation) return;
-    if (hasAnimated.current) return;
+    // Skip if the same animation type has already played (but allow re-triggering on type change)
+    if (hasAnimated.current && prevAnimationType.current === animationType) return;
+    prevAnimationType.current = animationType;
+    hasAnimated.current = true;
 
     const config = typeof animation === "object" ? animation : {};
     const type = animationType;
@@ -771,8 +775,7 @@ const useTextAnimation = (
     animation,
     animationDelay,
     animationDuration,
-    animationType,
-    isSpecialAnimation,
+    animationType, // isSpecialAnimation is derived from this, so it's redundant as a dep
     opacityValue,
     translateYValue,
     translateXValue,
@@ -784,7 +787,9 @@ const useTextAnimation = (
     gradientValue,
   ]);
 
-  const getAnimatedStyle = useCallback(() => {
+  // Compute the animated style (as a value, not a callback)
+  // IMPORTANT: Must list all Animated.Values that are referenced inside.
+  const animatedStyle = useMemo(() => {
     // Return empty if not animated/animation context, or if special animation handled by standard components
     if (!animated || !animation || isSpecialAnimation) return {};
 
@@ -881,13 +886,26 @@ const useTextAnimation = (
         return { transform: [{ translateX: shakeValue }] };
 
       case "swing":
+        return {
+          transform: [
+            {
+              rotate: rotateValue.interpolate({
+                inputRange: [-10, 15],
+                outputRange: ["-10deg", "15deg"],
+                extrapolate: "clamp",
+              }),
+            },
+          ],
+        };
+
       case "wobble":
         return {
           transform: [
             {
               rotate: rotateValue.interpolate({
-                inputRange: [-10, 10],
-                outputRange: ["-10deg", "10deg"],
+                inputRange: [-5, 5],
+                outputRange: ["-5deg", "5deg"],
+                extrapolate: "clamp",
               }),
             },
           ],
@@ -1006,10 +1024,24 @@ const useTextAnimation = (
       default:
         return { opacity: opacityValue };
     }
-  }, []);
+  }, [
+    animated,
+    animation,
+    animationType,
+    isSpecialAnimation,
+    opacityValue,
+    translateYValue,
+    translateXValue,
+    scaleValue,
+    rotateValue,
+    shakeValue,
+    glowValue,
+    neonValue,
+    gradientValue,
+  ]);
 
   return {
-    animatedStyle: getAnimatedStyle(),
+    animatedStyle,
     animationType,
   };
 };
@@ -1053,6 +1085,7 @@ const TypewriterText = memo<TypewriterTextProps>(
     }, [children]);
 
     useEffect(() => {
+      let isMounted = true;
       // Reset state whenever text, speed, or delay changes
       setDisplayText("");
       setIsDone(false);
@@ -1064,6 +1097,7 @@ const TypewriterText = memo<TypewriterTextProps>(
       // Single recursive chain: no dependency on component state,
       // so there is only ever ONE timer active at a time.
       const typeNextChar = () => {
+        if (!isMounted) return;
         if (index > text.length) {
           setIsDone(true);
           return;
@@ -1077,6 +1111,7 @@ const TypewriterText = memo<TypewriterTextProps>(
       startTimer = setTimeout(typeNextChar, delay);
 
       return () => {
+        isMounted = false;
         clearTimeout(startTimer);
         clearTimeout(characterTimer);
       };
@@ -1111,13 +1146,13 @@ const TypewriterText = memo<TypewriterTextProps>(
 
 /* ========== Truncation Component ========== */
 interface TruncationProps {
-  children: string;
+  children: React.ReactNode;
   maxLines: number;
   onExpand?: () => void;
   onCollapse?: () => void;
   expandText?: string;
   collapseText?: string;
-  style?: any;
+  style?: StyleProp<TextStyle>; // Issue #15: was `any`
 }
 
 const TruncationComponent = memo<TruncationProps>(
@@ -1130,9 +1165,11 @@ const TruncationComponent = memo<TruncationProps>(
     collapseText = "Read less",
     style,
   }) => {
-    const [isExpanded, setIsExpanded] = React.useState(false);
-    const [isTruncated, setIsTruncated] = React.useState(false);
+    const [isExpanded, setIsExpanded] = useState(false); // Issue #11: use imported useState
+    const [isTruncated, setIsTruncated] = useState(false);
     const theme = useAppTextTheme();
+    // Issue #19: track mounted state to skip callback on first render
+    const isFirstRender = useRef(true);
 
     const handleTextLayout = useCallback(
       (event: NativeSyntheticEvent<TextLayoutEventData>) => {
@@ -1141,30 +1178,65 @@ const TruncationComponent = memo<TruncationProps>(
       [maxLines],
     );
 
+    // Issue #19: Side effects moved OUT of setState updater
     const handleToggle = useCallback(() => {
-      setIsExpanded((prev) => {
-        if (!prev) {
-          onExpand?.();
-        } else {
-          onCollapse?.();
-        }
-        return !prev;
-      });
-    }, [onExpand, onCollapse]);
+      setIsExpanded((prev) => !prev);
+    }, []);
+
+    // Issue #19: Fire callbacks after state settles, skip initial mount
+    useEffect(() => {
+      if (isFirstRender.current) {
+        isFirstRender.current = false;
+        return;
+      }
+      if (isExpanded) {
+        onExpand?.();
+      } else {
+        onCollapse?.();
+      }
+    }, [isExpanded, onExpand, onCollapse]);
+
+    // Derive base font size for the "Read more" button from the style object
+    const baseFontSize = useMemo(() => {
+      const flat = Array.isArray(style) ? style[0] : style;
+      return (flat as any)?.fontSize ?? 14;
+    }, [style]);
 
     return (
-      <View>
+      // Issue #5 & #16: overflow:hidden ensures ghost text is measured within container bounds
+      <View style={{ overflow: "hidden" }}>
+        {/* Hidden ghost text — measures untruncated line count */}
+        {!isExpanded && (
+          <Text
+            style={[style, { position: "absolute", opacity: 0, zIndex: -1 }]}
+            onTextLayout={handleTextLayout}
+            pointerEvents="none"
+            aria-hidden={true}
+          >
+            {children}
+          </Text>
+        )}
+
         <Text
           style={style}
           numberOfLines={isExpanded ? undefined : maxLines}
-          onTextLayout={handleTextLayout}
+          ellipsizeMode="tail"
         >
           {children}
-          {isTruncated && !isExpanded && "... "}
         </Text>
+
+        {/* Issue #12: "Read more" button uses isolated styles — does not inherit harmful text styling */}
         {isTruncated && (
           <Text
-            style={[style, { color: theme.colors.primary, marginTop: 4 }]}
+            style={{
+              fontSize: baseFontSize,
+              color: theme.colors.primary,
+              marginTop: 4,
+              fontWeight: "600",
+              textTransform: "none",
+              textDecorationLine: "none",
+              fontStyle: "normal",
+            }}
             onPress={handleToggle}
           >
             {isExpanded ? collapseText : expandText}
@@ -1211,19 +1283,13 @@ const WaveText = memo<WaveTextProps>(
     const animatedValuesRef = useRef<Animated.Value[]>([]);
     const prevTextRef = useRef<string>(text);
 
-    // Initialize values on first render or text change - properly in useEffect
-    useEffect(() => {
-      if (prevTextRef.current !== text) {
-        prevTextRef.current = text;
-      }
-      if (animatedValuesRef.current.length !== characters.length) {
-        animatedValuesRef.current = characters.map(() => new Animated.Value(0));
-      }
-    }, [text, characters.length]);
+    // Initialize synchronously so useMemo can read correct values on the same render
+    if (prevTextRef.current !== text || animatedValuesRef.current.length !== characters.length) {
+      prevTextRef.current = text;
+      animatedValuesRef.current = characters.map(() => new Animated.Value(0));
+    }
 
     useEffect(() => {
-      isMountedRef.current = true;
-
       // Create animations for each character
       const animations = animatedValuesRef.current.map((value, i) => {
         const charLoop = Animated.loop(
@@ -1356,7 +1422,14 @@ const BaseAppText = memo(
         accessibilityHint,
         accessibilityLiveRegion,
         accessibilityState,
-        ...restProps
+        // Destructure common RN props to stabilize restProps (Issue #9)
+        accessibilityActions,
+        onAccessibilityAction,
+        accessibilityValue,
+        importantForAccessibility,
+        nativeID,
+        onLayout,
+        ...passThroughProps
       },
       ref,
     ) => {
@@ -1365,20 +1438,26 @@ const BaseAppText = memo(
       const colorScheme = rawScheme === "unspecified" ? "light" : rawScheme;
       const themedStyles = useThemedStyles(theme, colorScheme);
 
-      // Animation hook
-      const { animatedStyle, animationType } = useTextAnimation(
-        animated,
-        animation,
-        animationDelay,
-        animationDuration,
-        animationSpeed,
-        cursor,
-      );
+      // Animation decision (Issue #8: Moved hook call to sub-component)
+      const shouldAnimate = !!(animated || (animation && (animation as any) !== "none"));
+      const getAnimationType = () => {
+        if (!animation || (animation as any) === "none") return undefined;
+        if (typeof animation === "string") return animation;
+        if (typeof animation === "object") return animation.type;
+        return undefined;
+      };
+      const animationType = getAnimationType();
+      const isTypewriter = shouldAnimate && animationType === "typewriter";
+      const isWave = shouldAnimate && animationType === "wave";
 
       const textContent = useMemo(() => {
-        if (typeof children === "string") return children;
-        if (typeof children === "number") return children.toString();
-        return String(children || "");
+        const extractText = (node: React.ReactNode): string => {
+          if (typeof node === "string" || typeof node === "number") return String(node);
+          if (React.isValidElement(node)) return extractText(node.props.children);
+          if (Array.isArray(node)) return node.map(extractText).join("");
+          return "";
+        };
+        return extractText(children);
       }, [children]);
 
       const detectedScript = useScriptDetection(textContent);
@@ -1481,30 +1560,13 @@ const BaseAppText = memo(
       );
 
       const finalComputedStyle = useMemo(
-        () => ({ ...computedStyle, ...spacingStyles, ...animatedStyle }),
-        // Use primitive values that computedStyle and animatedStyle depend on
-        [
-          spacingStyles,
-          // computedStyle primitives
-          resolvedColor,
-          responsiveFontSize,
-          calculatedLineHeight,
-          weight,
-          align,
-          textDirection,
-          decoration,
-          italic,
-          transform,
-          shadow,
-          typographyStyle,
-          // animatedStyle - depends on animationType which is stable from useMemo
-          animationType,
-        ],
+        () => ({ ...computedStyle, ...spacingStyles, ...(propStyle as object) }),
+        [computedStyle, spacingStyles, propStyle],
       );
 
       const textProps = useMemo(() => {
         const props = {
-          ...restProps,
+          ...passThroughProps,
           numberOfLines:
             typeof truncate === "number" ? truncate : numberOfLines,
           ellipsizeMode: truncate ? ellipsizeMode || "tail" : ellipsizeMode,
@@ -1521,6 +1583,12 @@ const BaseAppText = memo(
           accessibilityHint,
           accessibilityLiveRegion,
           accessibilityState,
+          accessibilityActions,
+          onAccessibilityAction,
+          accessibilityValue,
+          importantForAccessibility,
+          nativeID,
+          onLayout,
         };
 
         return {
@@ -1528,7 +1596,7 @@ const BaseAppText = memo(
           accessibilityRole: (onPress ? "button" : "text") as AccessibilityRole,
         };
       }, [
-        restProps,
+        passThroughProps,
         truncate,
         numberOfLines,
         ellipsizeMode,
@@ -1546,6 +1614,12 @@ const BaseAppText = memo(
         accessibilityHint,
         accessibilityLiveRegion,
         accessibilityState,
+        accessibilityActions,
+        onAccessibilityAction,
+        accessibilityValue,
+        importantForAccessibility,
+        nativeID,
+        onLayout,
         onPress,
       ]);
 
@@ -1565,7 +1639,7 @@ const BaseAppText = memo(
       const finalSpeed = animationConfig.speed ?? animationSpeed;
 
       // Special animation handling
-      if ((animated || animation) && animationType === "typewriter") {
+      if (isTypewriter) {
         return (
           <TypewriterText
             delay={finalDelay}
@@ -1579,54 +1653,130 @@ const BaseAppText = memo(
         );
       }
 
-      if (animated || (animation && animationType !== "none")) {
+      if (isWave) {
         return (
-          <Animated.Text
-            ref={ref as any}
+          <WaveText
+            delay={finalDelay}
+            duration={finalDuration}
             style={finalComputedStyle}
-            {...(!hasPressHandlers
-              ? { pointerEvents: "none" }
-              : { onPress: handlePress, onLongPress: handleLongPress })}
-            {...textProps}
           >
             {children}
-          </Animated.Text>
+          </WaveText>
+        );
+      }
+
+      if (shouldAnimate) {
+        return (
+          <StandardAnimatedText
+            ref={ref}
+            animated={animated}
+            animation={animation}
+            animationDelay={animationDelay}
+            animationDuration={animationDuration}
+            animationSpeed={animationSpeed}
+            cursor={cursor}
+            style={finalComputedStyle}
+            textProps={textProps}
+            onPress={handlePress}
+            onLongPress={handleLongPress}
+            hasPressHandlers={hasPressHandlers}
+          >
+            {children}
+          </StandardAnimatedText>
         );
       }
 
       const hasExpandCollapse =
-        expandText || collapseText || onExpand || onCollapse;
-      const maxLines = typeof truncate === "number" ? truncate : numberOfLines;
+        !!(expandText || collapseText || onExpand || onCollapse);
 
-      const textElement = (
-        <Text
-          ref={ref}
-          style={finalComputedStyle}
-          {...(!hasPressHandlers
-            ? { pointerEvents: "none" }
-            : { onPress: handlePress, onLongPress: handleLongPress })}
-          {...textProps}
-        >
-          {children}
-        </Text>
-      );
-
-      if (hasExpandCollapse && maxLines) {
+      if (truncate && hasExpandCollapse) {
         return (
           <TruncationComponent
-            maxLines={maxLines}
+            maxLines={typeof truncate === "number" ? truncate : 1}
             onExpand={onExpand}
             onCollapse={onCollapse}
             expandText={expandText}
             collapseText={collapseText}
             style={finalComputedStyle}
           >
-            {typeof children === "string" ? children : String(children || "")}
+            {children}
           </TruncationComponent>
         );
       }
 
-      return textElement;
+      return (
+        <Text
+          ref={ref}
+          style={finalComputedStyle}
+          {...(!hasPressHandlers
+            ? {}
+            : { onPress: handlePress, onLongPress: handleLongPress })}
+          {...textProps}
+        >
+          {children}
+        </Text>
+      );
+    },
+  ),
+);
+
+/* ========== Animated Standard Text Component ========== */
+const StandardAnimatedText = memo(
+  forwardRef<
+    Text,
+    {
+      children: React.ReactNode;
+      animated: boolean;
+      animation: any;
+      animationDelay: number;
+      animationDuration: number;
+      animationSpeed: number;
+      cursor: boolean;
+      style: any;
+      textProps: any;
+      onPress?: any;
+      onLongPress?: any;
+      hasPressHandlers: boolean;
+    }
+  >(
+    (
+      {
+        children,
+        animated,
+        animation,
+        animationDelay,
+        animationDuration,
+        animationSpeed,
+        cursor,
+        style,
+        textProps,
+        onPress,
+        onLongPress,
+        hasPressHandlers,
+      },
+      ref,
+    ) => {
+      const { animatedStyle } = useTextAnimation(
+        animated,
+        animation,
+        animationDelay,
+        animationDuration,
+        animationSpeed,
+        cursor,
+      );
+
+      return (
+        <Animated.Text
+          ref={ref as any}
+          style={[style, animatedStyle]}
+          {...(!hasPressHandlers
+            ? { pointerEvents: "none" }
+            : { onPress, onLongPress })}
+          {...textProps}
+        >
+          {children}
+        </Animated.Text>
+      );
     },
   ),
 );

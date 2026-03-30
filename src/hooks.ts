@@ -25,22 +25,33 @@ type DimensionListener = (dims: ScaledSize) => void;
 
 let _currentDimensions: ScaledSize = Dimensions.get("window");
 const _listeners = new Set<DimensionListener>();
-let _listenerRegistered = false;
+let _subscription: any = null;
 
 const registerDimensionListener = () => {
-  if (!_listenerRegistered) {
-    Dimensions.addEventListener("change", ({ window }) => {
+  if (!_subscription) {
+    _subscription = Dimensions.addEventListener("change", ({ window }) => {
       _currentDimensions = window;
       _listeners.forEach((fn) => fn(window));
     });
-    _listenerRegistered = true;
   }
 };
 
 function subscribeToWindowDimensions(listener: DimensionListener): () => void {
   registerDimensionListener();
   _listeners.add(listener);
-  return () => _listeners.delete(listener);
+
+  return () => {
+    _listeners.delete(listener);
+    if (_listeners.size === 0 && _subscription) {
+      if (_subscription.remove) {
+        _subscription.remove();
+      } else {
+        // Fallback for older React Native versions
+        (Dimensions as any).removeEventListener("change", _subscription);
+      }
+      _subscription = null;
+    }
+  };
 }
 
 // ============================================================================
@@ -135,6 +146,9 @@ export const useThemedStyles = (
 // ============================================================================
 // Hook for device locale auto-detection
 // ============================================================================
+// Note: This value is computed once per hook mount. It does not automatically
+// update if the user changes system language while the app is in background.
+// For full reactive localization support, consider react-native-localize.
 
 export const useDeviceLocale = (): string => {
   return useMemo(() => {

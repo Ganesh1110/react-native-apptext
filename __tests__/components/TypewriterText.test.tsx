@@ -8,8 +8,14 @@ import AppText from "../../src/AppText";
 
 jest.useFakeTimers();
 
+import { LocaleProvider } from "../../src/LangCore";
+
 const renderWithProvider = (element: React.ReactElement) =>
-  render(<AppTextProvider>{element}</AppTextProvider>);
+  render(
+    <LocaleProvider translations={{}} defaultLanguage="en">
+      <AppTextProvider>{element}</AppTextProvider>
+    </LocaleProvider>,
+  );
 
 describe("TypewriterText Animation", () => {
   beforeEach(() => {
@@ -69,11 +75,13 @@ describe("TypewriterText Animation", () => {
 
     // Change the text — should restart from empty
     rerender(
-      <AppTextProvider>
-        <AppText animation={{ type: "typewriter" }} animated>
-          XYZ
-        </AppText>
-      </AppTextProvider>
+      <LocaleProvider translations={{}} defaultLanguage="en">
+        <AppTextProvider>
+          <AppText animation={{ type: "typewriter" }} animated>
+            XYZ
+          </AppText>
+        </AppTextProvider>
+      </LocaleProvider>,
     );
 
     // Immediately after re-render display should have reset
@@ -95,17 +103,19 @@ describe("TypewriterText Animation", () => {
     const { rerender } = renderWithProvider(
       <AppText animation={{ type: "typewriter" }} animated>
         First
-      </AppText>
+      </AppText>,
     );
 
     // Rapid successive re-renders
     for (const text of ["Second", "Third", "Fourth", "Fifth"]) {
       rerender(
-        <AppTextProvider>
-          <AppText animation={{ type: "typewriter" }} animated>
-            {text}
-          </AppText>
-        </AppTextProvider>
+        <LocaleProvider translations={{}} defaultLanguage="en">
+          <AppTextProvider>
+            <AppText animation={{ type: "typewriter" }} animated>
+              {text}
+            </AppText>
+          </AppTextProvider>
+        </LocaleProvider>,
       );
     }
 

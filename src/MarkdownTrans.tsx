@@ -140,15 +140,16 @@ function parseMarkdown(
   for (const { type, regex, enabled } of patterns) {
     if (!enabled) continue;
 
+    // Reset regex lastIndex since we use 'g' flag
+    regex.lastIndex = 0;
     let match;
-    const regexCopy = new RegExp(regex.source, regex.flags);
 
-    while ((match = regexCopy.exec(text)) !== null) {
+    while ((match = regex.exec(text)) !== null) {
       if (type === "link") {
         matches.push({
           type,
           start: match.index,
-          end: regexCopy.lastIndex,
+          end: regex.lastIndex,
           content: match[1],
           url: match[2],
         });
@@ -156,7 +157,7 @@ function parseMarkdown(
         matches.push({
           type,
           start: match.index,
-          end: regexCopy.lastIndex,
+          end: regex.lastIndex,
           content: match[2],
           componentName: match[1],
         });
@@ -164,18 +165,21 @@ function parseMarkdown(
         matches.push({
           type,
           start: match.index,
-          end: regexCopy.lastIndex,
+          end: regex.lastIndex,
           content: match[1],
         });
       }
     }
   }
 
-  // Sort matches by start position
-  matches.sort((a, b) => a.start - b.start);
+  // Sort matches by start position, then by length (descending) to prioritize longer matches
+  matches.sort((a, b) => a.start - b.start || b.end - a.end);
 
   // Build nodes
   for (const match of matches) {
+    // Skip overlapping matches
+    if (match.start < currentIndex) continue;
+
     // Add plain text before match
     if (match.start > currentIndex) {
       const plainText = text.slice(currentIndex, match.start);

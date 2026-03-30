@@ -3,19 +3,25 @@ import { useLang } from "./LangCore";
 import AppText from "./AppText";
 function tokenize(input) {
     const tokens = [];
-    // Match <tagName>, </tagName>, or plain text between them
-    const re = /<(\/)?\s*(\w+)\s*>/g;
+    // Match <tagName>, </tagName>, <tagName />, or <tagName attr="val">
+    const re = /<(\/)?\s*(\w+)(?:\s+[^>]+)?\s*(\/)?>/g;
     let last = 0;
     let match;
     while ((match = re.exec(input)) !== null) {
         if (match.index > last) {
             tokens.push({ type: "text", value: input.slice(last, match.index) });
         }
-        if (match[1]) {
-            tokens.push({ type: "close", tag: match[2] });
+        const isClosing = !!match[1];
+        const tagName = match[2];
+        const isSelfClosing = !!match[3];
+        if (isClosing) {
+            tokens.push({ type: "close", tag: tagName });
+        }
+        else if (isSelfClosing) {
+            tokens.push({ type: "selfClosing", tag: tagName });
         }
         else {
-            tokens.push({ type: "open", tag: match[2] });
+            tokens.push({ type: "open", tag: tagName });
         }
         last = re.lastIndex;
     }
@@ -36,6 +42,10 @@ function buildTree(tokens) {
             const node = { tag: token.tag, children: [] };
             current.children.push(node);
             stack.push(node);
+        }
+        else if (token.type === "selfClosing") {
+            const node = { tag: token.tag, children: [] };
+            current.children.push(node);
         }
         else {
             // close tag — pop the stack (even if tags are mismatched, best-effort)

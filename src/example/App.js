@@ -232,22 +232,22 @@ function TextStylingDemo() {
 function SpacingDemo() {
   return (
     <Section title="4️⃣ Spacing Props (Margin & Padding)">
-      <AppText m={5} p={5} backgroundColor="#DBEAFE">
+      <AppText m={5} p={5} style={{ backgroundColor: "#DBEAFE" }}>
         margin=5, padding=5
       </AppText>
-      <AppText mt={10} mb={10} backgroundColor="#FCE7F3">
+      <AppText mt={10} mb={10} style={{ backgroundColor: "#FCE7F3" }}>
         marginTop=10, marginBottom=10
       </AppText>
-      <AppText ml={15} mr={15} backgroundColor="#D1FAE5">
+      <AppText ml={15} mr={15} style={{ backgroundColor: "#D1FAE5" }}>
         marginLeft=15, marginRight=15
       </AppText>
-      <AppText mx={20} my={10} backgroundColor="#FEF3C7">
+      <AppText mx={20} my={10} style={{ backgroundColor: "#FEF3C7" }}>
         marginX=20, marginY=10
       </AppText>
-      <AppText p={15} pt={5} backgroundColor="#E0E7FF">
+      <AppText p={15} pt={5} style={{ backgroundColor: "#E0E7FF" }}>
         padding=15, paddingTop=5
       </AppText>
-      <AppText px={25} py={15} backgroundColor="#FED7AA">
+      <AppText px={25} py={15} style={{ backgroundColor: "#FED7AA" }}>
         paddingX=25, paddingY=15
       </AppText>
     </Section>
