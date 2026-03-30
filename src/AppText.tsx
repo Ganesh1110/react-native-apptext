@@ -993,7 +993,11 @@ const BaseAppText = memo(
         const props = {
           ...passThroughProps,
           numberOfLines:
-            typeof truncate === "number" ? truncate : numberOfLines,
+            typeof truncate === "number"
+              ? truncate
+              : truncate === true
+                ? 1
+                : numberOfLines,
           ellipsizeMode: truncate ? ellipsizeMode || "tail" : ellipsizeMode,
           allowFontScaling: allowFontScaling !== false,
           maxFontSizeMultiplier: maxFontSizeMultiplier || 3,
@@ -1114,10 +1118,12 @@ const BaseAppText = memo(
       const hasExpandCollapse =
         !!(expandText || collapseText || onExpand || onCollapse);
 
-      if (truncate && hasExpandCollapse) {
+      if ((truncate || numberOfLines) && hasExpandCollapse) {
         return (
           <TruncationComponent
-            maxLines={typeof truncate === "number" ? truncate : 1}
+            maxLines={
+              typeof truncate === "number" ? truncate : numberOfLines || 1
+            }
             onExpand={onExpand}
             onCollapse={onCollapse}
             expandText={expandText}

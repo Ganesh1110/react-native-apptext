@@ -687,7 +687,11 @@ accessibilityActions, onAccessibilityAction, accessibilityValue, importantForAcc
     const textProps = useMemo(() => {
         const props = {
             ...passThroughProps,
-            numberOfLines: typeof truncate === "number" ? truncate : numberOfLines,
+            numberOfLines: typeof truncate === "number"
+                ? truncate
+                : truncate === true
+                    ? 1
+                    : numberOfLines,
             ellipsizeMode: truncate ? ellipsizeMode || "tail" : ellipsizeMode,
             allowFontScaling: allowFontScaling !== false,
             maxFontSizeMultiplier: maxFontSizeMultiplier || 3,
@@ -764,8 +768,8 @@ accessibilityActions, onAccessibilityAction, accessibilityValue, importantForAcc
           </StandardAnimatedText>);
     }
     const hasExpandCollapse = !!(expandText || collapseText || onExpand || onCollapse);
-    if (truncate && hasExpandCollapse) {
-        return (<TruncationComponent maxLines={typeof truncate === "number" ? truncate : 1} onExpand={onExpand} onCollapse={onCollapse} expandText={expandText} collapseText={collapseText} style={finalComputedStyle}>
+    if ((truncate || numberOfLines) && hasExpandCollapse) {
+        return (<TruncationComponent maxLines={typeof truncate === "number" ? truncate : numberOfLines || 1} onExpand={onExpand} onCollapse={onCollapse} expandText={expandText} collapseText={collapseText} style={finalComputedStyle}>
             {children}
           </TruncationComponent>);
     }
