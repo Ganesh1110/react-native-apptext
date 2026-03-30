@@ -1,8 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Dimensions, ScaledSize, PixelRatio, NativeModules, Platform } from "react-native";
+import {
+  Dimensions,
+  ScaledSize,
+  PixelRatio,
+  NativeModules,
+  Platform,
+} from "react-native";
 import { AppTextTheme, ScriptCode } from "./types";
 import { SCRIPT_CONFIGS } from "./scriptConfigs";
-import { BASE_WIDTH, RESPONSIVE_FONT_MIN, RESPONSIVE_FONT_MAX } from "./constants";
+import {
+  BASE_WIDTH,
+  RESPONSIVE_FONT_MIN,
+  RESPONSIVE_FONT_MAX,
+} from "./constants";
 
 // ============================================================================
 // Shared Dimensions Singleton
@@ -15,14 +25,20 @@ type DimensionListener = (dims: ScaledSize) => void;
 
 let _currentDimensions: ScaledSize = Dimensions.get("window");
 const _listeners = new Set<DimensionListener>();
+let _listenerRegistered = false;
 
-// Register the shared listener once at module load time
-Dimensions.addEventListener("change", ({ window }) => {
-  _currentDimensions = window;
-  _listeners.forEach((fn) => fn(window));
-});
+const registerDimensionListener = () => {
+  if (!_listenerRegistered) {
+    Dimensions.addEventListener("change", ({ window }) => {
+      _currentDimensions = window;
+      _listeners.forEach((fn) => fn(window));
+    });
+    _listenerRegistered = true;
+  }
+};
 
 function subscribeToWindowDimensions(listener: DimensionListener): () => void {
+  registerDimensionListener();
   _listeners.add(listener);
   return () => _listeners.delete(listener);
 }
@@ -33,28 +49,32 @@ function subscribeToWindowDimensions(listener: DimensionListener): () => void {
 
 export const useResponsiveFont = (
   baseSize: number,
-  bounds?: { min?: number; max?: number }
+  minBound?: number,
+  maxBound?: number,
 ) => {
   const [dimensions, setDimensions] = useState(() => _currentDimensions);
 
   useEffect(() => {
-    // Subscribe to the shared singleton listener — O(1) per component
     const unsubscribe = subscribeToWindowDimensions(setDimensions);
     return unsubscribe;
   }, []);
 
+  const roundedWidth = useMemo(
+    () => Math.round(dimensions.width / 20) * 20,
+    [dimensions.width],
+  );
+
   return useMemo(() => {
-    const { width } = dimensions;
-    const scale = (width / BASE_WIDTH) * PixelRatio.getFontScale();
+    const scale = (roundedWidth / BASE_WIDTH) * PixelRatio.getFontScale();
     let scaledSize = Math.round(baseSize * scale * 100) / 100;
 
-    const min = bounds?.min ?? RESPONSIVE_FONT_MIN;
-    const max = bounds?.max ?? RESPONSIVE_FONT_MAX;
+    const min = minBound ?? RESPONSIVE_FONT_MIN;
+    const max = maxBound ?? RESPONSIVE_FONT_MAX;
     scaledSize = Math.max(scaledSize, min);
     scaledSize = Math.min(scaledSize, max);
 
     return scaledSize;
-  }, [baseSize, dimensions, bounds?.min, bounds?.max]);
+  }, [baseSize, roundedWidth, minBound, maxBound]);
 };
 
 // ============================================================================
@@ -70,7 +90,7 @@ const SORTED_SCRIPT_ENTRIES = Object.entries(SCRIPT_CONFIGS).sort(
     const span = (ranges: [number, number][]) =>
       ranges.reduce((s, [lo, hi]) => s + (hi - lo + 1), 0);
     return span(b.unicodeRanges) - span(a.unicodeRanges);
-  }
+  },
 );
 
 export const useScriptDetection = (text: string): ScriptCode => {
@@ -84,7 +104,7 @@ export const useScriptDetection = (text: string): ScriptCode => {
     for (const [scriptCode, config] of SORTED_SCRIPT_ENTRIES) {
       if (
         config.unicodeRanges.some(
-          ([start, end]) => codePoint >= start && codePoint <= end
+          ([start, end]) => codePoint >= start && codePoint <= end,
         )
       ) {
         return scriptCode as ScriptCode;
@@ -100,7 +120,7 @@ export const useScriptDetection = (text: string): ScriptCode => {
 
 export const useThemedStyles = (
   theme: AppTextTheme,
-  colorScheme: "light" | "dark" | null | undefined
+  colorScheme: "light" | "dark" | null | undefined,
 ) => {
   return useMemo(() => {
     const isDark = colorScheme === "dark";

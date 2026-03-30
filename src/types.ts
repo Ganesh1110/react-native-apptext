@@ -1,6 +1,8 @@
 import React, { createContext } from "react";
 import { TextProps, TextStyle, StyleProp } from "react-native";
 
+export type { TextStyle, StyleProp };
+
 // ============================================================================
 // SCRIPT & TYPOGRAPHY TYPES (Keep existing)
 // ============================================================================
@@ -365,7 +367,7 @@ export interface LocaleContextValue {
   t: (
     key: string,
     params?: Record<string, any>,
-    options?: TranslationOptions
+    options?: TranslationOptions,
   ) => string;
 
   /**
@@ -383,7 +385,7 @@ export interface LocaleContextValue {
     key: string,
     count: number,
     params?: Record<string, any>,
-    options?: { namespace?: string }
+    options?: { namespace?: string },
   ) => string;
 
   /**
@@ -402,7 +404,7 @@ export interface LocaleContextValue {
    */
   loadNamespace: (
     namespace: string,
-    loader: () => Promise<any>
+    loader: () => Promise<any>,
   ) => Promise<void>;
 }
 
@@ -428,7 +430,7 @@ export interface LocaleProviderProps {
   onMissingTranslation?: (
     lang: string,
     key: string,
-    namespace?: string
+    namespace?: string,
   ) => void;
 
   /** Child components */
@@ -463,18 +465,18 @@ export interface TypedLocaleContextValue<T extends Translations> {
   t: (
     key: DeepKeyOf<T>,
     params?: Record<string, any>,
-    options?: TranslationOptions
+    options?: TranslationOptions,
   ) => string;
   tn: (
     key: DeepKeyOf<T>,
     count: number,
     params?: Record<string, any>,
-    options?: { namespace?: string }
+    options?: { namespace?: string },
   ) => string;
   changeLanguage: (lang: string) => void;
   loadNamespace: (
     namespace: string,
-    loader: () => Promise<any>
+    loader: () => Promise<any>,
   ) => Promise<void>;
 }
 

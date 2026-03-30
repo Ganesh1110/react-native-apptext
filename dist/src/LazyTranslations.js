@@ -32,7 +32,7 @@ export function LazyLocaleProvider({ loaders, defaultLanguage, preloadLanguages 
             onLoadComplete === null || onLoadComplete === void 0 ? void 0 : onLoadComplete(locale);
         }
         catch (error) {
-            console.error(`Failed to load locale: ${locale}`, error);
+            console.warn(`Failed to load locale: ${locale}`, error);
             onLoadError === null || onLoadError === void 0 ? void 0 : onLoadError(locale, error);
         }
         finally {

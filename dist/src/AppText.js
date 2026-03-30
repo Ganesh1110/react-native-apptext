@@ -6,8 +6,17 @@ import { useResponsiveFont, useScriptDetection, useThemedStyles, } from "./hooks
 import { AppTextProvider, useAppTextTheme } from "./context";
 import { createSpacingStyles } from "./utils";
 import TransComponent from "./Trans";
-/* ========== Animation Hook ========== */
+const PRESET_ANIMATION_DURATIONS = {
+    rubberBand: 1000,
+    tada: 1000,
+    swing: 2000,
+    wobble: 2000,
+    pulse: 1500,
+    bounce: 1000,
+    shake: 500,
+};
 const useTextAnimation = (animated, animation, animationDelay = 0, animationDuration = 1000, animationSpeed = 50, cursor = false) => {
+    var _a;
     const opacityValue = useRef(new Animated.Value(0)).current;
     const translateYValue = useRef(new Animated.Value(50)).current;
     const translateXValue = useRef(new Animated.Value(100)).current;
@@ -30,6 +39,7 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
         return "fade";
     }, [animation]);
     const isSpecialAnimation = animationType === "typewriter" || animationType === "wave";
+    const effectiveDuration = (_a = PRESET_ANIMATION_DURATIONS[animationType]) !== null && _a !== void 0 ? _a : animationDuration;
     useEffect(() => {
         // Return early if not enabled, or if it's a special animation handled by separate components
         if (!animated || !animation || isSpecialAnimation)
@@ -264,32 +274,32 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
                 animationPromise = Animated.loop(Animated.sequence([
                     Animated.timing(scaleValue, {
                         toValue: 1.25,
-                        duration: 300,
+                        duration: effectiveDuration * 0.3,
                         useNativeDriver: true,
                     }),
                     Animated.timing(scaleValue, {
                         toValue: 0.75,
-                        duration: 100,
+                        duration: effectiveDuration * 0.1,
                         useNativeDriver: true,
                     }),
                     Animated.timing(scaleValue, {
                         toValue: 1.15,
-                        duration: 100,
+                        duration: effectiveDuration * 0.1,
                         useNativeDriver: true,
                     }),
                     Animated.timing(scaleValue, {
                         toValue: 0.95,
-                        duration: 100,
+                        duration: effectiveDuration * 0.1,
                         useNativeDriver: true,
                     }),
                     Animated.timing(scaleValue, {
                         toValue: 1.05,
-                        duration: 100,
+                        duration: effectiveDuration * 0.1,
                         useNativeDriver: true,
                     }),
                     Animated.timing(scaleValue, {
                         toValue: 1,
-                        duration: 300,
+                        duration: effectiveDuration * 0.3,
                         useNativeDriver: true,
                     }),
                 ]));
@@ -298,39 +308,39 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
                 animationPromise = Animated.loop(Animated.sequence([
                     Animated.timing(scaleValue, {
                         toValue: 0.9,
-                        duration: 100,
+                        duration: effectiveDuration * 0.1,
                         useNativeDriver: true,
                     }),
                     Animated.parallel([
                         Animated.timing(scaleValue, {
                             toValue: 1.1,
-                            duration: 100,
+                            duration: effectiveDuration * 0.1,
                             useNativeDriver: true,
                         }),
                         Animated.timing(rotateValue, {
                             toValue: -3,
-                            duration: 100,
+                            duration: effectiveDuration * 0.1,
                             useNativeDriver: true,
                         }),
                     ]),
                     Animated.timing(rotateValue, {
                         toValue: 3,
-                        duration: 100,
+                        duration: effectiveDuration * 0.1,
                         useNativeDriver: true,
                     }),
                     Animated.timing(rotateValue, {
                         toValue: -3,
-                        duration: 100,
+                        duration: effectiveDuration * 0.1,
                         useNativeDriver: true,
                     }),
                     Animated.timing(rotateValue, {
                         toValue: 0,
-                        duration: 100,
+                        duration: effectiveDuration * 0.1,
                         useNativeDriver: true,
                     }),
                     Animated.timing(scaleValue, {
                         toValue: 1,
-                        duration: 100,
+                        duration: effectiveDuration * 0.1,
                         useNativeDriver: true,
                     }),
                 ]));
@@ -339,27 +349,27 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
                 animationPromise = Animated.loop(Animated.sequence([
                     Animated.timing(rotateValue, {
                         toValue: 15,
-                        duration: 200,
+                        duration: effectiveDuration * 0.2,
                         useNativeDriver: true,
                     }),
                     Animated.timing(rotateValue, {
                         toValue: -10,
-                        duration: 200,
+                        duration: effectiveDuration * 0.2,
                         useNativeDriver: true,
                     }),
                     Animated.timing(rotateValue, {
                         toValue: 5,
-                        duration: 200,
+                        duration: effectiveDuration * 0.2,
                         useNativeDriver: true,
                     }),
                     Animated.timing(rotateValue, {
                         toValue: -5,
-                        duration: 200,
+                        duration: effectiveDuration * 0.2,
                         useNativeDriver: true,
                     }),
                     Animated.timing(rotateValue, {
                         toValue: 0,
-                        duration: 200,
+                        duration: effectiveDuration * 0.2,
                         useNativeDriver: true,
                     }),
                 ]));
@@ -368,27 +378,27 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
                 animationPromise = Animated.loop(Animated.sequence([
                     Animated.timing(rotateValue, {
                         toValue: 5,
-                        duration: 100,
+                        duration: effectiveDuration * 0.2,
                         useNativeDriver: true,
                     }),
                     Animated.timing(rotateValue, {
                         toValue: -5,
-                        duration: 100,
+                        duration: effectiveDuration * 0.2,
                         useNativeDriver: true,
                     }),
                     Animated.timing(rotateValue, {
                         toValue: 3,
-                        duration: 100,
+                        duration: effectiveDuration * 0.2,
                         useNativeDriver: true,
                     }),
                     Animated.timing(rotateValue, {
                         toValue: -3,
-                        duration: 100,
+                        duration: effectiveDuration * 0.2,
                         useNativeDriver: true,
                     }),
                     Animated.timing(rotateValue, {
                         toValue: 0,
-                        duration: 100,
+                        duration: effectiveDuration * 0.2,
                         useNativeDriver: true,
                     }),
                 ]));
@@ -624,8 +634,17 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
         animationDuration,
         animationType,
         isSpecialAnimation,
+        opacityValue,
+        translateYValue,
+        translateXValue,
+        scaleValue,
+        rotateValue,
+        shakeValue,
+        glowValue,
+        neonValue,
+        gradientValue,
     ]);
-    const getAnimatedStyle = () => {
+    const getAnimatedStyle = useCallback(() => {
         // Return empty if not animated/animation context, or if special animation handled by standard components
         if (!animated || !animation || isSpecialAnimation)
             return {};
@@ -822,7 +841,7 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
             default:
                 return { opacity: opacityValue };
         }
-    };
+    }, []);
     return {
         animatedStyle: getAnimatedStyle(),
         animationType,
@@ -871,9 +890,24 @@ const TypewriterText = memo(({ children, delay = 0, duration = 2000, speed = 50,
             clearTimeout(characterTimer);
         };
     }, [text, speed, delay]);
+    const cursorColor = useMemo(() => {
+        if (!style)
+            return undefined;
+        if (Array.isArray(style)) {
+            for (const s of style) {
+                if (s && typeof s === "object" && "color" in s) {
+                    return s.color;
+                }
+            }
+        }
+        else if (style && typeof style === "object" && "color" in style) {
+            return style.color;
+        }
+        return undefined;
+    }, [style]);
     return (<Text style={style} accessibilityLiveRegion="polite" accessibilityState={{ busy: !isDone }}>
         {displayText}
-        {cursor && !isDone && <Text style={{ color: style.color }}>|</Text>}
+        {cursor && !isDone && <Text style={{ color: cursorColor }}>|</Text>}
       </Text>);
 });
 const TruncationComponent = memo(({ children, maxLines, onExpand, expandText = "Read more", collapseText = "Read less", style, }) => {
@@ -918,18 +952,17 @@ const WaveText = memo(({ children, duration = 1000, delay = 0, style }) => {
     const isMountedRef = useRef(true);
     const animationsRef = useRef([]);
     // Create animated values - these persist but get replaced when text changes
-    // Using a ref that we manually manage to avoid React's strict mode issues
     const animatedValuesRef = useRef([]);
-    const prevTextRef = useRef("");
-    // Only create new values when text actually changes (not on every render)
-    if (prevTextRef.current !== text) {
-        prevTextRef.current = text;
-        // Don't recreate here - we let useEffect handle it
-    }
-    // Initialize values on first render or text change
-    if (animatedValuesRef.current.length !== characters.length) {
-        animatedValuesRef.current = characters.map(() => new Animated.Value(0));
-    }
+    const prevTextRef = useRef(text);
+    // Initialize values on first render or text change - properly in useEffect
+    useEffect(() => {
+        if (prevTextRef.current !== text) {
+            prevTextRef.current = text;
+        }
+        if (animatedValuesRef.current.length !== characters.length) {
+            animatedValuesRef.current = characters.map(() => new Animated.Value(0));
+        }
+    }, [text, characters.length]);
     useEffect(() => {
         isMountedRef.current = true;
         // Create animations for each character
@@ -965,10 +998,11 @@ const WaveText = memo(({ children, duration = 1000, delay = 0, style }) => {
                 try {
                     anim.stop();
                 }
-                catch (e) {
-                    // Ignore
+                catch (_a) {
+                    // Animation may already be stopped or in invalid state
                 }
             });
+            animationsRef.current = [];
         };
     }, [text, duration, delay, characters.length]);
     const interpolatedStyles = useMemo(() => {
@@ -983,7 +1017,7 @@ const WaveText = memo(({ children, duration = 1000, delay = 0, style }) => {
             ],
         }));
     }, [characters.length]);
-    return (<Text style={[style, { overflow: "visible" }]}>
+    return (<Text style={style}>
         {characters.map((char, i) => (<Animated.Text key={`wave-${i}`} style={interpolatedStyles[i]}>
             {char}
           </Animated.Text>))}
@@ -1012,7 +1046,7 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
     const baseFontSize = size === "auto"
         ? typographyStyle.fontSize
         : size || typographyStyle.fontSize;
-    const responsiveFontSize = useResponsiveFont(baseFontSize, responsive ? { min: 10, max: 48 } : undefined);
+    const responsiveFontSize = useResponsiveFont(baseFontSize, responsive ? 10 : undefined, responsive ? 48 : undefined);
     const calculatedLineHeight = useMemo(() => {
         const baseLineHeight = typographyStyle.lineHeight || baseFontSize * 1.2;
         return baseLineHeight * scriptConfig.lineHeightMultiplier;
@@ -1034,6 +1068,7 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
             return direction;
         return scriptConfig.direction;
     }, [direction, scriptConfig.direction]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const computedStyle = useMemo(() => {
         const baseStyle = {
             ...typographyStyle,
@@ -1086,7 +1121,25 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
         px,
         py,
     }), [m, mt, mr, mb, ml, mx, my, p, pt, pr, pb, pl, px, py]);
-    const finalComputedStyle = useMemo(() => ({ ...computedStyle, ...spacingStyles, ...animatedStyle }), [computedStyle, spacingStyles, animatedStyle]);
+    const finalComputedStyle = useMemo(() => ({ ...computedStyle, ...spacingStyles, ...animatedStyle }), 
+    // Use primitive values that computedStyle and animatedStyle depend on
+    [
+        spacingStyles,
+        // computedStyle primitives
+        resolvedColor,
+        responsiveFontSize,
+        calculatedLineHeight,
+        weight,
+        align,
+        textDirection,
+        decoration,
+        italic,
+        transform,
+        shadow,
+        typographyStyle,
+        // animatedStyle - depends on animationType which is stable from useMemo
+        animationType,
+    ]);
     const textProps = useMemo(() => {
         const props = {
             ...restProps,
@@ -1144,19 +1197,6 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
             {children}
           </TypewriterText>);
     }
-    /*
-    if ((animated || animation) && animationType === "wave") {
-      return (
-        <WaveText
-          delay={finalDelay}
-          duration={finalDuration}
-          style={finalComputedStyle}
-        >
-          {children}
-        </WaveText>
-      );
-    }
-    */
     if (animated || (animation && animationType !== "none")) {
         return (<Animated.Text ref={ref} style={finalComputedStyle} {...(!hasPressHandlers
             ? { pointerEvents: "none" }
@@ -1173,33 +1213,33 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
 BaseAppText.displayName = "AppText";
 const AppText = BaseAppText;
 // Legacy variants
-AppText.H1 = memo((props) => <BaseAppText {...props} variant="h1"/>);
-AppText.H2 = memo((props) => <BaseAppText {...props} variant="h2"/>);
-AppText.H3 = memo((props) => <BaseAppText {...props} variant="h3"/>);
-AppText.H4 = memo((props) => <BaseAppText {...props} variant="h4"/>);
-AppText.H5 = memo((props) => <BaseAppText {...props} variant="h5"/>);
-AppText.H6 = memo((props) => <BaseAppText {...props} variant="h6"/>);
-AppText.Title = memo((props) => <BaseAppText {...props} variant="title"/>);
-AppText.Subtitle = memo((props) => (<BaseAppText {...props} variant="subtitle1"/>));
-AppText.Body = memo((props) => <BaseAppText {...props} variant="body1"/>);
-AppText.Caption = memo((props) => <BaseAppText {...props} variant="caption"/>);
-AppText.Code = memo((props) => <BaseAppText {...props} variant="code"/>);
+AppText.H1 = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="h1" ref={ref}/>)));
+AppText.H2 = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="h2" ref={ref}/>)));
+AppText.H3 = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="h3" ref={ref}/>)));
+AppText.H4 = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="h4" ref={ref}/>)));
+AppText.H5 = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="h5" ref={ref}/>)));
+AppText.H6 = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="h6" ref={ref}/>)));
+AppText.Title = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="title" ref={ref}/>)));
+AppText.Subtitle = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="subtitle1" ref={ref}/>)));
+AppText.Body = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="body1" ref={ref}/>)));
+AppText.Caption = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="caption" ref={ref}/>)));
+AppText.Code = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="code" ref={ref}/>)));
 // Material Design 3 variants
-AppText.DisplayLarge = memo((props) => (<BaseAppText {...props} variant="displayLarge"/>));
-AppText.DisplayMedium = memo((props) => (<BaseAppText {...props} variant="displayMedium"/>));
-AppText.DisplaySmall = memo((props) => (<BaseAppText {...props} variant="displaySmall"/>));
-AppText.HeadlineLarge = memo((props) => (<BaseAppText {...props} variant="headlineLarge"/>));
-AppText.HeadlineMedium = memo((props) => (<BaseAppText {...props} variant="headlineMedium"/>));
-AppText.HeadlineSmall = memo((props) => (<BaseAppText {...props} variant="headlineSmall"/>));
-AppText.TitleLarge = memo((props) => (<BaseAppText {...props} variant="titleLarge"/>));
-AppText.TitleMedium = memo((props) => (<BaseAppText {...props} variant="titleMedium"/>));
-AppText.TitleSmall = memo((props) => (<BaseAppText {...props} variant="titleSmall"/>));
-AppText.BodyLarge = memo((props) => (<BaseAppText {...props} variant="bodyLarge"/>));
-AppText.BodyMedium = memo((props) => (<BaseAppText {...props} variant="bodyMedium"/>));
-AppText.BodySmall = memo((props) => (<BaseAppText {...props} variant="bodySmall"/>));
-AppText.LabelLarge = memo((props) => (<BaseAppText {...props} variant="labelLarge"/>));
-AppText.LabelMedium = memo((props) => (<BaseAppText {...props} variant="labelMedium"/>));
-AppText.LabelSmall = memo((props) => (<BaseAppText {...props} variant="labelSmall"/>));
+AppText.DisplayLarge = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="displayLarge" ref={ref}/>)));
+AppText.DisplayMedium = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="displayMedium" ref={ref}/>)));
+AppText.DisplaySmall = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="displaySmall" ref={ref}/>)));
+AppText.HeadlineLarge = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="headlineLarge" ref={ref}/>)));
+AppText.HeadlineMedium = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="headlineMedium" ref={ref}/>)));
+AppText.HeadlineSmall = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="headlineSmall" ref={ref}/>)));
+AppText.TitleLarge = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="titleLarge" ref={ref}/>)));
+AppText.TitleMedium = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="titleMedium" ref={ref}/>)));
+AppText.TitleSmall = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="titleSmall" ref={ref}/>)));
+AppText.BodyLarge = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="bodyLarge" ref={ref}/>)));
+AppText.BodyMedium = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="bodyMedium" ref={ref}/>)));
+AppText.BodySmall = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="bodySmall" ref={ref}/>)));
+AppText.LabelLarge = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="labelLarge" ref={ref}/>)));
+AppText.LabelMedium = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="labelMedium" ref={ref}/>)));
+AppText.LabelSmall = memo(forwardRef((props, ref) => (<BaseAppText {...props} variant="labelSmall" ref={ref}/>)));
 AppText.Trans = TransComponent;
 export default AppText;
 export { AppTextProvider, useAppTextTheme, useResponsiveFont, useScriptDetection, SCRIPT_CONFIGS, DEFAULT_THEME, TransComponent as Trans, };

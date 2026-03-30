@@ -1,39 +1,43 @@
 import { useEffect, useMemo, useState } from "react";
-import { Dimensions, PixelRatio, NativeModules, Platform } from "react-native";
+import { Dimensions, PixelRatio, NativeModules, Platform, } from "react-native";
 import { SCRIPT_CONFIGS } from "./scriptConfigs";
-import { BASE_WIDTH, RESPONSIVE_FONT_MIN, RESPONSIVE_FONT_MAX } from "./constants";
+import { BASE_WIDTH, RESPONSIVE_FONT_MIN, RESPONSIVE_FONT_MAX, } from "./constants";
 let _currentDimensions = Dimensions.get("window");
 const _listeners = new Set();
-// Register the shared listener once at module load time
-Dimensions.addEventListener("change", ({ window }) => {
-    _currentDimensions = window;
-    _listeners.forEach((fn) => fn(window));
-});
+let _listenerRegistered = false;
+const registerDimensionListener = () => {
+    if (!_listenerRegistered) {
+        Dimensions.addEventListener("change", ({ window }) => {
+            _currentDimensions = window;
+            _listeners.forEach((fn) => fn(window));
+        });
+        _listenerRegistered = true;
+    }
+};
 function subscribeToWindowDimensions(listener) {
+    registerDimensionListener();
     _listeners.add(listener);
     return () => _listeners.delete(listener);
 }
 // ============================================================================
 // Hook for responsive font scaling
 // ============================================================================
-export const useResponsiveFont = (baseSize, bounds) => {
+export const useResponsiveFont = (baseSize, minBound, maxBound) => {
     const [dimensions, setDimensions] = useState(() => _currentDimensions);
     useEffect(() => {
-        // Subscribe to the shared singleton listener — O(1) per component
         const unsubscribe = subscribeToWindowDimensions(setDimensions);
         return unsubscribe;
     }, []);
+    const roundedWidth = useMemo(() => Math.round(dimensions.width / 20) * 20, [dimensions.width]);
     return useMemo(() => {
-        var _a, _b;
-        const { width } = dimensions;
-        const scale = (width / BASE_WIDTH) * PixelRatio.getFontScale();
+        const scale = (roundedWidth / BASE_WIDTH) * PixelRatio.getFontScale();
         let scaledSize = Math.round(baseSize * scale * 100) / 100;
-        const min = (_a = bounds === null || bounds === void 0 ? void 0 : bounds.min) !== null && _a !== void 0 ? _a : RESPONSIVE_FONT_MIN;
-        const max = (_b = bounds === null || bounds === void 0 ? void 0 : bounds.max) !== null && _b !== void 0 ? _b : RESPONSIVE_FONT_MAX;
+        const min = minBound !== null && minBound !== void 0 ? minBound : RESPONSIVE_FONT_MIN;
+        const max = maxBound !== null && maxBound !== void 0 ? maxBound : RESPONSIVE_FONT_MAX;
         scaledSize = Math.max(scaledSize, min);
         scaledSize = Math.min(scaledSize, max);
         return scaledSize;
-    }, [baseSize, dimensions, bounds === null || bounds === void 0 ? void 0 : bounds.min, bounds === null || bounds === void 0 ? void 0 : bounds.max]);
+    }, [baseSize, roundedWidth, minBound, maxBound]);
 };
 // ============================================================================
 // Hook for script detection

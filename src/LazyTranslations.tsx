@@ -100,13 +100,13 @@ export function LazyLocaleProvider({
         setLoadedLocales((prev) => new Set([...prev, locale]));
         onLoadComplete?.(locale);
       } catch (error) {
-        console.error(`Failed to load locale: ${locale}`, error);
+        console.warn(`Failed to load locale: ${locale}`, error);
         onLoadError?.(locale, error as Error);
       } finally {
         setIsLoading(false);
       }
     },
-    [loaders, loadedLocales, onLoadStart, onLoadComplete, onLoadError]
+    [loaders, loadedLocales, onLoadStart, onLoadComplete, onLoadError],
   );
 
   const changeLanguage = useCallback(
@@ -114,7 +114,7 @@ export function LazyLocaleProvider({
       await loadLocale(locale);
       setLanguage(locale);
     },
-    [loadLocale]
+    [loadLocale],
   );
 
   // Load default language on mount
@@ -173,7 +173,7 @@ export function useLazyLocale() {
  */
 export function withLazyTranslations<P extends object>(
   Component: React.ComponentType<P>,
-  requiredLocales: string[]
+  requiredLocales: string[],
 ) {
   return function LazyWrapper(props: P) {
     const { loadLocale, loadedLocales, isLoading } = useLazyLocale();
@@ -184,7 +184,7 @@ export function withLazyTranslations<P extends object>(
         await Promise.all(
           requiredLocales
             .filter((locale) => !loadedLocales.has(locale))
-            .map((locale) => loadLocale(locale))
+            .map((locale) => loadLocale(locale)),
         );
         setReady(true);
       };
@@ -208,7 +208,7 @@ export class NamespaceLoader {
   private loaded = new Set<string>();
 
   constructor(
-    private loaders: Record<string, () => Promise<{ default: Translations }>>
+    private loaders: Record<string, () => Promise<{ default: Translations }>>,
   ) {}
 
   async load(namespace: string): Promise<Translations> {

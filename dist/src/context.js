@@ -1,10 +1,10 @@
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import React, { useCallback, useContext, useMemo, useState, useEffect, } from "react";
 import { DEFAULT_THEME } from "./theme";
 const AppTextContext = React.createContext(null);
 function deepMerge(target, source) {
     const result = { ...target };
     for (const key in source) {
-        if (source.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
             const sourceValue = source[key];
             const targetValue = result[key];
             if (sourceValue &&
@@ -24,6 +24,11 @@ function deepMerge(target, source) {
 }
 export const AppTextProvider = ({ theme: customTheme, children }) => {
     const [theme, setTheme] = useState(() => deepMerge(DEFAULT_THEME, customTheme || {}));
+    useEffect(() => {
+        if (customTheme) {
+            setTheme((prevTheme) => deepMerge(prevTheme, customTheme));
+        }
+    }, [customTheme]);
     const updateTheme = useCallback((newTheme) => {
         setTheme((prevTheme) => deepMerge(prevTheme, newTheme));
     }, []);

@@ -110,12 +110,12 @@ function buildTree(tokens: Token[]): TreeNode {
 function renderTree(
   node: TreeNode | string,
   components: Record<string, React.ReactElement>,
-  keyPrefix: string
+  keyPrefix: string,
 ): React.ReactNode {
   if (typeof node === "string") return node;
 
   const renderedChildren = node.children.map((child, i) =>
-    renderTree(child, components, `${keyPrefix}-${i}`)
+    renderTree(child, components, `${keyPrefix}-${i}`),
   );
 
   if (!node.tag) {
@@ -125,11 +125,7 @@ function renderTree(
 
   const Component = components[node.tag];
   if (Component && React.isValidElement(Component)) {
-    return React.cloneElement(
-      Component,
-      { key: keyPrefix } as any,
-      ...renderedChildren
-    );
+    return React.cloneElement(Component, { key: keyPrefix }, renderedChildren);
   }
 
   // Component not provided for this tag — fall back to plain text
@@ -139,7 +135,7 @@ function renderTree(
 
 function parseRichText(
   text: string,
-  components: Record<string, React.ReactElement>
+  components: Record<string, React.ReactElement>,
 ): React.ReactNode {
   const tokens = tokenize(text);
   const tree = buildTree(tokens);
@@ -185,7 +181,7 @@ const TransComponent = memo<TransProps>(
     }, [translatedText, components]);
 
     return <AppText {...textProps}>{content}</AppText>;
-  }
+  },
 );
 
 TransComponent.displayName = "Trans";

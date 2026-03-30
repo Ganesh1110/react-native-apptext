@@ -29,7 +29,7 @@ export class NumberFormatter {
             return formatter.format(value);
         }
         catch (error) {
-            console.error("Number formatting error:", error);
+            console.warn("Number formatting error:", error);
             return this.fallbackFormat(value, options);
         }
     }

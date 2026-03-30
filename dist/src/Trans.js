@@ -56,7 +56,7 @@ function renderTree(node, components, keyPrefix) {
     }
     const Component = components[node.tag];
     if (Component && React.isValidElement(Component)) {
-        return React.cloneElement(Component, { key: keyPrefix }, ...renderedChildren);
+        return React.cloneElement(Component, { key: keyPrefix }, renderedChildren);
     }
     // Component not provided for this tag — fall back to plain text
     console.warn(`Trans: component "${node.tag}" not found, using plain text`);

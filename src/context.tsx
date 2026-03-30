@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+  useEffect,
+} from "react";
 import { AppTextTheme } from "./types";
 import { DEFAULT_THEME } from "./theme";
 
@@ -11,12 +17,12 @@ const AppTextContext = React.createContext<AppTextContextType | null>(null);
 
 function deepMerge<T extends Record<string, any>>(
   target: T,
-  source: Partial<T>
+  source: Partial<T>,
 ): T {
   const result = { ...target };
 
   for (const key in source) {
-    if (source.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(source, key)) {
       const sourceValue = source[key];
       const targetValue = result[key];
 
@@ -43,8 +49,14 @@ export const AppTextProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ theme: customTheme, children }) => {
   const [theme, setTheme] = useState<AppTextTheme>(() =>
-    deepMerge(DEFAULT_THEME, customTheme || {})
+    deepMerge(DEFAULT_THEME, customTheme || {}),
   );
+
+  useEffect(() => {
+    if (customTheme) {
+      setTheme((prevTheme) => deepMerge(prevTheme, customTheme));
+    }
+  }, [customTheme]);
 
   const updateTheme = useCallback((newTheme: Partial<AppTextTheme>) => {
     setTheme((prevTheme) => deepMerge(prevTheme, newTheme));
@@ -52,7 +64,7 @@ export const AppTextProvider: React.FC<{
 
   const contextValue = useMemo(
     () => ({ theme, updateTheme }),
-    [theme, updateTheme]
+    [theme, updateTheme],
   );
 
   return (

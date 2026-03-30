@@ -15,9 +15,16 @@ import {
   NativeSyntheticEvent,
   TextLayoutEventData,
   AccessibilityRole,
+  GestureResponderEvent,
 } from "react-native";
 
-import { AppTextProps, AppTextTheme, TypographyVariant } from "./types";
+import {
+  AppTextProps,
+  AppTextTheme,
+  TypographyVariant,
+  TextStyle,
+  StyleProp,
+} from "./types";
 import { SCRIPT_CONFIGS } from "./scriptConfigs";
 import { DEFAULT_THEME } from "./theme";
 import {
@@ -29,10 +36,62 @@ import { AppTextProvider, useAppTextTheme } from "./context";
 import { createSpacingStyles } from "./utils";
 import TransComponent from "./Trans";
 
+const PRESET_ANIMATION_DURATIONS: Record<string, number> = {
+  rubberBand: 1000,
+  tada: 1000,
+  swing: 2000,
+  wobble: 2000,
+  pulse: 1500,
+  bounce: 1000,
+  shake: 500,
+};
+
 /* ========== Animation Hook ========== */
+type AnimationConfig = {
+  type?:
+    | "fade"
+    | "fadeIn"
+    | "slideInRight"
+    | "slideInLeft"
+    | "slideInUp"
+    | "slideInDown"
+    | "bounceIn"
+    | "zoomIn"
+    | "flipInX"
+    | "flipInY"
+    | "rotateIn"
+    | "pulse"
+    | "bounce"
+    | "shake"
+    | "swing"
+    | "wobble"
+    | "rubberBand"
+    | "tada"
+    | "fadeOut"
+    | "slideOutRight"
+    | "slideOutLeft"
+    | "slideOutUp"
+    | "slideOutDown"
+    | "bounceOut"
+    | "zoomOut"
+    | "flipOutX"
+    | "flipOutY"
+    | "rotateOut"
+    | "blink"
+    | "glow"
+    | "neon"
+    | "gradientShift"
+    | "wave"
+    | "typewriter"
+    | "none";
+  duration?: number;
+  delay?: number;
+  speed?: number;
+};
+
 const useTextAnimation = (
   animated: boolean,
-  animation: any,
+  animation: AnimationConfig | boolean | undefined,
   animationDelay: number = 0,
   animationDuration: number = 1000,
   animationSpeed: number = 50,
@@ -60,6 +119,9 @@ const useTextAnimation = (
 
   const isSpecialAnimation =
     animationType === "typewriter" || animationType === "wave";
+
+  const effectiveDuration =
+    PRESET_ANIMATION_DURATIONS[animationType] ?? animationDuration;
 
   useEffect(() => {
     // Return early if not enabled, or if it's a special animation handled by separate components
@@ -317,32 +379,32 @@ const useTextAnimation = (
           Animated.sequence([
             Animated.timing(scaleValue, {
               toValue: 1.25,
-              duration: 300,
+              duration: effectiveDuration * 0.3,
               useNativeDriver: true,
             }),
             Animated.timing(scaleValue, {
               toValue: 0.75,
-              duration: 100,
+              duration: effectiveDuration * 0.1,
               useNativeDriver: true,
             }),
             Animated.timing(scaleValue, {
               toValue: 1.15,
-              duration: 100,
+              duration: effectiveDuration * 0.1,
               useNativeDriver: true,
             }),
             Animated.timing(scaleValue, {
               toValue: 0.95,
-              duration: 100,
+              duration: effectiveDuration * 0.1,
               useNativeDriver: true,
             }),
             Animated.timing(scaleValue, {
               toValue: 1.05,
-              duration: 100,
+              duration: effectiveDuration * 0.1,
               useNativeDriver: true,
             }),
             Animated.timing(scaleValue, {
               toValue: 1,
-              duration: 300,
+              duration: effectiveDuration * 0.3,
               useNativeDriver: true,
             }),
           ]),
@@ -354,39 +416,39 @@ const useTextAnimation = (
           Animated.sequence([
             Animated.timing(scaleValue, {
               toValue: 0.9,
-              duration: 100,
+              duration: effectiveDuration * 0.1,
               useNativeDriver: true,
             }),
             Animated.parallel([
               Animated.timing(scaleValue, {
                 toValue: 1.1,
-                duration: 100,
+                duration: effectiveDuration * 0.1,
                 useNativeDriver: true,
               }),
               Animated.timing(rotateValue, {
                 toValue: -3,
-                duration: 100,
+                duration: effectiveDuration * 0.1,
                 useNativeDriver: true,
               }),
             ]),
             Animated.timing(rotateValue, {
               toValue: 3,
-              duration: 100,
+              duration: effectiveDuration * 0.1,
               useNativeDriver: true,
             }),
             Animated.timing(rotateValue, {
               toValue: -3,
-              duration: 100,
+              duration: effectiveDuration * 0.1,
               useNativeDriver: true,
             }),
             Animated.timing(rotateValue, {
               toValue: 0,
-              duration: 100,
+              duration: effectiveDuration * 0.1,
               useNativeDriver: true,
             }),
             Animated.timing(scaleValue, {
               toValue: 1,
-              duration: 100,
+              duration: effectiveDuration * 0.1,
               useNativeDriver: true,
             }),
           ]),
@@ -398,27 +460,27 @@ const useTextAnimation = (
           Animated.sequence([
             Animated.timing(rotateValue, {
               toValue: 15,
-              duration: 200,
+              duration: effectiveDuration * 0.2,
               useNativeDriver: true,
             }),
             Animated.timing(rotateValue, {
               toValue: -10,
-              duration: 200,
+              duration: effectiveDuration * 0.2,
               useNativeDriver: true,
             }),
             Animated.timing(rotateValue, {
               toValue: 5,
-              duration: 200,
+              duration: effectiveDuration * 0.2,
               useNativeDriver: true,
             }),
             Animated.timing(rotateValue, {
               toValue: -5,
-              duration: 200,
+              duration: effectiveDuration * 0.2,
               useNativeDriver: true,
             }),
             Animated.timing(rotateValue, {
               toValue: 0,
-              duration: 200,
+              duration: effectiveDuration * 0.2,
               useNativeDriver: true,
             }),
           ]),
@@ -430,27 +492,27 @@ const useTextAnimation = (
           Animated.sequence([
             Animated.timing(rotateValue, {
               toValue: 5,
-              duration: 100,
+              duration: effectiveDuration * 0.2,
               useNativeDriver: true,
             }),
             Animated.timing(rotateValue, {
               toValue: -5,
-              duration: 100,
+              duration: effectiveDuration * 0.2,
               useNativeDriver: true,
             }),
             Animated.timing(rotateValue, {
               toValue: 3,
-              duration: 100,
+              duration: effectiveDuration * 0.2,
               useNativeDriver: true,
             }),
             Animated.timing(rotateValue, {
               toValue: -3,
-              duration: 100,
+              duration: effectiveDuration * 0.2,
               useNativeDriver: true,
             }),
             Animated.timing(rotateValue, {
               toValue: 0,
-              duration: 100,
+              duration: effectiveDuration * 0.2,
               useNativeDriver: true,
             }),
           ]),
@@ -711,9 +773,18 @@ const useTextAnimation = (
     animationDuration,
     animationType,
     isSpecialAnimation,
+    opacityValue,
+    translateYValue,
+    translateXValue,
+    scaleValue,
+    rotateValue,
+    shakeValue,
+    glowValue,
+    neonValue,
+    gradientValue,
   ]);
 
-  const getAnimatedStyle = () => {
+  const getAnimatedStyle = useCallback(() => {
     // Return empty if not animated/animation context, or if special animation handled by standard components
     if (!animated || !animation || isSpecialAnimation) return {};
 
@@ -935,7 +1006,7 @@ const useTextAnimation = (
       default:
         return { opacity: opacityValue };
     }
-  };
+  }, []);
 
   return {
     animatedStyle: getAnimatedStyle(),
@@ -950,7 +1021,7 @@ interface TypewriterTextProps {
   duration?: number;
   speed?: number;
   cursor?: boolean;
-  style: any;
+  style: StyleProp<TextStyle>;
 }
 
 const TypewriterText = memo<TypewriterTextProps>(
@@ -1011,6 +1082,20 @@ const TypewriterText = memo<TypewriterTextProps>(
       };
     }, [text, speed, delay]);
 
+    const cursorColor = useMemo(() => {
+      if (!style) return undefined;
+      if (Array.isArray(style)) {
+        for (const s of style) {
+          if (s && typeof s === "object" && "color" in s) {
+            return s.color;
+          }
+        }
+      } else if (style && typeof style === "object" && "color" in style) {
+        return style.color;
+      }
+      return undefined;
+    }, [style]);
+
     return (
       <Text
         style={style}
@@ -1018,7 +1103,7 @@ const TypewriterText = memo<TypewriterTextProps>(
         accessibilityState={{ busy: !isDone }}
       >
         {displayText}
-        {cursor && !isDone && <Text style={{ color: style.color }}>|</Text>}
+        {cursor && !isDone && <Text style={{ color: cursorColor }}>|</Text>}
       </Text>
     );
   },
@@ -1087,7 +1172,7 @@ interface WaveTextProps {
   children: React.ReactNode;
   duration?: number;
   delay?: number;
-  style: any;
+  style: StyleProp<TextStyle>;
 }
 
 const WaveText = memo<WaveTextProps>(
@@ -1115,20 +1200,18 @@ const WaveText = memo<WaveTextProps>(
     const animationsRef = useRef<Animated.CompositeAnimation[]>([]);
 
     // Create animated values - these persist but get replaced when text changes
-    // Using a ref that we manually manage to avoid React's strict mode issues
     const animatedValuesRef = useRef<Animated.Value[]>([]);
-    const prevTextRef = useRef<string>("");
+    const prevTextRef = useRef<string>(text);
 
-    // Only create new values when text actually changes (not on every render)
-    if (prevTextRef.current !== text) {
-      prevTextRef.current = text;
-      // Don't recreate here - we let useEffect handle it
-    }
-
-    // Initialize values on first render or text change
-    if (animatedValuesRef.current.length !== characters.length) {
-      animatedValuesRef.current = characters.map(() => new Animated.Value(0));
-    }
+    // Initialize values on first render or text change - properly in useEffect
+    useEffect(() => {
+      if (prevTextRef.current !== text) {
+        prevTextRef.current = text;
+      }
+      if (animatedValuesRef.current.length !== characters.length) {
+        animatedValuesRef.current = characters.map(() => new Animated.Value(0));
+      }
+    }, [text, characters.length]);
 
     useEffect(() => {
       isMountedRef.current = true;
@@ -1171,10 +1254,11 @@ const WaveText = memo<WaveTextProps>(
         animationsRef.current.forEach((anim) => {
           try {
             anim.stop();
-          } catch (e) {
-            // Ignore
+          } catch {
+            // Animation may already be stopped or in invalid state
           }
         });
+        animationsRef.current = [];
       };
     }, [text, duration, delay, characters.length]);
 
@@ -1192,7 +1276,7 @@ const WaveText = memo<WaveTextProps>(
     }, [characters.length]);
 
     return (
-      <Text style={[style, { overflow: "visible" }]}>
+      <Text style={style}>
         {characters.map((char, i) => (
           <Animated.Text key={`wave-${i}`} style={interpolatedStyles[i]}>
             {char}
@@ -1298,7 +1382,8 @@ const BaseAppText = memo(
           : size || typographyStyle.fontSize;
       const responsiveFontSize = useResponsiveFont(
         baseFontSize,
-        responsive ? { min: 10, max: 48 } : undefined,
+        responsive ? 10 : undefined,
+        responsive ? 48 : undefined,
       );
 
       const calculatedLineHeight = useMemo(() => {
@@ -1323,6 +1408,7 @@ const BaseAppText = memo(
         return scriptConfig.direction;
       }, [direction, scriptConfig.direction]);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const computedStyle = useMemo(() => {
         const baseStyle: any = {
           ...typographyStyle,
@@ -1384,7 +1470,24 @@ const BaseAppText = memo(
 
       const finalComputedStyle = useMemo(
         () => ({ ...computedStyle, ...spacingStyles, ...animatedStyle }),
-        [computedStyle, spacingStyles, animatedStyle],
+        // Use primitive values that computedStyle and animatedStyle depend on
+        [
+          spacingStyles,
+          // computedStyle primitives
+          resolvedColor,
+          responsiveFontSize,
+          calculatedLineHeight,
+          weight,
+          align,
+          textDirection,
+          decoration,
+          italic,
+          transform,
+          shadow,
+          typographyStyle,
+          // animatedStyle - depends on animationType which is stable from useMemo
+          animationType,
+        ],
       );
 
       const textProps = useMemo(() => {
@@ -1434,9 +1537,12 @@ const BaseAppText = memo(
         onPress,
       ]);
 
-      const handlePress = useCallback((e: any) => onPress?.(e), [onPress]);
+      const handlePress = useCallback(
+        (e: GestureResponderEvent) => onPress?.(e),
+        [onPress],
+      );
       const handleLongPress = useCallback(
-        (e: any) => onLongPress?.(e),
+        (e: GestureResponderEvent) => onLongPress?.(e),
         [onLongPress],
       );
 
@@ -1460,20 +1566,6 @@ const BaseAppText = memo(
           </TypewriterText>
         );
       }
-
-      /* 
-      if ((animated || animation) && animationType === "wave") {
-        return (
-          <WaveText
-            delay={finalDelay}
-            duration={finalDuration}
-            style={finalComputedStyle}
-          >
-            {children}
-          </WaveText>
-        );
-      }
-      */
 
       if (animated || (animation && animationType !== "none")) {
         return (
@@ -1548,66 +1640,138 @@ type AppTextCompound = typeof BaseAppText & {
 const AppText = BaseAppText as AppTextCompound;
 
 // Legacy variants
-AppText.H1 = memo((props) => <BaseAppText {...props} variant="h1" />);
-AppText.H2 = memo((props) => <BaseAppText {...props} variant="h2" />);
-AppText.H3 = memo((props) => <BaseAppText {...props} variant="h3" />);
-AppText.H4 = memo((props) => <BaseAppText {...props} variant="h4" />);
-AppText.H5 = memo((props) => <BaseAppText {...props} variant="h5" />);
-AppText.H6 = memo((props) => <BaseAppText {...props} variant="h6" />);
-AppText.Title = memo((props) => <BaseAppText {...props} variant="title" />);
-AppText.Subtitle = memo((props) => (
-  <BaseAppText {...props} variant="subtitle1" />
-));
-AppText.Body = memo((props) => <BaseAppText {...props} variant="body1" />);
-AppText.Caption = memo((props) => <BaseAppText {...props} variant="caption" />);
-AppText.Code = memo((props) => <BaseAppText {...props} variant="code" />);
+AppText.H1 = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="h1" ref={ref} />
+  )),
+);
+AppText.H2 = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="h2" ref={ref} />
+  )),
+);
+AppText.H3 = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="h3" ref={ref} />
+  )),
+);
+AppText.H4 = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="h4" ref={ref} />
+  )),
+);
+AppText.H5 = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="h5" ref={ref} />
+  )),
+);
+AppText.H6 = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="h6" ref={ref} />
+  )),
+);
+AppText.Title = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="title" ref={ref} />
+  )),
+);
+AppText.Subtitle = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="subtitle1" ref={ref} />
+  )),
+);
+AppText.Body = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="body1" ref={ref} />
+  )),
+);
+AppText.Caption = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="caption" ref={ref} />
+  )),
+);
+AppText.Code = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="code" ref={ref} />
+  )),
+);
 
 // Material Design 3 variants
-AppText.DisplayLarge = memo((props) => (
-  <BaseAppText {...props} variant="displayLarge" />
-));
-AppText.DisplayMedium = memo((props) => (
-  <BaseAppText {...props} variant="displayMedium" />
-));
-AppText.DisplaySmall = memo((props) => (
-  <BaseAppText {...props} variant="displaySmall" />
-));
-AppText.HeadlineLarge = memo((props) => (
-  <BaseAppText {...props} variant="headlineLarge" />
-));
-AppText.HeadlineMedium = memo((props) => (
-  <BaseAppText {...props} variant="headlineMedium" />
-));
-AppText.HeadlineSmall = memo((props) => (
-  <BaseAppText {...props} variant="headlineSmall" />
-));
-AppText.TitleLarge = memo((props) => (
-  <BaseAppText {...props} variant="titleLarge" />
-));
-AppText.TitleMedium = memo((props) => (
-  <BaseAppText {...props} variant="titleMedium" />
-));
-AppText.TitleSmall = memo((props) => (
-  <BaseAppText {...props} variant="titleSmall" />
-));
-AppText.BodyLarge = memo((props) => (
-  <BaseAppText {...props} variant="bodyLarge" />
-));
-AppText.BodyMedium = memo((props) => (
-  <BaseAppText {...props} variant="bodyMedium" />
-));
-AppText.BodySmall = memo((props) => (
-  <BaseAppText {...props} variant="bodySmall" />
-));
-AppText.LabelLarge = memo((props) => (
-  <BaseAppText {...props} variant="labelLarge" />
-));
-AppText.LabelMedium = memo((props) => (
-  <BaseAppText {...props} variant="labelMedium" />
-));
-AppText.LabelSmall = memo((props) => (
-  <BaseAppText {...props} variant="labelSmall" />
-));
+AppText.DisplayLarge = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="displayLarge" ref={ref} />
+  )),
+);
+AppText.DisplayMedium = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="displayMedium" ref={ref} />
+  )),
+);
+AppText.DisplaySmall = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="displaySmall" ref={ref} />
+  )),
+);
+AppText.HeadlineLarge = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="headlineLarge" ref={ref} />
+  )),
+);
+AppText.HeadlineMedium = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="headlineMedium" ref={ref} />
+  )),
+);
+AppText.HeadlineSmall = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="headlineSmall" ref={ref} />
+  )),
+);
+AppText.TitleLarge = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="titleLarge" ref={ref} />
+  )),
+);
+AppText.TitleMedium = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="titleMedium" ref={ref} />
+  )),
+);
+AppText.TitleSmall = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="titleSmall" ref={ref} />
+  )),
+);
+AppText.BodyLarge = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="bodyLarge" ref={ref} />
+  )),
+);
+AppText.BodyMedium = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="bodyMedium" ref={ref} />
+  )),
+);
+AppText.BodySmall = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="bodySmall" ref={ref} />
+  )),
+);
+AppText.LabelLarge = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="labelLarge" ref={ref} />
+  )),
+);
+AppText.LabelMedium = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="labelMedium" ref={ref} />
+  )),
+);
+AppText.LabelSmall = memo(
+  forwardRef<any, Omit<AppTextProps, "variant">>((props, ref) => (
+    <BaseAppText {...props} variant="labelSmall" ref={ref} />
+  )),
+);
 
 AppText.Trans = TransComponent;
 

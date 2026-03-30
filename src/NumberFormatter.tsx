@@ -30,7 +30,7 @@ export class NumberFormatter {
   static format(
     value: number,
     locale: string,
-    options: NumberFormatterOptions = {}
+    options: NumberFormatterOptions = {},
   ): string {
     // Validate input
     if (typeof value !== "number" || !isFinite(value)) {
@@ -60,7 +60,7 @@ export class NumberFormatter {
 
       return formatter.format(value);
     } catch (error) {
-      console.error("Number formatting error:", error);
+      console.warn("Number formatting error:", error);
       return this.fallbackFormat(value, options);
     }
   }
@@ -70,7 +70,7 @@ export class NumberFormatter {
    */
   private static createFormatter(
     locale: string,
-    options: NumberFormatterOptions
+    options: NumberFormatterOptions,
   ): Intl.NumberFormat {
     const intlOptions: Intl.NumberFormatOptions = { ...options };
 
@@ -87,7 +87,7 @@ export class NumberFormatter {
    */
   private static createCacheKey(
     locale: string,
-    options: NumberFormatterOptions
+    options: NumberFormatterOptions,
   ): string {
     const sortedOptions = Object.keys(options)
       .sort()
@@ -112,7 +112,7 @@ export class NumberFormatter {
    */
   private static fallbackFormat(
     value: number,
-    options: NumberFormatterOptions
+    options: NumberFormatterOptions,
   ): string {
     // Simple fallback formatting
     if (options.style === "currency") {
@@ -120,10 +120,10 @@ export class NumberFormatter {
         options.currency === "EUR"
           ? "€"
           : options.currency === "GBP"
-          ? "£"
-          : options.currency === "JPY"
-          ? "¥"
-          : "$";
+            ? "£"
+            : options.currency === "JPY"
+              ? "¥"
+              : "$";
       return `${symbol}${value.toFixed(options.minimumFractionDigits || 2)}`;
     } else if (options.style === "percent") {
       return `${(value * 100).toFixed(options.maximumFractionDigits || 2)}%`;
@@ -159,7 +159,7 @@ export class NumberFormatter {
     value: number,
     locale: string,
     currency: string = "USD",
-    options: Partial<NumberFormatterOptions> = {}
+    options: Partial<NumberFormatterOptions> = {},
   ): string {
     return this.format(value, locale, {
       style: "currency",
@@ -175,7 +175,7 @@ export class NumberFormatter {
   static formatPercent(
     value: number,
     locale: string,
-    options: Partial<NumberFormatterOptions> = {}
+    options: Partial<NumberFormatterOptions> = {},
   ): string {
     return this.format(value, locale, {
       style: "percent",
@@ -191,7 +191,7 @@ export class NumberFormatter {
   static formatCompact(
     value: number,
     locale: string,
-    options: Partial<NumberFormatterOptions> = {}
+    options: Partial<NumberFormatterOptions> = {},
   ): string {
     return this.format(value, locale, {
       notation: "compact",
@@ -207,7 +207,7 @@ export class NumberFormatter {
     value: number,
     locale: string,
     unit: string,
-    options: Partial<NumberFormatterOptions> = {}
+    options: Partial<NumberFormatterOptions> = {},
   ): string {
     return this.format(value, locale, {
       style: "unit",
@@ -223,7 +223,7 @@ export class NumberFormatter {
   static formatSigned(
     value: number,
     locale: string,
-    options: Partial<NumberFormatterOptions> = {}
+    options: Partial<NumberFormatterOptions> = {},
   ): string {
     return this.format(value, locale, {
       signDisplay: "always",
@@ -238,7 +238,7 @@ export class NumberFormatter {
     start: number,
     end: number,
     locale: string,
-    options: NumberFormatterOptions = {}
+    options: NumberFormatterOptions = {},
   ): string {
     try {
       const formatter = this.createFormatter(locale, options) as any;
@@ -251,13 +251,13 @@ export class NumberFormatter {
       return `${this.format(start, locale, options)} – ${this.format(
         end,
         locale,
-        options
+        options,
       )}`;
     } catch (error) {
       return `${this.format(start, locale, options)} – ${this.format(
         end,
         locale,
-        options
+        options,
       )}`;
     }
   }
@@ -286,7 +286,7 @@ export class NumberFormatter {
 export function formatNumberICU(
   value: any,
   format: string | undefined,
-  locale: string
+  locale: string,
 ): string {
   const num = Number(value);
 

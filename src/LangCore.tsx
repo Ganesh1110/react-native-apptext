@@ -37,10 +37,10 @@ const localeToCurrency: Record<string, CurrencyInfo> = CurrencyJsonList.reduce(
     };
     return acc;
   },
-  {} as Record<string, CurrencyInfo>
+  {} as Record<string, CurrencyInfo>,
 );
 
-class ICUMessageFormat {
+export class ICUMessageFormat {
   private static PLURAL_REGEX =
     /\{(\w+),\s*plural,\s*((?:[^{}]|\{[^{}]*\})*)\}/g;
 
@@ -55,7 +55,7 @@ class ICUMessageFormat {
   static format(
     message: string,
     params: Record<string, any>,
-    language: string
+    language: string,
   ): string {
     let result = message;
 
@@ -71,7 +71,7 @@ class ICUMessageFormat {
       (match, variable, options) => {
         const count = Number(params[variable] ?? 0);
         return this.handleSelectOrdinal(options, count, language, params);
-      }
+      },
     );
 
     // 3. Handle select
@@ -92,7 +92,7 @@ class ICUMessageFormat {
     options: string,
     count: number,
     language: string,
-    params: Record<string, any>
+    params: Record<string, any>,
   ): string {
     const cases = this.parseOptions(options);
     const pluralForm = getPluralForm(language, count);
@@ -112,7 +112,7 @@ class ICUMessageFormat {
     options: string,
     count: number,
     language: string,
-    params: Record<string, any>
+    params: Record<string, any>,
   ): string {
     const cases = this.parseOptions(options);
     const ordinalForm = getOrdinalForm(language, count);
@@ -123,8 +123,8 @@ class ICUMessageFormat {
 
   private static handleSelect(
     options: string,
-    value: any,
-    params: Record<string, any>
+    value: unknown,
+    params: Record<string, unknown>,
   ): string {
     const cases = this.parseOptions(options);
     const key = String(value ?? "other");
@@ -134,7 +134,7 @@ class ICUMessageFormat {
   private static handleVariable(
     expression: string,
     params: Record<string, any>,
-    language: string
+    language: string,
   ): string {
     // Support formatting: {price, number, currency}
     const parts = expression.split(",").map((s) => s.trim());
@@ -173,7 +173,7 @@ class ICUMessageFormat {
   private static replacePoundSign(
     text: string,
     count: number,
-    params: Record<string, any>
+    params: Record<string, any>,
   ): string {
     return text.replace(/#/g, String(count)).replace(/\{(\w+)\}/g, (_, key) => {
       return String(params[key] ?? `{${key}}`);
@@ -181,9 +181,9 @@ class ICUMessageFormat {
   }
 
   public static formatNumber(
-    value: any,
+    value: unknown,
     format?: string,
-    language: string = "en"
+    language: string = "en",
   ): string {
     // Validate input
     if (value === null || value === undefined) {
@@ -233,8 +233,8 @@ class ICUMessageFormat {
             format === "currency"
               ? "currency"
               : format === "percent"
-              ? "percent"
-              : "decimal",
+                ? "percent"
+                : "decimal",
           currency: "USD",
         }).format(num);
       } catch {
@@ -244,11 +244,11 @@ class ICUMessageFormat {
   }
 
   private static formatDate(
-    value: any,
+    value: unknown,
     format?: string,
-    language: string = "en"
+    language: string = "en",
   ): string {
-    const date = new Date(value);
+    const date = new Date(value as string | number | Date);
     if (isNaN(date.getTime())) return String(value);
 
     try {
@@ -295,10 +295,10 @@ class ICUMessageFormat {
         regionUpper === "GB"
           ? "GBR"
           : regionUpper === "UK"
-          ? "GBR"
-          : regionUpper.length === 2
-          ? this.twoLetterToThreeLetter(regionUpper)
-          : regionUpper;
+            ? "GBR"
+            : regionUpper.length === 2
+              ? this.twoLetterToThreeLetter(regionUpper)
+              : regionUpper;
 
       const regionEntry = localeToCurrency[countryCode];
       if (regionEntry) {
@@ -346,13 +346,70 @@ class ICUMessageFormat {
       IN: "IND",
       KR: "KOR",
       ID: "IDN",
-      // Add more as needed
+      BR: "BRA",
+      RU: "RUS",
+      UA: "UKR",
+      PL: "POL",
+      TR: "TUR",
+      SA: "SAU",
+      ZA: "ZAF",
+      NG: "NGA",
+      EG: "EGY",
+      AR: "ARG",
+      CO: "COL",
+      CL: "CHL",
+      PE: "PER",
+      VE: "VEN",
+      PH: "PHL",
+      MY: "MYS",
+      SG: "SGP",
+      TH: "THA",
+      VN: "VNM",
+      PK: "PAK",
+      BD: "BGD",
+      IR: "IRN",
+      IQ: "IRQ",
+      IL: "ISR",
+      LB: "LBN",
+      JO: "JOR",
+      AE: "ARE",
+      KW: "KWT",
+      QA: "QAT",
+      BH: "BHR",
+      OM: "OMN",
+      NZ: "NZL",
+      AU: "AUS",
+      PT: "PRT",
+      GR: "GRC",
+      CZ: "CZE",
+      HU: "HUN",
+      RO: "ROU",
+      FI: "FIN",
+      IE: "IRL",
+      SK: "SVK",
+      SI: "SVN",
+      HR: "HRV",
+      RS: "SRB",
+      BG: "BGR",
+      LT: "LTU",
+      LV: "LVA",
+      EE: "EST",
+      CY: "CYP",
+      MT: "MLT",
+      LU: "LUX",
+      IS: "ISL",
+      HK: "HKG",
+      TW: "TWN",
     };
     return mapping[code] || code;
   }
 
   // Add this static cache property to your class
   private static currencyCache = new Map<string, CurrencyInfo>();
+
+  static clearCurrencyCache(): void {
+    this.currencyCache.clear();
+  }
 }
 
 // ============================================================================
@@ -510,9 +567,13 @@ function getPluralForm(language: string, count: number): PluralForm {
   if (typeof count !== "number" || !isFinite(count)) {
     count = 0;
   }
-  const langCode = language?.split("-")[0] || "en";
-  const rule = PLURAL_RULES[langCode] || PLURAL_RULES.en;
-  return rule(Math.abs(Math.floor(count)));
+  const langCode = language || "en";
+  try {
+    const pluralRules = new Intl.PluralRules(langCode);
+    return pluralRules.select(Math.abs(Math.floor(count))) as PluralForm;
+  } catch {
+    return "other";
+  }
 }
 
 function getOrdinalForm(language: string, count: number): PluralForm {
@@ -598,12 +659,12 @@ class TranslationManager {
   private onMissingKey?: (
     lang: string,
     key: string,
-    namespace?: string
+    namespace?: string,
   ) => void;
 
   constructor(
     translations: Record<string, Translations>,
-    options: TranslationManagerOptions = {}
+    options: TranslationManagerOptions = {},
   ) {
     this.translations = translations;
     this.fallbackLanguage = options.fallbackLanguage || "en";
@@ -614,7 +675,7 @@ class TranslationManager {
 
   addNamespace(
     namespace: string,
-    translations: Record<string, TranslationNamespace>
+    translations: Record<string, TranslationNamespace>,
   ) {
     if (!this.namespaces[namespace]) {
       this.namespaces[namespace] = translations;
@@ -626,7 +687,7 @@ class TranslationManager {
     lang: string,
     key: string,
     params?: Record<string, any>,
-    options?: { namespace?: string; context?: string; count?: number }
+    options?: { namespace?: string; context?: string; count?: number },
   ): string {
     const { namespace, context, count } = options || {};
 
@@ -671,7 +732,7 @@ class TranslationManager {
           finalResult = ICUMessageFormat.format(
             finalResult,
             mergedParams || {},
-            lang
+            lang,
           );
         } else {
           finalResult = mergedParams
@@ -697,7 +758,7 @@ class TranslationManager {
     key: string,
     count: number,
     params?: Record<string, any>,
-    options?: { namespace?: string }
+    options?: { namespace?: string },
   ): string {
     const translation = this.getTranslationValue(lang, key, options?.namespace);
 
@@ -737,7 +798,7 @@ class TranslationManager {
     lang: string,
     key: string,
     namespace?: string,
-    context?: string
+    context?: string,
   ): TranslationValue | null {
     if (namespace && this.namespaces[namespace]?.[lang]) {
       const value = getNestedValue(this.namespaces[namespace][lang], key);
@@ -760,7 +821,7 @@ class TranslationManager {
     key: string,
     params?: Record<string, any>,
     namespace?: string,
-    context?: string
+    context?: string,
   ): string {
     const parts = [lang, namespace || "main", key];
     if (context) parts.push(context);
@@ -773,7 +834,7 @@ class TranslationManager {
       console.warn(
         `[i18n] Missing translation: "${key}" (lang: ${lang}${
           namespace ? `, namespace: ${namespace}` : ""
-        })`
+        })`,
       );
     }
     this.onMissingKey?.(lang, key, namespace);
@@ -802,12 +863,12 @@ export function LocaleProvider({
   onMissingTranslation?: (
     lang: string,
     key: string,
-    namespace?: string
+    namespace?: string,
   ) => void;
 }) {
   const [language, setLanguage] = useState(defaultLanguage);
   const [loadedNamespaces, setLoadedNamespaces] = useState<Set<string>>(
-    new Set(["main"])
+    new Set(["main"]),
   );
 
   const initialMount = useRef(true);
@@ -818,7 +879,13 @@ export function LocaleProvider({
       return;
     }
     if (AccessibilityInfo?.announceForAccessibility) {
-      AccessibilityInfo.announceForAccessibility(`Language changed to ${language}`);
+      try {
+        AccessibilityInfo.announceForAccessibility(
+          `Language changed to ${language}`,
+        );
+      } catch (e) {
+        // Ignore errors from AccessibilityInfo
+      }
     }
   }, [language]);
 
@@ -842,11 +909,11 @@ export function LocaleProvider({
     (
       key: string,
       params?: Record<string, any>,
-      options?: { namespace?: string; context?: string; count?: number }
+      options?: { namespace?: string; context?: string; count?: number },
     ) => {
       return manager.translate(language, key, params, options);
     },
-    [language, manager]
+    [language, manager],
   );
 
   /**
@@ -858,28 +925,33 @@ export function LocaleProvider({
       key: string,
       count: number,
       params?: Record<string, any>,
-      options?: { namespace?: string }
+      options?: { namespace?: string },
     ) => {
       return manager.translatePlural(language, key, count, params, options);
     },
-    [language, manager]
+    [language, manager],
   );
 
-  // Debounced to prevent rapid successive cache clears on quick language switches
-  const debouncedChangeLanguage = useMemo(
-    () =>
-      debounce((lang: string) => {
-        setLanguage(lang);
-        manager.clearCache();
-      }, 150),
-    [manager]
-  );
+  const languageChangeRef = useRef<{
+    version: number;
+    timeoutId?: ReturnType<typeof setTimeout>;
+  }>({ version: 0 });
 
   const changeLanguage = useCallback(
     (lang: string) => {
-      debouncedChangeLanguage(lang);
+      if (languageChangeRef.current.timeoutId) {
+        clearTimeout(languageChangeRef.current.timeoutId);
+      }
+      const currentVersion = ++languageChangeRef.current.version;
+      setLanguage(lang);
+      languageChangeRef.current.timeoutId = setTimeout(() => {
+        if (languageChangeRef.current.version === currentVersion) {
+          manager.clearCache();
+        }
+        languageChangeRef.current.timeoutId = undefined;
+      }, 150);
     },
-    [debouncedChangeLanguage]
+    [manager],
   );
 
   const loadNamespace = useCallback(
@@ -891,10 +963,10 @@ export function LocaleProvider({
         manager.addNamespace(namespace, translations);
         setLoadedNamespaces((prev) => new Set([...prev, namespace]));
       } catch (error) {
-        console.error(`Failed to load namespace: ${namespace}`, error);
+        console.warn(`Failed to load namespace: ${namespace}`, error);
       }
     },
-    [manager, loadedNamespaces]
+    [manager, loadedNamespaces],
   );
 
   const value = useMemo(
@@ -906,7 +978,7 @@ export function LocaleProvider({
       changeLanguage,
       loadNamespace,
     }),
-    [language, t, tn, direction, changeLanguage, loadNamespace]
+    [language, t, tn, direction, changeLanguage, loadNamespace],
   );
 
   return (
@@ -936,7 +1008,6 @@ export function useNamespace(namespace: string, loader: () => Promise<any>) {
 
 // Export utilities
 export {
-  ICUMessageFormat,
   TranslationManager,
   interpolate,
   getNestedValue,

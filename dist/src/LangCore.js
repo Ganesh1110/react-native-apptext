@@ -1,6 +1,6 @@
 import React, { useContext, useState, useCallback, useMemo, useEffect, useRef, } from "react";
 import { LocaleContext } from "./types";
-import { translationCache, performanceMonitor, debounce, } from "./PerformanceOptimizations";
+import { translationCache, performanceMonitor, } from "./PerformanceOptimizations";
 import { AccessibilityInfo } from "react-native";
 import CurrencyJsonList from "./data/Currency.json";
 // ============================================================================
@@ -16,7 +16,7 @@ const localeToCurrency = CurrencyJsonList.reduce((acc, item) => {
     };
     return acc;
 }, {});
-class ICUMessageFormat {
+export class ICUMessageFormat {
     static format(message, params, language) {
         let result = message;
         // 1. Handle plural formatting
@@ -244,9 +244,65 @@ class ICUMessageFormat {
             IN: "IND",
             KR: "KOR",
             ID: "IDN",
-            // Add more as needed
+            BR: "BRA",
+            RU: "RUS",
+            UA: "UKR",
+            PL: "POL",
+            TR: "TUR",
+            SA: "SAU",
+            ZA: "ZAF",
+            NG: "NGA",
+            EG: "EGY",
+            AR: "ARG",
+            CO: "COL",
+            CL: "CHL",
+            PE: "PER",
+            VE: "VEN",
+            PH: "PHL",
+            MY: "MYS",
+            SG: "SGP",
+            TH: "THA",
+            VN: "VNM",
+            PK: "PAK",
+            BD: "BGD",
+            IR: "IRN",
+            IQ: "IRQ",
+            IL: "ISR",
+            LB: "LBN",
+            JO: "JOR",
+            AE: "ARE",
+            KW: "KWT",
+            QA: "QAT",
+            BH: "BHR",
+            OM: "OMN",
+            NZ: "NZL",
+            AU: "AUS",
+            PT: "PRT",
+            GR: "GRC",
+            CZ: "CZE",
+            HU: "HUN",
+            RO: "ROU",
+            FI: "FIN",
+            IE: "IRL",
+            SK: "SVK",
+            SI: "SVN",
+            HR: "HRV",
+            RS: "SRB",
+            BG: "BGR",
+            LT: "LTU",
+            LV: "LVA",
+            EE: "EST",
+            CY: "CYP",
+            MT: "MLT",
+            LU: "LUX",
+            IS: "ISL",
+            HK: "HKG",
+            TW: "TWN",
         };
         return mapping[code] || code;
+    }
+    static clearCurrencyCache() {
+        this.currencyCache.clear();
     }
 }
 ICUMessageFormat.PLURAL_REGEX = /\{(\w+),\s*plural,\s*((?:[^{}]|\{[^{}]*\})*)\}/g;
@@ -451,9 +507,14 @@ function getPluralForm(language, count) {
     if (typeof count !== "number" || !isFinite(count)) {
         count = 0;
     }
-    const langCode = (language === null || language === void 0 ? void 0 : language.split("-")[0]) || "en";
-    const rule = PLURAL_RULES[langCode] || PLURAL_RULES.en;
-    return rule(Math.abs(Math.floor(count)));
+    const langCode = language || "en";
+    try {
+        const pluralRules = new Intl.PluralRules(langCode);
+        return pluralRules.select(Math.abs(Math.floor(count)));
+    }
+    catch (_a) {
+        return "other";
+    }
 }
 function getOrdinalForm(language, count) {
     const langCode = (language === null || language === void 0 ? void 0 : language.split("-")[0]) || "en";
@@ -622,7 +683,12 @@ export function LocaleProvider({ translations, defaultLanguage, fallbackLanguage
             return;
         }
         if (AccessibilityInfo === null || AccessibilityInfo === void 0 ? void 0 : AccessibilityInfo.announceForAccessibility) {
-            AccessibilityInfo.announceForAccessibility(`Language changed to ${language}`);
+            try {
+                AccessibilityInfo.announceForAccessibility(`Language changed to ${language}`);
+            }
+            catch (e) {
+                // Ignore errors from AccessibilityInfo
+            }
         }
     }, [language]);
     const RTL_LANGUAGES = ["ar", "he", "fa", "ur"];
@@ -648,14 +714,20 @@ export function LocaleProvider({ translations, defaultLanguage, fallbackLanguage
     const tn = useCallback((key, count, params, options) => {
         return manager.translatePlural(language, key, count, params, options);
     }, [language, manager]);
-    // Debounced to prevent rapid successive cache clears on quick language switches
-    const debouncedChangeLanguage = useMemo(() => debounce((lang) => {
-        setLanguage(lang);
-        manager.clearCache();
-    }, 150), [manager]);
+    const languageChangeRef = useRef({ version: 0 });
     const changeLanguage = useCallback((lang) => {
-        debouncedChangeLanguage(lang);
-    }, [debouncedChangeLanguage]);
+        if (languageChangeRef.current.timeoutId) {
+            clearTimeout(languageChangeRef.current.timeoutId);
+        }
+        const currentVersion = ++languageChangeRef.current.version;
+        setLanguage(lang);
+        languageChangeRef.current.timeoutId = setTimeout(() => {
+            if (languageChangeRef.current.version === currentVersion) {
+                manager.clearCache();
+            }
+            languageChangeRef.current.timeoutId = undefined;
+        }, 150);
+    }, [manager]);
     const loadNamespace = useCallback(async (namespace, loader) => {
         if (loadedNamespaces.has(namespace))
             return;
@@ -665,7 +737,7 @@ export function LocaleProvider({ translations, defaultLanguage, fallbackLanguage
             setLoadedNamespaces((prev) => new Set([...prev, namespace]));
         }
         catch (error) {
-            console.error(`Failed to load namespace: ${namespace}`, error);
+            console.warn(`Failed to load namespace: ${namespace}`, error);
         }
     }, [manager, loadedNamespaces]);
     const value = useMemo(() => ({
@@ -695,4 +767,4 @@ export function useNamespace(namespace, loader) {
     }, [namespace, loader, loadNamespace]);
 }
 // Export utilities
-export { ICUMessageFormat, TranslationManager, interpolate, getNestedValue, getPluralForm, PLURAL_RULES, };
+export { TranslationManager, interpolate, getNestedValue, getPluralForm, PLURAL_RULES, };
