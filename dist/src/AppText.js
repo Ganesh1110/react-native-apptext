@@ -6,6 +6,7 @@ import { useResponsiveFont, useScriptDetection, useThemedStyles, } from "./hooks
 import { AppTextProvider, useAppTextTheme } from "./context";
 import { createSpacingStyles } from "./utils";
 import TransComponent from "./Trans";
+import { ANIMATION_REGISTRY } from "./animations";
 const PRESET_ANIMATION_DURATIONS = {
     rubberBand: 1000,
     tada: 1000,
@@ -78,549 +79,23 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
         if (type.includes("flip") || type.includes("rotate")) {
             rotateValue.setValue(0);
         }
-        let animationPromise = null;
-        switch (type) {
-            // === ENTRANCE ANIMATIONS ===
-            case "fade":
-            case "fadeIn":
-                animationPromise = Animated.timing(opacityValue, {
-                    toValue: 1,
-                    duration,
-                    delay,
-                    useNativeDriver: true,
-                });
-                break;
-            case "slideInRight":
-                animationPromise = Animated.parallel([
-                    Animated.timing(opacityValue, {
-                        toValue: 1,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(translateXValue, {
-                        toValue: 0,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                ]);
-                break;
-            case "slideInLeft":
-                translateXValue.setValue(-100);
-                animationPromise = Animated.parallel([
-                    Animated.timing(opacityValue, {
-                        toValue: 1,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(translateXValue, {
-                        toValue: 0,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                ]);
-                break;
-            case "slideInUp":
-                animationPromise = Animated.parallel([
-                    Animated.timing(opacityValue, {
-                        toValue: 1,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(translateYValue, {
-                        toValue: 0,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                ]);
-                break;
-            case "slideInDown":
-                translateYValue.setValue(-50);
-                animationPromise = Animated.parallel([
-                    Animated.timing(opacityValue, {
-                        toValue: 1,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(translateYValue, {
-                        toValue: 0,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                ]);
-                break;
-            case "bounceIn":
-            case "zoomIn":
-                animationPromise = Animated.parallel([
-                    Animated.timing(opacityValue, {
-                        toValue: 1,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                    Animated.spring(scaleValue, {
-                        toValue: 1,
-                        friction: 4,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                ]);
-                break;
-            case "flipInX":
-                rotateValue.setValue(-90);
-                opacityValue.setValue(0);
-                animationPromise = Animated.parallel([
-                    Animated.timing(opacityValue, {
-                        toValue: 1,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(rotateValue, {
-                        toValue: 0,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                ]);
-                break;
-            case "flipInY":
-                rotateValue.setValue(-90);
-                opacityValue.setValue(0);
-                animationPromise = Animated.parallel([
-                    Animated.timing(opacityValue, {
-                        toValue: 1,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(rotateValue, {
-                        toValue: 0,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                ]);
-                break;
-            case "rotateIn":
-                rotateValue.setValue(-180);
-                animationPromise = Animated.parallel([
-                    Animated.timing(opacityValue, {
-                        toValue: 1,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(rotateValue, {
-                        toValue: 0,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                ]);
-                break;
-            // === ATTENTION ANIMATIONS ===
-            case "pulse":
-                animationPromise = Animated.loop(Animated.sequence([
-                    Animated.timing(scaleValue, {
-                        toValue: 1.1,
-                        duration: duration / 2,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(scaleValue, {
-                        toValue: 1,
-                        duration: duration / 2,
-                        useNativeDriver: true,
-                    }),
-                ]));
-                break;
-            case "bounce":
-                animationPromise = Animated.loop(Animated.sequence([
-                    Animated.timing(translateYValue, {
-                        toValue: -20,
-                        duration: duration / 2,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(translateYValue, {
-                        toValue: 0,
-                        duration: duration / 2,
-                        useNativeDriver: true,
-                    }),
-                ]));
-                break;
-            case "shake":
-                animationPromise = Animated.loop(Animated.sequence([
-                    Animated.timing(shakeValue, {
-                        toValue: 10,
-                        duration: duration / 4,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(shakeValue, {
-                        toValue: -10,
-                        duration: duration / 2,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(shakeValue, {
-                        toValue: 0,
-                        duration: duration / 4,
-                        useNativeDriver: true,
-                    }),
-                ]));
-                break;
-            case "rubberBand":
-                animationPromise = Animated.loop(Animated.sequence([
-                    Animated.timing(scaleValue, {
-                        toValue: 1.25,
-                        duration: effectiveDuration * 0.3,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(scaleValue, {
-                        toValue: 0.75,
-                        duration: effectiveDuration * 0.1,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(scaleValue, {
-                        toValue: 1.15,
-                        duration: effectiveDuration * 0.1,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(scaleValue, {
-                        toValue: 0.95,
-                        duration: effectiveDuration * 0.1,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(scaleValue, {
-                        toValue: 1.05,
-                        duration: effectiveDuration * 0.1,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(scaleValue, {
-                        toValue: 1,
-                        duration: effectiveDuration * 0.3,
-                        useNativeDriver: true,
-                    }),
-                ]));
-                break;
-            case "tada":
-                animationPromise = Animated.loop(Animated.sequence([
-                    Animated.timing(scaleValue, {
-                        toValue: 0.9,
-                        duration: effectiveDuration * 0.1,
-                        useNativeDriver: true,
-                    }),
-                    Animated.parallel([
-                        Animated.timing(scaleValue, {
-                            toValue: 1.1,
-                            duration: effectiveDuration * 0.1,
-                            useNativeDriver: true,
-                        }),
-                        Animated.timing(rotateValue, {
-                            toValue: -3,
-                            duration: effectiveDuration * 0.1,
-                            useNativeDriver: true,
-                        }),
-                    ]),
-                    Animated.timing(rotateValue, {
-                        toValue: 3,
-                        duration: effectiveDuration * 0.1,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(rotateValue, {
-                        toValue: -3,
-                        duration: effectiveDuration * 0.1,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(rotateValue, {
-                        toValue: 0,
-                        duration: effectiveDuration * 0.1,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(scaleValue, {
-                        toValue: 1,
-                        duration: effectiveDuration * 0.1,
-                        useNativeDriver: true,
-                    }),
-                ]));
-                break;
-            case "swing":
-                animationPromise = Animated.loop(Animated.sequence([
-                    Animated.timing(rotateValue, {
-                        toValue: 15,
-                        duration: effectiveDuration * 0.2,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(rotateValue, {
-                        toValue: -10,
-                        duration: effectiveDuration * 0.2,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(rotateValue, {
-                        toValue: 5,
-                        duration: effectiveDuration * 0.2,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(rotateValue, {
-                        toValue: -5,
-                        duration: effectiveDuration * 0.2,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(rotateValue, {
-                        toValue: 0,
-                        duration: effectiveDuration * 0.2,
-                        useNativeDriver: true,
-                    }),
-                ]));
-                break;
-            case "wobble":
-                animationPromise = Animated.loop(Animated.sequence([
-                    Animated.timing(rotateValue, {
-                        toValue: 5,
-                        duration: effectiveDuration * 0.2,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(rotateValue, {
-                        toValue: -5,
-                        duration: effectiveDuration * 0.2,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(rotateValue, {
-                        toValue: 3,
-                        duration: effectiveDuration * 0.2,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(rotateValue, {
-                        toValue: -3,
-                        duration: effectiveDuration * 0.2,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(rotateValue, {
-                        toValue: 0,
-                        duration: effectiveDuration * 0.2,
-                        useNativeDriver: true,
-                    }),
-                ]));
-                break;
-            // === EXIT ANIMATIONS ===
-            case "fadeOut":
-                opacityValue.setValue(1);
-                animationPromise = Animated.timing(opacityValue, {
-                    toValue: 0,
-                    duration,
-                    delay,
-                    useNativeDriver: true,
-                });
-                break;
-            case "slideOutRight":
-                opacityValue.setValue(1);
-                translateXValue.setValue(0);
-                animationPromise = Animated.parallel([
-                    Animated.timing(opacityValue, {
-                        toValue: 0,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(translateXValue, {
-                        toValue: 100,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                ]);
-                break;
-            case "slideOutLeft":
-                opacityValue.setValue(1);
-                translateXValue.setValue(0);
-                animationPromise = Animated.parallel([
-                    Animated.timing(opacityValue, {
-                        toValue: 0,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(translateXValue, {
-                        toValue: -100,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                ]);
-                break;
-            case "slideOutUp":
-                opacityValue.setValue(1);
-                translateYValue.setValue(0);
-                animationPromise = Animated.parallel([
-                    Animated.timing(opacityValue, {
-                        toValue: 0,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(translateYValue, {
-                        toValue: -50,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                ]);
-                break;
-            case "slideOutDown":
-                opacityValue.setValue(1);
-                translateYValue.setValue(0);
-                animationPromise = Animated.parallel([
-                    Animated.timing(opacityValue, {
-                        toValue: 0,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(translateYValue, {
-                        toValue: 50,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                ]);
-                break;
-            case "bounceOut":
-            case "zoomOut":
-                opacityValue.setValue(1);
-                scaleValue.setValue(1);
-                animationPromise = Animated.parallel([
-                    Animated.timing(opacityValue, {
-                        toValue: 0,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(scaleValue, {
-                        toValue: 0.8,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                ]);
-                break;
-            case "flipOutX":
-                opacityValue.setValue(1);
-                rotateValue.setValue(0);
-                animationPromise = Animated.parallel([
-                    Animated.timing(opacityValue, {
-                        toValue: 0,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(rotateValue, {
-                        toValue: 90,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                ]);
-                break;
-            case "flipOutY":
-                opacityValue.setValue(1);
-                rotateValue.setValue(0);
-                animationPromise = Animated.parallel([
-                    Animated.timing(opacityValue, {
-                        toValue: 0,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(rotateValue, {
-                        toValue: 90,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                ]);
-                break;
-            case "rotateOut":
-                opacityValue.setValue(1);
-                rotateValue.setValue(0);
-                animationPromise = Animated.parallel([
-                    Animated.timing(opacityValue, {
-                        toValue: 0,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(rotateValue, {
-                        toValue: 180,
-                        duration,
-                        delay,
-                        useNativeDriver: true,
-                    }),
-                ]);
-                break;
-            // === SPECIAL EFFECTS ===
-            case "blink":
-                animationPromise = Animated.loop(Animated.sequence([
-                    Animated.timing(opacityValue, {
-                        toValue: 0,
-                        duration: duration / 2,
-                        useNativeDriver: true,
-                    }),
-                    Animated.timing(opacityValue, {
-                        toValue: 1,
-                        duration: duration / 2,
-                        useNativeDriver: true,
-                    }),
-                ]));
-                break;
-            case "glow":
-                animationPromise = Animated.loop(Animated.sequence([
-                    Animated.timing(glowValue, {
-                        toValue: 1,
-                        duration: duration / 2,
-                        useNativeDriver: false,
-                    }),
-                    Animated.timing(glowValue, {
-                        toValue: 0,
-                        duration: duration / 2,
-                        useNativeDriver: false,
-                    }),
-                ]));
-                break;
-            case "neon":
-                animationPromise = Animated.loop(Animated.sequence([
-                    Animated.timing(neonValue, {
-                        toValue: 1,
-                        duration: duration / 2,
-                        useNativeDriver: false,
-                    }),
-                    Animated.timing(neonValue, {
-                        toValue: 0.5,
-                        duration: duration / 2,
-                        useNativeDriver: false,
-                    }),
-                ]));
-                break;
-            case "gradientShift":
-                animationPromise = Animated.loop(Animated.timing(gradientValue, {
-                    toValue: 1,
-                    duration: 3000,
-                    useNativeDriver: false,
-                }));
-                break;
-            default:
-                // Default to fade animation
-                animationPromise = Animated.timing(opacityValue, {
-                    toValue: 1,
-                    duration,
-                    delay,
-                    useNativeDriver: true,
-                });
-        }
+        const values = {
+            opacity: opacityValue,
+            translateY: translateYValue,
+            translateX: translateXValue,
+            scale: scaleValue,
+            rotate: rotateValue,
+            shake: shakeValue,
+            glow: glowValue,
+            neon: neonValue,
+            gradient: gradientValue,
+        };
+        const generator = ANIMATION_REGISTRY[type] || ANIMATION_REGISTRY.fade;
+        const animationPromise = generator(values, {
+            duration,
+            delay,
+            effectiveDuration,
+        });
         if (animationPromise) {
             currentAnimation.current = animationPromise;
             hasAnimated.current = true;
@@ -636,7 +111,7 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
         animation,
         animationDelay,
         animationDuration,
-        animationType, // isSpecialAnimation is derived from this, so it's redundant as a dep
+        animationType,
         opacityValue,
         translateYValue,
         translateXValue,
@@ -646,6 +121,7 @@ const useTextAnimation = (animated, animation, animationDelay = 0, animationDura
         glowValue,
         neonValue,
         gradientValue,
+        effectiveDuration,
     ]);
     // Compute the animated style (as a value, not a callback)
     // IMPORTANT: Must list all Animated.Values that are referenced inside.
@@ -1091,14 +567,28 @@ const WaveText = memo(({ children, duration = 1000, delay = 0, style }) => {
       </Text>);
 });
 /* ========== Main Component ========== */
-const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size, weight, align, transform, decoration, italic = false, truncate = false, shadow = false, animated = false, animation, animationDelay = 0, animationDuration = 1000, animationSpeed = 50, cursor = false, script, direction = "auto", responsive = true, style: propStyle, testID, m, mt, mr, mb, ml, mx, my, p, pt, pr, pb, pl, px, py, numberOfLines, ellipsizeMode, onPress, onLongPress, onExpand, onCollapse, expandText, collapseText, allowFontScaling, maxFontSizeMultiplier, minimumFontScale, suppressHighlighting, selectable, selectionColor, textBreakStrategy, hyphenationFrequency, accessibilityLabel, accessibilityHint, accessibilityLiveRegion, accessibilityState, ...restProps }, ref) => {
+const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size, weight, align, transform, decoration, italic = false, truncate = false, shadow = false, animated = false, animation, animationDelay = 0, animationDuration = 1000, animationSpeed = 50, cursor = false, script, direction = "auto", responsive = true, style: propStyle, testID, m, mt, mr, mb, ml, mx, my, p, pt, pr, pb, pl, px, py, numberOfLines, ellipsizeMode, onPress, onLongPress, onExpand, onCollapse, expandText, collapseText, allowFontScaling, maxFontSizeMultiplier, minimumFontScale, suppressHighlighting, selectable, selectionColor, textBreakStrategy, hyphenationFrequency, accessibilityLabel, accessibilityHint, accessibilityLiveRegion, accessibilityState, 
+// Destructure common RN props to stabilize restProps (Issue #9)
+accessibilityActions, onAccessibilityAction, accessibilityValue, importantForAccessibility, nativeID, onLayout, ...passThroughProps }, ref) => {
     var _a, _b, _c;
     const theme = useAppTextTheme();
     const rawScheme = useColorScheme();
     const colorScheme = rawScheme === "unspecified" ? "light" : rawScheme;
     const themedStyles = useThemedStyles(theme, colorScheme);
-    // Animation hook
-    const { animatedStyle, animationType } = useTextAnimation(animated, animation, animationDelay, animationDuration, animationSpeed, cursor);
+    // Animation decision (Issue #8: Moved hook call to sub-component)
+    const shouldAnimate = !!(animated || (animation && animation !== "none"));
+    const getAnimationType = () => {
+        if (!animation || animation === "none")
+            return undefined;
+        if (typeof animation === "string")
+            return animation;
+        if (typeof animation === "object")
+            return animation.type;
+        return undefined;
+    };
+    const animationType = getAnimationType();
+    const isTypewriter = shouldAnimate && animationType === "typewriter";
+    const isWave = shouldAnimate && animationType === "wave";
     const textContent = useMemo(() => {
         const extractText = (node) => {
             if (typeof node === "string" || typeof node === "number")
@@ -1193,28 +683,10 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
         px,
         py,
     }), [m, mt, mr, mb, ml, mx, my, p, pt, pr, pb, pl, px, py]);
-    const finalComputedStyle = useMemo(() => ({ ...computedStyle, ...spacingStyles, ...animatedStyle }), 
-    // Use primitive values that computedStyle and animatedStyle depend on
-    [
-        spacingStyles,
-        // computedStyle primitives
-        resolvedColor,
-        responsiveFontSize,
-        calculatedLineHeight,
-        weight,
-        align,
-        textDirection,
-        decoration,
-        italic,
-        transform,
-        shadow,
-        typographyStyle,
-        // animatedStyle - depends on animationType which is stable from useMemo
-        animationType,
-    ]);
+    const finalComputedStyle = useMemo(() => ({ ...computedStyle, ...spacingStyles, ...propStyle }), [computedStyle, spacingStyles, propStyle]);
     const textProps = useMemo(() => {
         const props = {
-            ...restProps,
+            ...passThroughProps,
             numberOfLines: typeof truncate === "number" ? truncate : numberOfLines,
             ellipsizeMode: truncate ? ellipsizeMode || "tail" : ellipsizeMode,
             allowFontScaling: allowFontScaling !== false,
@@ -1230,13 +702,19 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
             accessibilityHint,
             accessibilityLiveRegion,
             accessibilityState,
+            accessibilityActions,
+            onAccessibilityAction,
+            accessibilityValue,
+            importantForAccessibility,
+            nativeID,
+            onLayout,
         };
         return {
             ...props,
             accessibilityRole: (onPress ? "button" : "text"),
         };
     }, [
-        restProps,
+        passThroughProps,
         truncate,
         numberOfLines,
         ellipsizeMode,
@@ -1254,6 +732,12 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
         accessibilityHint,
         accessibilityLiveRegion,
         accessibilityState,
+        accessibilityActions,
+        onAccessibilityAction,
+        accessibilityValue,
+        importantForAccessibility,
+        nativeID,
+        onLayout,
         onPress,
     ]);
     const handlePress = useCallback((e) => onPress === null || onPress === void 0 ? void 0 : onPress(e), [onPress]);
@@ -1264,36 +748,41 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
     const finalDuration = (_b = animationConfig.duration) !== null && _b !== void 0 ? _b : animationDuration;
     const finalSpeed = (_c = animationConfig.speed) !== null && _c !== void 0 ? _c : animationSpeed;
     // Special animation handling
-    if ((animated || animation) && animationType === "typewriter") {
+    if (isTypewriter) {
         return (<TypewriterText delay={finalDelay} duration={finalDuration} speed={finalSpeed} cursor={cursor} style={finalComputedStyle}>
             {children}
           </TypewriterText>);
     }
-    if ((animated || animation) && animationType === "wave") {
+    if (isWave) {
         return (<WaveText delay={finalDelay} duration={finalDuration} style={finalComputedStyle}>
             {children}
           </WaveText>);
     }
-    if (animated || (animation && animationType !== "none")) {
-        return (<Animated.Text ref={ref} style={finalComputedStyle} {...(!hasPressHandlers
-            ? { pointerEvents: "none" }
-            : { onPress: handlePress, onLongPress: handleLongPress })} {...textProps}>
+    if (shouldAnimate) {
+        return (<StandardAnimatedText ref={ref} animated={animated} animation={animation} animationDelay={animationDelay} animationDuration={animationDuration} animationSpeed={animationSpeed} cursor={cursor} style={finalComputedStyle} textProps={textProps} onPress={handlePress} onLongPress={handleLongPress} hasPressHandlers={hasPressHandlers}>
             {children}
-          </Animated.Text>);
+          </StandardAnimatedText>);
     }
-    const hasExpandCollapse = expandText || collapseText || onExpand || onCollapse;
-    const maxLines = typeof truncate === "number" ? truncate : numberOfLines;
-    const textElement = (<Text ref={ref} style={finalComputedStyle} {...(!hasPressHandlers
-        ? { pointerEvents: "none" }
-        : { onPress: handlePress, onLongPress: handleLongPress })} {...textProps}>
-          {children}
-        </Text>);
-    if (hasExpandCollapse && maxLines) {
-        return (<TruncationComponent maxLines={maxLines} onExpand={onExpand} onCollapse={onCollapse} expandText={expandText} collapseText={collapseText} style={finalComputedStyle}>
+    const hasExpandCollapse = !!(expandText || collapseText || onExpand || onCollapse);
+    if (truncate && hasExpandCollapse) {
+        return (<TruncationComponent maxLines={typeof truncate === "number" ? truncate : 1} onExpand={onExpand} onCollapse={onCollapse} expandText={expandText} collapseText={collapseText} style={finalComputedStyle}>
             {children}
           </TruncationComponent>);
     }
-    return textElement;
+    return (<Text ref={ref} style={finalComputedStyle} {...(!hasPressHandlers
+        ? {}
+        : { onPress: handlePress, onLongPress: handleLongPress })} {...textProps}>
+          {children}
+        </Text>);
+}));
+/* ========== Animated Standard Text Component ========== */
+const StandardAnimatedText = memo(forwardRef(({ children, animated, animation, animationDelay, animationDuration, animationSpeed, cursor, style, textProps, onPress, onLongPress, hasPressHandlers, }, ref) => {
+    const { animatedStyle } = useTextAnimation(animated, animation, animationDelay, animationDuration, animationSpeed, cursor);
+    return (<Animated.Text ref={ref} style={[style, animatedStyle]} {...(!hasPressHandlers
+        ? { pointerEvents: "none" }
+        : { onPress, onLongPress })} {...textProps}>
+          {children}
+        </Animated.Text>);
 }));
 BaseAppText.displayName = "AppText";
 const AppText = BaseAppText;

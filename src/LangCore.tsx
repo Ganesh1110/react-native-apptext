@@ -196,39 +196,47 @@ export class ICUMessageFormat {
     }
 
     try {
-      if (format === "currency") {
-        const currencyInfo = this.getCurrencyForLanguage(language);
+      const options =
+        format === "currency"
+          ? {
+              style: "currency",
+              currency: this.getCurrencyForLanguage(language).code,
+              currencyDisplay: "symbol",
+            }
+          : format === "percent"
+            ? {
+                style: "percent",
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              }
+            : {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              };
 
-        const formatter = new Intl.NumberFormat(language, {
-          style: "currency",
-          currency: currencyInfo.code,
-          currencyDisplay: "symbol",
-        });
+      const cacheKey = `${language}-${JSON.stringify(options)}`;
+      let formatter = this.numberFormatCache.get(cacheKey);
 
-        let result = formatter.format(num);
-
-        // Fix spacing issues for RTL and specific locales
-        if (["ar", "he", "fa", "ur"].includes(language.split("-")[0])) {
-          result = result.replace(/\u202F/g, " ").replace(/\u00A0/g, " ");
-        }
-
-        return result;
-      } else if (format === "percent") {
-        return new Intl.NumberFormat(language, {
-          style: "percent",
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 2,
-        }).format(num);
-      } else {
-        return new Intl.NumberFormat(language, {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 2,
-        }).format(num);
+      if (!formatter) {
+        formatter = new Intl.NumberFormat(language, options as any);
+        this.numberFormatCache.set(cacheKey, formatter);
       }
+
+      let result = formatter.format(num);
+
+      // Fix spacing issues for RTL and specific locales
+      if (
+        format === "currency" &&
+        ["ar", "he", "fa", "ur"].includes(language.split("-")[0])
+      ) {
+        result = result.replace(/\u202F/g, " ").replace(/\u00A0/g, " ");
+      }
+
+      return result;
     } catch (error) {
       // Silent fallback for production
       try {
-        return new Intl.NumberFormat("en-US", {
+        const fallbackOptions = {
           style:
             format === "currency"
               ? "currency"
@@ -236,7 +244,14 @@ export class ICUMessageFormat {
                 ? "percent"
                 : "decimal",
           currency: "USD",
-        }).format(num);
+        };
+        const fallbackKey = `en-US-${JSON.stringify(fallbackOptions)}`;
+        let fallbackFormatter = this.numberFormatCache.get(fallbackKey);
+        if (!fallbackFormatter) {
+          fallbackFormatter = new Intl.NumberFormat("en-US", fallbackOptions as any);
+          this.numberFormatCache.set(fallbackKey, fallbackFormatter);
+        }
+        return fallbackFormatter.format(num);
       } catch {
         return String(value);
       }
@@ -406,6 +421,12 @@ export class ICUMessageFormat {
 
   // Add this static cache property to your class
   private static currencyCache = new Map<string, CurrencyInfo>();
+  private static numberFormatCache = new Map<string, Intl.NumberFormat>();
+
+  static clearCaches(): void {
+    this.currencyCache.clear();
+    this.numberFormatCache.clear();
+  }
 
   static clearCurrencyCache(): void {
     this.currencyCache.clear();
@@ -563,14 +584,20 @@ const ORDINAL_RULES: Record<string, (count: number) => PluralForm> = {
   ar: (n) => "other",
 };
 
+const pluralRulesCache = new Map<string, Intl.PluralRules>();
+
 function getPluralForm(language: string, count: number): PluralForm {
   if (typeof count !== "number" || !isFinite(count)) {
     count = 0;
   }
   const langCode = language || "en";
   try {
-    const pluralRules = new Intl.PluralRules(langCode);
-    return pluralRules.select(Math.abs(Math.floor(count))) as PluralForm;
+    let rules = pluralRulesCache.get(langCode);
+    if (!rules) {
+      rules = new Intl.PluralRules(langCode);
+      pluralRulesCache.set(langCode, rules);
+    }
+    return rules.select(Math.abs(Math.floor(count))) as PluralForm;
   } catch {
     return "other";
   }

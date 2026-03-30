@@ -110,45 +110,54 @@ export class ICUMessageFormat {
             return String(value);
         }
         try {
-            if (format === "currency") {
-                const currencyInfo = this.getCurrencyForLanguage(language);
-                const formatter = new Intl.NumberFormat(language, {
+            const options = format === "currency"
+                ? {
                     style: "currency",
-                    currency: currencyInfo.code,
+                    currency: this.getCurrencyForLanguage(language).code,
                     currencyDisplay: "symbol",
-                });
-                let result = formatter.format(num);
-                // Fix spacing issues for RTL and specific locales
-                if (["ar", "he", "fa", "ur"].includes(language.split("-")[0])) {
-                    result = result.replace(/\u202F/g, " ").replace(/\u00A0/g, " ");
                 }
-                return result;
+                : format === "percent"
+                    ? {
+                        style: "percent",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                    }
+                    : {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                    };
+            const cacheKey = `${language}-${JSON.stringify(options)}`;
+            let formatter = this.numberFormatCache.get(cacheKey);
+            if (!formatter) {
+                formatter = new Intl.NumberFormat(language, options);
+                this.numberFormatCache.set(cacheKey, formatter);
             }
-            else if (format === "percent") {
-                return new Intl.NumberFormat(language, {
-                    style: "percent",
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 2,
-                }).format(num);
+            let result = formatter.format(num);
+            // Fix spacing issues for RTL and specific locales
+            if (format === "currency" &&
+                ["ar", "he", "fa", "ur"].includes(language.split("-")[0])) {
+                result = result.replace(/\u202F/g, " ").replace(/\u00A0/g, " ");
             }
-            else {
-                return new Intl.NumberFormat(language, {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 2,
-                }).format(num);
-            }
+            return result;
         }
         catch (error) {
             // Silent fallback for production
             try {
-                return new Intl.NumberFormat("en-US", {
+                const fallbackOptions = {
                     style: format === "currency"
                         ? "currency"
                         : format === "percent"
                             ? "percent"
                             : "decimal",
                     currency: "USD",
-                }).format(num);
+                };
+                const fallbackKey = `en-US-${JSON.stringify(fallbackOptions)}`;
+                let fallbackFormatter = this.numberFormatCache.get(fallbackKey);
+                if (!fallbackFormatter) {
+                    fallbackFormatter = new Intl.NumberFormat("en-US", fallbackOptions);
+                    this.numberFormatCache.set(fallbackKey, fallbackFormatter);
+                }
+                return fallbackFormatter.format(num);
             }
             catch (_a) {
                 return String(value);
@@ -301,6 +310,10 @@ export class ICUMessageFormat {
         };
         return mapping[code] || code;
     }
+    static clearCaches() {
+        this.currencyCache.clear();
+        this.numberFormatCache.clear();
+    }
     static clearCurrencyCache() {
         this.currencyCache.clear();
     }
@@ -311,6 +324,7 @@ ICUMessageFormat.SELECTORDINAL_REGEX = /\{(\w+),\s*selectordinal,\s*((?:[^{}]|\{
 ICUMessageFormat.VARIABLE_REGEX = /\{([^}]+)\}/g;
 // Add this static cache property to your class
 ICUMessageFormat.currencyCache = new Map();
+ICUMessageFormat.numberFormatCache = new Map();
 // ============================================================================
 // PART 2: ENHANCED PLURAL RULES (CLDR-compliant)
 // ============================================================================
@@ -503,14 +517,19 @@ const ORDINAL_RULES = {
     es: (n) => "other",
     ar: (n) => "other",
 };
+const pluralRulesCache = new Map();
 function getPluralForm(language, count) {
     if (typeof count !== "number" || !isFinite(count)) {
         count = 0;
     }
     const langCode = language || "en";
     try {
-        const pluralRules = new Intl.PluralRules(langCode);
-        return pluralRules.select(Math.abs(Math.floor(count)));
+        let rules = pluralRulesCache.get(langCode);
+        if (!rules) {
+            rules = new Intl.PluralRules(langCode);
+            pluralRulesCache.set(langCode, rules);
+        }
+        return rules.select(Math.abs(Math.floor(count)));
     }
     catch (_a) {
         return "other";
