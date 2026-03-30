@@ -910,7 +910,7 @@ const TypewriterText = memo(({ children, delay = 0, duration = 2000, speed = 50,
         {cursor && !isDone && <Text style={{ color: cursorColor }}>|</Text>}
       </Text>);
 });
-const TruncationComponent = memo(({ children, maxLines, onExpand, expandText = "Read more", collapseText = "Read less", style, }) => {
+const TruncationComponent = memo(({ children, maxLines, onExpand, onCollapse, expandText = "Read more", collapseText = "Read less", style, }) => {
     const [isExpanded, setIsExpanded] = React.useState(false);
     const [isTruncated, setIsTruncated] = React.useState(false);
     const theme = useAppTextTheme();
@@ -918,9 +918,16 @@ const TruncationComponent = memo(({ children, maxLines, onExpand, expandText = "
         setIsTruncated(event.nativeEvent.lines.length > maxLines);
     }, [maxLines]);
     const handleToggle = useCallback(() => {
-        setIsExpanded(!isExpanded);
-        onExpand === null || onExpand === void 0 ? void 0 : onExpand();
-    }, [isExpanded, onExpand]);
+        setIsExpanded((prev) => {
+            if (!prev) {
+                onExpand === null || onExpand === void 0 ? void 0 : onExpand();
+            }
+            else {
+                onCollapse === null || onCollapse === void 0 ? void 0 : onCollapse();
+            }
+            return !prev;
+        });
+    }, [onExpand, onCollapse]);
     return (<View>
         <Text style={style} numberOfLines={isExpanded ? undefined : maxLines} onTextLayout={handleTextLayout}>
           {children}
@@ -1024,7 +1031,7 @@ const WaveText = memo(({ children, duration = 1000, delay = 0, style }) => {
       </Text>);
 });
 /* ========== Main Component ========== */
-const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size, weight, align, transform, decoration, italic = false, truncate = false, shadow = false, animated = false, animation, animationDelay = 0, animationDuration = 1000, animationSpeed = 50, cursor = false, script, direction = "auto", responsive = true, style: propStyle, testID, m, mt, mr, mb, ml, mx, my, p, pt, pr, pb, pl, px, py, numberOfLines, ellipsizeMode, onPress, onLongPress, allowFontScaling, maxFontSizeMultiplier, minimumFontScale, suppressHighlighting, selectable, selectionColor, textBreakStrategy, hyphenationFrequency, accessibilityLabel, accessibilityHint, accessibilityLiveRegion, accessibilityState, ...restProps }, ref) => {
+const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size, weight, align, transform, decoration, italic = false, truncate = false, shadow = false, animated = false, animation, animationDelay = 0, animationDuration = 1000, animationSpeed = 50, cursor = false, script, direction = "auto", responsive = true, style: propStyle, testID, m, mt, mr, mb, ml, mx, my, p, pt, pr, pb, pl, px, py, numberOfLines, ellipsizeMode, onPress, onLongPress, onExpand, onCollapse, expandText, collapseText, allowFontScaling, maxFontSizeMultiplier, minimumFontScale, suppressHighlighting, selectable, selectionColor, textBreakStrategy, hyphenationFrequency, accessibilityLabel, accessibilityHint, accessibilityLiveRegion, accessibilityState, ...restProps }, ref) => {
     var _a, _b, _c;
     const theme = useAppTextTheme();
     const rawScheme = useColorScheme();
@@ -1204,11 +1211,19 @@ const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size,
             {children}
           </Animated.Text>);
     }
-    return (<Text ref={ref} style={finalComputedStyle} {...(!hasPressHandlers
+    const hasExpandCollapse = expandText || collapseText || onExpand || onCollapse;
+    const maxLines = typeof truncate === "number" ? truncate : numberOfLines;
+    const textElement = (<Text ref={ref} style={finalComputedStyle} {...(!hasPressHandlers
         ? { pointerEvents: "none" }
         : { onPress: handlePress, onLongPress: handleLongPress })} {...textProps}>
           {children}
         </Text>);
+    if (hasExpandCollapse && maxLines) {
+        return (<TruncationComponent maxLines={maxLines} onExpand={onExpand} onCollapse={onCollapse} expandText={expandText} collapseText={collapseText} style={finalComputedStyle}>
+            {typeof children === "string" ? children : String(children || "")}
+          </TruncationComponent>);
+    }
+    return textElement;
 }));
 BaseAppText.displayName = "AppText";
 const AppText = BaseAppText;

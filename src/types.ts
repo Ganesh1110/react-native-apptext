@@ -246,6 +246,10 @@ export interface AppTextProps extends Omit<TextProps, "style">, SpacingProps {
   };
   hyphenationFrequency?: "none" | "normal" | "full";
   textBreakStrategy?: "simple" | "highQuality" | "balanced";
+  onExpand?: () => void;
+  onCollapse?: () => void;
+  expandText?: string;
+  collapseText?: string;
 }
 
 // ============================================================================

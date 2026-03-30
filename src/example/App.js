@@ -510,7 +510,11 @@ function TruncationDemo() {
         click "Read more" to see the full content. This is useful for displaying
         preview text in lists or cards where you want to show a brief excerpt.
       </AppText>
-      <AppText numberOfLines={3} style={{ marginTop: 10 }}>
+      <AppText
+        numberOfLines={3}
+        expandText="Read more"
+        style={{ marginTop: 10 }}
+      >
         Three line truncation. Lorem ipsum dolor sit amet, consectetur
         adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
         magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.

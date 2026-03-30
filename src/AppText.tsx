@@ -1114,6 +1114,7 @@ interface TruncationProps {
   children: string;
   maxLines: number;
   onExpand?: () => void;
+  onCollapse?: () => void;
   expandText?: string;
   collapseText?: string;
   style?: any;
@@ -1124,6 +1125,7 @@ const TruncationComponent = memo<TruncationProps>(
     children,
     maxLines,
     onExpand,
+    onCollapse,
     expandText = "Read more",
     collapseText = "Read less",
     style,
@@ -1140,9 +1142,15 @@ const TruncationComponent = memo<TruncationProps>(
     );
 
     const handleToggle = useCallback(() => {
-      setIsExpanded(!isExpanded);
-      onExpand?.();
-    }, [isExpanded, onExpand]);
+      setIsExpanded((prev) => {
+        if (!prev) {
+          onExpand?.();
+        } else {
+          onCollapse?.();
+        }
+        return !prev;
+      });
+    }, [onExpand, onCollapse]);
 
     return (
       <View>
@@ -1332,6 +1340,10 @@ const BaseAppText = memo(
         ellipsizeMode,
         onPress,
         onLongPress,
+        onExpand,
+        onCollapse,
+        expandText,
+        collapseText,
         allowFontScaling,
         maxFontSizeMultiplier,
         minimumFontScale,
@@ -1582,7 +1594,11 @@ const BaseAppText = memo(
         );
       }
 
-      return (
+      const hasExpandCollapse =
+        expandText || collapseText || onExpand || onCollapse;
+      const maxLines = typeof truncate === "number" ? truncate : numberOfLines;
+
+      const textElement = (
         <Text
           ref={ref}
           style={finalComputedStyle}
@@ -1594,6 +1610,23 @@ const BaseAppText = memo(
           {children}
         </Text>
       );
+
+      if (hasExpandCollapse && maxLines) {
+        return (
+          <TruncationComponent
+            maxLines={maxLines}
+            onExpand={onExpand}
+            onCollapse={onCollapse}
+            expandText={expandText}
+            collapseText={collapseText}
+            style={finalComputedStyle}
+          >
+            {typeof children === "string" ? children : String(children || "")}
+          </TruncationComponent>
+        );
+      }
+
+      return textElement;
     },
   ),
 );
