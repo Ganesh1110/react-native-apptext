@@ -18,7 +18,7 @@ import AppText, {
   Trans,
   MarkdownTrans,
   useAppTextTheme,
-  useUpdateAppTheme,       // v4.4.0 — runtime theme hot-patching
+  useUpdateAppTheme,
   useResponsiveFont,
   DEFAULT_THEME,
   NumberFormatter,
@@ -26,18 +26,32 @@ import AppText, {
   translationCache,
   performanceMonitor,
   TranslationErrorBoundary,
-  // v4.4.0 new exports
-  AppTextSkeleton,         // Shimmer placeholder
-  AppTextDevTools,         // __DEV__ performance overlay
-  RTLProvider,             // App-wide RTL mirroring
-  useRTL,                  // RTL context hook
-  useRTLFlexDirection,     // Flex direction helper
-  isRTLLanguage,           // RTL language detector
-  useAutoLocale,           // System locale detection
-  useDeviceLocale,         // Raw device locale
-  useTranslationReady,     // Locale loading progress
-  withLazyTranslations,    // HOC with loadingFallback support
-  LazyLocaleProvider,      // Code-splitting locale provider
+  // v4.4.0
+  AppTextSkeleton,
+  AppTextDevTools,
+  RTLProvider,
+  useRTL,
+  useRTLFlexDirection,
+  useRTLStyle,           // NEW gap-fix: full RTL style map
+  RTLView,               // NEW gap-fix: auto-mirroring View
+  isRTLLanguage,
+  useAutoLocale,
+  useDeviceLocale,
+  useTranslationReady,
+  withLazyTranslations,
+  LazyLocaleProvider,
+  // Gap fixes
+  useDynamicTypeCategory,  // NEW: Dynamic Type semantic category
+  useDynamicTypeFontSize,  // NEW: clamped font size from fontScale
+  useSpeech,               // NEW: no-dep TTS hook
+  speak,                   // NEW: standalone TTS utility
+  AppTextContextMenu,      // NEW: long-press context menu
+  // v4.5.0
+  registerAppTextPlugin,
+  unregisterAppTextPlugin,
+  RemoteLocaleProvider,
+  useRemoteLocales,
+  useTextMetrics,
 } from "react-native-apptext";
 
 // ============================================================================
@@ -1095,6 +1109,518 @@ function InteractiveFeaturesDemo() {
 }
 
 // ============================================================================
+// 30. 🆕 GAP FIX: CSS-Only RTL (no restart needed)
+// ============================================================================
+function InnerCSSRTLDemo() {
+  const { isRTL, mode } = useRTL();
+  const rtlStyle = useRTLStyle();
+
+  return (
+    <View style={{ marginTop: 12, gap: 10 }}>
+      <View style={styles.infoBox}>
+        <AppText variant="caption" color="#6B7280">
+          isRTL:{" "}
+          <AppText weight="700">{String(isRTL)}</AppText>
+          {" · "}mode:{" "}
+          <AppText weight="700" color="#10B981">{mode}</AppText>
+        </AppText>
+      </View>
+
+      {/* RTLView auto-mirrors */}
+      <RTLView
+        style={{
+          gap: 8, padding: 10,
+          backgroundColor: "#F0F4FF", borderRadius: 8,
+        }}
+      >
+        <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: "#6366F1", justifyContent: "center", alignItems: "center" }}>
+          <AppText color="#FFF" size={18}>A</AppText>
+        </View>
+        <View style={{ flex: 1 }}>
+          <AppText variant="titleSmall">
+            {isRTL ? "مرحبا بالعالم" : "Hello World"}
+          </AppText>
+          <AppText variant="caption" color="#6B7280">
+            {isRTL ? "محاذاة تلقائية بدون إعادة تشغيل" : "Auto-mirrored without restart"}
+          </AppText>
+        </View>
+        <AppText size={20}>{isRTL ? "◄" : "►"}</AppText>
+      </RTLView>
+
+      {/* useRTLStyle row demo */}
+      <View style={[rtlStyle.row, { gap: 8 }]}>
+        {["Home", "Search", "Profile"].map((item) => (
+          <View key={item} style={{ paddingHorizontal: 12, paddingVertical: 6, backgroundColor: "#E0E7FF", borderRadius: 16 }}>
+            <AppText variant="labelMedium" color="#4338CA">{item}</AppText>
+          </View>
+        ))}
+      </View>
+
+      <AppText variant="caption" color="#9CA3AF">
+        {"useRTLStyle().row flexDirection = " + (isRTL ? "row-reverse" : "row")}
+      </AppText>
+    </View>
+  );
+}
+
+function CSSRTLDemo() {
+  const [cssLang, setCssLang] = useState("en");
+
+  return (
+    <Section title="3️⃣0️⃣ 🆕 CSS RTL (no restart)" badge="Gap Fix" initiallyExpanded={false}>
+      <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
+        mode='css' mirrors layout via flexDirection instantly.{"\n"}
+        No I18nManager.forceRTL() — no restart required.
+      </AppText>
+
+      <View style={{ flexDirection: "row", gap: 8, marginBottom: 12 }}>
+        {["en", "ar"].map((lang) => (
+          <TouchableOpacity
+            key={lang}
+            style={[
+              styles.langButton,
+              cssLang === lang && styles.langButtonSelected,
+            ]}
+            onPress={() => setCssLang(lang)}
+          >
+            <AppText
+              size={12}
+              color={cssLang === lang ? "#FFF" : "#374151"}
+            >
+              {lang === "en" ? "🇺🇸 LTR" : "🇸🇦 RTL"}
+            </AppText>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <RTLProvider language={cssLang} mode="css">
+        <InnerCSSRTLDemo />
+      </RTLProvider>
+    </Section>
+  );
+}
+
+// ============================================================================
+// 31. 🆕 GAP FIX: Dynamic Type Categories
+// ============================================================================
+function DynamicTypeDemo() {
+  const { PixelRatio } = require("react-native");
+  const category = useDynamicTypeCategory();
+  const scaledTitle = useDynamicTypeFontSize(28, { min: 20, max: 48 });
+  const scaledBody = useDynamicTypeFontSize(16, { min: 13, max: 26 });
+  const fontScale = PixelRatio.getFontScale();
+  const isAccessibility = category.startsWith("accessibility");
+
+  return (
+    <Section title="3️⃣1️⃣ 🆕 Dynamic Type" badge="Gap Fix" initiallyExpanded={false}>
+      <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
+        useDynamicTypeCategory() maps PixelRatio.getFontScale() to semantic
+        iOS Dynamic Type size names. Increase text size in device Settings to test.
+      </AppText>
+
+      <View style={styles.infoBox}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <AppText variant="caption" color="#6B7280">fontScale</AppText>
+          <AppText variant="bodyMedium" weight="700">{fontScale.toFixed(2)}x</AppText>
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 4 }}>
+          <AppText variant="caption" color="#6B7280">category</AppText>
+          <AppText
+            variant="bodyMedium"
+            weight="700"
+            color={isAccessibility ? "#EF4444" : "#10B981"}
+          >
+            {category}
+          </AppText>
+        </View>
+      </View>
+
+      <View style={{ marginTop: 12 }}>
+        <AppText variant="caption" color="#9CA3AF" style={{ marginBottom: 4 }}>
+          {"useDynamicTypeFontSize(28) → " + scaledTitle.toFixed(1) + "px"}
+        </AppText>
+        <AppText size={scaledTitle} weight="700">Heading scales with system font</AppText>
+
+        <AppText variant="caption" color="#9CA3AF" style={{ marginTop: 10, marginBottom: 4 }}>
+          {"useDynamicTypeFontSize(16, min:13, max:26) → " + scaledBody.toFixed(1) + "px"}
+        </AppText>
+        <AppText size={scaledBody}>
+          Body text also scales proportionally. Clamped between min and max to prevent layout breakage.
+        </AppText>
+      </View>
+
+      {isAccessibility && (
+        <View style={[styles.infoBox, { backgroundColor: "#FEF3C7", marginTop: 12 }]}>
+          <AppText variant="caption" color="#92400E">
+            ⚠️ Accessibility text size detected. Consider switching to a single-column layout.
+          </AppText>
+        </View>
+      )}
+    </Section>
+  );
+}
+
+// ============================================================================
+// 32. 🆕 GAP FIX: Text-to-Speech (no external package)
+// ============================================================================
+function TTSDemo() {
+  const { speak: speakHook } = useSpeech();
+  const [lastSpoken, setLastSpoken] = useState("");
+
+  const ttsItems = [
+    {
+      label: "Welcome message",
+      text: "Welcome to AppText, the production-grade text library for React Native.",
+      color: "#6366F1",
+    },
+    {
+      label: "Arabic",
+      text: "مرحباً بك في AppText",
+      color: "#8B5CF6",
+    },
+    {
+      label: "Announcement",
+      text: "Version 4.4.0 is now available with new features and bug fixes.",
+      color: "#3B82F6",
+    },
+  ];
+
+  return (
+    <Section title="3️⃣2️⃣ 🆕 Text-to-Speech" badge="Gap Fix" initiallyExpanded={false}>
+      <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
+        useSpeech() wraps AccessibilityInfo.announceForAccessibility — zero
+        external packages. Works with VoiceOver (iOS) and TalkBack (Android).
+      </AppText>
+
+      {ttsItems.map(({ label, text, color }) => (
+        <TouchableOpacity
+          key={label}
+          style={[styles.button, { backgroundColor: color, marginBottom: 8 }]}
+          onPress={() => {
+            speakHook(text);
+            setLastSpoken(label);
+          }}
+        >
+          <AppText color="#FFF" size={13}>🔊 Speak: {label}</AppText>
+        </TouchableOpacity>
+      ))}
+
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: "#374151", marginBottom: 8 }]}
+        onPress={() => {
+          speak("This is the standalone speak() utility — called outside a hook.");
+          setLastSpoken("standalone speak()");
+        }}
+      >
+        <AppText color="#FFF" size={13}>🔊 Standalone speak() utility</AppText>
+      </TouchableOpacity>
+
+      {lastSpoken ? (
+        <View style={styles.infoBox}>
+          <AppText variant="caption" color="#6366F1">
+            Last spoken: <AppText weight="700">{lastSpoken}</AppText>
+          </AppText>
+          <AppText variant="caption" color="#6B7280" style={{ marginTop: 2 }}>
+            Enable VoiceOver / TalkBack to hear the audio output.
+          </AppText>
+        </View>
+      ) : null}
+    </Section>
+  );
+}
+
+// ============================================================================
+// 33. 🆕 GAP FIX: Text Selection Context Menu
+// ============================================================================
+function ContextMenuDemo() {
+  const [lastAction, setLastAction] = useState("");
+  const sampleText =
+    "Long-press this text to see the custom context menu with Copy, Share, and Speak actions.";
+  const shortText = "Hello, AppText!";
+
+  return (
+    <Section title="3️⃣3️⃣ 🆕 Context Menu" badge="Gap Fix" initiallyExpanded={false}>
+      <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
+        AppTextContextMenu is a JS-only long-press popup — no native
+        integration needed. Positions itself near the press location.
+      </AppText>
+
+      <AppText variant="caption" color="#6B7280" style={{ marginBottom: 6 }}>
+        Light theme menu:
+      </AppText>
+
+      <AppTextContextMenu
+        longPressDelay={400}
+        onMenuOpen={() => setLastAction("Menu opened")}
+        actions={[
+          {
+            label: "Copy",
+            icon: "📋",
+            onPress: () => setLastAction("Copied text"),
+          },
+          {
+            label: "Speak",
+            icon: "🔊",
+            onPress: () => {
+              speak(sampleText);
+              setLastAction("Speaking...");
+            },
+          },
+          {
+            label: "Share",
+            icon: "📤",
+            onPress: () => {
+              Alert.alert("Share", sampleText);
+              setLastAction("Share dialog opened");
+            },
+          },
+          {
+            label: "Delete",
+            icon: "🗑️",
+            destructive: true,
+            onPress: () => setLastAction("Deleted (simulated)"),
+          },
+        ]}
+      >
+        <View style={[styles.infoBox, { backgroundColor: "#F9FAFB" }]}>
+          <AppText selectable>{sampleText}</AppText>
+        </View>
+      </AppTextContextMenu>
+
+      <AppText variant="caption" color="#6B7280" style={{ marginTop: 12, marginBottom: 6 }}>
+        Dark theme menu + disabled action:
+      </AppText>
+
+      <AppTextContextMenu
+        actions={[
+          {
+            label: "Copy",
+            icon: "📋",
+            onPress: () => setLastAction("Copied: " + shortText),
+          },
+          {
+            label: "Translate",
+            icon: "🌐",
+            disabled: true,
+            onPress: () => {},
+          },
+          {
+            label: "Speak",
+            icon: "🔊",
+            onPress: () => {
+              speak(shortText);
+              setLastAction("Speaking: " + shortText);
+            },
+          },
+        ]}
+        menuBackgroundColor="#1F2937"
+        actionTextColor="#F9FAFB"
+        destructiveColor="#F87171"
+      >
+        <View
+          style={{
+            padding: 12,
+            backgroundColor: "#1F2937",
+            borderRadius: 8,
+            marginBottom: 4,
+          }}
+        >
+          <AppText color="#F9FAFB" selectable>
+            {shortText}
+          </AppText>
+        </View>
+      </AppTextContextMenu>
+
+      {lastAction ? (
+        <View style={[styles.infoBox, { marginTop: 10 }]}>
+          <AppText variant="caption" color="#10B981">✅ {lastAction}</AppText>
+        </View>
+      ) : (
+        <AppText variant="caption" color="#9CA3AF" style={{ marginTop: 8 }}>
+          Long-press the boxes above to trigger the context menu.
+        </AppText>
+      )}
+    </Section>
+  );
+}
+
+
+// ============================================================================
+// 34. 🆕 GAP FIX: Plugin System (v4.5.0)
+// ============================================================================
+function PluginSystemDemo() {
+  const [pluginEnabled, setPluginEnabled] = useState(false);
+
+  useEffect(() => {
+    if (pluginEnabled) {
+      registerAppTextPlugin({
+        name: "emoji-transformer",
+        order: 10,
+        transform: (text) => text
+          .replace(/:smile:/g, "😊")
+          .replace(/:fire:/g, "🔥")
+          .replace(/:rocket:/g, "🚀"),
+        themeExtension: {
+          colors: { textSecondary: "#8B5CF6" }, // Temporarily hijack secondary color
+        },
+      });
+    } else {
+      unregisterAppTextPlugin("emoji-transformer");
+    }
+  }, [pluginEnabled]);
+
+  return (
+    <Section title="3️⃣4️⃣ 🆕 Plugin System" badge="v4.5.0" initiallyExpanded={false}>
+      <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
+        Plugins can intercept and transform text before rendering (memo-safe, purely synchronous)
+        and deeply extend the active AppTextTheme.
+      </AppText>
+
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: pluginEnabled ? "#10B981" : "#6366F1", marginBottom: 12 }]}
+        onPress={() => setPluginEnabled(!pluginEnabled)}
+      >
+        <AppText color="#FFF">
+          {pluginEnabled ? "✅ Emoji Plugin Active" : "Enable Emoji Plugin"}
+        </AppText>
+      </TouchableOpacity>
+
+      <View style={styles.infoBox}>
+        <AppText variant="labelMedium" color="textSecondary" style={{ marginBottom: 4 }}>
+          "This project is fire :fire:, launching soon :rocket:!"
+        </AppText>
+        <AppText variant="caption" color="#9CA3AF">
+          (Notice how `textSecondary` color changes when the plugin is active, due to theme extension)
+        </AppText>
+      </View>
+    </Section>
+  );
+}
+
+// ============================================================================
+// 35. 🆕 GAP FIX: Remote Translations (v4.5.0)
+// ============================================================================
+function RemoteTranslationsDemo() {
+  const [remoteKey, setRemoteKey] = useState(0); // For forcing re-mount
+
+  return (
+    <Section title="3️⃣5️⃣ 🆕 Remote Sync" badge="v4.5.0" initiallyExpanded={false}>
+       <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
+        RemoteLocaleProvider implements an SWR (stale-while-revalidate) cache. It serves cached translations instantly (zero render block) while fetching updates in the background.
+      </AppText>
+
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: "#374151" }]}
+        onPress={() => setRemoteKey(k => k + 1)}
+      >
+        <AppText color="#FFF">Trigger Remount</AppText>
+      </TouchableOpacity>
+
+      {/* Wrapping in a local provider just for the demo boundary */}
+      <View style={{ marginTop: 12 }} key={remoteKey}>
+        <RemoteLocaleProvider
+          endpoint="https://raw.githubusercontent.com/Ganesh1110/react-native-apptext/main/package.json" // Fake endpoint for demo
+          cacheStrategy="stale-while-revalidate"
+          fallback={{ en: { demo_key: "Fallback Translation (Offline)" } }}
+          onFetchError={() => console.log("Demo fetch failed gracefully")}
+        >
+          <RemoteDemoInner />
+        </RemoteLocaleProvider>
+      </View>
+    </Section>
+  );
+}
+
+function RemoteDemoInner() {
+  const { status, refresh, lastUpdated } = useRemoteLocales();
+
+  return (
+    <View style={styles.infoBox}>
+       <AppText>
+        Status: <AppText weight="700" color={status === "success" ? "#10B981" : "#F59E0B"}>{status}</AppText>
+      </AppText>
+      {lastUpdated && (
+        <AppText variant="caption" color="#6B7280" style={{ marginTop: 4 }}>
+          Last updated: {new Date(lastUpdated).toLocaleTimeString()}
+        </AppText>
+      )}
+      <TouchableOpacity onPress={refresh} style={{ marginTop: 8 }}>
+         <AppText variant="caption" color="#6366F1">↻ Manual Refresh</AppText>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+// ============================================================================
+// 36. 🆕 GAP FIX: useTextMetrics (v4.5.0)
+// ============================================================================
+function TextMetricsDemo() {
+  const text = "This is a long piece of text that we want to measure before actually displaying it on the screen. It might span multiple lines depending on the width.";
+
+  const { metrics, GhostText } = useTextMetrics({
+    text,
+    variant: "bodySmall",
+    maxWidth: 250,
+    numberOfLines: 2,
+  });
+
+  return (
+    <Section title="3️⃣6️⃣ 🆕 useTextMetrics" badge="v4.5.0" initiallyExpanded={false}>
+      <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
+        Measures text block dimensions and truncation state via a hidden ghost element before rendering.
+      </AppText>
+
+      {/* Render the ghost text somewhere in the tree */}
+      <GhostText />
+
+      <View style={{ flexDirection: "row", gap: 12 }}>
+        <View style={{ width: 250, backgroundColor: "#F9FAFB", padding: 8, borderColor: "#E5E7EB", borderWidth: 1 }}>
+          <AppText variant="bodySmall" numberOfLines={2}>{text}</AppText>
+        </View>
+
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          {metrics.measured ? (
+             <View>
+               <AppText variant="caption">Width: <AppText weight="700">{metrics.width.toFixed(1)}px</AppText></AppText>
+               <AppText variant="caption">Height: <AppText weight="700">{metrics.height.toFixed(1)}px</AppText></AppText>
+               <AppText variant="caption">Lines: <AppText weight="700">{metrics.lines}</AppText></AppText>
+               <AppText variant="caption" color={metrics.isTruncated ? "#EF4444" : "#10B981"}>
+                 Truncated: <AppText weight="700">{String(metrics.isTruncated)}</AppText>
+               </AppText>
+             </View>
+          ) : (
+            <AppText variant="caption">Measuring...</AppText>
+          )}
+        </View>
+      </View>
+    </Section>
+  );
+}
+
+// ============================================================================
+// 37. 🆕 GAP FIX: Accessibility & Analytics (v4.5.0)
+// ============================================================================
+function AnalyticsDemo() {
+  // Using context exposed in App component
+  return (
+    <Section title="3️⃣7️⃣ 🆕 Accessibility & Analytics" badge="v4.5.0" initiallyExpanded={false}>
+      <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
+        AppTextProvider now exposes `onTranslate`, `onAnimationStart`, and `onPluginError` hooks for analytics tracing.
+      </AppText>
+
+      <AppText variant="caption" color="#6B7280" style={{ marginBottom: 4 }}>
+        accessibilityMode="static"
+      </AppText>
+      <View style={styles.infoBox}>
+        <AppText animation="typewriter" duration={3000} accessibilityMode="static">
+          This animated text exposes its full content to screen readers immediately, avoiding partial-read bugs on VoiceOver/TalkBack.
+        </AppText>
+      </View>
+    </Section>
+  );
+}
+
+// ============================================================================
 // MAIN CONTENT SCROLL VIEW
 // ============================================================================
 function Content() {
@@ -1152,6 +1678,27 @@ function Content() {
       <RTLProviderDemo />
       <DevToolsDemo />
       <InteractiveFeaturesDemo />
+
+      {/* Gap Fixes v4.4.0+ */}
+      <View style={styles.v440Header}>
+        <View style={[styles.v440Badge, { backgroundColor: "#10B981" }]}>
+          <AppText size={10} color="#FFF" weight="800" style={{ letterSpacing: 1 }}>
+            GAP FIXES
+          </AppText>
+        </View>
+        <AppText variant="caption" color="#9CA3AF" style={{ marginTop: 4 }}>
+          RTL-without-restart · Dynamic Type · TTS · Context Menu
+        </AppText>
+      </View>
+
+      <CSSRTLDemo />
+      <DynamicTypeDemo />
+      <TTSDemo />
+      <ContextMenuDemo />
+      <PluginSystemDemo />
+      <RemoteTranslationsDemo />
+      <TextMetricsDemo />
+      <AnalyticsDemo />
 
       <View style={styles.footer}>
         <AppText variant="titleSmall" color="#6366F1">

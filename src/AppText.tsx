@@ -33,10 +33,11 @@ import {
   useScriptDetection,
   useThemedStyles,
 } from "./hooks";
-import { AppTextProvider, useAppTextTheme } from "./context";
+import { AppTextProvider, useAppTextTheme, useAppTextAnalytics } from "./context";
 import { createSpacingStyles } from "./utils";
 import TransComponent from "./Trans";
 import { ANIMATION_REGISTRY, AnimationValues } from "./animations";
+import { pluginRegistry } from "./PluginRegistry";
 
 const PRESET_ANIMATION_DURATIONS: Record<string, number> = {
   rubberBand: 1000,
@@ -480,6 +481,8 @@ interface TypewriterTextProps {
   speed?: number;
   cursor?: boolean;
   style: StyleProp<TextStyle>;
+  accessible?: boolean;
+  importantForAccessibility?: "yes" | "no" | "no-hide-descendants";
 }
 
 const TypewriterText = memo<TypewriterTextProps>(
@@ -490,6 +493,8 @@ const TypewriterText = memo<TypewriterTextProps>(
     speed = 50,
     cursor = false,
     style,
+    accessible,
+    importantForAccessibility,
   }) => {
     const [displayText, setDisplayText] = useState("");
     const [isDone, setIsDone] = useState(false);
@@ -562,6 +567,8 @@ const TypewriterText = memo<TypewriterTextProps>(
         style={style}
         accessibilityLiveRegion="polite"
         accessibilityState={{ busy: !isDone }}
+        accessible={accessible}
+        importantForAccessibility={importantForAccessibility}
       >
         {displayText}
         {cursor && !isDone && <Text style={{ color: cursorColor }}>|</Text>}
@@ -679,6 +686,8 @@ interface WaveTextProps {
   duration?: number;
   delay?: number;
   style: StyleProp<TextStyle>;
+  accessible?: boolean;
+  importantForAccessibility?: "yes" | "no" | "no-hide-descendants";
 }
 
 const extractTextStyles = (style: StyleProp<TextStyle>) => {
@@ -705,7 +714,7 @@ const extractTextStyles = (style: StyleProp<TextStyle>) => {
 };
 
 const WaveText = memo<WaveTextProps>(
-  ({ children, duration = 1000, delay = 0, style }) => {
+  ({ children, duration = 1000, delay = 0, style, accessible, importantForAccessibility }) => {
     const text = useMemo(() => {
       const extractText = (node: React.ReactNode): string => {
         if (typeof node === "string" || typeof node === "number") {
@@ -815,6 +824,8 @@ const WaveText = memo<WaveTextProps>(
                   : "flex-start",
           },
         ]}
+        accessible={accessible}
+        importantForAccessibility={importantForAccessibility}
       >
         {characters.map((char, i) => (
           <Animated.View key={`wave-${i}`} style={interpolatedStyles[i]}>
@@ -855,6 +866,7 @@ const BaseAppText = memo(
         responsive = true,
         style: propStyle,
         testID,
+        accessibilityMode = "default",
         m,
         mt,
         mr,
@@ -926,6 +938,19 @@ const BaseAppText = memo(
         };
         return extractText(children);
       }, [children]);
+
+      // Apply plugin transform pipeline (pure + synchronous)
+      const analytics = useAppTextAnalytics();
+      const isDark = colorScheme === "dark";
+      const transformedText = useMemo(() => {
+        if (pluginRegistry.getAll().length === 0) return textContent;
+        return pluginRegistry.applyTransforms(textContent, {
+          variant,
+          locale: "",
+          isRTL: false,
+          isDark,
+        });
+      }, [textContent, variant, isDark]);
 
       const detectedScript = useScriptDetection(textContent);
       const finalScript = script || detectedScript;
@@ -1109,30 +1134,63 @@ const BaseAppText = memo(
       const finalDuration = animationConfig.duration ?? animationDuration;
       const finalSpeed = animationConfig.speed ?? animationSpeed;
 
+      // Accessibility mode handling
+      const isHidden = accessibilityMode === "hidden";
+      const isStaticMode = accessibilityMode === "static";
+
+      // Analytics: fire onAnimationStart on first render when animated
+      const hasReportedAnim = useRef(false);
+      useEffect(() => {
+        if (shouldAnimate && animationType && !hasReportedAnim.current) {
+          hasReportedAnim.current = true;
+          analytics.onAnimationStart?.(animationType, variant);
+        }
+      }, [shouldAnimate, animationType, variant]); // eslint-disable-line
+
       // Special animation handling
       if (isTypewriter) {
         return (
-          <TypewriterText
-            delay={finalDelay}
-            duration={finalDuration}
-            speed={finalSpeed}
-            cursor={cursor}
-            style={finalComputedStyle}
-          >
-            {children}
-          </TypewriterText>
+          <>
+            {isStaticMode && (
+              <Text
+                accessible
+                accessibilityLabel={textContent}
+                style={[finalComputedStyle, { position: "absolute", opacity: 0 }]}
+                importantForAccessibility="yes"
+              />
+            )}
+            <TypewriterText
+              delay={finalDelay}
+              duration={finalDuration}
+              speed={finalSpeed}
+              cursor={cursor}
+              style={finalComputedStyle}
+            >
+              {children}
+            </TypewriterText>
+          </>
         );
       }
 
       if (isWave) {
         return (
-          <WaveText
-            delay={finalDelay}
-            duration={finalDuration}
-            style={finalComputedStyle}
-          >
-            {children}
-          </WaveText>
+          <>
+            {isStaticMode && (
+              <Text
+                accessible
+                accessibilityLabel={textContent}
+                style={[finalComputedStyle, { position: "absolute", opacity: 0 }]}
+                importantForAccessibility="yes"
+              />
+            )}
+            <WaveText
+              delay={finalDelay}
+              duration={finalDuration}
+              style={finalComputedStyle}
+            >
+              {children}
+            </WaveText>
+          </>
         );
       }
 

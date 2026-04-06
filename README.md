@@ -674,20 +674,27 @@ function DashboardScreen() {
 
 ---
 
-### ⚠️ Remaining Known Gaps
+### ✅ Gap Fixes (v4.4.1)
 
-The following items remain out of scope for v4.4.0 due to React Native / platform limitations:
+All four previously-flagged implementation gaps are now resolved:
 
-| Feature | Status | Reason / Workaround |
+| Feature | Was | Now | What changed |
+|---|---|---|---|
+| **RTL without restart** | ⚠️ Requires restart | ✅ Fixed | `RTLProvider mode="css"` mirrors layout via flexDirection/textAlign — no `I18nManager.forceRTL()` |
+| **Dynamic Type categories (iOS)** | ⚠️ Partial | ✅ Fixed | `useDynamicTypeCategory()` → semantic category name; `useDynamicTypeFontSize(base)` → clamped scaled size |
+| **Text selection menus** | ❌ Missing | ✅ Fixed | `AppTextContextMenu` — JS-only long-press popup, no native modules |
+| **Text-to-speech** | ❌ Out of scope | ✅ Fixed | `useSpeech()` hook + `speak()` utility via `AccessibilityInfo.announceForAccessibility` — zero external packages |
+
+### ⚠️ Remaining Platform Limitations
+
+The following items remain out of scope due to fundamental React Native / platform constraints:
+
+| Feature | Status | Reason |
 |---|---|---|
-| **Right-to-left native layout without restart** | ⚠️ Requires restart | `I18nManager.forceRTL()` is a platform constraint — `restartRequired` flag is now exposed |
-| **Dynamic Type categories (iOS)** | ⚠️ Partial | `allowFontScaling` + `maxFontSizeMultiplier` props available; UIFontTextStyle categories require native support |
-| **Gradient text** | ⚠️ Simulated | React Native `Text` does not support gradient fill; `gradientShift` cycles solid colours |
-| **Variable fonts** | ❌ Platform limit | Not supported by React Native's text engine |
-| **Text selection menus** | ❌ Missing | `selectable` prop works; custom context menus require native integration |
-| **Text-to-speech integration** | ❌ Out of scope | Use `expo-speech` or `react-native-tts` alongside accessibility labels |
-| **Reanimated v3 animations** | ⚠️ Not integrated | `Animated.Value` used; migrating to `useSharedValue` would require Reanimated peer dep |
-| **Skeletal loading with Reanimated** | ⚠️ Uses JS driver | `backgroundColor` animation cannot use native driver — shimmer uses JS-driven Animated |
+| **Variable fonts** | ❌ Platform limit | React Native's text engine does not support variable fonts |
+| **Gradient text** | ⚠️ Simulated | `gradientShift` cycles solid colours — true gradient fill requires native SVG |
+| **Reanimated v3 animations** | ⚠️ Not integrated | `Animated.Value` is used; adding `useSharedValue` would require Reanimated as a peer dep |
+| **Skeletal loading with Reanimated** | ⚠️ Uses JS driver | `backgroundColor` animation cannot use native driver |
 
 ---
 

@@ -23,7 +23,7 @@
  *   <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row' }}>
  */
 import React, { createContext, memo, useCallback, useContext, useEffect, useMemo, useState, } from "react";
-import { I18nManager, Platform } from "react-native";
+import { I18nManager, Platform, View, StyleSheet } from "react-native";
 // ---------------------------------------------------------------------------
 // RTL language detection
 // ---------------------------------------------------------------------------
@@ -56,14 +56,22 @@ const RTLContext = createContext({
     isRTL: false,
     setRTL: () => { },
     restartRequired: false,
+    mode: "native",
 });
-export const RTLProvider = memo(({ language, forceRTL, autoApply = true, children }) => {
+export const RTLProvider = memo(({ language, forceRTL, autoApply = true, mode = "native", children }) => {
     const detectedRTL = isRTLLanguage(language);
     const targetRTL = forceRTL !== undefined ? forceRTL : detectedRTL;
-    const [isRTL, setIsRTLState] = useState(() => I18nManager.isRTL || targetRTL);
+    const [isRTL, setIsRTLState] = useState(() => (mode === "native" ? I18nManager.isRTL : false) || targetRTL);
     const [restartRequired, setRestartRequired] = useState(false);
     // Sync when language changes
     useEffect(() => {
+        if (mode === "css") {
+            // CSS-only mode: just flip the state — no I18nManager, no restart needed
+            setIsRTLState(targetRTL);
+            setRestartRequired(false);
+            return;
+        }
+        // Native mode
         if (autoApply && targetRTL !== I18nManager.isRTL) {
             I18nManager.forceRTL(targetRTL);
             setIsRTLState(targetRTL);
@@ -72,22 +80,28 @@ export const RTLProvider = memo(({ language, forceRTL, autoApply = true, childre
                 setRestartRequired(true);
                 if (__DEV__) {
                     console.warn(`[RTLProvider] RTL changed to ${targetRTL}. ` +
-                        "A full app reload is needed for native layout mirroring to take effect.");
+                        "A full app reload is needed for native layout mirroring to take effect. " +
+                        "Use mode='css' to avoid this requirement.");
                 }
             }
         }
         else {
             setIsRTLState(targetRTL);
         }
-    }, [targetRTL, autoApply]);
+    }, [targetRTL, autoApply, mode]);
     const setRTL = useCallback((rtl) => {
+        if (mode === "css") {
+            setIsRTLState(rtl);
+            setRestartRequired(false);
+            return;
+        }
         I18nManager.forceRTL(rtl);
         setIsRTLState(rtl);
         if (rtl !== I18nManager.isRTL && Platform.OS !== "web") {
             setRestartRequired(true);
         }
-    }, []);
-    const value = useMemo(() => ({ isRTL, setRTL, restartRequired }), [isRTL, setRTL, restartRequired]);
+    }, [mode]);
+    const value = useMemo(() => ({ isRTL, setRTL, restartRequired, mode: mode !== null && mode !== void 0 ? mode : "native" }), [isRTL, setRTL, restartRequired, mode]);
     return <RTLContext.Provider value={value}>{children}</RTLContext.Provider>;
 });
 RTLProvider.displayName = "RTLProvider";
@@ -95,7 +109,7 @@ RTLProvider.displayName = "RTLProvider";
 // Hook
 // ---------------------------------------------------------------------------
 /**
- * Returns RTL context: `{ isRTL, setRTL, restartRequired }`.
+ * Returns RTL context: `{ isRTL, setRTL, restartRequired, mode }`.
  * Must be used inside `<RTLProvider>`.
  */
 export function useRTL() {
@@ -111,3 +125,50 @@ export function useRTLFlexDirection(ltrDirection = "row") {
         return "column";
     return isRTL ? "row-reverse" : "row";
 }
+/**
+ * Returns a complete set of RTL-aware layout styles based on RTL context.
+ *
+ * Example:
+ * ```tsx
+ * const rtl = useRTLStyle();
+ * <View style={rtl.row}><Text style={rtl.text}>Hello</Text></View>
+ * ```
+ */
+export function useRTLStyle() {
+    const { isRTL } = useRTL();
+    return useMemo(() => ({
+        row: { flexDirection: isRTL ? "row-reverse" : "row" },
+        rowReverse: { flexDirection: isRTL ? "row" : "row-reverse" },
+        textAlign: { textAlign: isRTL ? "right" : "left" },
+        textAlignReverse: { textAlign: isRTL ? "left" : "right" },
+        start: { alignItems: isRTL ? "flex-end" : "flex-start" },
+        end: { alignItems: isRTL ? "flex-start" : "flex-end" },
+        paddingStart: (v) => isRTL ? { paddingRight: v } : { paddingLeft: v },
+        paddingEnd: (v) => isRTL ? { paddingLeft: v } : { paddingRight: v },
+        marginStart: (v) => isRTL ? { marginRight: v } : { marginLeft: v },
+        marginEnd: (v) => isRTL ? { marginLeft: v } : { marginRight: v },
+    }), [isRTL]);
+}
+/**
+ * A `<View>` that automatically applies `flexDirection: 'row-reverse'`
+ * when the app is in RTL mode (from `RTLProvider` context).
+ *
+ * In CSS mode this works immediately without a restart.
+ *
+ * ```tsx
+ * <RTLView style={{ gap: 8 }}>
+ *   <Icon /><Label />
+ * </RTLView>
+ * ```
+ */
+export const RTLView = memo(({ children, style, forceRTL, ...props }) => {
+    const { isRTL } = useRTL();
+    const rtl = forceRTL !== undefined ? forceRTL : isRTL;
+    const resolvedStyle = useMemo(() => {
+        const flat = StyleSheet.flatten(style) || {};
+        const base = flat.flexDirection === "column" ? {} : { flexDirection: (rtl ? "row-reverse" : "row") };
+        return { ...base, ...flat };
+    }, [style, rtl]);
+    return <View style={resolvedStyle} {...props}>{children}</View>;
+});
+RTLView.displayName = "RTLView";

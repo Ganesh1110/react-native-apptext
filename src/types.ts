@@ -250,6 +250,15 @@ export interface AppTextProps extends Omit<TextProps, "style">, SpacingProps {
   onCollapse?: () => void;
   expandText?: string;
   collapseText?: string;
+  /**
+   * Controls how animated text is exposed to screen readers.
+   * - 'default'  Current behavior (animated element is accessible as-is)
+   * - 'static'   Renders a hidden static label with the final text; the animated
+   *              element is hidden from the accessibility tree (VoiceOver/TalkBack
+   *              reads the full text immediately while the animation plays visually)
+   * - 'hidden'   Removes the element from the accessibility tree entirely
+   */
+  accessibilityMode?: "default" | "static" | "hidden";
 }
 
 // ============================================================================

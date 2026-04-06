@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useCallback, useMemo, useRef, useState } from "react";
 import {
+  AccessibilityInfo,
   Dimensions,
   ScaledSize,
   PixelRatio,
@@ -164,4 +165,134 @@ export const useDeviceLocale = (): string => {
       return "en";
     }
   }, []);
+};
+
+// ============================================================================
+// Dynamic Type category hook (iOS-first, Android-friendly fallback)
+// ============================================================================
+
+export type DynamicTypeCategory =
+  | "xSmall"
+  | "small"
+  | "medium"
+  | "large"
+  | "xLarge"
+  | "xxLarge"
+  | "xxxLarge"
+  | "accessibilityMedium"
+  | "accessibilityLarge"
+  | "accessibilityXLarge"
+  | "accessibilityXXLarge"
+  | "accessibilityXXXLarge";
+
+/**
+ * Returns the current Dynamic Type semantic category based on `PixelRatio.getFontScale()`.
+ *
+ * iOS maps its DynamicType size steps to font scale multipliers. This hook
+ * approximates those steps, giving you the named category so you can adjust
+ * layout beyond just font size (e.g. single/multi-column).
+ *
+ * ```tsx
+ * const category = useDynamicTypeCategory();
+ * const isLarge = category.startsWith('accessibility');
+ * ```
+ */
+export const useDynamicTypeCategory = (): DynamicTypeCategory => {
+  const [scale, setScale] = useState(() => PixelRatio.getFontScale());
+
+  useEffect(() => {
+    // AccessibilityInfo fires when the user changes text size in Settings
+    const sub = AccessibilityInfo.addEventListener("boldTextChanged", () => {
+      setScale(PixelRatio.getFontScale());
+    });
+    return () => sub?.remove?.();
+  }, []);
+
+  return useMemo((): DynamicTypeCategory => {
+    if (scale <= 0.82) return "xSmall";
+    if (scale <= 0.88) return "small";
+    if (scale <= 0.95) return "medium";
+    if (scale <= 1.00) return "large";        // default
+    if (scale <= 1.12) return "xLarge";
+    if (scale <= 1.24) return "xxLarge";
+    if (scale <= 1.35) return "xxxLarge";
+    if (scale <= 1.53) return "accessibilityMedium";
+    if (scale <= 1.76) return "accessibilityLarge";
+    if (scale <= 2.00) return "accessibilityXLarge";
+    if (scale <= 2.35) return "accessibilityXXLarge";
+    return "accessibilityXXXLarge";
+  }, [scale]);
+};
+
+/**
+ * Returns a font size scaled by the current Dynamic Type multiplier.
+ * Equivalent to CSS `clamp(min, base * fontScale, max)`.
+ *
+ * ```tsx
+ * const headingSize = useDynamicTypeFontSize(32, { min: 24, max: 52 });
+ * ```
+ */
+export const useDynamicTypeFontSize = (
+  baseSize: number,
+  opts?: { min?: number; max?: number },
+): number => {
+  const [scale, setScale] = useState(() => PixelRatio.getFontScale());
+
+  useEffect(() => {
+    const sub = AccessibilityInfo.addEventListener("boldTextChanged", () => {
+      setScale(PixelRatio.getFontScale());
+    });
+    return () => sub?.remove?.();
+  }, []);
+
+  return useMemo(() => {
+    const scaled = Math.round(baseSize * scale * 100) / 100;
+    const clamped = Math.min(
+      Math.max(scaled, opts?.min ?? baseSize * 0.6),
+      opts?.max ?? baseSize * 2.5,
+    );
+    return clamped;
+  }, [baseSize, scale, opts?.min, opts?.max]);
+};
+
+// ============================================================================
+// Text-to-speech — zero external dependencies
+// ============================================================================
+
+/**
+ * Wrapper around `AccessibilityInfo.announceForAccessibility`.
+ * Works on both iOS and Android without any external package.
+ *
+ * On iOS the system voice (VoiceOver) reads the text;
+ * on Android TalkBack handles it. No TTS engine is launched independently.
+ *
+ * Returns a `speak(text)` callback safe to call conditionally.
+ */
+export const useSpeech = () => {
+  const speak = useCallback((text: string) => {
+    if (!text) return;
+    try {
+      AccessibilityInfo.announceForAccessibility(text);
+    } catch (e) {
+      if (__DEV__) console.warn("[useSpeech] announceForAccessibility failed:", e);
+    }
+  }, []);
+
+  return { speak };
+};
+
+/**
+ * Standalone `speak()` utility (non-hook, can be used outside components).
+ *
+ * ```ts
+ * import { speak } from 'react-native-apptext';
+ * speak('Hello world');
+ * ```
+ */
+export const speak = (text: string): void => {
+  try {
+    AccessibilityInfo.announceForAccessibility(text);
+  } catch (e) {
+    if (__DEV__) console.warn("[speak] announceForAccessibility failed:", e);
+  }
 };

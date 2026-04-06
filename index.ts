@@ -1,6 +1,6 @@
 // ============================================================================
 // react-native-apptext — Public API
-// Version 4.4.0
+// Version 4.5.0
 // ============================================================================
 
 // ---------------------------------------------------------------------------
@@ -20,10 +20,15 @@ export { Trans } from "./src/AppText";
 export {
   AppTextProvider,
   useAppTextTheme,
-  useUpdateAppTheme,        // NEW: hot-patch theme tokens at runtime
+  useUpdateAppTheme,
+  useAppTextAnalytics,       // NEW v4.5.0: read analytics callbacks
 } from "./src/context";
 
-export type { AppTextContextValue } from "./src/context";
+export type {
+  AppTextContextValue,
+  AppTextProviderProps,
+  AppTextAnalyticsCallbacks,
+} from "./src/context";
 
 // ---------------------------------------------------------------------------
 // Hooks
@@ -31,7 +36,15 @@ export type { AppTextContextValue } from "./src/context";
 export {
   useResponsiveFont,
   useThemedStyles,
+  // Dynamic Type — iOS/Android font scale semantic mapping
+  useDynamicTypeCategory,  // NEW: xSmall → accessibilityXXXLarge
+  useDynamicTypeFontSize,  // NEW: clamp(base * fontScale, min, max)
+  // Text-to-speech (no external package required)
+  useSpeech,               // NEW: hook returning { speak(text) }
+  speak,                   // NEW: standalone utility
 } from "./src/hooks";
+
+export type { DynamicTypeCategory } from "./src/hooks";
 
 // NEW: System locale detection hooks (previously internal-only)
 export {
@@ -148,13 +161,15 @@ export type { AppTextSkeletonProps } from "./src/AppTextSkeleton";
 // ---------------------------------------------------------------------------
 export {
   RTLProvider,               // NEW: calls I18nManager.forceRTL, exposes isRTL
-  useRTL,                    // NEW: { isRTL, setRTL, restartRequired }
+  useRTL,                    // NEW: { isRTL, setRTL, restartRequired, mode }
   useRTLFlexDirection,       // NEW: convenience helper
+  useRTLStyle,               // NEW: full layout style map (row, textAlign, paddingStart…)
+  RTLView,                   // NEW: drop-in RTL-aware View (works in 'css' mode)
   isRTLLanguage,             // NEW: pure function — isRTLLanguage('ar') → true
   RTL_LANGUAGE_CODES,        // NEW: Set of RTL BCP-47 prefixes
 } from "./src/RTLProvider";
 
-export type { RTLContextValue, RTLProviderProps } from "./src/RTLProvider";
+export type { RTLContextValue, RTLProviderProps, RTLViewProps } from "./src/RTLProvider";
 
 // ---------------------------------------------------------------------------
 // TypeScript Type Surface
@@ -177,3 +192,58 @@ export type {
 // Error Boundary
 // ---------------------------------------------------------------------------
 export { TranslationErrorBoundary } from "./src/ErrorBoundary";
+
+// ---------------------------------------------------------------------------
+// Text Selection Context Menu
+// ---------------------------------------------------------------------------
+export { AppTextContextMenu } from "./src/AppTextContextMenu";
+
+export type {
+  AppTextContextMenuProps,
+  ContextMenuAction,
+} from "./src/AppTextContextMenu";
+
+// ---------------------------------------------------------------------------
+// Plugin System (v4.5.0)
+// ---------------------------------------------------------------------------
+export {
+  pluginRegistry,
+  registerAppTextPlugin,
+  unregisterAppTextPlugin,
+  getRegisteredPlugins,
+} from "./src/PluginRegistry";
+
+export type {
+  AppTextPlugin,
+  PluginRegisterOptions,
+  PluginTransformContext,
+  PluginAnimationDefinition,
+} from "./src/PluginRegistry";
+
+// ---------------------------------------------------------------------------
+// Remote Translation Sync (v4.5.0)
+// ---------------------------------------------------------------------------
+export {
+  RemoteLocaleProvider,
+  useRemoteLocales,
+  clearRemoteLocaleCache,
+  clearAllRemoteLocaleCaches,
+} from "./src/RemoteLocaleProvider";
+
+export type {
+  RemoteLocaleProviderProps,
+  RemoteLocaleContextValue,
+  RemoteCacheStrategy,
+  RemoteStorageAdapter,
+  RemoteLocaleStatus,
+} from "./src/RemoteLocaleProvider";
+
+// ---------------------------------------------------------------------------
+// Text Metrics API (v4.5.0)
+// ---------------------------------------------------------------------------
+export { useTextMetrics } from "./src/useTextMetrics";
+
+export type {
+  TextMetricsOptions,
+  TextMetrics,
+} from "./src/useTextMetrics";

@@ -1,6 +1,13 @@
-import React, { useCallback, useContext, useMemo, useState, useEffect, } from "react";
+import React, { createContext, useCallback, useContext, useMemo, useState, useEffect, } from "react";
 import { DEFAULT_THEME } from "./theme";
 const AppTextContext = React.createContext(null);
+// ---------------------------------------------------------------------------
+// Analytics context (lighter, for consumers that only need callbacks)
+// ---------------------------------------------------------------------------
+const AppTextAnalyticsContext = createContext({});
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
 function deepMerge(target, source) {
     const result = { ...target };
     for (const key in source) {
@@ -22,7 +29,7 @@ function deepMerge(target, source) {
     }
     return result;
 }
-export const AppTextProvider = ({ theme: customTheme, children }) => {
+export const AppTextProvider = ({ theme: customTheme, children, onTranslate, onAnimationStart, onMissingTranslation, onPluginError, }) => {
     const [theme, setTheme] = useState(() => deepMerge(DEFAULT_THEME, customTheme || {}));
     useEffect(() => {
         if (customTheme) {
@@ -32,11 +39,23 @@ export const AppTextProvider = ({ theme: customTheme, children }) => {
     const updateTheme = useCallback((newTheme) => {
         setTheme((prevTheme) => deepMerge(prevTheme, newTheme));
     }, []);
-    const contextValue = useMemo(() => ({ theme, updateTheme }), [theme, updateTheme]);
+    // Stable analytics object — only recreates when callbacks change
+    const analytics = useMemo(() => ({
+        onTranslate,
+        onAnimationStart,
+        onMissingTranslation,
+        onPluginError,
+    }), [onTranslate, onAnimationStart, onMissingTranslation, onPluginError]);
+    const contextValue = useMemo(() => ({ theme, updateTheme, analytics }), [theme, updateTheme, analytics]);
     return (<AppTextContext.Provider value={contextValue}>
-      {children}
+      <AppTextAnalyticsContext.Provider value={analytics}>
+        {children}
+      </AppTextAnalyticsContext.Provider>
     </AppTextContext.Provider>);
 };
+// ---------------------------------------------------------------------------
+// Hooks
+// ---------------------------------------------------------------------------
 /**
  * Returns the current AppText theme object.
  * Falls back to DEFAULT_THEME when used outside AppTextProvider.
@@ -49,13 +68,6 @@ export const useAppTextTheme = () => {
 /**
  * Returns the `updateTheme` function that deep-merges partial theme overrides
  * into the current theme at runtime — without remounting AppTextProvider.
- *
- * Must be used inside `<AppTextProvider>`.
- *
- * @example
- * const updateTheme = useUpdateAppTheme();
- * // Switch primary colour to brand red at runtime
- * updateTheme({ colors: { primary: '#E53E3E' } });
  */
 export const useUpdateAppTheme = () => {
     const context = useContext(AppTextContext);
@@ -67,4 +79,11 @@ export const useUpdateAppTheme = () => {
         return () => { };
     }
     return context.updateTheme;
+};
+/**
+ * Returns the current analytics callbacks from `<AppTextProvider>`.
+ * Safe to call — returns empty object when outside a provider.
+ */
+export const useAppTextAnalytics = () => {
+    return useContext(AppTextAnalyticsContext);
 };

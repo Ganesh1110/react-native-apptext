@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "skipLibCheck": true,
+    "noImplicitAny": false
+  },
+  "include": [
+    "src/reanimated.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
