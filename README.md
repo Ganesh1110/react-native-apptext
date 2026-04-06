@@ -60,7 +60,7 @@ AppText is designed to sit as a **universal text primitive** in your design syst
 ### Maintainer & Community
 
 - **Author:** Ganesh Jayaprakash
-- **Status:** ✅ Actively maintained (v4.4.0, April 2026)
+- **Status:** ✅ Actively maintained (v4.5.0, April 2026)
 - **Repository:** [github.com/Ganesh1110/react-native-apptext](https://github.com/Ganesh1110/react-native-apptext)
 - **License:** MIT
 - **Peer dependencies:** React ≥16.8, React Native ≥0.60
@@ -439,6 +439,29 @@ OrdinalFormatter.format(3, 'en'); // "3rd"
 ---
 
 ## ⚠️ 4. Gaps, New Features & New Architecture
+
+### 🔥 New Enterprise Architecture in v4.5.0
+
+Version 4.5.0 hardens `react-native-apptext` for production-scale architectures, introducing zero-dependency enterprise tools and external pipeline support.
+
+#### 4.5.1 Plugin System (`PluginRegistry`)
+- **Register Global Transformers:** Create pure/synchronous functions via `registerAppTextPlugin()` to intercept strings before render (e.g., Emoji mapping, Markdown shortcodes).
+- **Theme Extensions:** Override/extend the Active `AppTextTheme` dynamically per-plugin.
+
+#### 4.5.2 SWR Remote Translation Sync
+- Use `RemoteLocaleProvider` to execute `stale-while-revalidate` or `network-first` hydration of translations at scale without ever blocking the JS thread or initial app paint.
+
+#### 4.5.3 CLI Translation Validator
+- Zero-dependency CLI ships directly in the bin (`npx apptext validate`).
+- Traverses your React Native AST to extract translation keys (`<Trans>`, `useLang().t()`) and alerts you to dead or unmapped locale `.json`/`.yaml` nodes.
+
+#### 4.5.4 High-Performance Text Metrics
+- Evaluate text dimensions, line counts, and layout metrics *prior* to rendering using `useTextMetrics` and the hidden `GhostText` component.
+
+#### 4.5.5 Optional Reanimated Bridge
+- Import `ReanimatedAppText` safely from `react-native-apptext/reanimated` to run UI-thread animations, ensuring zero bloated dependencies for consumers needing the vanilla footprint!
+
+---
 
 ### ✅ Implemented in v4.4.0 (Previously Gaps)
 
