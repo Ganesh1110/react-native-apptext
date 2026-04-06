@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import {
   ScrollView,
   View,
@@ -6,7 +6,9 @@ import {
   SafeAreaView,
   StatusBar,
   TouchableOpacity,
+  Pressable,
   Alert,
+  Linking,
   useColorScheme,
 } from "react-native";
 import AppText, {
@@ -16,6 +18,7 @@ import AppText, {
   Trans,
   MarkdownTrans,
   useAppTextTheme,
+  useUpdateAppTheme,       // v4.4.0 — runtime theme hot-patching
   useResponsiveFont,
   DEFAULT_THEME,
   NumberFormatter,
@@ -23,8 +26,23 @@ import AppText, {
   translationCache,
   performanceMonitor,
   TranslationErrorBoundary,
+  // v4.4.0 new exports
+  AppTextSkeleton,         // Shimmer placeholder
+  AppTextDevTools,         // __DEV__ performance overlay
+  RTLProvider,             // App-wide RTL mirroring
+  useRTL,                  // RTL context hook
+  useRTLFlexDirection,     // Flex direction helper
+  isRTLLanguage,           // RTL language detector
+  useAutoLocale,           // System locale detection
+  useDeviceLocale,         // Raw device locale
+  useTranslationReady,     // Locale loading progress
+  withLazyTranslations,    // HOC with loadingFallback support
+  LazyLocaleProvider,      // Code-splitting locale provider
 } from "react-native-apptext";
 
+// ============================================================================
+// TRANSLATIONS (expanded for v4.4.0 demos)
+// ============================================================================
 const translations = {
   en: {
     welcome: "Welcome to AppText",
@@ -36,15 +54,16 @@ const translations = {
       "{gender, select, male {He is here} female {She is here} other {They are here}}",
     icu_select_role:
       "{role, select, admin {Admin User} user {Regular User} guest {Guest User}}",
-    icu_number: "Price: {{value, number, currency}}",
-    icu_date: "Event date: {{value, date}}",
     rich_markdown:
       "This is **bold** and *italic* with a [link](https://example.com)",
+    rich_nested:
+      "**_Bold italic_** and **[bold link](https://reactnative.dev)** work now!",
     nested_tags: "<bold>Hello</bold> <link>World</link>",
     no_items: "No items found",
     one_item: "One item",
     few_items: "Few items",
     many_items: "Many items",
+    theme_demo: "Runtime theme updated! Primary is now **{{color}}**.",
   },
   ar: {
     welcome: "مرحباً بك في AppText",
@@ -53,6 +72,9 @@ const translations = {
     items_other: "{{count}} عناصر",
     icu_plural: "{count, plural, one {# عنصر} other {# عناصر}}",
     rich_markdown: "هذا نص **عريض** و *مائل* مع [رابط](https://example.com)",
+    rich_nested: "**_عريض ومائل_** يعمل الآن!",
+    nested_tags: "<bold>مرحباً</bold> <link>عالم</link>",
+    theme_demo: "تم تحديث المظهر! اللون الأساسي هو **{{color}}**.",
   },
   fr: {
     welcome: "Bienvenue dans AppText",
@@ -60,12 +82,21 @@ const translations = {
     items_one: "{{count}} élément",
     items_other: "{{count}} éléments",
     icu_plural: "{count, plural, one {# élément} other {# éléments}}",
+    rich_markdown:
+      "Voici du **gras** et de *l'italique* avec un [lien](https://example.com)",
+    rich_nested: "**_Gras et italique_** fonctionne maintenant!",
+    nested_tags: "<bold>Bonjour</bold> <link>Monde</link>",
+    theme_demo: "Thème mis à jour! La couleur principale est **{{color}}**.",
   },
   ja: {
     welcome: "AppTextへようこそ",
     greeting: "こんにちは、{{name}}さん！",
     items_other: "{{count}}個",
     icu_plural: "{count, plural, other {#個}}",
+    rich_markdown: "これは**太字**と*斜体*です [リンク](https://example.com)",
+    rich_nested: "**_太字と斜体_**が機能します！",
+    nested_tags: "<bold>こんにちは</bold> <link>世界</link>",
+    theme_demo: "テーマが更新されました！プライマリカラーは**{{color}}**です。",
   },
 };
 
@@ -75,6 +106,14 @@ const languages = [
   { code: "fr", name: "French", nativeName: "Français", flag: "🇫🇷" },
   { code: "ja", name: "Japanese", nativeName: "日本語", flag: "🇯🇵" },
 ];
+
+// Theme presets for the runtime update demo
+const THEME_PRESETS = {
+  indigo: { color: "Indigo", primary: "#6366F1", secondary: "#8B5CF6" },
+  rose:   { color: "Rose",   primary: "#F43F5E", secondary: "#E11D48" },
+  teal:   { color: "Teal",   primary: "#14B8A6", secondary: "#0D9488" },
+  amber:  { color: "Amber",  primary: "#F59E0B", secondary: "#D97706" },
+};
 
 const customTheme = {
   ...DEFAULT_THEME,
@@ -94,7 +133,10 @@ const customTheme = {
   },
 };
 
-function Section({ title, children, initiallyExpanded = true }) {
+// ============================================================================
+// REUSABLE SECTION WRAPPER
+// ============================================================================
+function Section({ title, children, initiallyExpanded = true, badge }) {
   const [expanded, setExpanded] = useState(initiallyExpanded);
 
   return (
@@ -104,9 +146,16 @@ function Section({ title, children, initiallyExpanded = true }) {
         onPress={() => setExpanded(!expanded)}
         activeOpacity={0.7}
       >
-        <AppText variant="titleMedium" style={styles.sectionTitle}>
-          {title}
-        </AppText>
+        <View style={{ flexDirection: "row", alignItems: "center", flex: 1, gap: 8 }}>
+          <AppText variant="titleMedium" style={styles.sectionTitle}>
+            {title}
+          </AppText>
+          {badge && (
+            <View style={styles.newBadge}>
+              <AppText style={styles.newBadgeText}>{badge}</AppText>
+            </View>
+          )}
+        </View>
         <AppText variant="bodySmall" color="#666">
           {expanded ? "▼" : "▶"}
         </AppText>
@@ -117,7 +166,7 @@ function Section({ title, children, initiallyExpanded = true }) {
 }
 
 // ============================================================================
-// 1. TYPOGRAPHY - Material Design 3 Variants
+// 1. MATERIAL DESIGN 3 TYPOGRAPHY
 // ============================================================================
 function MaterialTypographyDemo() {
   return (
@@ -131,22 +180,18 @@ function MaterialTypographyDemo() {
       <AppText variant="titleLarge">Title Large (22px)</AppText>
       <AppText variant="titleMedium">Title Medium (16px)</AppText>
       <AppText variant="titleSmall">Title Small (14px)</AppText>
-      <AppText variant="bodyLarge">
-        Body Large - Standard paragraph text
-      </AppText>
-      <AppText variant="bodyMedium">
-        Body Medium - Slightly smaller body text
-      </AppText>
-      <AppText variant="bodySmall">Body Small - Smallest body text</AppText>
-      <AppText variant="labelLarge">Label Large - Labels and buttons</AppText>
-      <AppText variant="labelMedium">Label Medium - Smaller labels</AppText>
-      <AppText variant="labelSmall">Label Small - Smallest label</AppText>
+      <AppText variant="bodyLarge">Body Large — standard paragraph text</AppText>
+      <AppText variant="bodyMedium">Body Medium — slightly smaller body text</AppText>
+      <AppText variant="bodySmall">Body Small — smallest body text</AppText>
+      <AppText variant="labelLarge">Label Large — labels and buttons</AppText>
+      <AppText variant="labelMedium">Label Medium — smaller labels</AppText>
+      <AppText variant="labelSmall">Label Small — smallest label</AppText>
     </Section>
   );
 }
 
 // ============================================================================
-// 2. TYPOGRAPHY - Legacy Variants
+// 2. LEGACY TYPOGRAPHY VARIANTS
 // ============================================================================
 function LegacyTypographyDemo() {
   return (
@@ -159,17 +204,11 @@ function LegacyTypographyDemo() {
       <AppText variant="h6">Heading 6 (16px)</AppText>
       <AppText variant="subtitle1">Subtitle 1 (18px)</AppText>
       <AppText variant="subtitle2">Subtitle 2 (16px)</AppText>
-      <AppText variant="body1">
-        Body 1 - The quick brown fox jumps over the lazy dog. Used for longer
-        paragraphs.
-      </AppText>
-      <AppText variant="body2">
-        Body 2 - The quick brown fox jumps over the lazy dog. Used for shorter
-        paragraphs.
-      </AppText>
-      <AppText variant="caption">Caption text - Small helper text</AppText>
-      <AppText variant="overline">OVERLINE TEXT - ALL CAPS SMALL</AppText>
-      <AppText variant="button">BUTTON TEXT - ALL CAPS</AppText>
+      <AppText variant="body1">Body 1 — standard paragraph text</AppText>
+      <AppText variant="body2">Body 2 — secondary paragraph text</AppText>
+      <AppText variant="caption">Caption text — small helper text</AppText>
+      <AppText variant="overline">OVERLINE TEXT — ALL CAPS SMALL</AppText>
+      <AppText variant="button">BUTTON TEXT — ALL CAPS</AppText>
       <AppText variant="code">{"function hello() { return 'world'; }"}</AppText>
     </Section>
   );
@@ -205,19 +244,11 @@ function TextStylingDemo() {
       <AppText decoration="line-through" color="#EF4444">
         Strikethrough text
       </AppText>
-      <AppText decoration="none" style={{ textDecorationLine: "underline" }}>
-        Decoration none
-      </AppText>
       <AppText italic color="#059669">
         Italic text
       </AppText>
-      <AppText italic weight="700" style={{ fontStyle: "normal" }}>
-        Font style override
-      </AppText>
       <View style={styles.colorBox}>
-        <AppText style={{ color: "#FFFFFF" }}>
-          Custom style with background
-        </AppText>
+        <AppText style={{ color: "#FFFFFF" }}>Custom style with background</AppText>
       </View>
       <AppText numberOfLines={1} style={{ backgroundColor: "#FEF3C7" }}>
         Truncated long text that will be cut off after one line...
@@ -259,230 +290,100 @@ function SpacingDemo() {
 // ============================================================================
 function CompoundComponentsDemo() {
   return (
-    <Section title="5️⃣ Compound Components">
-      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>
-        Legacy Variants:
-      </AppText>
-      <AppText.H1>AppText.H1 - Heading 1</AppText.H1>
-      <AppText.H2>AppText.H2 - Heading 2</AppText.H2>
-      <AppText.H3>AppText.H3 - Heading 3</AppText.H3>
-      <AppText.H4>AppText.H4 - Heading 4</AppText.H4>
-      <AppText.H5>AppText.H5 - Heading 5</AppText.H5>
-      <AppText.H6>AppText.H6 - Heading 6</AppText.H6>
-      <AppText.Subtitle>AppText.Subtitle (variant=subtitle1)</AppText.Subtitle>
-      <AppText.Body>AppText.Body (variant=body1)</AppText.Body>
-      <AppText.Caption>AppText.Caption</AppText.Caption>
-      <AppText variant="overline" style={{ letterSpacing: 1.5 }}>
-        AppText with variant="overline"
-      </AppText>
-      <AppText variant="button" style={{ letterSpacing: 0.5 }}>
-        AppText with variant="button"
-      </AppText>
-      <AppText.Code>AppText.Code</AppText.Code>
-
-      <AppText variant="titleSmall" style={{ marginTop: 15, marginBottom: 8 }}>
-        Material Design 3:
-      </AppText>
+    <Section title="5️⃣ Compound Components" initiallyExpanded={false}>
+      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>Material Design 3:</AppText>
       <AppText.DisplayLarge>DisplayLarge</AppText.DisplayLarge>
       <AppText.DisplayMedium>DisplayMedium</AppText.DisplayMedium>
-      <AppText.DisplaySmall>DisplaySmall</AppText.DisplaySmall>
       <AppText.HeadlineLarge>HeadlineLarge</AppText.HeadlineLarge>
-      <AppText.HeadlineMedium>HeadlineMedium</AppText.HeadlineMedium>
-      <AppText.HeadlineSmall>HeadlineSmall</AppText.HeadlineSmall>
       <AppText.TitleLarge>TitleLarge</AppText.TitleLarge>
-      <AppText.TitleMedium>TitleMedium</AppText.TitleMedium>
-      <AppText.TitleSmall>TitleSmall</AppText.TitleSmall>
       <AppText.BodyLarge>BodyLarge</AppText.BodyLarge>
-      <AppText.BodyMedium>BodyMedium</AppText.BodyMedium>
-      <AppText.BodySmall>BodySmall</AppText.BodySmall>
-      <AppText.LabelLarge>LabelLarge</AppText.LabelLarge>
-      <AppText.LabelMedium>LabelMedium</AppText.LabelMedium>
       <AppText.LabelSmall>LabelSmall</AppText.LabelSmall>
+
+      <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>Legacy:</AppText>
+      <AppText.H1>H1 Component</AppText.H1>
+      <AppText.H2>H2 Component</AppText.H2>
+      <AppText.Body>AppText.Body</AppText.Body>
+      <AppText.Caption>AppText.Caption</AppText.Caption>
+      <AppText.Code>AppText.Code</AppText.Code>
     </Section>
   );
 }
 
 // ============================================================================
-// 6. FADE ANIMATIONS
+// 6–12. ANIMATIONS
 // ============================================================================
 function FadeAnimationsDemo() {
   return (
     <Section title="6️⃣ Fade Animations" initiallyExpanded={false}>
-      <AppText animated animation={{ type: "fadeIn", duration: 1000 }}>
-        fadeIn - Fade in from invisible
-      </AppText>
-      <AppText animated animation={{ type: "fadeOut", duration: 1000 }}>
-        fadeOut - Fade out to invisible
-      </AppText>
-      <AppText animated animation={{ type: "blink", duration: 2000 }}>
-        blink - Repeated blinking effect
-      </AppText>
-      <AppText animated animation={{ type: "glow", duration: 2000 }}>
-        glow - Pulsing glow effect
-      </AppText>
+      <AppText animated animation={{ type: "fadeIn", duration: 1000 }}>fadeIn</AppText>
+      <AppText animated animation={{ type: "fadeOut", duration: 1000 }}>fadeOut</AppText>
+      <AppText animated animation={{ type: "blink", duration: 2000 }}>blink</AppText>
+      <AppText animated animation={{ type: "glow", duration: 2000 }}>glow</AppText>
     </Section>
   );
 }
 
-// ============================================================================
-// 7. SLIDE ANIMATIONS
-// ============================================================================
 function SlideAnimationsDemo() {
   return (
     <Section title="7️⃣ Slide Animations" initiallyExpanded={false}>
-      <AppText animated animation={{ type: "slideInRight", duration: 800 }}>
-        slideInRight - Slide from right
-      </AppText>
-      <AppText animated animation={{ type: "slideInLeft", duration: 800 }}>
-        slideInLeft - Slide from left
-      </AppText>
-      <AppText animated animation={{ type: "slideInUp", duration: 800 }}>
-        slideInUp - Slide from bottom
-      </AppText>
-      <AppText animated animation={{ type: "slideInDown", duration: 800 }}>
-        slideInDown - Slide from top
-      </AppText>
-      <AppText animated animation={{ type: "slideOutRight", duration: 800 }}>
-        slideOutRight - Slide to right
-      </AppText>
-      <AppText animated animation={{ type: "slideOutLeft", duration: 800 }}>
-        slideOutLeft - Slide to left
-      </AppText>
-      <AppText animated animation={{ type: "slideOutUp", duration: 800 }}>
-        slideOutUp - Slide to top
-      </AppText>
-      <AppText animated animation={{ type: "slideOutDown", duration: 800 }}>
-        slideOutDown - Slide to bottom
-      </AppText>
+      <AppText animated animation={{ type: "slideInRight", duration: 800 }}>slideInRight</AppText>
+      <AppText animated animation={{ type: "slideInLeft", duration: 800 }}>slideInLeft</AppText>
+      <AppText animated animation={{ type: "slideInUp", duration: 800 }}>slideInUp</AppText>
+      <AppText animated animation={{ type: "slideInDown", duration: 800 }}>slideInDown</AppText>
     </Section>
   );
 }
 
-// ============================================================================
-// 8. BOUNCE & SCALE ANIMATIONS
-// ============================================================================
 function BounceScaleAnimationsDemo() {
   return (
     <Section title="8️⃣ Bounce & Scale Animations" initiallyExpanded={false}>
-      <AppText animated animation={{ type: "bounceIn", duration: 1000 }}>
-        bounceIn - Bouncing entrance
-      </AppText>
-      <AppText animated animation={{ type: "bounceOut", duration: 1000 }}>
-        bounceOut - Bouncing exit
-      </AppText>
-      <AppText animated animation={{ type: "zoomIn", duration: 600 }}>
-        zoomIn - Scale up entrance
-      </AppText>
-      <AppText animated animation={{ type: "zoomOut", duration: 600 }}>
-        zoomOut - Scale down exit
-      </AppText>
-      <AppText animated animation={{ type: "pulse", duration: 1500 }}>
-        pulse - Continuous pulse
-      </AppText>
-      <AppText animated animation={{ type: "rubberBand", duration: 1000 }}>
-        rubberBand - Rubber band effect
-      </AppText>
+      <AppText animated animation={{ type: "bounceIn", duration: 1000 }}>bounceIn</AppText>
+      <AppText animated animation={{ type: "zoomIn", duration: 600 }}>zoomIn</AppText>
+      <AppText animated animation={{ type: "pulse", duration: 1500 }}>pulse</AppText>
+      <AppText animated animation={{ type: "rubberBand", duration: 1000 }}>rubberBand</AppText>
     </Section>
   );
 }
 
-// ============================================================================
-// 9. ROTATE & FLIP ANIMATIONS (FIXED)
-// ============================================================================
 function RotateFlipAnimationsDemo() {
   return (
-    <Section
-      title="9️⃣ Rotate & Flip Animations (Fixed)"
-      initiallyExpanded={false}
-    >
-      <AppText animated animation={{ type: "rotateIn", duration: 800 }}>
-        rotateIn - Rotate entrance
-      </AppText>
-      <AppText animated animation={{ type: "rotateOut", duration: 800 }}>
-        rotateOut - Rotate exit
-      </AppText>
-      <AppText animated animation={{ type: "flipInX", duration: 1000 }}>
-        flipInX - Flip horizontally in
-      </AppText>
-      <AppText animated animation={{ type: "flipInY", duration: 1000 }}>
-        flipInY - Flip vertically in
-      </AppText>
-      <AppText animated animation={{ type: "flipOutX", duration: 1000 }}>
-        flipOutX - Flip horizontally out
-      </AppText>
-      <AppText animated animation={{ type: "flipOutY", duration: 1000 }}>
-        flipOutY - Flip vertically out
-      </AppText>
+    <Section title="9️⃣ Rotate & Flip Animations" initiallyExpanded={false}>
+      <AppText animated animation={{ type: "rotateIn", duration: 800 }}>rotateIn</AppText>
+      <AppText animated animation={{ type: "flipInX", duration: 1000 }}>flipInX</AppText>
+      <AppText animated animation={{ type: "flipInY", duration: 1000 }}>flipInY</AppText>
     </Section>
   );
 }
 
-// ============================================================================
-// 10. SPECIAL ANIMATIONS
-// ============================================================================
 function SpecialAnimationsDemo() {
   return (
     <Section title="🔟 Special Animations" initiallyExpanded={false}>
-      <AppText animated animation={{ type: "shake", duration: 1000 }}>
-        shake - Horizontal shake
-      </AppText>
-      <AppText animated animation={{ type: "wobble", duration: 1000 }}>
-        wobble - Wobble effect
-      </AppText>
-      <AppText animated animation={{ type: "swing", duration: 1000 }}>
-        swing - Swing motion
-      </AppText>
-      <AppText animated animation={{ type: "tada", duration: 1000 }}>
-        tada - Celebration animation
-      </AppText>
-      <AppText animated animation={{ type: "neon", duration: 2000 }}>
-        neon - Neon glow text
-      </AppText>
-      <AppText animated animation={{ type: "gradientShift", duration: 3000 }}>
-        gradientShift - Color gradient shift
-      </AppText>
+      <AppText animated animation={{ type: "shake", duration: 1000 }}>shake</AppText>
+      <AppText animated animation={{ type: "wobble", duration: 1000 }}>wobble</AppText>
+      <AppText animated animation={{ type: "swing", duration: 1000 }}>swing</AppText>
+      <AppText animated animation={{ type: "tada", duration: 1000 }}>tada</AppText>
+      <AppText animated animation={{ type: "neon", duration: 2000 }}>neon</AppText>
+      <AppText animated animation={{ type: "gradientShift", duration: 3000 }}>gradientShift</AppText>
     </Section>
   );
 }
 
-// ============================================================================
-// 11. TYPEWRITER ANIMATION (FIXED)
-// ============================================================================
 function TypewriterDemo() {
   return (
-    <Section
-      title="1️⃣1️⃣ Typewriter Animation (Fixed)"
-      initiallyExpanded={false}
-    >
-      <AppText
-        animated
-        animation={{ type: "typewriter", speed: 30, delay: 500 }}
-      >
-        This text types itself character by character. Watch each letter appear
-        one by one!
+    <Section title="1️⃣1️⃣ Typewriter Animation" initiallyExpanded={false}>
+      <AppText animated animation={{ type: "typewriter", speed: 30, delay: 500 }} cursor>
+        This text types itself character by character. Watch each letter appear!
       </AppText>
-      <AppText
-        animated
-        animation={{ type: "typewriter", speed: 50, delay: 300 }}
-      >
-        Faster typewriter with 50ms speed
-      </AppText>
-      <AppText
-        animated
-        animation={{ type: "typewriter", speed: 100, delay: 200 }}
-      >
-        Slower typewriter with 100ms speed
+      <AppText animated animation={{ type: "typewriter", speed: 60, delay: 300 }}>
+        Faster typewriter with 60ms speed
       </AppText>
     </Section>
   );
 }
 
-// ============================================================================
-// 12. WAVE ANIMATION (FIXED)
-// ============================================================================
 function WaveDemo() {
   return (
-    <Section title="1️⃣2️⃣ Wave Animation (Fixed)" initiallyExpanded={false}>
+    <Section title="1️⃣2️⃣ Wave Animation" initiallyExpanded={false}>
       <AppText animated animation={{ type: "wave", duration: 1000, delay: 50 }}>
         Wave Animation Text
       </AppText>
@@ -494,7 +395,7 @@ function WaveDemo() {
 }
 
 // ============================================================================
-// 13. TRUNCATION & EXPAND
+// 13. TRUNCATION
 // ============================================================================
 function TruncationDemo() {
   return (
@@ -504,27 +405,19 @@ function TruncationDemo() {
         expandText="Read more..."
         collapseText="Show less"
         onExpand={() => Alert.alert("Expanded!", "Text is now fully visible")}
-        onCollapse={() => Alert.alert("Collapsed!", "Text is now truncated")}
+        onCollapse={() => Alert.alert("Collapsed!")}
       >
         This is a long text that will be truncated after two lines. The user can
         click "Read more" to see the full content. This is useful for displaying
-        preview text in lists or cards where you want to show a brief excerpt.
-      </AppText>
-      <AppText
-        numberOfLines={3}
-        expandText="Read more"
-        style={{ marginTop: 10 }}
-      >
-        Three line truncation. Lorem ipsum dolor sit amet, consectetur
-        adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
+        preview text in lists or cards where you want to show a brief excerpt of
+        the content before expanding.
       </AppText>
     </Section>
   );
 }
 
 // ============================================================================
-// 14. LOCALIZATION & i18n
+// 14. LOCALIZATION
 // ============================================================================
 function LocalizationDemo() {
   const { language, direction, t, changeLanguage } = useLang();
@@ -553,7 +446,7 @@ function LocalizationDemo() {
             ]}
             onPress={() => handleLanguageChange(lang.code)}
           >
-            <AppText size={12}>{lang.flag}</AppText>
+            <AppText size={13}>{lang.flag}</AppText>
             <AppText
               size={11}
               weight={selectedLang === lang.code ? "700" : "400"}
@@ -566,48 +459,26 @@ function LocalizationDemo() {
       </View>
 
       <View style={{ alignItems: isRTL ? "flex-end" : "flex-start" }}>
-        <AppText variant="titleSmall" style={{ marginBottom: 5 }}>
-          Basic Translation:
-        </AppText>
+        <AppText variant="titleSmall" style={{ marginBottom: 5 }}>Basic Translation:</AppText>
         <AppText>{t("welcome")}</AppText>
-        <AppText style={{ marginTop: 8 }}>
-          {t("greeting", { name: "Developer" })}
-        </AppText>
+        <AppText style={{ marginTop: 8 }}>{t("greeting", { name: "Developer" })}</AppText>
 
-        <AppText
-          variant="titleSmall"
-          style={{ marginTop: 15, marginBottom: 5 }}
-        >
-          Object-based Plural:
-        </AppText>
-        <AppText>{t("items_one", { count: 1 })}</AppText>
-        <AppText>{t("items_other", { count: 5 })}</AppText>
-
-        <AppText
-          variant="titleSmall"
-          style={{ marginTop: 15, marginBottom: 5 }}
-        >
-          ICU MessageFormat Plural:
+        <AppText variant="titleSmall" style={{ marginTop: 15, marginBottom: 5 }}>
+          ICU Plural:
         </AppText>
         <AppText>{t("icu_plural", { count: 0 })}</AppText>
         <AppText>{t("icu_plural", { count: 1 })}</AppText>
-        <AppText>{t("icu_plural", { count: 2 })}</AppText>
         <AppText>{t("icu_plural", { count: 5 })}</AppText>
-        <AppText>{t("icu_plural", { count: 100 })}</AppText>
 
-        <AppText
-          variant="titleSmall"
-          style={{ marginTop: 15, marginBottom: 5 }}
-        >
+        <AppText variant="titleSmall" style={{ marginTop: 15, marginBottom: 5 }}>
           ICU Select:
         </AppText>
         <AppText>{t("icu_select_gender", { gender: "male" })}</AppText>
         <AppText>{t("icu_select_gender", { gender: "female" })}</AppText>
-        <AppText>{t("icu_select_gender", { gender: "other" })}</AppText>
       </View>
 
       <AppText variant="caption" color="#666" style={{ marginTop: 10 }}>
-        Current direction: {direction.toUpperCase()} {isRTL ? "(RTL)" : "(LTR)"}
+        Direction: {direction.toUpperCase()} {isRTL ? "(RTL)" : "(LTR)"}
       </AppText>
     </Section>
   );
@@ -619,9 +490,7 @@ function LocalizationDemo() {
 function TransComponentDemo() {
   return (
     <Section title="1️⃣5️⃣ Trans Component (Rich i18n)">
-      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>
-        Basic Usage:
-      </AppText>
+      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>Basic Usage:</AppText>
       <Trans i18nKey="welcome" />
 
       <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>
@@ -630,16 +499,7 @@ function TransComponentDemo() {
       <Trans i18nKey="greeting" values={{ name: "React Developer" }} />
 
       <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>
-        Plural with Count:
-      </AppText>
-      <Trans
-        i18nKey="icu_plural"
-        values={{ count: 5 }}
-        options={{ count: 5 }}
-      />
-
-      <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>
-        With Nested Components (Fixed):
+        With Nested Components:
       </AppText>
       <Trans
         i18nKey="nested_tags"
@@ -653,19 +513,19 @@ function TransComponentDemo() {
           ),
         }}
       />
-      <AppText variant="caption" color="#666">
-        Translation: {"<bold>Hello</bold> <link>World</link>"}
-      </AppText>
     </Section>
   );
 }
 
 // ============================================================================
-// 16. MARKDOWN TRANS
+// 16. MARKDOWN TRANS (updated for v4.4.0 nested support)
 // ============================================================================
 function MarkdownTransDemo() {
   return (
     <Section title="1️⃣6️⃣ MarkdownTrans Component">
+      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>
+        Basic Markdown:
+      </AppText>
       <MarkdownTrans
         i18nKey="rich_markdown"
         markdownStyles={{
@@ -673,37 +533,30 @@ function MarkdownTransDemo() {
           italic: { fontStyle: "italic" },
           link: { color: "#3B82F6", textDecorationLine: "underline" },
         }}
-        onLinkPress={(url) => Alert.alert(`Opened URL: ${url}`)}
+        onLinkPress={(url) => Linking.openURL(url).catch(() => {})}
       />
 
       <AppText variant="titleSmall" style={{ marginTop: 15, marginBottom: 8 }}>
-        Supported Syntax:
+        🆕 Nested Markdown (v4.4.0):
+      </AppText>
+      <AppText variant="caption" color="#6B7280" style={{ marginBottom: 6 }}>
+        **_bold italic_** and **[bold link](url)** — recursive descent parser
       </AppText>
       <MarkdownTrans
-        i18nKey="rich_markdown"
-        enabledFeatures={{
-          bold: true,
-          italic: true,
-          underline: true,
-          strikethrough: true,
-          code: true,
-          links: true,
-          components: false,
+        i18nKey="rich_nested"
+        markdownStyles={{
+          bold: { fontWeight: "800", color: "#1F2937" },
+          italic: { fontStyle: "italic", color: "#6366F1" },
+          link: { color: "#3B82F6", textDecorationLine: "underline" },
         }}
+        onLinkPress={(url) => Linking.openURL(url).catch(() => {})}
       />
 
-      <View
-        style={{
-          marginTop: 10,
-          padding: 10,
-          backgroundColor: "#F3F4F6",
-          borderRadius: 8,
-        }}
-      >
+      <View style={styles.infoBox}>
         <AppText variant="caption" color="#374151">
-          • **bold** - Bold text{"\n"}• *italic* - Italic text{"\n"}•
-          __underline__ - Underlined{"\n"}• ~~strikethrough~~ - Strikethrough
-          {"\n"}• `code` - Inline code{"\n"}• [text](url) - Links
+          Supported: **bold** · *italic* · __underline__ · ~~strikethrough~~ ·
+          {"`"}code{"` ·"} [link](url) · {"{{component:text}}"}
+          {"\n"}🆕 Nested: **_bold italic_** · **[bold link](url)**
         </AppText>
       </View>
     </Section>
@@ -726,7 +579,7 @@ function ResponsiveFontDemo() {
         Based on device width (375px base)
       </AppText>
       <View style={{ marginTop: 10 }}>
-        <AppText size={fontSize40}>Responsive 40 (clamped 32-56)</AppText>
+        <AppText size={fontSize40}>Responsive 40 (clamped 32–56)</AppText>
         <AppText size={fontSize28}>Responsive 28</AppText>
         <AppText size={fontSize20}>Responsive 20</AppText>
         <AppText size={fontSize14}>Responsive 14</AppText>
@@ -737,29 +590,21 @@ function ResponsiveFontDemo() {
 }
 
 // ============================================================================
-// 18. SCRIPT DETECTION & RTL
+// 18. SCRIPT DETECTION & RTL TEXT
 // ============================================================================
 function ScriptDetectionDemo() {
   return (
-    <Section
-      title="1️⃣8️⃣ Script Detection & RTL Scripts"
-      initiallyExpanded={false}
-    >
-      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>
-        Left-to-Right (LTR):
-      </AppText>
-      <AppText>English: Hello World</AppText>
+    <Section title="1️⃣8️⃣ Script Detection & RTL Scripts" initiallyExpanded={false}>
+      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>LTR Scripts:</AppText>
+      <AppText>Latin: Hello World</AppText>
       <AppText>Chinese: 你好世界</AppText>
       <AppText>Japanese: こんにちは世界</AppText>
-      <AppText>Korean: 안녕하세요</AppText>
       <AppText>Hindi: नमस्ते दुनिया</AppText>
 
-      <AppText variant="titleSmall" style={{ marginTop: 15, marginBottom: 8 }}>
-        Right-to-Left (RTL):
-      </AppText>
+      <AppText variant="titleSmall" style={{ marginTop: 15, marginBottom: 8 }}>RTL Scripts:</AppText>
       <AppText style={{ textAlign: "right" }}>Arabic: مرحبا بالعالم</AppText>
       <AppText style={{ textAlign: "right" }}>Hebrew: שלום עולם</AppText>
-      <AppText style={{ textAlign: "right" }}>Persian/Farsi: سلام دنیا</AppText>
+      <AppText style={{ textAlign: "right" }}>Persian: سلام دنیا</AppText>
     </Section>
   );
 }
@@ -769,59 +614,25 @@ function ScriptDetectionDemo() {
 // ============================================================================
 function NumberFormatterDemo() {
   return (
-    <Section title="1️⃣9️⃣ Number Formatter">
-      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>
-        Decimal:
-      </AppText>
-      <AppText>en-US: {NumberFormatter.format(1234567.89, "en-US")}</AppText>
-      <AppText>de-DE: {NumberFormatter.format(1234567.89, "de-DE")}</AppText>
-      <AppText>fr-FR: {NumberFormatter.format(1234567.89, "fr-FR")}</AppText>
+    <Section title="1️⃣9️⃣ Number Formatter" initiallyExpanded={false}>
+      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>Currency:</AppText>
+      <AppText>USD: {NumberFormatter.formatCurrency(1234.56, "en-US", "USD")}</AppText>
+      <AppText>EUR: {NumberFormatter.formatCurrency(1234.56, "de-DE", "EUR")}</AppText>
+      <AppText>GBP: {NumberFormatter.formatCurrency(1234.56, "en-GB", "GBP")}</AppText>
+      <AppText>JPY: {NumberFormatter.formatCurrency(9999, "ja-JP", "JPY")}</AppText>
 
-      <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>
-        Currency:
-      </AppText>
-      <AppText>
-        USD: {NumberFormatter.formatCurrency(1234.56, "en-US", "USD")}
-      </AppText>
-      <AppText>
-        EUR: {NumberFormatter.formatCurrency(1234.56, "de-DE", "EUR")}
-      </AppText>
-      <AppText>
-        GBP: {NumberFormatter.formatCurrency(1234.56, "en-GB", "GBP")}
-      </AppText>
-      <AppText>
-        JPY: {NumberFormatter.formatCurrency(9999, "ja-JP", "JPY")}
-      </AppText>
+      <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>Compact:</AppText>
+      <AppText>{NumberFormatter.formatCompact(1_500_000, "en-US")}</AppText>
+      <AppText>{NumberFormatter.formatCompact(2_300_000_000, "en-US")}</AppText>
 
-      <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>
-        Percentage:
-      </AppText>
-      <AppText>{NumberFormatter.formatPercent(0.856, "en-US")}</AppText>
-      <AppText>{NumberFormatter.formatPercent(0.125, "en-US")}</AppText>
-
-      <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>
-        Compact:
-      </AppText>
-      <AppText>en: {NumberFormatter.formatCompact(1500000, "en-US")}</AppText>
-      <AppText>de: {NumberFormatter.formatCompact(1500000, "de-DE")}</AppText>
-
-      <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>
-        Signed:
-      </AppText>
-      <AppText>+42: {NumberFormatter.formatSigned(42, "en-US")}</AppText>
-      <AppText>-42: {NumberFormatter.formatSigned(-42, "en-US")}</AppText>
-
-      <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>
-        Ordinals:
-      </AppText>
+      <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>Ordinals:</AppText>
       <AppText>
-        {OrdinalFormatter.format(1, "en-US")},{" "}
-        {OrdinalFormatter.format(2, "en-US")},{" "}
-        {OrdinalFormatter.format(3, "en-US")},{" "}
-        {OrdinalFormatter.format(4, "en-US")},{" "}
-        {OrdinalFormatter.format(11, "en-US")},{" "}
-        {OrdinalFormatter.format(21, "en-US")},{" "}
-        {OrdinalFormatter.format(111, "en-US")}
+        {OrdinalFormatter.format(1, "en")},{" "}
+        {OrdinalFormatter.format(2, "en")},{" "}
+        {OrdinalFormatter.format(3, "en")},{" "}
+        {OrdinalFormatter.format(4, "en")},{" "}
+        {OrdinalFormatter.format(11, "en")},{" "}
+        {OrdinalFormatter.format(21, "en")}
       </AppText>
     </Section>
   );
@@ -832,71 +643,23 @@ function NumberFormatterDemo() {
 // ============================================================================
 function ThemeDemo() {
   const theme = useAppTextTheme();
-
   return (
     <Section title="2️⃣0️⃣ Theme Customization">
-      <AppText variant="bodySmall" color="#666">
-        Custom purple theme applied:
-      </AppText>
-
+      <AppText variant="bodySmall" color="#666">Active theme colours:</AppText>
       <View style={styles.colorSwatches}>
-        <View style={styles.swatchContainer}>
-          <View
-            style={[styles.swatch, { backgroundColor: theme.colors.primary }]}
-          />
-          <AppText variant="caption">primary</AppText>
-        </View>
-        <View style={styles.swatchContainer}>
-          <View
-            style={[styles.swatch, { backgroundColor: theme.colors.secondary }]}
-          />
-          <AppText variant="caption">secondary</AppText>
-        </View>
-        <View style={styles.swatchContainer}>
-          <View
-            style={[styles.swatch, { backgroundColor: theme.colors.success }]}
-          />
-          <AppText variant="caption">success</AppText>
-        </View>
-        <View style={styles.swatchContainer}>
-          <View
-            style={[styles.swatch, { backgroundColor: theme.colors.warning }]}
-          />
-          <AppText variant="caption">warning</AppText>
-        </View>
-        <View style={styles.swatchContainer}>
-          <View
-            style={[styles.swatch, { backgroundColor: theme.colors.error }]}
-          />
-          <AppText variant="caption">error</AppText>
-        </View>
-        <View style={styles.swatchContainer}>
-          <View
-            style={[styles.swatch, { backgroundColor: theme.colors.info }]}
-          />
-          <AppText variant="caption">info</AppText>
-        </View>
-      </View>
-
-      <AppText variant="titleSmall" style={{ marginTop: 10, marginBottom: 5 }}>
-        Theme Colors:
-      </AppText>
-      <View style={styles.colorRow}>
-        <View
-          style={[styles.colorDot, { backgroundColor: theme.colors.text }]}
-        />
-        <AppText variant="bodySmall">text: {theme.colors.text}</AppText>
-      </View>
-      <View style={styles.colorRow}>
-        <View
-          style={[
-            styles.colorDot,
-            { backgroundColor: theme.colors.textSecondary },
-          ]}
-        />
-        <AppText variant="bodySmall">
-          textSecondary: {theme.colors.textSecondary}
-        </AppText>
+        {Object.entries({
+          primary: theme.colors.primary,
+          secondary: theme.colors.secondary,
+          success: theme.colors.success,
+          warning: theme.colors.warning,
+          error: theme.colors.error,
+          info: theme.colors.info,
+        }).map(([name, color]) => (
+          <View key={name} style={styles.swatchContainer}>
+            <View style={[styles.swatch, { backgroundColor: color }]} />
+            <AppText variant="caption">{name}</AppText>
+          </View>
+        ))}
       </View>
     </Section>
   );
@@ -908,21 +671,16 @@ function ThemeDemo() {
 function AccessibilityDemo() {
   return (
     <Section title="2️⃣1️⃣ Accessibility">
-      <AppText
-        accessibilityLabel="Important header text"
-        accessibilityRole="header"
-      >
-        Accessibility Header (role=header)
+      <AppText accessibilityLabel="Important header text" accessibilityRole="header">
+        Header (role=header)
       </AppText>
-
       <AppText
-        accessibilityLabel="Clickable link to external site"
+        accessibilityLabel="Clickable link"
         accessibilityRole="link"
         onPress={() => Alert.alert("Link pressed!")}
       >
         Accessible Link (role=link)
       </AppText>
-
       <AppText
         accessibilityLabel="Button text"
         accessibilityRole="button"
@@ -930,26 +688,18 @@ function AccessibilityDemo() {
       >
         Accessible Button (role=button)
       </AppText>
-
-      <AppText
-        accessibilityLabel="Selected state example"
-        accessibilityState={{ selected: true, disabled: false }}
-      >
-        Selected State (state=selected)
+      <AppText accessibilityState={{ selected: true }}>
+        Selected State
       </AppText>
-
-      <AppText
-        accessibilityLabel="Disabled state example"
-        accessibilityState={{ disabled: true }}
-      >
-        Disabled State (state=disabled)
+      <AppText accessibilityState={{ disabled: true }}>
+        Disabled State
       </AppText>
     </Section>
   );
 }
 
 // ============================================================================
-// 22. PERFORMANCE MONITORING
+// 22. PERFORMANCE MONITORING (existing)
 // ============================================================================
 function PerformanceDemo() {
   const cacheStats = translationCache.getStats();
@@ -967,18 +717,14 @@ function PerformanceDemo() {
 
       {Object.keys(perfStats).length > 0 && (
         <>
-          <AppText
-            variant="titleSmall"
-            style={{ marginTop: 12, marginBottom: 5 }}
-          >
+          <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 5 }}>
             Performance Metrics:
           </AppText>
           {Object.entries(perfStats)
             .slice(0, 5)
             .map(([name, stats]) => (
               <AppText key={name} variant="caption">
-                {name}: {stats?.count || 0} calls, avg{" "}
-                {stats?.mean?.toFixed(2) || 0}ms
+                {name}: {stats?.count || 0} calls, avg {stats?.mean?.toFixed(2) || 0}ms
               </AppText>
             ))}
         </>
@@ -996,35 +742,23 @@ function ErrorBoundaryDemo() {
   return (
     <Section title="2️⃣3️⃣ Error Boundary">
       <AppText variant="bodySmall" color="#666">
-        TranslationErrorBoundary catches translation errors and displays
-        fallback UI
+        TranslationErrorBoundary catches errors and shows fallback UI.
       </AppText>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => setShowError(true)}
-      >
+      <TouchableOpacity style={styles.button} onPress={() => setShowError(true)}>
         <AppText color="#FFF">Trigger Error to Test Boundary</AppText>
       </TouchableOpacity>
-
       <TranslationErrorBoundary
         fallback={
           <View style={styles.errorFallback}>
-            <AppText color="#EF4444" weight="700">
-              ⚠️ Translation Error
-            </AppText>
-            <AppText variant="caption" color="#666">
-              Error caught by boundary
-            </AppText>
+            <AppText color="#EF4444" weight="700">⚠️ Translation Error</AppText>
+            <AppText variant="caption" color="#666">Caught by boundary</AppText>
           </View>
         }
-        onError={(error, info) => {
-          console.log("Translation error:", error.message);
-        }}
+        onError={(error) => console.log("Translation error:", error.message)}
       >
         {showError && <AppText>{undefined}</AppText>}
         {!showError && (
-          <AppText>Error boundary is watching - tap button to test</AppText>
+          <AppText>Error boundary is watching — tap button to test</AppText>
         )}
       </TranslationErrorBoundary>
     </Section>
@@ -1032,33 +766,320 @@ function ErrorBoundaryDemo() {
 }
 
 // ============================================================================
-// 24. INTERACTIVE FEATURES
+// 24. 🆕 v4.4.0 — useAutoLocale & useDeviceLocale
+// ============================================================================
+function AutoLocaleDemo() {
+  const deviceLocale = useDeviceLocale();
+  const autoLocale = useAutoLocale({
+    supportedLocales: ["en", "ar", "fr", "ja"],
+    fallback: "en",
+  });
+
+  return (
+    <Section title="2️⃣4️⃣ 🆕 Auto Locale Detection" badge="v4.4.0">
+      <View style={styles.infoBox}>
+        <AppText variant="caption" color="#6366F1" weight="600">
+          useDeviceLocale() — Raw system locale
+        </AppText>
+        <AppText variant="bodyMedium" style={{ marginTop: 4 }}>
+          📱 {deviceLocale}
+        </AppText>
+      </View>
+
+      <View style={[styles.infoBox, { marginTop: 10 }]}>
+        <AppText variant="caption" color="#6366F1" weight="600">
+          useAutoLocale({"{"} supportedLocales: ['en','ar','fr','ja'] {"}"})
+        </AppText>
+        <AppText variant="bodyMedium" style={{ marginTop: 4 }}>
+          ✅ Best match: {autoLocale}
+        </AppText>
+        <AppText variant="caption" color="#6B7280" style={{ marginTop: 4 }}>
+          Filters device locale against your supported list.
+          Fallback to "en" if no match found.
+        </AppText>
+      </View>
+
+      <AppText variant="caption" color="#9CA3AF" style={{ marginTop: 8 }}>
+        isRTLLanguage('ar') → {String(isRTLLanguage("ar"))} ✅{"\n"}
+        isRTLLanguage('en') → {String(isRTLLanguage("en"))} ✅
+      </AppText>
+    </Section>
+  );
+}
+
+// ============================================================================
+// 25. 🆕 v4.4.0 — useUpdateAppTheme — Runtime Theme Hot-Patching
+// ============================================================================
+function RuntimeThemeDemo() {
+  const updateTheme = useUpdateAppTheme();
+  const theme = useAppTextTheme();
+  const { t } = useLang();
+  const [activePreset, setActivePreset] = useState("indigo");
+
+  return (
+    <Section title="2️⃣5️⃣ 🆕 Runtime Theme Update" badge="v4.4.0">
+      <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
+        useUpdateAppTheme() — hot-patches theme tokens without remounting the provider.
+      </AppText>
+
+      <View style={styles.presetRow}>
+        {Object.entries(THEME_PRESETS).map(([key, preset]) => (
+          <Pressable
+            key={key}
+            style={[
+              styles.presetButton,
+              { backgroundColor: preset.primary },
+              activePreset === key && styles.presetButtonActive,
+            ]}
+            onPress={() => {
+              setActivePreset(key);
+              updateTheme({
+                colors: {
+                  primary: preset.primary,
+                  secondary: preset.secondary,
+                },
+              });
+            }}
+          >
+            <AppText size={12} color="#FFF" weight="600">
+              {preset.color}
+            </AppText>
+          </Pressable>
+        ))}
+      </View>
+
+      <View style={styles.infoBox}>
+        <AppText variant="caption" color="#6B7280">Current primary colour</AppText>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginTop: 6 }}>
+          <View style={[styles.themeDot, { backgroundColor: theme.colors.primary }]} />
+          <AppText variant="bodyMedium" weight="600">
+            {theme.colors.primary}
+          </AppText>
+        </View>
+        <AppText variant="caption" color="#6B7280" style={{ marginTop: 6 }}>
+          Try: {t("theme_demo", { color: THEME_PRESETS[activePreset]?.color || "Indigo" })}
+        </AppText>
+      </View>
+
+      <AppText
+        variant="titleMedium"
+        color={theme.colors.primary}
+        style={{ marginTop: 8 }}
+        animated
+        animation={{ type: "fadeIn", duration: 400 }}
+      >
+        ● Text using theme primary colour
+      </AppText>
+    </Section>
+  );
+}
+
+// ============================================================================
+// 26. 🆕 v4.4.0 — AppTextSkeleton — Shimmer Loading Placeholder
+// ============================================================================
+function SkeletonDemo() {
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
+  return (
+    <Section title="2️⃣6️⃣ 🆕 AppTextSkeleton" badge="v4.4.0">
+      <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
+        Shimmer placeholder matching variant line-heights. Ideal for lazy
+        translation loading.
+      </AppText>
+
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: "#6366F1" }]}
+        onPress={() => {
+          setShowSkeleton(true);
+          setTimeout(() => setShowSkeleton(false), 2500);
+        }}
+      >
+        <AppText color="#FFF">▶ Simulate Loading (2.5s)</AppText>
+      </TouchableOpacity>
+
+      {showSkeleton ? (
+        <View style={{ marginTop: 12, gap: 10 }}>
+          <AppText variant="caption" color="#9CA3AF">Skeleton placeholders:</AppText>
+          <AppTextSkeleton variant="headlineMedium" width={220} />
+          <AppTextSkeleton variant="titleSmall" width={160} />
+          <AppTextSkeleton variant="bodyMedium" lines={3} lastLineWidth="55%" />
+          <AppTextSkeleton variant="labelMedium" width={100} />
+
+          <AppText variant="caption" color="#9CA3AF" style={{ marginTop: 8 }}>
+            Dark mode variant:
+          </AppText>
+          <View style={{ backgroundColor: "#1F2937", padding: 12, borderRadius: 8 }}>
+            <AppTextSkeleton
+              variant="titleMedium"
+              width={180}
+              baseColor="#374151"
+              shimmerColor="#4B5563"
+            />
+            <AppTextSkeleton
+              variant="bodyMedium"
+              lines={2}
+              baseColor="#374151"
+              shimmerColor="#4B5563"
+              style={{ marginTop: 8 }}
+            />
+          </View>
+        </View>
+      ) : (
+        <View style={{ marginTop: 12 }}>
+          <AppText
+            variant="headlineMedium"
+            animated
+            animation={{ type: "fadeIn", duration: 400 }}
+          >
+            Content Loaded ✓
+          </AppText>
+          <AppText variant="titleSmall" color="#6B7280">
+            Subtitle text visible
+          </AppText>
+          <AppText variant="bodyMedium" style={{ marginTop: 4 }}>
+            The skeleton placeholder has been replaced with real content.
+            The line heights matched perfectly during loading.
+          </AppText>
+        </View>
+      )}
+    </Section>
+  );
+}
+
+// ============================================================================
+// 27. 🆕 v4.4.0 — RTLProvider & useRTL
+// ============================================================================
+function RTLProviderDemo() {
+  const { isRTL, setRTL, restartRequired } = useRTL();
+  const flexDir = useRTLFlexDirection("row");
+
+  return (
+    <Section title="2️⃣7️⃣ 🆕 RTLProvider & useRTL" badge="v4.4.0">
+      <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
+        RTLProvider wraps I18nManager.forceRTL(). useRTL() gives you isRTL,
+        setRTL(), and restartRequired.
+      </AppText>
+
+      <View style={styles.infoBox}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <AppText variant="caption" color="#6B7280">isRTL</AppText>
+          <AppText variant="bodyMedium" color={isRTL ? "#10B981" : "#6366F1"}>
+            {String(isRTL)} {isRTL ? "←" : "→"}
+          </AppText>
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 4 }}>
+          <AppText variant="caption" color="#6B7280">restartRequired</AppText>
+          <AppText variant="bodyMedium" color={restartRequired ? "#F59E0B" : "#10B981"}>
+            {String(restartRequired)}
+          </AppText>
+        </View>
+      </View>
+
+      {/* useRTLFlexDirection demo */}
+      <AppText variant="caption" color="#6B7280" style={{ marginTop: 12, marginBottom: 6 }}>
+        useRTLFlexDirection('row') = {flexDir} — nav bar demo:
+      </AppText>
+      <View style={[styles.navBar, { flexDirection: flexDir }]}>
+        <View style={styles.navIcon}><AppText size={18}>☰</AppText></View>
+        <AppText variant="titleSmall" style={{ flex: 1, textAlign: isRTL ? "right" : "left" }}>
+          App Title
+        </AppText>
+        <View style={styles.navIcon}><AppText size={18}>🔔</AppText></View>
+        <View style={styles.navIcon}><AppText size={18}>👤</AppText></View>
+      </View>
+
+      {/* isRTLLanguage demo */}
+      <AppText variant="caption" color="#6B7280" style={{ marginTop: 12, marginBottom: 6 }}>
+        isRTLLanguage() detection:
+      </AppText>
+      <View style={{ gap: 2 }}>
+        {[["ar", "Arabic"], ["he", "Hebrew"], ["fa", "Farsi"], ["ur", "Urdu"],
+          ["en", "English"], ["fr", "French"], ["ja", "Japanese"]].map(([code, name]) => (
+          <View key={code} style={{ flexDirection: "row", gap: 8 }}>
+            <AppText variant="caption" style={{ width: 60 }} color="#6B7280">{code}</AppText>
+            <AppText variant="caption" style={{ width: 70 }}>{name}</AppText>
+            <AppText variant="caption" color={isRTLLanguage(code) ? "#EF4444" : "#10B981"}>
+              {isRTLLanguage(code) ? "RTL ◀" : "LTR ▶"}
+            </AppText>
+          </View>
+        ))}
+      </View>
+
+      {restartRequired && (
+        <View style={[styles.infoBox, { backgroundColor: "#FEF3C7", marginTop: 12 }]}>
+          <AppText variant="caption" color="#92400E">
+            ⚠️ A full app restart is needed for native RTL layout mirroring to take effect.
+          </AppText>
+        </View>
+      )}
+    </Section>
+  );
+}
+
+// ============================================================================
+// 28. 🆕 v4.4.0 — AppTextDevTools
+// ============================================================================
+function DevToolsDemo() {
+  const { t } = useLang();
+  // Trigger some translations to populate stats
+  const _ = [
+    t("welcome"), t("greeting", { name: "Demo" }),
+    t("icu_plural", { count: 3 }), t("rich_markdown"),
+  ];
+
+  return (
+    <Section title="2️⃣8️⃣ 🆕 AppTextDevTools" badge="v4.4.0">
+      <View style={styles.infoBox}>
+        <AppText variant="caption" color="#6366F1" weight="600">
+          🔤 DevTools overlay is active
+        </AppText>
+        <AppText variant="bodySmall" color="#6B7280" style={{ marginTop: 6 }}>
+          Look for the "🔤 AppText" badge in the{" "}
+          <AppText weight="700" color="#1F2937">bottom-right corner</AppText>{" "}
+          of the screen. Tap it to expand the performance panel.
+        </AppText>
+      </View>
+
+      <View style={{ marginTop: 12 }}>
+        <AppText variant="titleSmall" style={{ marginBottom: 6 }}>Overlay shows:</AppText>
+        {[
+          "📊 LRU cache hit rate (colour-coded: green ≥90%, amber ≥60%, red <60%)",
+          "⚡️ Top 5 slowest translation keys by p95 latency",
+          "🌍 Current language and text direction",
+          "🗑️ Cache & stats clear button",
+        ].map((item, i) => (
+          <View key={i} style={{ flexDirection: "row", gap: 8, marginBottom: 4 }}>
+            <AppText variant="caption">{item}</AppText>
+          </View>
+        ))}
+      </View>
+
+      <AppText variant="caption" color="#9CA3AF" style={{ marginTop: 8 }}>
+        Only renders in __DEV__ mode. Safe to import unconditionally — renders
+        null in production builds.
+      </AppText>
+    </Section>
+  );
+}
+
+// ============================================================================
+// 29. INTERACTIVE FEATURES
 // ============================================================================
 function InteractiveFeaturesDemo() {
   const [count, setCount] = useState(0);
 
   return (
-    <Section title="2️⃣4️⃣ Interactive Features">
-      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>
-        Pressable Text:
-      </AppText>
+    <Section title="2️⃣9️⃣ Interactive Features">
       <AppText onPress={() => Alert.alert("Tapped!", "You tapped on the text")}>
-        Tap me! - onPress handler
+        Tap me! — onPress handler
       </AppText>
-
-      <AppText variant="titleSmall" style={{ marginTop: 15, marginBottom: 8 }}>
-        State Changes:
-      </AppText>
-      <AppText onPress={() => setCount(count + 1)}>
+      <AppText onPress={() => setCount(count + 1)} style={{ marginTop: 8 }}>
         Tap count: {count} (tap to increment)
-      </AppText>
-
-      <AppText variant="titleSmall" style={{ marginTop: 15, marginBottom: 8 }}>
-        Dynamic Styling:
       </AppText>
       <AppText
         onPress={() => setCount(0)}
         style={{
+          marginTop: 8,
           color: count > 5 ? "#EF4444" : "#10B981",
           fontWeight: count > 3 ? "700" : "400",
         }}
@@ -1066,15 +1087,15 @@ function InteractiveFeaturesDemo() {
         {count === 0
           ? "Tap to start"
           : count > 5
-            ? "Warning: High count!"
-            : "Keep tapping..."}
+          ? "Warning: High count! Tap to reset."
+          : "Keep tapping..."}
       </AppText>
     </Section>
   );
 }
 
 // ============================================================================
-// MAIN CONTENT
+// MAIN CONTENT SCROLL VIEW
 // ============================================================================
 function Content() {
   return (
@@ -1082,10 +1103,8 @@ function Content() {
       style={styles.content}
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
-      scrollEnabled={true}
-      overScrollMode="always"
-      nestedScrollEnabled={true}
     >
+      {/* Existing features */}
       <MaterialTypographyDemo />
       <LegacyTypographyDemo />
       <TextStylingDemo />
@@ -1097,7 +1116,7 @@ function Content() {
       <RotateFlipAnimationsDemo />
       <SpecialAnimationsDemo />
       <TypewriterDemo />
-      {/* <WaveDemo /> */}
+      <WaveDemo />
       <TruncationDemo />
       <LocalizationDemo />
       <TransComponentDemo />
@@ -1109,6 +1128,29 @@ function Content() {
       <AccessibilityDemo />
       <PerformanceDemo />
       <ErrorBoundaryDemo />
+
+      {/* v4.4.0 NEW FEATURES */}
+      <View style={styles.v440Header}>
+        <View style={styles.v440Badge}>
+          <AppText
+            size={10}
+            color="#FFF"
+            weight="800"
+            style={{ letterSpacing: 1 }}
+          >
+            NEW IN v4.4.0
+          </AppText>
+        </View>
+        <AppText variant="caption" color="#9CA3AF" style={{ marginTop: 4 }}>
+          Gap fixes, new hooks, components & New Architecture improvements
+        </AppText>
+      </View>
+
+      <AutoLocaleDemo />
+      <RuntimeThemeDemo />
+      <SkeletonDemo />
+      <RTLProviderDemo />
+      <DevToolsDemo />
       <InteractiveFeaturesDemo />
 
       <View style={styles.footer}>
@@ -1116,7 +1158,7 @@ function Content() {
           react-native-apptext
         </AppText>
         <AppText variant="caption" color="#999">
-          Version 4.0.2 - Full Feature Demo
+          Version 4.4.0 — Full Feature Demo
         </AppText>
         <AppText variant="caption" color="#666" style={{ marginTop: 5 }}>
           All features demonstrated above are production-ready
@@ -1127,54 +1169,80 @@ function Content() {
 }
 
 // ============================================================================
-// MAIN APP
+// MAIN APP — wraps with RTLProvider too (v4.4.0)
 // ============================================================================
 export default function App() {
   const colorScheme = useColorScheme();
+  const [language, setLanguage] = useState("en");
 
   return (
     <AppTextProvider theme={customTheme}>
       <LocaleProvider
         translations={translations}
-        defaultLanguage="en"
+        defaultLanguage={language}
         fallbackLanguage="en"
         useICU={true}
         onMissingTranslation={(lang, key) => {
-          console.log(`Missing: ${key} in ${lang}`);
+          if (__DEV__) console.log(`[i18n] Missing: "${key}" in ${lang}`);
         }}
       >
-        <SafeAreaView
-          style={[
-            styles.container,
-            colorScheme === "dark" && styles.darkContainer,
-          ]}
-        >
-          <StatusBar barStyle="dark-content" />
-          <View style={styles.header}>
-            <AppText variant="headlineMedium" weight="700">
-              AppText Demo
-            </AppText>
-            <AppText variant="bodySmall" color="#666">
-              v4.0.2 - Complete Feature Showcase
-            </AppText>
-            <AppText variant="caption" color="#999" style={{ marginTop: 4 }}>
-              Tap sections to expand/collapse
-            </AppText>
-          </View>
-          <Content />
-        </SafeAreaView>
+        {/* v4.4.0: RTLProvider wraps the navigator */}
+        <RTLProvider language={language} autoApply>
+          <SafeAreaView
+            style={[
+              styles.container,
+              colorScheme === "dark" && styles.darkContainer,
+            ]}
+          >
+            <StatusBar
+              barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
+            />
+
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                <View>
+                  <AppText variant="headlineMedium" weight="700">
+                    AppText Demo
+                  </AppText>
+                  <AppText variant="bodySmall" color="#666">
+                    v4.4.0 — Complete Feature Showcase
+                  </AppText>
+                </View>
+                <View style={[styles.versionBadge]}>
+                  <AppText size={10} color="#6366F1" weight="700">v4.4.0</AppText>
+                </View>
+              </View>
+              <AppText variant="caption" color="#999" style={{ marginTop: 4 }}>
+                Tap sections to expand/collapse · Scroll down for new features
+              </AppText>
+            </View>
+
+            <Content />
+          </SafeAreaView>
+
+          {/* v4.4.0: AppTextDevTools overlay — renders only in __DEV__ */}
+          <AppTextDevTools
+            position="bottom-right"
+            refreshInterval={3000}
+            defaultCollapsed={true}
+          />
+        </RTLProvider>
       </LocaleProvider>
     </AppTextProvider>
   );
 }
 
+// ============================================================================
+// STYLES
+// ============================================================================
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F3F4F6",
   },
   darkContainer: {
-    backgroundColor: "#1F2937",
+    backgroundColor: "#111827",
   },
   header: {
     padding: 16,
@@ -1183,14 +1251,19 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#E5E7EB",
   },
+  versionBadge: {
+    borderWidth: 1.5,
+    borderColor: "#6366F1",
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
   content: {
     flex: 1,
     padding: 12,
-    minHeight: 800,
   },
   contentContainer: {
-    paddingBottom: 40,
-    minHeight: 900,
+    paddingBottom: 60,
   },
   section: {
     marginBottom: 12,
@@ -1201,7 +1274,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 4,
-    elevation: 1,
+    elevation: 2,
   },
   sectionHeader: {
     flexDirection: "row",
@@ -1218,6 +1291,18 @@ const styles = StyleSheet.create({
   },
   sectionContent: {
     padding: 14,
+  },
+  newBadge: {
+    backgroundColor: "#6366F1",
+    borderRadius: 8,
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+  },
+  newBadgeText: {
+    color: "#FFF",
+    fontSize: 9,
+    fontWeight: "800",
+    letterSpacing: 0.5,
   },
   languageSelector: {
     flexDirection: "row",
@@ -1245,13 +1330,19 @@ const styles = StyleSheet.create({
   },
   swatchContainer: {
     alignItems: "center",
-    width: 50,
+    width: 54,
   },
   swatch: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     marginBottom: 4,
+  },
+  colorBox: {
+    backgroundColor: "#374151",
+    padding: 12,
+    borderRadius: 8,
+    marginVertical: 4,
   },
   colorRow: {
     flexDirection: "row",
@@ -1263,12 +1354,6 @@ const styles = StyleSheet.create({
     height: 12,
     borderRadius: 6,
     marginRight: 8,
-  },
-  colorBox: {
-    backgroundColor: "#374151",
-    padding: 12,
-    borderRadius: 8,
-    marginVertical: 4,
   },
   button: {
     backgroundColor: "#EF4444",
@@ -1282,6 +1367,65 @@ const styles = StyleSheet.create({
     backgroundColor: "#FEF2F2",
     borderRadius: 8,
     alignItems: "center",
+  },
+  infoBox: {
+    backgroundColor: "#F0F4FF",
+    borderRadius: 8,
+    padding: 12,
+    borderLeftWidth: 3,
+    borderLeftColor: "#6366F1",
+  },
+  presetRow: {
+    flexDirection: "row",
+    gap: 8,
+    flexWrap: "wrap",
+    marginBottom: 12,
+  },
+  presetButton: {
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    alignItems: "center",
+    opacity: 0.85,
+  },
+  presetButtonActive: {
+    opacity: 1,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  themeDot: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+  },
+  navBar: {
+    backgroundColor: "#1F2937",
+    borderRadius: 10,
+    padding: 12,
+    alignItems: "center",
+    gap: 8,
+  },
+  navIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "rgba(255,255,255,0.1)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  v440Header: {
+    alignItems: "center",
+    paddingVertical: 16,
+    marginVertical: 8,
+  },
+  v440Badge: {
+    backgroundColor: "#6366F1",
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
   },
   footer: {
     padding: 32,

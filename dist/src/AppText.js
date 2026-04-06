@@ -1,5 +1,5 @@
 import React, { forwardRef, memo, useCallback, useMemo, useEffect, useRef, useState, } from "react";
-import { Text, Animated, useColorScheme, View, } from "react-native";
+import { Text, Animated, useColorScheme, View, StyleSheet, } from "react-native";
 import { SCRIPT_CONFIGS } from "./scriptConfigs";
 import { DEFAULT_THEME } from "./theme";
 import { useResponsiveFont, useScriptDetection, useThemedStyles, } from "./hooks";
@@ -479,6 +479,26 @@ const TruncationComponent = memo(({ children, maxLines, onExpand, onCollapse, ex
           </Text>)}
       </View>);
 });
+const extractTextStyles = (style) => {
+    const flatStyle = StyleSheet.flatten(style) || {};
+    const textStyles = {};
+    const viewStyles = {};
+    const textProps = [
+        "color", "fontFamily", "fontSize", "fontStyle", "fontWeight",
+        "letterSpacing", "lineHeight", "textAlign", "textDecorationLine",
+        "textDecorationStyle", "textDecorationColor", "textShadowColor",
+        "textShadowOffset", "textShadowRadius", "textTransform", "opacity",
+    ];
+    Object.keys(flatStyle).forEach((key) => {
+        if (textProps.includes(key)) {
+            textStyles[key] = flatStyle[key];
+        }
+        else {
+            viewStyles[key] = flatStyle[key];
+        }
+    });
+    return { textStyles, viewStyles };
+};
 const WaveText = memo(({ children, duration = 1000, delay = 0, style }) => {
     const text = useMemo(() => {
         const extractText = (node) => {
@@ -560,11 +580,25 @@ const WaveText = memo(({ children, duration = 1000, delay = 0, style }) => {
             ],
         }));
     }, [characters.length]);
-    return (<Text style={style}>
-        {characters.map((char, i) => (<Animated.Text key={`wave-${i}`} style={interpolatedStyles[i]}>
-            {char}
-          </Animated.Text>))}
-      </Text>);
+    const { textStyles, viewStyles } = useMemo(() => extractTextStyles(style), [style]);
+    return (<View style={[
+            viewStyles,
+            {
+                flexDirection: "row",
+                flexWrap: "wrap",
+                justifyContent: textStyles.textAlign === "center"
+                    ? "center"
+                    : textStyles.textAlign === "right"
+                        ? "flex-end"
+                        : "flex-start",
+            },
+        ]}>
+        {characters.map((char, i) => (<Animated.View key={`wave-${i}`} style={interpolatedStyles[i]}>
+            <Text style={textStyles}>
+              {char === " " ? "\u00A0" : char}
+            </Text>
+          </Animated.View>))}
+      </View>);
 });
 /* ========== Main Component ========== */
 const BaseAppText = memo(forwardRef(({ children, variant = "body1", color, size, weight, align, transform, decoration, italic = false, truncate = false, shadow = false, animated = false, animation, animationDelay = 0, animationDuration = 1000, animationSpeed = 50, cursor = false, script, direction = "auto", responsive = true, style: propStyle, testID, m, mt, mr, mb, ml, mx, my, p, pt, pr, pb, pl, px, py, numberOfLines, ellipsizeMode, onPress, onLongPress, onExpand, onCollapse, expandText, collapseText, allowFontScaling, maxFontSizeMultiplier, minimumFontScale, suppressHighlighting, selectable, selectionColor, textBreakStrategy, hyphenationFrequency, accessibilityLabel, accessibilityHint, accessibilityLiveRegion, accessibilityState, 

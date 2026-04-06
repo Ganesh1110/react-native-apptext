@@ -16,6 +16,7 @@ import {
   TextLayoutEventData,
   AccessibilityRole,
   GestureResponderEvent,
+  StyleSheet,
 } from "react-native";
 
 import {
@@ -680,6 +681,29 @@ interface WaveTextProps {
   style: StyleProp<TextStyle>;
 }
 
+const extractTextStyles = (style: StyleProp<TextStyle>) => {
+  const flatStyle = StyleSheet.flatten(style) || {};
+  const textStyles: any = {};
+  const viewStyles: any = {};
+
+  const textProps = [
+    "color", "fontFamily", "fontSize", "fontStyle", "fontWeight",
+    "letterSpacing", "lineHeight", "textAlign", "textDecorationLine",
+    "textDecorationStyle", "textDecorationColor", "textShadowColor",
+    "textShadowOffset", "textShadowRadius", "textTransform", "opacity",
+  ];
+
+  Object.keys(flatStyle).forEach((key) => {
+    if (textProps.includes(key)) {
+      textStyles[key] = (flatStyle as any)[key];
+    } else {
+      viewStyles[key] = (flatStyle as any)[key];
+    }
+  });
+
+  return { textStyles, viewStyles };
+};
+
 const WaveText = memo<WaveTextProps>(
   ({ children, duration = 1000, delay = 0, style }) => {
     const text = useMemo(() => {
@@ -774,14 +798,32 @@ const WaveText = memo<WaveTextProps>(
       }));
     }, [characters.length]);
 
+    const { textStyles, viewStyles } = useMemo(() => extractTextStyles(style), [style]);
+
     return (
-      <Text style={style}>
+      <View
+        style={[
+          viewStyles,
+          {
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent:
+              textStyles.textAlign === "center"
+                ? "center"
+                : textStyles.textAlign === "right"
+                  ? "flex-end"
+                  : "flex-start",
+          },
+        ]}
+      >
         {characters.map((char, i) => (
-          <Animated.Text key={`wave-${i}`} style={interpolatedStyles[i]}>
-            {char}
-          </Animated.Text>
+          <Animated.View key={`wave-${i}`} style={interpolatedStyles[i]}>
+            <Text style={textStyles}>
+              {char === " " ? "\u00A0" : char}
+            </Text>
+          </Animated.View>
         ))}
-      </Text>
+      </View>
     );
   },
 );

@@ -15,7 +15,10 @@ interface LazyTranslationConfig {
 interface LazyLocaleContextValue {
   language: string;
   isLoading: boolean;
+  /** Set of locales that have finished loading */
   loadedLocales: Set<string>;
+  /** Map of locale → loading progress 0–1 (1 = fully loaded) */
+  loadingProgress: Map<string, number>;
   loadLocale: (locale: string) => Promise<void>;
   changeLanguage: (locale: string) => Promise<void>;
   translations: Record<string, Translations>;
@@ -69,6 +72,9 @@ export function LazyLocaleProvider({
   const [language, setLanguage] = useState(defaultLanguage);
   const [isLoading, setIsLoading] = useState(false);
   const [loadedLocales, setLoadedLocales] = useState<Set<string>>(new Set());
+  const [loadingProgress, setLoadingProgress] = useState<Map<string, number>>(
+    new Map(),
+  );
   const [translations, setTranslations] = useState<
     Record<string, Translations>
   >({});
@@ -96,6 +102,8 @@ export function LazyLocaleProvider({
       const promise = (async () => {
         try {
           setIsLoading(true);
+          // Mark as in-progress (0.5 = loading, 0 = not started, 1 = done)
+          setLoadingProgress((prev) => new Map(prev).set(locale, 0.5));
           onLoadStart?.(locale);
 
           const module = await loader();
@@ -107,9 +115,11 @@ export function LazyLocaleProvider({
           }));
 
           setLoadedLocales((prev) => new Set([...prev, locale]));
+          setLoadingProgress((prev) => new Map(prev).set(locale, 1));
           onLoadComplete?.(locale);
         } catch (error) {
           console.warn(`Failed to load locale: ${locale}`, error);
+          setLoadingProgress((prev) => new Map(prev).set(locale, 0));
           onLoadError?.(locale, error as Error);
         } finally {
           setIsLoading(false);
@@ -147,6 +157,7 @@ export function LazyLocaleProvider({
     language,
     isLoading,
     loadedLocales,
+    loadingProgress,
     loadLocale,
     changeLanguage,
     translations,
@@ -173,35 +184,56 @@ export function useLazyLocale() {
 }
 
 /**
- * Higher-order component for lazy loading translations
+ * Higher-order component for lazy loading translations.
+ *
+ * Now accepts an optional `loadingFallback` node (shown during locale load)
+ * so callers are not left with a blank screen.
+ *
+ * @example
+ * const DashboardWithLocale = withLazyTranslations(
+ *   DashboardScreen,
+ *   ['en', 'fr'],
+ *   { loadingFallback: <AppTextSkeleton variant="bodyMedium" lines={3} /> }
+ * );
  */
 export function withLazyTranslations<P extends object>(
   Component: React.ComponentType<P>,
   requiredLocales: string[],
+  options: {
+    /** Node rendered while locales are loading. Defaults to null. */
+    loadingFallback?: React.ReactNode;
+  } = {},
 ) {
-  return function LazyWrapper(props: P) {
-    const { loadLocale, loadedLocales, isLoading } = useLazyLocale();
+  const { loadingFallback = null } = options;
+
+  const LazyWrapper = function (props: P) {
+    const { loadLocale, loadedLocales } = useLazyLocale();
     const [ready, setReady] = useState(false);
 
     useEffect(() => {
+      let cancelled = false;
       const loadRequired = async () => {
         await Promise.all(
           requiredLocales
             .filter((locale) => !loadedLocales.has(locale))
             .map((locale) => loadLocale(locale)),
         );
-        setReady(true);
+        if (!cancelled) setReady(true);
       };
 
       loadRequired();
+      return () => { cancelled = true; };
     }, [loadLocale, loadedLocales]);
 
-    if (!ready || isLoading) {
-      return null; // Or return a loading component
+    if (!ready) {
+      return <>{loadingFallback}</>;
     }
 
     return <Component {...props} />;
   };
+
+  LazyWrapper.displayName = `withLazyTranslations(${Component.displayName ?? Component.name ?? 'Component'})`;
+  return LazyWrapper;
 }
 
 /**
@@ -254,6 +286,40 @@ export class NamespaceLoader {
   preload(namespaces: string[]): Promise<void> {
     return Promise.all(namespaces.map((ns) => this.load(ns))).then(() => {});
   }
+}
+
+// ---------------------------------------------------------------------------
+// useTranslationReady — fine-grained locale loading state
+// ---------------------------------------------------------------------------
+
+/**
+ * Returns whether all `requiredLocales` are fully loaded.
+ *
+ * @example
+ * const { ready, progress } = useTranslationReady(['en', 'ar']);
+ * if (!ready) return <ProgressBar value={progress} />;
+ */
+export function useTranslationReady(requiredLocales: string[]): {
+  ready: boolean;
+  progress: number;
+} {
+  const { loadedLocales, loadingProgress } = useLazyLocale();
+
+  const loaded = requiredLocales.filter((l) => loadedLocales.has(l)).length;
+  const total = requiredLocales.length;
+
+  if (total === 0) return { ready: true, progress: 1 };
+
+  // Calculate weighted progress
+  const totalProgress = requiredLocales.reduce((sum, locale) => {
+    if (loadedLocales.has(locale)) return sum + 1;
+    return sum + (loadingProgress.get(locale) ?? 0);
+  }, 0);
+
+  return {
+    ready: loaded === total,
+    progress: Math.min(totalProgress / total, 1),
+  };
 }
 
 // Export types

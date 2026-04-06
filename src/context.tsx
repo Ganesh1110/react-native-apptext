@@ -8,12 +8,12 @@ import React, {
 import { AppTextTheme } from "./types";
 import { DEFAULT_THEME } from "./theme";
 
-interface AppTextContextType {
+export interface AppTextContextValue {
   theme: AppTextTheme;
   updateTheme: (theme: Partial<AppTextTheme>) => void;
 }
 
-const AppTextContext = React.createContext<AppTextContextType | null>(null);
+const AppTextContext = React.createContext<AppTextContextValue | null>(null);
 
 function deepMerge<T extends Record<string, any>>(
   target: T,
@@ -74,7 +74,38 @@ export const AppTextProvider: React.FC<{
   );
 };
 
-export const useAppTextTheme = () => {
+/**
+ * Returns the current AppText theme object.
+ * Falls back to DEFAULT_THEME when used outside AppTextProvider.
+ */
+export const useAppTextTheme = (): AppTextTheme => {
   const context = useContext(AppTextContext);
   return context?.theme ?? DEFAULT_THEME;
+};
+
+/**
+ * Returns the `updateTheme` function that deep-merges partial theme overrides
+ * into the current theme at runtime — without remounting AppTextProvider.
+ *
+ * Must be used inside `<AppTextProvider>`.
+ *
+ * @example
+ * const updateTheme = useUpdateAppTheme();
+ * // Switch primary colour to brand red at runtime
+ * updateTheme({ colors: { primary: '#E53E3E' } });
+ */
+export const useUpdateAppTheme = (): ((
+  patch: Partial<AppTextTheme>,
+) => void) => {
+  const context = useContext(AppTextContext);
+  if (!context) {
+    if (__DEV__) {
+      console.warn(
+        "useUpdateAppTheme: called outside <AppTextProvider>. " +
+          "Theme updates will have no effect.",
+      );
+    }
+    return () => {};
+  }
+  return context.updateTheme;
 };
