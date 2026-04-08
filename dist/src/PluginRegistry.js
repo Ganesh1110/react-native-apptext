@@ -14,7 +14,7 @@
  *
  * Usage:
  * ```ts
- * import { registerAppTextPlugin } from 'react-native-apptext';
+ * import { registerAppTextPlugin } from 'react-native-typography';
  *
  * registerAppTextPlugin({
  *   name: 'emoji-shortcodes',

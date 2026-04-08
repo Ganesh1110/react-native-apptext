@@ -11,7 +11,7 @@
  *  - Warns in __DEV__ when a restart is needed for changes to take effect
  *
  * Usage:
- *   import { RTLProvider, useRTL } from 'react-native-apptext';
+ *   import { RTLProvider, useRTL } from 'react-native-typography';
  *
  *   // Wrap your root
  *   <RTLProvider language={currentLanguage}>
@@ -55,7 +55,7 @@ export const RTL_LANGUAGE_CODES = new Set([
   "dv", // Thaana (Dhivehi/Maldivian)
   "ug", // Uyghur
   "arc", // Aramaic
-  "az",  // Azerbaijani (Arabic script variant)
+  "az", // Azerbaijani (Arabic script variant)
   "nqo", // N'Ko
 ]);
 
@@ -166,18 +166,21 @@ export const RTLProvider = memo<RTLProviderProps>(
       }
     }, [targetRTL, autoApply, mode]);
 
-    const setRTL = useCallback((rtl: boolean) => {
-      if (mode === "css") {
+    const setRTL = useCallback(
+      (rtl: boolean) => {
+        if (mode === "css") {
+          setIsRTLState(rtl);
+          setRestartRequired(false);
+          return;
+        }
+        I18nManager.forceRTL(rtl);
         setIsRTLState(rtl);
-        setRestartRequired(false);
-        return;
-      }
-      I18nManager.forceRTL(rtl);
-      setIsRTLState(rtl);
-      if (rtl !== I18nManager.isRTL && Platform.OS !== "web") {
-        setRestartRequired(true);
-      }
-    }, [mode]);
+        if (rtl !== I18nManager.isRTL && Platform.OS !== "web") {
+          setRestartRequired(true);
+        }
+      },
+      [mode],
+    );
 
     const value = useMemo<RTLContextValue>(
       () => ({ isRTL, setRTL, restartRequired, mode: mode ?? "native" }),
@@ -236,18 +239,25 @@ export function useRTLStyle(): {
   marginEnd: (v: number) => ViewStyle;
 } {
   const { isRTL } = useRTL();
-  return useMemo(() => ({
-    row: { flexDirection: isRTL ? "row-reverse" : "row" },
-    rowReverse: { flexDirection: isRTL ? "row" : "row-reverse" },
-    textAlign: { textAlign: isRTL ? "right" : "left" },
-    textAlignReverse: { textAlign: isRTL ? "left" : "right" },
-    start: { alignItems: isRTL ? "flex-end" : "flex-start" },
-    end: { alignItems: isRTL ? "flex-start" : "flex-end" },
-    paddingStart: (v: number) => isRTL ? { paddingRight: v } : { paddingLeft: v },
-    paddingEnd: (v: number) => isRTL ? { paddingLeft: v } : { paddingRight: v },
-    marginStart: (v: number) => isRTL ? { marginRight: v } : { marginLeft: v },
-    marginEnd: (v: number) => isRTL ? { marginLeft: v } : { marginRight: v },
-  }), [isRTL]);
+  return useMemo(
+    () => ({
+      row: { flexDirection: isRTL ? "row-reverse" : "row" },
+      rowReverse: { flexDirection: isRTL ? "row" : "row-reverse" },
+      textAlign: { textAlign: isRTL ? "right" : "left" },
+      textAlignReverse: { textAlign: isRTL ? "left" : "right" },
+      start: { alignItems: isRTL ? "flex-end" : "flex-start" },
+      end: { alignItems: isRTL ? "flex-start" : "flex-end" },
+      paddingStart: (v: number) =>
+        isRTL ? { paddingRight: v } : { paddingLeft: v },
+      paddingEnd: (v: number) =>
+        isRTL ? { paddingLeft: v } : { paddingRight: v },
+      marginStart: (v: number) =>
+        isRTL ? { marginRight: v } : { marginLeft: v },
+      marginEnd: (v: number) =>
+        isRTL ? { marginLeft: v } : { marginRight: v },
+    }),
+    [isRTL],
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -274,16 +284,29 @@ export interface RTLViewProps {
  * </RTLView>
  * ```
  */
-export const RTLView = memo<RTLViewProps>(({ children, style, forceRTL, ...props }) => {
-  const { isRTL } = useRTL();
-  const rtl = forceRTL !== undefined ? forceRTL : isRTL;
-  const resolvedStyle = useMemo<ViewStyle>(() => {
-    const flat = StyleSheet.flatten(style) || {};
-    const base = flat.flexDirection === "column" ? {} : { flexDirection: (rtl ? "row-reverse" : "row") as FlexStyle["flexDirection"] };
-    return { ...base, ...flat };
-  }, [style, rtl]);
+export const RTLView = memo<RTLViewProps>(
+  ({ children, style, forceRTL, ...props }) => {
+    const { isRTL } = useRTL();
+    const rtl = forceRTL !== undefined ? forceRTL : isRTL;
+    const resolvedStyle = useMemo<ViewStyle>(() => {
+      const flat = StyleSheet.flatten(style) || {};
+      const base =
+        flat.flexDirection === "column"
+          ? {}
+          : {
+              flexDirection: (rtl
+                ? "row-reverse"
+                : "row") as FlexStyle["flexDirection"],
+            };
+      return { ...base, ...flat };
+    }, [style, rtl]);
 
-  return <View style={resolvedStyle} {...props}>{children}</View>;
-});
+    return (
+      <View style={resolvedStyle} {...props}>
+        {children}
+      </View>
+    );
+  },
+);
 
 RTLView.displayName = "RTLView";

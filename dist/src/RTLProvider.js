@@ -11,7 +11,7 @@
  *  - Warns in __DEV__ when a restart is needed for changes to take effect
  *
  * Usage:
- *   import { RTLProvider, useRTL } from 'react-native-apptext';
+ *   import { RTLProvider, useRTL } from 'react-native-typography';
  *
  *   // Wrap your root
  *   <RTLProvider language={currentLanguage}>
@@ -166,9 +166,17 @@ export const RTLView = memo(({ children, style, forceRTL, ...props }) => {
     const rtl = forceRTL !== undefined ? forceRTL : isRTL;
     const resolvedStyle = useMemo(() => {
         const flat = StyleSheet.flatten(style) || {};
-        const base = flat.flexDirection === "column" ? {} : { flexDirection: (rtl ? "row-reverse" : "row") };
+        const base = flat.flexDirection === "column"
+            ? {}
+            : {
+                flexDirection: (rtl
+                    ? "row-reverse"
+                    : "row"),
+            };
         return { ...base, ...flat };
     }, [style, rtl]);
-    return <View style={resolvedStyle} {...props}>{children}</View>;
+    return (<View style={resolvedStyle} {...props}>
+        {children}
+      </View>);
 });
 RTLView.displayName = "RTLView";

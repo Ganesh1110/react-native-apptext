@@ -1,5 +1,5 @@
 /**
- * Centralized configuration constants for react-native-apptext.
+ * Centralized configuration constants for react-native-typography.
  * All magic numbers should be sourced from here.
  */
 /** Base device width used for responsive font scaling (iPhone 8/SE width) */

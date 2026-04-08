@@ -14,7 +14,7 @@
  *
  * Usage:
  * ```ts
- * import { registerAppTextPlugin } from 'react-native-apptext';
+ * import { registerAppTextPlugin } from 'react-native-typography';
  *
  * registerAppTextPlugin({
  *   name: 'emoji-shortcodes',
@@ -122,7 +122,9 @@ class AppTextPluginRegistry {
   register(plugin: AppTextPlugin, opts?: PluginRegisterOptions): void {
     if (!plugin.name || typeof plugin.name !== "string") {
       if (__DEV__) {
-        console.warn("[AppTextPlugin] Plugin must have a non-empty string `name`.");
+        console.warn(
+          "[AppTextPlugin] Plugin must have a non-empty string `name`.",
+        );
       }
       return;
     }
@@ -140,7 +142,9 @@ class AppTextPluginRegistry {
     plugin.onMount?.();
 
     if (__DEV__) {
-      console.log(`[AppTextPlugin] Registered: "${plugin.name}" (order: ${order})`);
+      console.log(
+        `[AppTextPlugin] Registered: "${plugin.name}" (order: ${order})`,
+      );
     }
   }
 

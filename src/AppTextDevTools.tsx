@@ -1,5 +1,5 @@
 /**
- * AppTextDevTools — Developer overlay for react-native-apptext
+ * AppTextDevTools — Developer overlay for react-native-typography
  *
  * Shows live stats for:
  * - LRU translation cache (hit rate, size)
@@ -10,7 +10,7 @@
  * Only renders in __DEV__ mode. Safe to import unconditionally.
  *
  * Usage:
- *   import { AppTextDevTools } from 'react-native-apptext';
+ *   import { AppTextDevTools } from 'react-native-typography';
  *   // Place anywhere inside AppTextProvider + LocaleProvider
  *   <AppTextDevTools position="bottom-right" />
  */
@@ -25,7 +25,10 @@ import {
   Text,
   View,
 } from "react-native";
-import { translationCache, performanceMonitor } from "./PerformanceOptimizations";
+import {
+  translationCache,
+  performanceMonitor,
+} from "./PerformanceOptimizations";
 
 // Only import useLang if in an i18n context — guard with try/catch at call site
 let _useLang: (() => { language: string; direction: string }) | null = null;
@@ -241,7 +244,10 @@ const DevToolsInner = memo<Required<AppTextDevToolsProps>>(
                 valueColor={hitRateColor(stats.cacheHitRate)}
               />
               <Row label="Cache Size" value={`${stats.cacheSize} entries`} />
-              <Row label="Hits / Misses" value={`${stats.cacheHits} / ${stats.cacheMisses}`} />
+              <Row
+                label="Hits / Misses"
+                value={`${stats.cacheHits} / ${stats.cacheMisses}`}
+              />
 
               {stats.topKeys.length > 0 && (
                 <>
@@ -250,7 +256,9 @@ const DevToolsInner = memo<Required<AppTextDevToolsProps>>(
                   {stats.topKeys.map((k) => (
                     <Row
                       key={k.name}
-                      label={k.name.length > 22 ? `…${k.name.slice(-20)}` : k.name}
+                      label={
+                        k.name.length > 22 ? `…${k.name.slice(-20)}` : k.name
+                      }
                       value={`${k.p95}ms (×${k.count})`}
                       valueColor={k.p95 > 5 ? "#f87171" : "#4ade80"}
                     />
@@ -287,7 +295,9 @@ const Row = memo<{ label: string; value: string; valueColor?: string }>(
   ({ label, value, valueColor }) => (
     <View style={styles.row}>
       <Text style={styles.rowLabel}>{label}</Text>
-      <Text style={[styles.rowValue, valueColor ? { color: valueColor } : null]}>
+      <Text
+        style={[styles.rowValue, valueColor ? { color: valueColor } : null]}
+      >
         {value}
       </Text>
     </View>

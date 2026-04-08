@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 /**
- * React Native AppText - Translation Key Extractor
+ * React Native Text Kit - Translation Key Extractor
  *
  * Scans your codebase for t() and tn() calls and generates a translation template
  *
  * Usage:
- *   npx react-native-apptext extract --src ./src --output ./locales/template.json
+ *   npx react-native-text-kit extract --src ./src --output ./locales/template.json
  */
 
 import * as fs from "fs";
@@ -148,7 +148,7 @@ class TranslationExtractor {
   private extractTranslationCall(
     node: any,
     filePath: string,
-    isPlural: boolean
+    isPlural: boolean,
   ): void {
     if (node.arguments.length === 0) return;
 
@@ -173,17 +173,17 @@ class TranslationExtractor {
   private extractTransComponent(node: any, filePath: string): void {
     const attributes = node.openingElement.attributes;
     const i18nKeyAttr = attributes.find(
-      (attr: any) => attr.name?.name === "i18nKey"
+      (attr: any) => attr.name?.name === "i18nKey",
     );
 
     if (!i18nKeyAttr || i18nKeyAttr.value.type !== "StringLiteral") return;
 
     const key = i18nKeyAttr.value.value;
     const valuesAttr = attributes.find(
-      (attr: any) => attr.name?.name === "values"
+      (attr: any) => attr.name?.name === "values",
     );
     const optionsAttr = attributes.find(
-      (attr: any) => attr.name?.name === "options"
+      (attr: any) => attr.name?.name === "options",
     );
 
     const params = valuesAttr ? this.extractJSXParams(valuesAttr) : undefined;
@@ -283,7 +283,7 @@ class TranslationExtractor {
         fs.writeFileSync(
           this.options.output,
           JSON.stringify(template, null, 2),
-          "utf-8"
+          "utf-8",
         );
         break;
       case "yaml":
@@ -340,7 +340,7 @@ class TranslationExtractor {
       const value = occurrences[0].defaultValue || "";
 
       rows.push(
-        [`"${key}"`, `"${value}"`, `"${files}"`, `"${params}"`].join(",")
+        [`"${key}"`, `"${value}"`, `"${files}"`, `"${params}"`].join(","),
       );
     }
 
@@ -365,13 +365,14 @@ class TranslationExtractor {
 
     // Plural keys
     const pluralCount = Array.from(this.keys.values()).filter(
-      (occurrences) => occurrences[0].count
+      (occurrences) => occurrences[0].count,
     ).length;
     console.log(`\nPlural keys: ${pluralCount}`);
 
     // Keys with params
     const withParamsCount = Array.from(this.keys.values()).filter(
-      (occurrences) => occurrences[0].params && occurrences[0].params.length > 0
+      (occurrences) =>
+        occurrences[0].params && occurrences[0].params.length > 0,
     ).length;
     console.log(`Keys with params: ${withParamsCount}`);
 
@@ -430,10 +431,10 @@ function parseArgs(): Partial<ExtractOptions> {
 
 function printHelp(): void {
   console.log(`
-React Native AppText - Translation Key Extractor
+React Native Text Kit - Translation Key Extractor
 
 Usage:
-  npx react-native-apptext extract [options]
+  npx react-native-text-kit extract [options]
 
 Options:
   -s, --src <paths>        Source directories to scan (comma-separated)
@@ -451,16 +452,16 @@ Options:
 
 Examples:
   # Extract from src directory
-  npx react-native-apptext extract
+  npx react-native-text-kit extract
 
   # Extract from multiple directories
-  npx react-native-apptext extract --src ./src,./components
+  npx react-native-text-kit extract --src ./src,./components
 
   # Output as CSV
-  npx react-native-apptext extract --format csv --output keys.csv
+  npx react-native-text-kit extract --format csv --output keys.csv
 
   # Verbose mode
-  npx react-native-apptext extract --verbose
+  npx react-native-text-kit extract --verbose
   `);
 }
 

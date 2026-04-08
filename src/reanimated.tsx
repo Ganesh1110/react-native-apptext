@@ -1,13 +1,13 @@
 /**
- * react-native-apptext/reanimated
+ * react-native-typography/reanimated
  *
  * Optional Reanimated v3+ integration for AppText animations.
  *
  * ⚠️  Sub-entry point — import ONLY if react-native-reanimated is installed:
  *
- *     import { ReanimatedAppText, useReanimatedText } from 'react-native-apptext/reanimated';
+ *     import { ReanimatedAppText, useReanimatedText } from 'react-native-typography/reanimated';
  *
- * The main bundle (`react-native-apptext`) is completely unaffected.
+ * The main bundle (`react-native-typography`) is completely unaffected.
  * This file contains DIRECT imports from 'react-native-reanimated' — users who
  * import this sub-entry MUST have Reanimated ≥ 3 properly set up.
  *
@@ -211,7 +211,12 @@ export function useReanimatedText(config: ReanimatedTextConfig) {
       }
     };
 
-    if (delay && animation !== "shake" && animation !== "bounce" && animation !== "pulse") {
+    if (
+      delay &&
+      animation !== "shake" &&
+      animation !== "bounce" &&
+      animation !== "pulse"
+    ) {
       const timer = setTimeout(runAnim, delay);
       return () => clearTimeout(timer);
     } else {
@@ -228,9 +233,10 @@ export function useReanimatedText(config: ReanimatedTextConfig) {
       Extrapolation.CLAMP,
     );
     return {
-      opacity: animation === "pulse" || animation === "shake" || animation === "bounce"
-        ? 1
-        : opacity,
+      opacity:
+        animation === "pulse" || animation === "shake" || animation === "bounce"
+          ? 1
+          : opacity,
       transform: [
         { translateX: slideX.value },
         { translateY: slideY.value },
@@ -251,7 +257,7 @@ export function useReanimatedText(config: ReanimatedTextConfig) {
  * All animations run on the UI thread — eliminates JS-thread frame drops.
  *
  * ```tsx
- * import { ReanimatedAppText } from 'react-native-apptext/reanimated';
+ * import { ReanimatedAppText } from 'react-native-typography/reanimated';
  *
  * <ReanimatedAppText animation="bounceIn" duration={500} style={{ fontSize: 24 }}>
  *   Hello, Reanimated!
@@ -259,7 +265,17 @@ export function useReanimatedText(config: ReanimatedTextConfig) {
  * ```
  */
 export const ReanimatedAppText = memo<ReanimatedTextProps>(
-  ({ animation, duration, delay, loop, onStart, onComplete, children, style, testID }) => {
+  ({
+    animation,
+    duration,
+    delay,
+    loop,
+    onStart,
+    onComplete,
+    children,
+    style,
+    testID,
+  }) => {
     const animatedStyle = useReanimatedText({
       animation,
       duration,

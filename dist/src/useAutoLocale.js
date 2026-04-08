@@ -11,7 +11,7 @@
  *  - Returns a stable reference (memoised, never re-evaluates after mount)
  *
  * Usage:
- *   import { useAutoLocale } from 'react-native-apptext';
+ *   import { useAutoLocale } from 'react-native-typography';
  *
  *   const locale = useAutoLocale();
  *   // locale → "en-US"

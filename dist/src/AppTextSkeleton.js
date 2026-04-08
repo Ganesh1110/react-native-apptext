@@ -6,7 +6,7 @@
  * variant so the skeleton slot perfectly matches the real text.
  *
  * Usage:
- *   import { AppTextSkeleton } from 'react-native-apptext';
+ *   import { AppTextSkeleton } from 'react-native-typography';
  *
  *   // Match a specific variant
  *   <AppTextSkeleton variant="bodyMedium" width={220} />
@@ -39,10 +39,21 @@ const VARIANT_LINE_HEIGHT = {
     labelMedium: 16,
     labelSmall: 16,
     // Legacy
-    h1: 40, h2: 36, h3: 32, h4: 28, h5: 26, h6: 24,
-    title: 30, subtitle1: 26, subtitle2: 24,
-    body1: 24, body2: 22, caption: 18,
-    overline: 16, button: 24, code: 22,
+    h1: 40,
+    h2: 36,
+    h3: 32,
+    h4: 28,
+    h5: 26,
+    h6: 24,
+    title: 30,
+    subtitle1: 26,
+    subtitle2: 24,
+    body1: 24,
+    body2: 22,
+    caption: 18,
+    overline: 16,
+    button: 24,
+    code: 22,
 };
 const SkeletonBar = memo(({ height, width, borderRadius, shimmerAnim, baseColor, shimmerColor }) => {
     const backgroundColor = shimmerAnim.interpolate({

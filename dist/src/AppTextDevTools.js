@@ -1,5 +1,5 @@
 /**
- * AppTextDevTools — Developer overlay for react-native-apptext
+ * AppTextDevTools — Developer overlay for react-native-typography
  *
  * Shows live stats for:
  * - LRU translation cache (hit rate, size)
@@ -10,13 +10,13 @@
  * Only renders in __DEV__ mode. Safe to import unconditionally.
  *
  * Usage:
- *   import { AppTextDevTools } from 'react-native-apptext';
+ *   import { AppTextDevTools } from 'react-native-typography';
  *   // Place anywhere inside AppTextProvider + LocaleProvider
  *   <AppTextDevTools position="bottom-right" />
  */
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { Animated, Platform, Pressable, ScrollView, StyleSheet, Text, View, } from "react-native";
-import { translationCache, performanceMonitor } from "./PerformanceOptimizations";
+import { translationCache, performanceMonitor, } from "./PerformanceOptimizations";
 // Only import useLang if in an i18n context — guard with try/catch at call site
 let _useLang = null;
 try {

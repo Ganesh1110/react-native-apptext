@@ -138,7 +138,7 @@ export const useDynamicTypeCategory = () => {
             return "small";
         if (scale <= 0.95)
             return "medium";
-        if (scale <= 1.00)
+        if (scale <= 1.0)
             return "large"; // default
         if (scale <= 1.12)
             return "xLarge";
@@ -150,7 +150,7 @@ export const useDynamicTypeCategory = () => {
             return "accessibilityMedium";
         if (scale <= 1.76)
             return "accessibilityLarge";
-        if (scale <= 2.00)
+        if (scale <= 2.0)
             return "accessibilityXLarge";
         if (scale <= 2.35)
             return "accessibilityXXLarge";
@@ -210,7 +210,7 @@ export const useSpeech = () => {
  * Standalone `speak()` utility (non-hook, can be used outside components).
  *
  * ```ts
- * import { speak } from 'react-native-apptext';
+ * import { speak } from 'react-native-typography';
  * speak('Hello world');
  * ```
  */

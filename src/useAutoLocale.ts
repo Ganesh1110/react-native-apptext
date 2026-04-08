@@ -11,7 +11,7 @@
  *  - Returns a stable reference (memoised, never re-evaluates after mount)
  *
  * Usage:
- *   import { useAutoLocale } from 'react-native-apptext';
+ *   import { useAutoLocale } from 'react-native-typography';
  *
  *   const locale = useAutoLocale();
  *   // locale → "en-US"
@@ -82,10 +82,7 @@ function readDeviceLocale(): string | null {
  *  2. Language prefix match ("en" matches "en-GB")
  *  3. null if no match
  */
-function bestMatch(
-  deviceLocale: string,
-  supported: string[],
-): string | null {
+function bestMatch(deviceLocale: string, supported: string[]): string | null {
   const normalized = deviceLocale.toLowerCase();
   const langPrefix = normalized.split("-")[0];
 

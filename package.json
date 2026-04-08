@@ -1,5 +1,5 @@
 {
-  "name": "react-native-apptext",
+  "name": "react-native-text-kit",
   "version": "4.5.0",
   "description": "Production-grade Typography, i18n, animations, RTL, plugin system, and developer tools for React Native",
   "readme": "README.md",
@@ -7,7 +7,7 @@
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "apptext": "dist/src/cli/index.js"
+    "react-native-text-kit": "dist/src/cli/index.js"
   },
   "exports": {
     ".": {
@@ -39,36 +39,50 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Ganesh1110/react-native-apptext.git"
+    "url": "https://github.com/Ganesh1110/react-native-text-kit.git"
   },
   "keywords": [
     "react-native",
+    "text",
+    "typography",
+    "i18n",
+    "localization",
+    "l10n",
+    "internationalization",
     "react-native-text",
     "react-native-typography",
-    "react-native-ui",
-    "react-native-components",
-    "react-native-design-system",
-    "react-native-responsive",
-    "react-native-theme",
-    "react-native-rtl",
     "react-native-i18n",
-    "typography",
+    "react-native-localization",
+    "react-native-rtl",
+    "react-native-animation",
+    "rtl",
+    "right-to-left",
+    "animated-text",
+    "text-animation",
+    "typewriter",
+    "material-design",
+    "material-design-3",
+    "md3",
     "responsive-text",
     "font-scaling",
-    "theming",
     "design-system",
-    "rtl",
-    "internationalization",
-    "localization",
-    "plugin-system",
-    "remote-translations"
+    "multilingual",
+    "arabic",
+    "translation",
+    "icu",
+    "messageformat",
+    "locale",
+    "accessibility",
+    "text-kit",
+    "react-native-ui",
+    "react-native-components"
   ],
   "author": "Ganesh Jayaprakash <ganeshjayaprakash3@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Ganesh1110/react-native-apptext/issues"
+    "url": "https://github.com/Ganesh1110/react-native-text-kit/issues"
   },
-  "homepage": "https://github.com/Ganesh1110/react-native-apptext#readme",
+  "homepage": "https://github.com/Ganesh1110/react-native-text-kit#readme",
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-native": ">=0.60.0"
