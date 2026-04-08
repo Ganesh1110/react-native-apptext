@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * React Native AppText - Translation Key Extractor
+ * React Native Text Kit - Translation Key Extractor
  *
  * Scans your codebase for t() and tn() calls and generates a translation template
  *
  * Usage:
- *   npx react-native-i18n-text extract --src ./src --output ./locales/template.json
+ *   npx react-native-text-kit extract --src ./src --output ./locales/template.json
  */
 import * as fs from "fs";
 import * as path from "path";
@@ -328,10 +328,10 @@ function parseArgs() {
 }
 function printHelp() {
     console.log(`
-React Native AppText - Translation Key Extractor
+React Native Text Kit - Translation Key Extractor
 
 Usage:
-  npx react-native-i18n-text extract [options]
+  npx react-native-text-kit extract [options]
 
 Options:
   -s, --src <paths>        Source directories to scan (comma-separated)
@@ -349,16 +349,16 @@ Options:
 
 Examples:
   # Extract from src directory
-  npx react-native-i18n-text extract
+  npx react-native-text-kit extract
 
   # Extract from multiple directories
-  npx react-native-i18n-text extract --src ./src,./components
+  npx react-native-text-kit extract --src ./src,./components
 
   # Output as CSV
-  npx react-native-i18n-text extract --format csv --output keys.csv
+  npx react-native-text-kit extract --format csv --output keys.csv
 
   # Verbose mode
-  npx react-native-i18n-text extract --verbose
+  npx react-native-text-kit extract --verbose
   `);
 }
 // Main execution

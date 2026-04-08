@@ -4,9 +4,9 @@
  * AppText CLI — Unified dispatcher
  *
  * Usage:
- *   npx react-native-i18n-text extract [options]
- *   npx react-native-i18n-text validate [options]
- *   npx react-native-i18n-text help
+ *   npx react-native-text-kit extract [options]
+ *   npx react-native-text-kit validate [options]
+ *   npx react-native-text-kit help
  */
 const command = process.argv[2];
 async function main() {
@@ -29,11 +29,11 @@ async function main() {
         case "-h": {
             console.log(`
 ╔══════════════════════════════════════════╗
-║       AppText CLI — react-native-i18n-text  ║
+║       AppText CLI — react-native-text-kit   ║
 ╚══════════════════════════════════════════╝
 
 Usage:
-  npx react-native-i18n-text <command> [options]
+  npx react-native-text-kit <command> [options]
 
 Commands:
   extract    Extract translation keys from source files
@@ -41,18 +41,18 @@ Commands:
   help       Show this help
 
 Examples:
-  npx react-native-i18n-text extract --src ./src --output ./locales/template.json
-  npx react-native-i18n-text validate --src ./src --translations ./locales
-  npx react-native-i18n-text validate --strict --format json > ci-report.json
+  npx react-native-text-kit extract --src ./src --output ./locales/template.json
+  npx react-native-text-kit validate --src ./src --translations ./locales
+  npx react-native-text-kit validate --strict --format json > ci-report.json
 
-Run 'npx react-native-i18n-text <command> --help' for command-specific options.
+Run 'npx react-native-text-kit <command> --help' for command-specific options.
       `);
             process.exit(0);
             break;
         }
         default: {
             console.error(`\n❌ Unknown command: "${command}"`);
-            console.error(`   Run 'npx react-native-i18n-text help' for usage.\n`);
+            console.error(`   Run 'npx react-native-text-kit help' for usage.\n`);
             process.exit(1);
         }
     }
