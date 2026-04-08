@@ -26,15 +26,15 @@ Please be respectful and considerate in all interactions. We're building a welco
 2. **Clone your fork** locally:
 
    ```bash
-   git clone https://github.com/YOUR_USERNAME/react-native-apptext.git
-   cd react-native-apptext
+   git clone https://github.com/YOUR_USERNAME/react-native-text-kit.git
+   cd react-native-text-kit
    ```
 ````
 
 3. **Add upstream remote**:
 
    ```bash
-   git remote add upstream https://github.com/Ganesh1110/react-native-apptext.git
+   git remote add upstream https://github.com/Ganesh1110/react-native-text-kit.git
    ```
 
 4. **Sync your fork**:
@@ -144,7 +144,7 @@ docs: update installation guide for Expo
 
 ## 🐛 Reporting Bugs
 
-[Open an issue](https://github.com/Ganesh1110/react-native-apptext/issues/new) with:
+[Open an issue](https://github.com/Ganesh1110/react-native-text-kit/issues/new) with:
 
 - **Clear, descriptive title**
 - **Steps to reproduce**
@@ -155,7 +155,7 @@ docs: update installation guide for Expo
 
 ## 💡 Requesting Features
 
-[Open an issue](https://github.com/Ganesh1110/react-native-apptext/issues/new) with:
+[Open an issue](https://github.com/Ganesh1110/react-native-text-kit/issues/new) with:
 
 - **Clear description** of the feature
 - **Use case** / why it's needed
@@ -194,7 +194,7 @@ docs: update installation guide for Expo
 
 ## ❓ Need Help?
 
-- Check our [Documentation](https://github.com/Ganesh1110/react-native-apptext/wiki)
-- Search [existing issues](https://github.com/Ganesh1110/react-native-apptext/issues)
+- Check our [Documentation](https://github.com/Ganesh1110/react-native-text-kit/wiki)
+- Search [existing issues](https://github.com/Ganesh1110/react-native-text-kit/issues)
 
 Thank you for contributing! 🙏

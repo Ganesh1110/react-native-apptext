@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import {
   ScrollView,
   View,
@@ -26,14 +26,13 @@ import AppText, {
   translationCache,
   performanceMonitor,
   TranslationErrorBoundary,
-  // v4.4.0
   AppTextSkeleton,
   AppTextDevTools,
   RTLProvider,
   useRTL,
   useRTLFlexDirection,
-  useRTLStyle,           // NEW gap-fix: full RTL style map
-  RTLView,               // NEW gap-fix: auto-mirroring View
+  useRTLStyle, // full RTL style map
+  RTLView, // auto-mirroring View
   isRTLLanguage,
   useAutoLocale,
   useDeviceLocale,
@@ -41,21 +40,20 @@ import AppText, {
   withLazyTranslations,
   LazyLocaleProvider,
   // Gap fixes
-  useDynamicTypeCategory,  // NEW: Dynamic Type semantic category
-  useDynamicTypeFontSize,  // NEW: clamped font size from fontScale
-  useSpeech,               // NEW: no-dep TTS hook
-  speak,                   // NEW: standalone TTS utility
-  AppTextContextMenu,      // NEW: long-press context menu
-  // v4.5.0
+  useDynamicTypeCategory, // Dynamic Type semantic category
+  useDynamicTypeFontSize, // clamped font size from fontScale
+  useSpeech, // no-dep TTS hook
+  speak, // standalone TTS utility
+  AppTextContextMenu, // long-press context menu
   registerAppTextPlugin,
   unregisterAppTextPlugin,
   RemoteLocaleProvider,
   useRemoteLocales,
   useTextMetrics,
-} from "react-native-apptext";
+} from "react-native-text-kit";
 
 // ============================================================================
-// TRANSLATIONS (expanded for v4.4.0 demos)
+// TRANSLATIONS (expanded for demos)
 // ============================================================================
 const translations = {
   en: {
@@ -124,9 +122,9 @@ const languages = [
 // Theme presets for the runtime update demo
 const THEME_PRESETS = {
   indigo: { color: "Indigo", primary: "#6366F1", secondary: "#8B5CF6" },
-  rose:   { color: "Rose",   primary: "#F43F5E", secondary: "#E11D48" },
-  teal:   { color: "Teal",   primary: "#14B8A6", secondary: "#0D9488" },
-  amber:  { color: "Amber",  primary: "#F59E0B", secondary: "#D97706" },
+  rose: { color: "Rose", primary: "#F43F5E", secondary: "#E11D48" },
+  teal: { color: "Teal", primary: "#14B8A6", secondary: "#0D9488" },
+  amber: { color: "Amber", primary: "#F59E0B", secondary: "#D97706" },
 };
 
 const customTheme = {
@@ -160,7 +158,14 @@ function Section({ title, children, initiallyExpanded = true, badge }) {
         onPress={() => setExpanded(!expanded)}
         activeOpacity={0.7}
       >
-        <View style={{ flexDirection: "row", alignItems: "center", flex: 1, gap: 8 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            flex: 1,
+            gap: 8,
+          }}
+        >
           <AppText variant="titleMedium" style={styles.sectionTitle}>
             {title}
           </AppText>
@@ -194,8 +199,12 @@ function MaterialTypographyDemo() {
       <AppText variant="titleLarge">Title Large (22px)</AppText>
       <AppText variant="titleMedium">Title Medium (16px)</AppText>
       <AppText variant="titleSmall">Title Small (14px)</AppText>
-      <AppText variant="bodyLarge">Body Large — standard paragraph text</AppText>
-      <AppText variant="bodyMedium">Body Medium — slightly smaller body text</AppText>
+      <AppText variant="bodyLarge">
+        Body Large — standard paragraph text
+      </AppText>
+      <AppText variant="bodyMedium">
+        Body Medium — slightly smaller body text
+      </AppText>
       <AppText variant="bodySmall">Body Small — smallest body text</AppText>
       <AppText variant="labelLarge">Label Large — labels and buttons</AppText>
       <AppText variant="labelMedium">Label Medium — smaller labels</AppText>
@@ -262,7 +271,9 @@ function TextStylingDemo() {
         Italic text
       </AppText>
       <View style={styles.colorBox}>
-        <AppText style={{ color: "#FFFFFF" }}>Custom style with background</AppText>
+        <AppText style={{ color: "#FFFFFF" }}>
+          Custom style with background
+        </AppText>
       </View>
       <AppText numberOfLines={1} style={{ backgroundColor: "#FEF3C7" }}>
         Truncated long text that will be cut off after one line...
@@ -305,7 +316,9 @@ function SpacingDemo() {
 function CompoundComponentsDemo() {
   return (
     <Section title="5️⃣ Compound Components" initiallyExpanded={false}>
-      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>Material Design 3:</AppText>
+      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>
+        Material Design 3:
+      </AppText>
       <AppText.DisplayLarge>DisplayLarge</AppText.DisplayLarge>
       <AppText.DisplayMedium>DisplayMedium</AppText.DisplayMedium>
       <AppText.HeadlineLarge>HeadlineLarge</AppText.HeadlineLarge>
@@ -313,7 +326,9 @@ function CompoundComponentsDemo() {
       <AppText.BodyLarge>BodyLarge</AppText.BodyLarge>
       <AppText.LabelSmall>LabelSmall</AppText.LabelSmall>
 
-      <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>Legacy:</AppText>
+      <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>
+        Legacy:
+      </AppText>
       <AppText.H1>H1 Component</AppText.H1>
       <AppText.H2>H2 Component</AppText.H2>
       <AppText.Body>AppText.Body</AppText.Body>
@@ -329,10 +344,18 @@ function CompoundComponentsDemo() {
 function FadeAnimationsDemo() {
   return (
     <Section title="6️⃣ Fade Animations" initiallyExpanded={false}>
-      <AppText animated animation={{ type: "fadeIn", duration: 1000 }}>fadeIn</AppText>
-      <AppText animated animation={{ type: "fadeOut", duration: 1000 }}>fadeOut</AppText>
-      <AppText animated animation={{ type: "blink", duration: 2000 }}>blink</AppText>
-      <AppText animated animation={{ type: "glow", duration: 2000 }}>glow</AppText>
+      <AppText animated animation={{ type: "fadeIn", duration: 1000 }}>
+        fadeIn
+      </AppText>
+      <AppText animated animation={{ type: "fadeOut", duration: 1000 }}>
+        fadeOut
+      </AppText>
+      <AppText animated animation={{ type: "blink", duration: 2000 }}>
+        blink
+      </AppText>
+      <AppText animated animation={{ type: "glow", duration: 2000 }}>
+        glow
+      </AppText>
     </Section>
   );
 }
@@ -340,10 +363,18 @@ function FadeAnimationsDemo() {
 function SlideAnimationsDemo() {
   return (
     <Section title="7️⃣ Slide Animations" initiallyExpanded={false}>
-      <AppText animated animation={{ type: "slideInRight", duration: 800 }}>slideInRight</AppText>
-      <AppText animated animation={{ type: "slideInLeft", duration: 800 }}>slideInLeft</AppText>
-      <AppText animated animation={{ type: "slideInUp", duration: 800 }}>slideInUp</AppText>
-      <AppText animated animation={{ type: "slideInDown", duration: 800 }}>slideInDown</AppText>
+      <AppText animated animation={{ type: "slideInRight", duration: 800 }}>
+        slideInRight
+      </AppText>
+      <AppText animated animation={{ type: "slideInLeft", duration: 800 }}>
+        slideInLeft
+      </AppText>
+      <AppText animated animation={{ type: "slideInUp", duration: 800 }}>
+        slideInUp
+      </AppText>
+      <AppText animated animation={{ type: "slideInDown", duration: 800 }}>
+        slideInDown
+      </AppText>
     </Section>
   );
 }
@@ -351,10 +382,18 @@ function SlideAnimationsDemo() {
 function BounceScaleAnimationsDemo() {
   return (
     <Section title="8️⃣ Bounce & Scale Animations" initiallyExpanded={false}>
-      <AppText animated animation={{ type: "bounceIn", duration: 1000 }}>bounceIn</AppText>
-      <AppText animated animation={{ type: "zoomIn", duration: 600 }}>zoomIn</AppText>
-      <AppText animated animation={{ type: "pulse", duration: 1500 }}>pulse</AppText>
-      <AppText animated animation={{ type: "rubberBand", duration: 1000 }}>rubberBand</AppText>
+      <AppText animated animation={{ type: "bounceIn", duration: 1000 }}>
+        bounceIn
+      </AppText>
+      <AppText animated animation={{ type: "zoomIn", duration: 600 }}>
+        zoomIn
+      </AppText>
+      <AppText animated animation={{ type: "pulse", duration: 1500 }}>
+        pulse
+      </AppText>
+      <AppText animated animation={{ type: "rubberBand", duration: 1000 }}>
+        rubberBand
+      </AppText>
     </Section>
   );
 }
@@ -362,9 +401,15 @@ function BounceScaleAnimationsDemo() {
 function RotateFlipAnimationsDemo() {
   return (
     <Section title="9️⃣ Rotate & Flip Animations" initiallyExpanded={false}>
-      <AppText animated animation={{ type: "rotateIn", duration: 800 }}>rotateIn</AppText>
-      <AppText animated animation={{ type: "flipInX", duration: 1000 }}>flipInX</AppText>
-      <AppText animated animation={{ type: "flipInY", duration: 1000 }}>flipInY</AppText>
+      <AppText animated animation={{ type: "rotateIn", duration: 800 }}>
+        rotateIn
+      </AppText>
+      <AppText animated animation={{ type: "flipInX", duration: 1000 }}>
+        flipInX
+      </AppText>
+      <AppText animated animation={{ type: "flipInY", duration: 1000 }}>
+        flipInY
+      </AppText>
     </Section>
   );
 }
@@ -372,12 +417,24 @@ function RotateFlipAnimationsDemo() {
 function SpecialAnimationsDemo() {
   return (
     <Section title="🔟 Special Animations" initiallyExpanded={false}>
-      <AppText animated animation={{ type: "shake", duration: 1000 }}>shake</AppText>
-      <AppText animated animation={{ type: "wobble", duration: 1000 }}>wobble</AppText>
-      <AppText animated animation={{ type: "swing", duration: 1000 }}>swing</AppText>
-      <AppText animated animation={{ type: "tada", duration: 1000 }}>tada</AppText>
-      <AppText animated animation={{ type: "neon", duration: 2000 }}>neon</AppText>
-      <AppText animated animation={{ type: "gradientShift", duration: 3000 }}>gradientShift</AppText>
+      <AppText animated animation={{ type: "shake", duration: 1000 }}>
+        shake
+      </AppText>
+      <AppText animated animation={{ type: "wobble", duration: 1000 }}>
+        wobble
+      </AppText>
+      <AppText animated animation={{ type: "swing", duration: 1000 }}>
+        swing
+      </AppText>
+      <AppText animated animation={{ type: "tada", duration: 1000 }}>
+        tada
+      </AppText>
+      <AppText animated animation={{ type: "neon", duration: 2000 }}>
+        neon
+      </AppText>
+      <AppText animated animation={{ type: "gradientShift", duration: 3000 }}>
+        gradientShift
+      </AppText>
     </Section>
   );
 }
@@ -385,10 +442,17 @@ function SpecialAnimationsDemo() {
 function TypewriterDemo() {
   return (
     <Section title="1️⃣1️⃣ Typewriter Animation" initiallyExpanded={false}>
-      <AppText animated animation={{ type: "typewriter", speed: 30, delay: 500 }} cursor>
+      <AppText
+        animated
+        animation={{ type: "typewriter", speed: 30, delay: 500 }}
+        cursor
+      >
         This text types itself character by character. Watch each letter appear!
       </AppText>
-      <AppText animated animation={{ type: "typewriter", speed: 60, delay: 300 }}>
+      <AppText
+        animated
+        animation={{ type: "typewriter", speed: 60, delay: 300 }}
+      >
         Faster typewriter with 60ms speed
       </AppText>
     </Section>
@@ -473,18 +537,28 @@ function LocalizationDemo() {
       </View>
 
       <View style={{ alignItems: isRTL ? "flex-end" : "flex-start" }}>
-        <AppText variant="titleSmall" style={{ marginBottom: 5 }}>Basic Translation:</AppText>
+        <AppText variant="titleSmall" style={{ marginBottom: 5 }}>
+          Basic Translation:
+        </AppText>
         <AppText>{t("welcome")}</AppText>
-        <AppText style={{ marginTop: 8 }}>{t("greeting", { name: "Developer" })}</AppText>
+        <AppText style={{ marginTop: 8 }}>
+          {t("greeting", { name: "Developer" })}
+        </AppText>
 
-        <AppText variant="titleSmall" style={{ marginTop: 15, marginBottom: 5 }}>
+        <AppText
+          variant="titleSmall"
+          style={{ marginTop: 15, marginBottom: 5 }}
+        >
           ICU Plural:
         </AppText>
         <AppText>{t("icu_plural", { count: 0 })}</AppText>
         <AppText>{t("icu_plural", { count: 1 })}</AppText>
         <AppText>{t("icu_plural", { count: 5 })}</AppText>
 
-        <AppText variant="titleSmall" style={{ marginTop: 15, marginBottom: 5 }}>
+        <AppText
+          variant="titleSmall"
+          style={{ marginTop: 15, marginBottom: 5 }}
+        >
           ICU Select:
         </AppText>
         <AppText>{t("icu_select_gender", { gender: "male" })}</AppText>
@@ -504,7 +578,9 @@ function LocalizationDemo() {
 function TransComponentDemo() {
   return (
     <Section title="1️⃣5️⃣ Trans Component (Rich i18n)">
-      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>Basic Usage:</AppText>
+      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>
+        Basic Usage:
+      </AppText>
       <Trans i18nKey="welcome" />
 
       <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>
@@ -532,7 +608,7 @@ function TransComponentDemo() {
 }
 
 // ============================================================================
-// 16. MARKDOWN TRANS (updated for v4.4.0 nested support)
+// 16. MARKDOWN TRANS (updated for nested support)
 // ============================================================================
 function MarkdownTransDemo() {
   return (
@@ -551,7 +627,7 @@ function MarkdownTransDemo() {
       />
 
       <AppText variant="titleSmall" style={{ marginTop: 15, marginBottom: 8 }}>
-        🆕 Nested Markdown (v4.4.0):
+        Nested Markdown :
       </AppText>
       <AppText variant="caption" color="#6B7280" style={{ marginBottom: 6 }}>
         **_bold italic_** and **[bold link](url)** — recursive descent parser
@@ -570,7 +646,7 @@ function MarkdownTransDemo() {
         <AppText variant="caption" color="#374151">
           Supported: **bold** · *italic* · __underline__ · ~~strikethrough~~ ·
           {"`"}code{"` ·"} [link](url) · {"{{component:text}}"}
-          {"\n"}🆕 Nested: **_bold italic_** · **[bold link](url)**
+          {"\n"}Nested: **_bold italic_** · **[bold link](url)**
         </AppText>
       </View>
     </Section>
@@ -608,14 +684,21 @@ function ResponsiveFontDemo() {
 // ============================================================================
 function ScriptDetectionDemo() {
   return (
-    <Section title="1️⃣8️⃣ Script Detection & RTL Scripts" initiallyExpanded={false}>
-      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>LTR Scripts:</AppText>
+    <Section
+      title="1️⃣8️⃣ Script Detection & RTL Scripts"
+      initiallyExpanded={false}
+    >
+      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>
+        LTR Scripts:
+      </AppText>
       <AppText>Latin: Hello World</AppText>
       <AppText>Chinese: 你好世界</AppText>
       <AppText>Japanese: こんにちは世界</AppText>
       <AppText>Hindi: नमस्ते दुनिया</AppText>
 
-      <AppText variant="titleSmall" style={{ marginTop: 15, marginBottom: 8 }}>RTL Scripts:</AppText>
+      <AppText variant="titleSmall" style={{ marginTop: 15, marginBottom: 8 }}>
+        RTL Scripts:
+      </AppText>
       <AppText style={{ textAlign: "right" }}>Arabic: مرحبا بالعالم</AppText>
       <AppText style={{ textAlign: "right" }}>Hebrew: שלום עולם</AppText>
       <AppText style={{ textAlign: "right" }}>Persian: سلام دنیا</AppText>
@@ -629,24 +712,35 @@ function ScriptDetectionDemo() {
 function NumberFormatterDemo() {
   return (
     <Section title="1️⃣9️⃣ Number Formatter" initiallyExpanded={false}>
-      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>Currency:</AppText>
-      <AppText>USD: {NumberFormatter.formatCurrency(1234.56, "en-US", "USD")}</AppText>
-      <AppText>EUR: {NumberFormatter.formatCurrency(1234.56, "de-DE", "EUR")}</AppText>
-      <AppText>GBP: {NumberFormatter.formatCurrency(1234.56, "en-GB", "GBP")}</AppText>
-      <AppText>JPY: {NumberFormatter.formatCurrency(9999, "ja-JP", "JPY")}</AppText>
+      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>
+        Currency:
+      </AppText>
+      <AppText>
+        USD: {NumberFormatter.formatCurrency(1234.56, "en-US", "USD")}
+      </AppText>
+      <AppText>
+        EUR: {NumberFormatter.formatCurrency(1234.56, "de-DE", "EUR")}
+      </AppText>
+      <AppText>
+        GBP: {NumberFormatter.formatCurrency(1234.56, "en-GB", "GBP")}
+      </AppText>
+      <AppText>
+        JPY: {NumberFormatter.formatCurrency(9999, "ja-JP", "JPY")}
+      </AppText>
 
-      <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>Compact:</AppText>
+      <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>
+        Compact:
+      </AppText>
       <AppText>{NumberFormatter.formatCompact(1_500_000, "en-US")}</AppText>
       <AppText>{NumberFormatter.formatCompact(2_300_000_000, "en-US")}</AppText>
 
-      <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>Ordinals:</AppText>
+      <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 8 }}>
+        Ordinals:
+      </AppText>
       <AppText>
-        {OrdinalFormatter.format(1, "en")},{" "}
-        {OrdinalFormatter.format(2, "en")},{" "}
-        {OrdinalFormatter.format(3, "en")},{" "}
-        {OrdinalFormatter.format(4, "en")},{" "}
-        {OrdinalFormatter.format(11, "en")},{" "}
-        {OrdinalFormatter.format(21, "en")}
+        {OrdinalFormatter.format(1, "en")}, {OrdinalFormatter.format(2, "en")},{" "}
+        {OrdinalFormatter.format(3, "en")}, {OrdinalFormatter.format(4, "en")},{" "}
+        {OrdinalFormatter.format(11, "en")}, {OrdinalFormatter.format(21, "en")}
       </AppText>
     </Section>
   );
@@ -659,7 +753,9 @@ function ThemeDemo() {
   const theme = useAppTextTheme();
   return (
     <Section title="2️⃣0️⃣ Theme Customization">
-      <AppText variant="bodySmall" color="#666">Active theme colours:</AppText>
+      <AppText variant="bodySmall" color="#666">
+        Active theme colours:
+      </AppText>
       <View style={styles.colorSwatches}>
         {Object.entries({
           primary: theme.colors.primary,
@@ -685,7 +781,10 @@ function ThemeDemo() {
 function AccessibilityDemo() {
   return (
     <Section title="2️⃣1️⃣ Accessibility">
-      <AppText accessibilityLabel="Important header text" accessibilityRole="header">
+      <AppText
+        accessibilityLabel="Important header text"
+        accessibilityRole="header"
+      >
         Header (role=header)
       </AppText>
       <AppText
@@ -702,12 +801,8 @@ function AccessibilityDemo() {
       >
         Accessible Button (role=button)
       </AppText>
-      <AppText accessibilityState={{ selected: true }}>
-        Selected State
-      </AppText>
-      <AppText accessibilityState={{ disabled: true }}>
-        Disabled State
-      </AppText>
+      <AppText accessibilityState={{ selected: true }}>Selected State</AppText>
+      <AppText accessibilityState={{ disabled: true }}>Disabled State</AppText>
     </Section>
   );
 }
@@ -731,14 +826,18 @@ function PerformanceDemo() {
 
       {Object.keys(perfStats).length > 0 && (
         <>
-          <AppText variant="titleSmall" style={{ marginTop: 12, marginBottom: 5 }}>
+          <AppText
+            variant="titleSmall"
+            style={{ marginTop: 12, marginBottom: 5 }}
+          >
             Performance Metrics:
           </AppText>
           {Object.entries(perfStats)
             .slice(0, 5)
             .map(([name, stats]) => (
               <AppText key={name} variant="caption">
-                {name}: {stats?.count || 0} calls, avg {stats?.mean?.toFixed(2) || 0}ms
+                {name}: {stats?.count || 0} calls, avg{" "}
+                {stats?.mean?.toFixed(2) || 0}ms
               </AppText>
             ))}
         </>
@@ -758,14 +857,21 @@ function ErrorBoundaryDemo() {
       <AppText variant="bodySmall" color="#666">
         TranslationErrorBoundary catches errors and shows fallback UI.
       </AppText>
-      <TouchableOpacity style={styles.button} onPress={() => setShowError(true)}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => setShowError(true)}
+      >
         <AppText color="#FFF">Trigger Error to Test Boundary</AppText>
       </TouchableOpacity>
       <TranslationErrorBoundary
         fallback={
           <View style={styles.errorFallback}>
-            <AppText color="#EF4444" weight="700">⚠️ Translation Error</AppText>
-            <AppText variant="caption" color="#666">Caught by boundary</AppText>
+            <AppText color="#EF4444" weight="700">
+              ⚠️ Translation Error
+            </AppText>
+            <AppText variant="caption" color="#666">
+              Caught by boundary
+            </AppText>
           </View>
         }
         onError={(error) => console.log("Translation error:", error.message)}
@@ -780,7 +886,7 @@ function ErrorBoundaryDemo() {
 }
 
 // ============================================================================
-// 24. 🆕 v4.4.0 — useAutoLocale & useDeviceLocale
+// 24. — useAutoLocale & useDeviceLocale
 // ============================================================================
 function AutoLocaleDemo() {
   const deviceLocale = useDeviceLocale();
@@ -790,7 +896,7 @@ function AutoLocaleDemo() {
   });
 
   return (
-    <Section title="2️⃣4️⃣ 🆕 Auto Locale Detection" badge="v4.4.0">
+    <Section title="2️⃣4️⃣ Auto Locale Detection">
       <View style={styles.infoBox}>
         <AppText variant="caption" color="#6366F1" weight="600">
           useDeviceLocale() — Raw system locale
@@ -808,8 +914,8 @@ function AutoLocaleDemo() {
           ✅ Best match: {autoLocale}
         </AppText>
         <AppText variant="caption" color="#6B7280" style={{ marginTop: 4 }}>
-          Filters device locale against your supported list.
-          Fallback to "en" if no match found.
+          Filters device locale against your supported list. Fallback to "en" if
+          no match found.
         </AppText>
       </View>
 
@@ -822,7 +928,7 @@ function AutoLocaleDemo() {
 }
 
 // ============================================================================
-// 25. 🆕 v4.4.0 — useUpdateAppTheme — Runtime Theme Hot-Patching
+// 25. — useUpdateAppTheme — Runtime Theme Hot-Patching
 // ============================================================================
 function RuntimeThemeDemo() {
   const updateTheme = useUpdateAppTheme();
@@ -831,9 +937,10 @@ function RuntimeThemeDemo() {
   const [activePreset, setActivePreset] = useState("indigo");
 
   return (
-    <Section title="2️⃣5️⃣ 🆕 Runtime Theme Update" badge="v4.4.0">
+    <Section title="2️⃣5️⃣ Runtime Theme Update">
       <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
-        useUpdateAppTheme() — hot-patches theme tokens without remounting the provider.
+        useUpdateAppTheme() — hot-patches theme tokens without remounting the
+        provider.
       </AppText>
 
       <View style={styles.presetRow}>
@@ -863,15 +970,29 @@ function RuntimeThemeDemo() {
       </View>
 
       <View style={styles.infoBox}>
-        <AppText variant="caption" color="#6B7280">Current primary colour</AppText>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginTop: 6 }}>
-          <View style={[styles.themeDot, { backgroundColor: theme.colors.primary }]} />
+        <AppText variant="caption" color="#6B7280">
+          Current primary colour
+        </AppText>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 8,
+            marginTop: 6,
+          }}
+        >
+          <View
+            style={[styles.themeDot, { backgroundColor: theme.colors.primary }]}
+          />
           <AppText variant="bodyMedium" weight="600">
             {theme.colors.primary}
           </AppText>
         </View>
         <AppText variant="caption" color="#6B7280" style={{ marginTop: 6 }}>
-          Try: {t("theme_demo", { color: THEME_PRESETS[activePreset]?.color || "Indigo" })}
+          Try:{" "}
+          {t("theme_demo", {
+            color: THEME_PRESETS[activePreset]?.color || "Indigo",
+          })}
         </AppText>
       </View>
 
@@ -889,13 +1010,13 @@ function RuntimeThemeDemo() {
 }
 
 // ============================================================================
-// 26. 🆕 v4.4.0 — AppTextSkeleton — Shimmer Loading Placeholder
+// 26. — AppTextSkeleton — Shimmer Loading Placeholder
 // ============================================================================
 function SkeletonDemo() {
   const [showSkeleton, setShowSkeleton] = useState(true);
 
   return (
-    <Section title="2️⃣6️⃣ 🆕 AppTextSkeleton" badge="v4.4.0">
+    <Section title="2️⃣6️⃣ AppTextSkeleton">
       <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
         Shimmer placeholder matching variant line-heights. Ideal for lazy
         translation loading.
@@ -913,7 +1034,9 @@ function SkeletonDemo() {
 
       {showSkeleton ? (
         <View style={{ marginTop: 12, gap: 10 }}>
-          <AppText variant="caption" color="#9CA3AF">Skeleton placeholders:</AppText>
+          <AppText variant="caption" color="#9CA3AF">
+            Skeleton placeholders:
+          </AppText>
           <AppTextSkeleton variant="headlineMedium" width={220} />
           <AppTextSkeleton variant="titleSmall" width={160} />
           <AppTextSkeleton variant="bodyMedium" lines={3} lastLineWidth="55%" />
@@ -922,7 +1045,9 @@ function SkeletonDemo() {
           <AppText variant="caption" color="#9CA3AF" style={{ marginTop: 8 }}>
             Dark mode variant:
           </AppText>
-          <View style={{ backgroundColor: "#1F2937", padding: 12, borderRadius: 8 }}>
+          <View
+            style={{ backgroundColor: "#1F2937", padding: 12, borderRadius: 8 }}
+          >
             <AppTextSkeleton
               variant="titleMedium"
               width={180}
@@ -951,8 +1076,8 @@ function SkeletonDemo() {
             Subtitle text visible
           </AppText>
           <AppText variant="bodyMedium" style={{ marginTop: 4 }}>
-            The skeleton placeholder has been replaced with real content.
-            The line heights matched perfectly during loading.
+            The skeleton placeholder has been replaced with real content. The
+            line heights matched perfectly during loading.
           </AppText>
         </View>
       )}
@@ -961,14 +1086,14 @@ function SkeletonDemo() {
 }
 
 // ============================================================================
-// 27. 🆕 v4.4.0 — RTLProvider & useRTL
+// 27. — RTLProvider & useRTL
 // ============================================================================
 function RTLProviderDemo() {
   const { isRTL, setRTL, restartRequired } = useRTL();
   const flexDir = useRTLFlexDirection("row");
 
   return (
-    <Section title="2️⃣7️⃣ 🆕 RTLProvider & useRTL" badge="v4.4.0">
+    <Section title="2️⃣7️⃣ RTLProvider & useRTL">
       <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
         RTLProvider wraps I18nManager.forceRTL(). useRTL() gives you isRTL,
         setRTL(), and restartRequired.
@@ -976,43 +1101,87 @@ function RTLProviderDemo() {
 
       <View style={styles.infoBox}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <AppText variant="caption" color="#6B7280">isRTL</AppText>
+          <AppText variant="caption" color="#6B7280">
+            isRTL
+          </AppText>
           <AppText variant="bodyMedium" color={isRTL ? "#10B981" : "#6366F1"}>
             {String(isRTL)} {isRTL ? "←" : "→"}
           </AppText>
         </View>
-        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 4 }}>
-          <AppText variant="caption" color="#6B7280">restartRequired</AppText>
-          <AppText variant="bodyMedium" color={restartRequired ? "#F59E0B" : "#10B981"}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: 4,
+          }}
+        >
+          <AppText variant="caption" color="#6B7280">
+            restartRequired
+          </AppText>
+          <AppText
+            variant="bodyMedium"
+            color={restartRequired ? "#F59E0B" : "#10B981"}
+          >
             {String(restartRequired)}
           </AppText>
         </View>
       </View>
 
       {/* useRTLFlexDirection demo */}
-      <AppText variant="caption" color="#6B7280" style={{ marginTop: 12, marginBottom: 6 }}>
+      <AppText
+        variant="caption"
+        color="#6B7280"
+        style={{ marginTop: 12, marginBottom: 6 }}
+      >
         useRTLFlexDirection('row') = {flexDir} — nav bar demo:
       </AppText>
       <View style={[styles.navBar, { flexDirection: flexDir }]}>
-        <View style={styles.navIcon}><AppText size={18}>☰</AppText></View>
-        <AppText variant="titleSmall" style={{ flex: 1, textAlign: isRTL ? "right" : "left" }}>
+        <View style={styles.navIcon}>
+          <AppText size={18}>☰</AppText>
+        </View>
+        <AppText
+          variant="titleSmall"
+          style={{ flex: 1, textAlign: isRTL ? "right" : "left" }}
+        >
           App Title
         </AppText>
-        <View style={styles.navIcon}><AppText size={18}>🔔</AppText></View>
-        <View style={styles.navIcon}><AppText size={18}>👤</AppText></View>
+        <View style={styles.navIcon}>
+          <AppText size={18}>🔔</AppText>
+        </View>
+        <View style={styles.navIcon}>
+          <AppText size={18}>👤</AppText>
+        </View>
       </View>
 
       {/* isRTLLanguage demo */}
-      <AppText variant="caption" color="#6B7280" style={{ marginTop: 12, marginBottom: 6 }}>
+      <AppText
+        variant="caption"
+        color="#6B7280"
+        style={{ marginTop: 12, marginBottom: 6 }}
+      >
         isRTLLanguage() detection:
       </AppText>
       <View style={{ gap: 2 }}>
-        {[["ar", "Arabic"], ["he", "Hebrew"], ["fa", "Farsi"], ["ur", "Urdu"],
-          ["en", "English"], ["fr", "French"], ["ja", "Japanese"]].map(([code, name]) => (
+        {[
+          ["ar", "Arabic"],
+          ["he", "Hebrew"],
+          ["fa", "Farsi"],
+          ["ur", "Urdu"],
+          ["en", "English"],
+          ["fr", "French"],
+          ["ja", "Japanese"],
+        ].map(([code, name]) => (
           <View key={code} style={{ flexDirection: "row", gap: 8 }}>
-            <AppText variant="caption" style={{ width: 60 }} color="#6B7280">{code}</AppText>
-            <AppText variant="caption" style={{ width: 70 }}>{name}</AppText>
-            <AppText variant="caption" color={isRTLLanguage(code) ? "#EF4444" : "#10B981"}>
+            <AppText variant="caption" style={{ width: 60 }} color="#6B7280">
+              {code}
+            </AppText>
+            <AppText variant="caption" style={{ width: 70 }}>
+              {name}
+            </AppText>
+            <AppText
+              variant="caption"
+              color={isRTLLanguage(code) ? "#EF4444" : "#10B981"}
+            >
               {isRTLLanguage(code) ? "RTL ◀" : "LTR ▶"}
             </AppText>
           </View>
@@ -1020,9 +1189,15 @@ function RTLProviderDemo() {
       </View>
 
       {restartRequired && (
-        <View style={[styles.infoBox, { backgroundColor: "#FEF3C7", marginTop: 12 }]}>
+        <View
+          style={[
+            styles.infoBox,
+            { backgroundColor: "#FEF3C7", marginTop: 12 },
+          ]}
+        >
           <AppText variant="caption" color="#92400E">
-            ⚠️ A full app restart is needed for native RTL layout mirroring to take effect.
+            ⚠️ A full app restart is needed for native RTL layout mirroring to
+            take effect.
           </AppText>
         </View>
       )}
@@ -1031,38 +1206,47 @@ function RTLProviderDemo() {
 }
 
 // ============================================================================
-// 28. 🆕 v4.4.0 — AppTextDevTools
+// 28. — AppTextDevTools
 // ============================================================================
 function DevToolsDemo() {
   const { t } = useLang();
   // Trigger some translations to populate stats
   const _ = [
-    t("welcome"), t("greeting", { name: "Demo" }),
-    t("icu_plural", { count: 3 }), t("rich_markdown"),
+    t("welcome"),
+    t("greeting", { name: "Demo" }),
+    t("icu_plural", { count: 3 }),
+    t("rich_markdown"),
   ];
 
   return (
-    <Section title="2️⃣8️⃣ 🆕 AppTextDevTools" badge="v4.4.0">
+    <Section title="2️⃣8️⃣ AppTextDevTools">
       <View style={styles.infoBox}>
         <AppText variant="caption" color="#6366F1" weight="600">
           🔤 DevTools overlay is active
         </AppText>
         <AppText variant="bodySmall" color="#6B7280" style={{ marginTop: 6 }}>
           Look for the "🔤 AppText" badge in the{" "}
-          <AppText weight="700" color="#1F2937">bottom-right corner</AppText>{" "}
+          <AppText weight="700" color="#1F2937">
+            bottom-right corner
+          </AppText>{" "}
           of the screen. Tap it to expand the performance panel.
         </AppText>
       </View>
 
       <View style={{ marginTop: 12 }}>
-        <AppText variant="titleSmall" style={{ marginBottom: 6 }}>Overlay shows:</AppText>
+        <AppText variant="titleSmall" style={{ marginBottom: 6 }}>
+          Overlay shows:
+        </AppText>
         {[
           "📊 LRU cache hit rate (colour-coded: green ≥90%, amber ≥60%, red <60%)",
           "⚡️ Top 5 slowest translation keys by p95 latency",
           "🌍 Current language and text direction",
           "🗑️ Cache & stats clear button",
         ].map((item, i) => (
-          <View key={i} style={{ flexDirection: "row", gap: 8, marginBottom: 4 }}>
+          <View
+            key={i}
+            style={{ flexDirection: "row", gap: 8, marginBottom: 4 }}
+          >
             <AppText variant="caption">{item}</AppText>
           </View>
         ))}
@@ -1101,15 +1285,15 @@ function InteractiveFeaturesDemo() {
         {count === 0
           ? "Tap to start"
           : count > 5
-          ? "Warning: High count! Tap to reset."
-          : "Keep tapping..."}
+            ? "Warning: High count! Tap to reset."
+            : "Keep tapping..."}
       </AppText>
     </Section>
   );
 }
 
 // ============================================================================
-// 30. 🆕 GAP FIX: CSS-Only RTL (no restart needed)
+// CSS-Only RTL (no restart needed)
 // ============================================================================
 function InnerCSSRTLDemo() {
   const { isRTL, mode } = useRTL();
@@ -1119,29 +1303,45 @@ function InnerCSSRTLDemo() {
     <View style={{ marginTop: 12, gap: 10 }}>
       <View style={styles.infoBox}>
         <AppText variant="caption" color="#6B7280">
-          isRTL:{" "}
-          <AppText weight="700">{String(isRTL)}</AppText>
+          isRTL: <AppText weight="700">{String(isRTL)}</AppText>
           {" · "}mode:{" "}
-          <AppText weight="700" color="#10B981">{mode}</AppText>
+          <AppText weight="700" color="#10B981">
+            {mode}
+          </AppText>
         </AppText>
       </View>
 
       {/* RTLView auto-mirrors */}
       <RTLView
         style={{
-          gap: 8, padding: 10,
-          backgroundColor: "#F0F4FF", borderRadius: 8,
+          gap: 8,
+          padding: 10,
+          backgroundColor: "#F0F4FF",
+          borderRadius: 8,
         }}
       >
-        <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: "#6366F1", justifyContent: "center", alignItems: "center" }}>
-          <AppText color="#FFF" size={18}>A</AppText>
+        <View
+          style={{
+            width: 36,
+            height: 36,
+            borderRadius: 18,
+            backgroundColor: "#6366F1",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <AppText color="#FFF" size={18}>
+            A
+          </AppText>
         </View>
         <View style={{ flex: 1 }}>
           <AppText variant="titleSmall">
             {isRTL ? "مرحبا بالعالم" : "Hello World"}
           </AppText>
           <AppText variant="caption" color="#6B7280">
-            {isRTL ? "محاذاة تلقائية بدون إعادة تشغيل" : "Auto-mirrored without restart"}
+            {isRTL
+              ? "محاذاة تلقائية بدون إعادة تشغيل"
+              : "Auto-mirrored without restart"}
           </AppText>
         </View>
         <AppText size={20}>{isRTL ? "◄" : "►"}</AppText>
@@ -1150,8 +1350,18 @@ function InnerCSSRTLDemo() {
       {/* useRTLStyle row demo */}
       <View style={[rtlStyle.row, { gap: 8 }]}>
         {["Home", "Search", "Profile"].map((item) => (
-          <View key={item} style={{ paddingHorizontal: 12, paddingVertical: 6, backgroundColor: "#E0E7FF", borderRadius: 16 }}>
-            <AppText variant="labelMedium" color="#4338CA">{item}</AppText>
+          <View
+            key={item}
+            style={{
+              paddingHorizontal: 12,
+              paddingVertical: 6,
+              backgroundColor: "#E0E7FF",
+              borderRadius: 16,
+            }}
+          >
+            <AppText variant="labelMedium" color="#4338CA">
+              {item}
+            </AppText>
           </View>
         ))}
       </View>
@@ -1167,7 +1377,7 @@ function CSSRTLDemo() {
   const [cssLang, setCssLang] = useState("en");
 
   return (
-    <Section title="3️⃣0️⃣ 🆕 CSS RTL (no restart)" badge="Gap Fix" initiallyExpanded={false}>
+    <Section title="3️⃣0️⃣ CSS RTL (no restart)" initiallyExpanded={false}>
       <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
         mode='css' mirrors layout via flexDirection instantly.{"\n"}
         No I18nManager.forceRTL() — no restart required.
@@ -1183,10 +1393,7 @@ function CSSRTLDemo() {
             ]}
             onPress={() => setCssLang(lang)}
           >
-            <AppText
-              size={12}
-              color={cssLang === lang ? "#FFF" : "#374151"}
-            >
+            <AppText size={12} color={cssLang === lang ? "#FFF" : "#374151"}>
               {lang === "en" ? "🇺🇸 LTR" : "🇸🇦 RTL"}
             </AppText>
           </TouchableOpacity>
@@ -1201,7 +1408,7 @@ function CSSRTLDemo() {
 }
 
 // ============================================================================
-// 31. 🆕 GAP FIX: Dynamic Type Categories
+// Dynamic Type Categories
 // ============================================================================
 function DynamicTypeDemo() {
   const { PixelRatio } = require("react-native");
@@ -1212,19 +1419,31 @@ function DynamicTypeDemo() {
   const isAccessibility = category.startsWith("accessibility");
 
   return (
-    <Section title="3️⃣1️⃣ 🆕 Dynamic Type" badge="Gap Fix" initiallyExpanded={false}>
+    <Section title="3️⃣1️⃣ Dynamic Type" initiallyExpanded={false}>
       <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
-        useDynamicTypeCategory() maps PixelRatio.getFontScale() to semantic
-        iOS Dynamic Type size names. Increase text size in device Settings to test.
+        useDynamicTypeCategory() maps PixelRatio.getFontScale() to semantic iOS
+        Dynamic Type size names. Increase text size in device Settings to test.
       </AppText>
 
       <View style={styles.infoBox}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <AppText variant="caption" color="#6B7280">fontScale</AppText>
-          <AppText variant="bodyMedium" weight="700">{fontScale.toFixed(2)}x</AppText>
+          <AppText variant="caption" color="#6B7280">
+            fontScale
+          </AppText>
+          <AppText variant="bodyMedium" weight="700">
+            {fontScale.toFixed(2)}x
+          </AppText>
         </View>
-        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 4 }}>
-          <AppText variant="caption" color="#6B7280">category</AppText>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: 4,
+          }}
+        >
+          <AppText variant="caption" color="#6B7280">
+            category
+          </AppText>
           <AppText
             variant="bodyMedium"
             weight="700"
@@ -1239,20 +1458,35 @@ function DynamicTypeDemo() {
         <AppText variant="caption" color="#9CA3AF" style={{ marginBottom: 4 }}>
           {"useDynamicTypeFontSize(28) → " + scaledTitle.toFixed(1) + "px"}
         </AppText>
-        <AppText size={scaledTitle} weight="700">Heading scales with system font</AppText>
+        <AppText size={scaledTitle} weight="700">
+          Heading scales with system font
+        </AppText>
 
-        <AppText variant="caption" color="#9CA3AF" style={{ marginTop: 10, marginBottom: 4 }}>
-          {"useDynamicTypeFontSize(16, min:13, max:26) → " + scaledBody.toFixed(1) + "px"}
+        <AppText
+          variant="caption"
+          color="#9CA3AF"
+          style={{ marginTop: 10, marginBottom: 4 }}
+        >
+          {"useDynamicTypeFontSize(16, min:13, max:26) → " +
+            scaledBody.toFixed(1) +
+            "px"}
         </AppText>
         <AppText size={scaledBody}>
-          Body text also scales proportionally. Clamped between min and max to prevent layout breakage.
+          Body text also scales proportionally. Clamped between min and max to
+          prevent layout breakage.
         </AppText>
       </View>
 
       {isAccessibility && (
-        <View style={[styles.infoBox, { backgroundColor: "#FEF3C7", marginTop: 12 }]}>
+        <View
+          style={[
+            styles.infoBox,
+            { backgroundColor: "#FEF3C7", marginTop: 12 },
+          ]}
+        >
           <AppText variant="caption" color="#92400E">
-            ⚠️ Accessibility text size detected. Consider switching to a single-column layout.
+            ⚠️ Accessibility text size detected. Consider switching to a
+            single-column layout.
           </AppText>
         </View>
       )}
@@ -1261,7 +1495,7 @@ function DynamicTypeDemo() {
 }
 
 // ============================================================================
-// 32. 🆕 GAP FIX: Text-to-Speech (no external package)
+// Text-to-Speech (no external package)
 // ============================================================================
 function TTSDemo() {
   const { speak: speakHook } = useSpeech();
@@ -1286,7 +1520,7 @@ function TTSDemo() {
   ];
 
   return (
-    <Section title="3️⃣2️⃣ 🆕 Text-to-Speech" badge="Gap Fix" initiallyExpanded={false}>
+    <Section title="3️⃣2️⃣ Text-to-Speech" initiallyExpanded={false}>
       <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
         useSpeech() wraps AccessibilityInfo.announceForAccessibility — zero
         external packages. Works with VoiceOver (iOS) and TalkBack (Android).
@@ -1301,18 +1535,24 @@ function TTSDemo() {
             setLastSpoken(label);
           }}
         >
-          <AppText color="#FFF" size={13}>🔊 Speak: {label}</AppText>
+          <AppText color="#FFF" size={13}>
+            🔊 Speak: {label}
+          </AppText>
         </TouchableOpacity>
       ))}
 
       <TouchableOpacity
         style={[styles.button, { backgroundColor: "#374151", marginBottom: 8 }]}
         onPress={() => {
-          speak("This is the standalone speak() utility — called outside a hook.");
+          speak(
+            "This is the standalone speak() utility — called outside a hook.",
+          );
           setLastSpoken("standalone speak()");
         }}
       >
-        <AppText color="#FFF" size={13}>🔊 Standalone speak() utility</AppText>
+        <AppText color="#FFF" size={13}>
+          🔊 Standalone speak() utility
+        </AppText>
       </TouchableOpacity>
 
       {lastSpoken ? (
@@ -1330,7 +1570,7 @@ function TTSDemo() {
 }
 
 // ============================================================================
-// 33. 🆕 GAP FIX: Text Selection Context Menu
+// Text Selection Context Menu
 // ============================================================================
 function ContextMenuDemo() {
   const [lastAction, setLastAction] = useState("");
@@ -1339,10 +1579,10 @@ function ContextMenuDemo() {
   const shortText = "Hello, AppText!";
 
   return (
-    <Section title="3️⃣3️⃣ 🆕 Context Menu" badge="Gap Fix" initiallyExpanded={false}>
+    <Section title="3️⃣3️⃣ Context Menu" initiallyExpanded={false}>
       <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
-        AppTextContextMenu is a JS-only long-press popup — no native
-        integration needed. Positions itself near the press location.
+        AppTextContextMenu is a JS-only long-press popup — no native integration
+        needed. Positions itself near the press location.
       </AppText>
 
       <AppText variant="caption" color="#6B7280" style={{ marginBottom: 6 }}>
@@ -1387,7 +1627,11 @@ function ContextMenuDemo() {
         </View>
       </AppTextContextMenu>
 
-      <AppText variant="caption" color="#6B7280" style={{ marginTop: 12, marginBottom: 6 }}>
+      <AppText
+        variant="caption"
+        color="#6B7280"
+        style={{ marginTop: 12, marginBottom: 6 }}
+      >
         Dark theme menu + disabled action:
       </AppText>
 
@@ -1433,7 +1677,9 @@ function ContextMenuDemo() {
 
       {lastAction ? (
         <View style={[styles.infoBox, { marginTop: 10 }]}>
-          <AppText variant="caption" color="#10B981">✅ {lastAction}</AppText>
+          <AppText variant="caption" color="#10B981">
+            ✅ {lastAction}
+          </AppText>
         </View>
       ) : (
         <AppText variant="caption" color="#9CA3AF" style={{ marginTop: 8 }}>
@@ -1444,40 +1690,49 @@ function ContextMenuDemo() {
   );
 }
 
-
 // ============================================================================
-// 34. 🆕 GAP FIX: Plugin System (v4.5.0)
+// Plugin System
 // ============================================================================
 function PluginSystemDemo() {
   const [pluginEnabled, setPluginEnabled] = useState(false);
+  const hasRegistered = useRef(false);
 
   useEffect(() => {
     if (pluginEnabled) {
       registerAppTextPlugin({
         name: "emoji-transformer",
         order: 10,
-        transform: (text) => text
-          .replace(/:smile:/g, "😊")
-          .replace(/:fire:/g, "🔥")
-          .replace(/:rocket:/g, "🚀"),
+        transform: (text) =>
+          text
+            .replace(/:smile:/g, "😊")
+            .replace(/:fire:/g, "🔥")
+            .replace(/:rocket:/g, "🚀"),
         themeExtension: {
           colors: { textSecondary: "#8B5CF6" }, // Temporarily hijack secondary color
         },
       });
-    } else {
+      hasRegistered.current = true;
+    } else if (hasRegistered.current) {
       unregisterAppTextPlugin("emoji-transformer");
+      hasRegistered.current = false;
     }
   }, [pluginEnabled]);
 
   return (
-    <Section title="3️⃣4️⃣ 🆕 Plugin System" badge="v4.5.0" initiallyExpanded={false}>
+    <Section title="3️⃣4️⃣ Plugin System" initiallyExpanded={false}>
       <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
-        Plugins can intercept and transform text before rendering (memo-safe, purely synchronous)
-        and deeply extend the active AppTextTheme.
+        Plugins can intercept and transform text before rendering (memo-safe,
+        purely synchronous) and deeply extend the active AppTextTheme.
       </AppText>
 
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: pluginEnabled ? "#10B981" : "#6366F1", marginBottom: 12 }]}
+        style={[
+          styles.button,
+          {
+            backgroundColor: pluginEnabled ? "#10B981" : "#6366F1",
+            marginBottom: 12,
+          },
+        ]}
         onPress={() => setPluginEnabled(!pluginEnabled)}
       >
         <AppText color="#FFF">
@@ -1486,11 +1741,16 @@ function PluginSystemDemo() {
       </TouchableOpacity>
 
       <View style={styles.infoBox}>
-        <AppText variant="labelMedium" color="textSecondary" style={{ marginBottom: 4 }}>
+        <AppText
+          variant="labelMedium"
+          color="textSecondary"
+          style={{ marginBottom: 4 }}
+        >
           "This project is fire :fire:, launching soon :rocket:!"
         </AppText>
         <AppText variant="caption" color="#9CA3AF">
-          (Notice how `textSecondary` color changes when the plugin is active, due to theme extension)
+          (Notice how `textSecondary` color changes when the plugin is active,
+          due to theme extension)
         </AppText>
       </View>
     </Section>
@@ -1498,20 +1758,22 @@ function PluginSystemDemo() {
 }
 
 // ============================================================================
-// 35. 🆕 GAP FIX: Remote Translations (v4.5.0)
+// Remote Translations
 // ============================================================================
 function RemoteTranslationsDemo() {
   const [remoteKey, setRemoteKey] = useState(0); // For forcing re-mount
 
   return (
-    <Section title="3️⃣5️⃣ 🆕 Remote Sync" badge="v4.5.0" initiallyExpanded={false}>
-       <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
-        RemoteLocaleProvider implements an SWR (stale-while-revalidate) cache. It serves cached translations instantly (zero render block) while fetching updates in the background.
+    <Section title="3️⃣5️⃣ Remote Sync" initiallyExpanded={false}>
+      <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
+        RemoteLocaleProvider implements an SWR (stale-while-revalidate) cache.
+        It serves cached translations instantly (zero render block) while
+        fetching updates in the background.
       </AppText>
 
       <TouchableOpacity
         style={[styles.button, { backgroundColor: "#374151" }]}
-        onPress={() => setRemoteKey(k => k + 1)}
+        onPress={() => setRemoteKey((k) => k + 1)}
       >
         <AppText color="#FFF">Trigger Remount</AppText>
       </TouchableOpacity>
@@ -1519,7 +1781,7 @@ function RemoteTranslationsDemo() {
       {/* Wrapping in a local provider just for the demo boundary */}
       <View style={{ marginTop: 12 }} key={remoteKey}>
         <RemoteLocaleProvider
-          endpoint="https://raw.githubusercontent.com/Ganesh1110/react-native-apptext/main/package.json" // Fake endpoint for demo
+          endpoint="https://raw.githubusercontent.com/Ganesh1110/react-native-text-kit/main/package.json" // Fake endpoint for demo
           cacheStrategy="stale-while-revalidate"
           fallback={{ en: { demo_key: "Fallback Translation (Offline)" } }}
           onFetchError={() => console.log("Demo fetch failed gracefully")}
@@ -1536,8 +1798,14 @@ function RemoteDemoInner() {
 
   return (
     <View style={styles.infoBox}>
-       <AppText>
-        Status: <AppText weight="700" color={status === "success" ? "#10B981" : "#F59E0B"}>{status}</AppText>
+      <AppText>
+        Status:{" "}
+        <AppText
+          weight="700"
+          color={status === "success" ? "#10B981" : "#F59E0B"}
+        >
+          {status}
+        </AppText>
       </AppText>
       {lastUpdated && (
         <AppText variant="caption" color="#6B7280" style={{ marginTop: 4 }}>
@@ -1545,17 +1813,20 @@ function RemoteDemoInner() {
         </AppText>
       )}
       <TouchableOpacity onPress={refresh} style={{ marginTop: 8 }}>
-         <AppText variant="caption" color="#6366F1">↻ Manual Refresh</AppText>
+        <AppText variant="caption" color="#6366F1">
+          ↻ Manual Refresh
+        </AppText>
       </TouchableOpacity>
     </View>
   );
 }
 
 // ============================================================================
-// 36. 🆕 GAP FIX: useTextMetrics (v4.5.0)
+// useTextMetrics
 // ============================================================================
 function TextMetricsDemo() {
-  const text = "This is a long piece of text that we want to measure before actually displaying it on the screen. It might span multiple lines depending on the width.";
+  const text =
+    "This is a long piece of text that we want to measure before actually displaying it on the screen. It might span multiple lines depending on the width.";
 
   const { metrics, GhostText } = useTextMetrics({
     text,
@@ -1565,29 +1836,52 @@ function TextMetricsDemo() {
   });
 
   return (
-    <Section title="3️⃣6️⃣ 🆕 useTextMetrics" badge="v4.5.0" initiallyExpanded={false}>
+    <Section title="3️⃣6️⃣ useTextMetrics" initiallyExpanded={false}>
       <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
-        Measures text block dimensions and truncation state via a hidden ghost element before rendering.
+        Measures text block dimensions and truncation state via a hidden ghost
+        element before rendering.
       </AppText>
 
       {/* Render the ghost text somewhere in the tree */}
       <GhostText />
 
       <View style={{ flexDirection: "row", gap: 12 }}>
-        <View style={{ width: 250, backgroundColor: "#F9FAFB", padding: 8, borderColor: "#E5E7EB", borderWidth: 1 }}>
-          <AppText variant="bodySmall" numberOfLines={2}>{text}</AppText>
+        <View
+          style={{
+            width: 250,
+            backgroundColor: "#F9FAFB",
+            padding: 8,
+            borderColor: "#E5E7EB",
+            borderWidth: 1,
+          }}
+        >
+          <AppText variant="bodySmall" numberOfLines={2}>
+            {text}
+          </AppText>
         </View>
 
         <View style={{ flex: 1, justifyContent: "center" }}>
           {metrics.measured ? (
-             <View>
-               <AppText variant="caption">Width: <AppText weight="700">{metrics.width.toFixed(1)}px</AppText></AppText>
-               <AppText variant="caption">Height: <AppText weight="700">{metrics.height.toFixed(1)}px</AppText></AppText>
-               <AppText variant="caption">Lines: <AppText weight="700">{metrics.lines}</AppText></AppText>
-               <AppText variant="caption" color={metrics.isTruncated ? "#EF4444" : "#10B981"}>
-                 Truncated: <AppText weight="700">{String(metrics.isTruncated)}</AppText>
-               </AppText>
-             </View>
+            <View>
+              <AppText variant="caption">
+                Width:{" "}
+                <AppText weight="700">{metrics.width.toFixed(1)}px</AppText>
+              </AppText>
+              <AppText variant="caption">
+                Height:{" "}
+                <AppText weight="700">{metrics.height.toFixed(1)}px</AppText>
+              </AppText>
+              <AppText variant="caption">
+                Lines: <AppText weight="700">{metrics.lines}</AppText>
+              </AppText>
+              <AppText
+                variant="caption"
+                color={metrics.isTruncated ? "#EF4444" : "#10B981"}
+              >
+                Truncated:{" "}
+                <AppText weight="700">{String(metrics.isTruncated)}</AppText>
+              </AppText>
+            </View>
           ) : (
             <AppText variant="caption">Measuring...</AppText>
           )}
@@ -1598,22 +1892,28 @@ function TextMetricsDemo() {
 }
 
 // ============================================================================
-// 37. 🆕 GAP FIX: Accessibility & Analytics (v4.5.0)
+// Accessibility & Analytics
 // ============================================================================
 function AnalyticsDemo() {
   // Using context exposed in App component
   return (
-    <Section title="3️⃣7️⃣ 🆕 Accessibility & Analytics" badge="v4.5.0" initiallyExpanded={false}>
+    <Section title="3️⃣7️⃣ Accessibility & Analytics" initiallyExpanded={false}>
       <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
-        AppTextProvider now exposes `onTranslate`, `onAnimationStart`, and `onPluginError` hooks for analytics tracing.
+        AppTextProvider now exposes `onTranslate`, `onAnimationStart`, and
+        `onPluginError` hooks for analytics tracing.
       </AppText>
 
       <AppText variant="caption" color="#6B7280" style={{ marginBottom: 4 }}>
         accessibilityMode="static"
       </AppText>
       <View style={styles.infoBox}>
-        <AppText animation="typewriter" duration={3000} accessibilityMode="static">
-          This animated text exposes its full content to screen readers immediately, avoiding partial-read bugs on VoiceOver/TalkBack.
+        <AppText
+          animation="typewriter"
+          duration={3000}
+          accessibilityMode="static"
+        >
+          This animated text exposes its full content to screen readers
+          immediately, avoiding partial-read bugs on VoiceOver/TalkBack.
         </AppText>
       </View>
     </Section>
@@ -1654,43 +1954,12 @@ function Content() {
       <AccessibilityDemo />
       <PerformanceDemo />
       <ErrorBoundaryDemo />
-
-      {/* v4.4.0 NEW FEATURES */}
-      <View style={styles.v440Header}>
-        <View style={styles.v440Badge}>
-          <AppText
-            size={10}
-            color="#FFF"
-            weight="800"
-            style={{ letterSpacing: 1 }}
-          >
-            NEW IN v4.4.0
-          </AppText>
-        </View>
-        <AppText variant="caption" color="#9CA3AF" style={{ marginTop: 4 }}>
-          Gap fixes, new hooks, components & New Architecture improvements
-        </AppText>
-      </View>
-
       <AutoLocaleDemo />
       <RuntimeThemeDemo />
       <SkeletonDemo />
       <RTLProviderDemo />
       <DevToolsDemo />
       <InteractiveFeaturesDemo />
-
-      {/* Gap Fixes v4.4.0+ */}
-      <View style={styles.v440Header}>
-        <View style={[styles.v440Badge, { backgroundColor: "#10B981" }]}>
-          <AppText size={10} color="#FFF" weight="800" style={{ letterSpacing: 1 }}>
-            GAP FIXES
-          </AppText>
-        </View>
-        <AppText variant="caption" color="#9CA3AF" style={{ marginTop: 4 }}>
-          RTL-without-restart · Dynamic Type · TTS · Context Menu
-        </AppText>
-      </View>
-
       <CSSRTLDemo />
       <DynamicTypeDemo />
       <TTSDemo />
@@ -1702,7 +1971,7 @@ function Content() {
 
       <View style={styles.footer}>
         <AppText variant="titleSmall" color="#6366F1">
-          react-native-apptext
+          react-native-text-kit
         </AppText>
         <AppText variant="caption" color="#999">
           Version 4.4.0 — Full Feature Demo
@@ -1716,7 +1985,7 @@ function Content() {
 }
 
 // ============================================================================
-// MAIN APP — wraps with RTLProvider too (v4.4.0)
+// MAIN APP — wraps with RTLProvider too
 // ============================================================================
 export default function App() {
   const colorScheme = useColorScheme();
@@ -1733,7 +2002,7 @@ export default function App() {
           if (__DEV__) console.log(`[i18n] Missing: "${key}" in ${lang}`);
         }}
       >
-        {/* v4.4.0: RTLProvider wraps the navigator */}
+        {/* RTLProvider wraps the navigator */}
         <RTLProvider language={language} autoApply>
           <SafeAreaView
             style={[
@@ -1742,22 +2011,32 @@ export default function App() {
             ]}
           >
             <StatusBar
-              barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
+              barStyle={
+                colorScheme === "dark" ? "light-content" : "dark-content"
+              }
             />
 
             {/* Header */}
             <View style={styles.header}>
-              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <View>
                   <AppText variant="headlineMedium" weight="700">
                     AppText Demo
                   </AppText>
                   <AppText variant="bodySmall" color="#666">
-                    v4.4.0 — Complete Feature Showcase
+                    Complete Feature Showcase
                   </AppText>
                 </View>
                 <View style={[styles.versionBadge]}>
-                  <AppText size={10} color="#6366F1" weight="700">v4.4.0</AppText>
+                  <AppText size={10} color="#6366F1" weight="700">
+                    react-native-text-kit
+                  </AppText>
                 </View>
               </View>
               <AppText variant="caption" color="#999" style={{ marginTop: 4 }}>
@@ -1768,7 +2047,7 @@ export default function App() {
             <Content />
           </SafeAreaView>
 
-          {/* v4.4.0: AppTextDevTools overlay — renders only in __DEV__ */}
+          {/* AppTextDevTools overlay — renders only in __DEV__ */}
           <AppTextDevTools
             position="bottom-right"
             refreshInterval={3000}
