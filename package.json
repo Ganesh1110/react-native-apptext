@@ -1,24 +1,23 @@
 {
   "name": "react-native-text-kit",
-  "version": "4.5.2",
+  "version": "4.5.3",
   "description": "Production-grade Typography, i18n, animations, RTL, plugin system, and developer tools for React Native",
   "readme": "README.md",
   "main": "dist/index.js",
-  "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "bin": {
     "react-native-text-kit": "dist/src/cli/index.js"
   },
   "exports": {
     ".": {
-      "import": "./dist/index.esm.js",
+      "import": "./dist/index.js",
       "require": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
     "./reanimated": {
-      "import": "./dist/src/reanimated.js",
-      "require": "./dist/src/reanimated.js",
-      "types": "./dist/src/reanimated.d.ts"
+      "import": "./dist/reanimated.js",
+      "require": "./dist/reanimated.js",
+      "types": "./dist/reanimated.d.ts"
     }
   },
   "files": [
