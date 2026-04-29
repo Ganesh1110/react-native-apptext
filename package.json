@@ -1,6 +1,6 @@
 {
   "name": "react-native-text-kit",
-  "version": "4.5.3",
+  "version": "4.5.4",
   "description": "Production-grade Typography, i18n, animations, RTL, plugin system, and developer tools for React Native",
   "readme": "README.md",
   "main": "dist/index.js",
