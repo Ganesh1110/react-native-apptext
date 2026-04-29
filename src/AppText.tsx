@@ -969,11 +969,18 @@ const BaseAppText = memo(
         responsive ? 48 : undefined,
       );
 
+      const actualFontSize = responsive ? responsiveFontSize : baseFontSize;
+
       const calculatedLineHeight = useMemo(() => {
-        const baseLineHeight = typographyStyle.lineHeight || baseFontSize * 1.2;
+        const variantFontSize = typographyStyle.fontSize || baseFontSize;
+        const baseLineHeight = typographyStyle.lineHeight
+          ? (typographyStyle.lineHeight * actualFontSize) / variantFontSize
+          : actualFontSize * 1.2;
         return baseLineHeight * scriptConfig.lineHeightMultiplier;
       }, [
         typographyStyle.lineHeight,
+        typographyStyle.fontSize,
+        actualFontSize,
         baseFontSize,
         scriptConfig.lineHeightMultiplier,
       ]);
