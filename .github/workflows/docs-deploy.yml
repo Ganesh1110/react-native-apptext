@@ -1,0 +1,49 @@
+name: Deploy Documentation
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - '**.md'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy Docs to GitHub Pages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build documentation
+        run: |
+          mkdir -p _site
+          cp docs/*.md _site/
+          cp README.md _site/index.md
+          cp CHANGELOG.md _site/
+          ls -la _site/
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4

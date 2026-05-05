@@ -1,0 +1,49 @@
+name: Size Check
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  bundlesize:
+    name: Bundle Size Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build package
+        run: npm run build
+
+      - name: Run bundlesize
+        run: npx bundlesize
+        env:
+          BUNDLESIZE_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const size = fs.readFileSync('dist/index.js', 'utf8').length;
+            const sizeKB = (size / 1024).toFixed(2);
+            
+            const comment = `📦 **Bundle Size Check**\n\n| File | Size |\n|------|------|\n| dist/index.js | ${sizeKB}KB |`;
+            
+            github.rest.issues.createComment({
+              owner: context.issue.owner,
+              repo: context.issue.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });
