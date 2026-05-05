@@ -26,6 +26,7 @@
     "dist",
     "**/*.test.ts",
     "**/*.test.tsx",
-    "src/reanimated.tsx"
+    "src/reanimated.tsx",
+    "examples"
   ]
 }

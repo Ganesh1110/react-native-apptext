@@ -70,7 +70,8 @@ describe("PLURAL_RULES coverage", () => {
     ["pl", 5, "many"],
     ["cs", 1, "one"],
     ["cs", 3, "few"],
-    ["cs", 5, "many"],
+    ["cs", 5, "other"],
+    ["cs", 15, "other"],
     // Semitic
     ["ar", 1, "one"],
     ["ar", 2, "two"],
@@ -99,7 +100,7 @@ describe("PLURAL_RULES coverage", () => {
     // Hellenic
     ["el", 1, "one"],
     // Iranian
-    ["fa", 1, "other"],
+    ["fa", 1, "one"],
     ["ur", 1, "one"],
   ];
 
