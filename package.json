@@ -6,7 +6,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "react-native-text-kit": "dist/src/cli/index.js"
+    "react-native-text-kit": "dist/src/cli/index.js",
+    "react-native-text-kit-types": "dist/src/cli/types.js"
   },
   "exports": {
     ".": {

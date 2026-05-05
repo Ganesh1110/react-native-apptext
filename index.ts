@@ -247,3 +247,14 @@ export type {
   TextMetricsOptions,
   TextMetrics,
 } from "./src/useTextMetrics";
+
+// ---------------------------------------------------------------------------
+// Text Gradient (v4.6.0)
+// ---------------------------------------------------------------------------
+export {
+  GradientText,
+  isGradientSupported,
+  GradientTextPlaceholder,
+} from "./src/TextGradient";
+
+export type { GradientTextProps } from "./src/TextGradient";
