@@ -60,7 +60,8 @@ import AppText from "react-native-text-kit";
 | **Responsive**    | Font scaling with LRU cache                                   |
 | **Accessibility** | Dynamic Type, `useSpeech()`, live regions                     |
 | **Performance**   | ~0.8ms translation lookups, single listener                   |
-| **CLI**           | Extract & validate translation keys                           |
+| **CLI**           | Extract, validate & type-generate translation keys            |
+| **TypeScript**    | Auto-generate typed translation keys for compile-time safety  |
 
 ---
 
@@ -167,6 +168,7 @@ OrdinalFormatter.format(3, 'en') // "3rd"
 // CLI Tools
 npx react-native-text-kit extract --src ./src
 npx react-native-text-kit validate --translations ./locales
+npx react-native-text-kit types --src "./locales/*.json" --output "./src/types/translations.ts"
 
 // Plugin System
 registerAppTextPlugin({ name: 'emoji', transformString: ... })
