@@ -103,7 +103,3 @@ export { RemoteLocaleProvider, useRemoteLocales, clearRemoteLocaleCache, clearAl
 // Text Metrics API (v4.5.0)
 // ---------------------------------------------------------------------------
 export { useTextMetrics } from "./src/useTextMetrics";
-// ---------------------------------------------------------------------------
-// Text Gradient (v4.6.0)
-// ---------------------------------------------------------------------------
-export { GradientText, isGradientSupported, GradientTextPlaceholder, } from "./src/TextGradient";

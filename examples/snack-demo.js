@@ -50,8 +50,6 @@ import AppText, {
   RemoteLocaleProvider,
   useRemoteLocales,
   useTextMetrics,
-  GradientText, // v4.6.0: Text Gradient
-  isGradientSupported, // v4.6.0: Check gradient support
 } from "react-native-text-kit";
 
 // ============================================================================
@@ -1923,92 +1921,6 @@ function AnalyticsDemo() {
 }
 
 // ============================================================================
-// 33. Gradient Text (v4.6.0)
-// ============================================================================
-function GradientTextDemo() {
-  const isSupported = isGradientSupported();
-
-  if (!isSupported) {
-    return (
-      <Section title="3️⃣3️⃣ Gradient Text (v4.6.0)" initiallyExpanded={false}>
-        <View style={styles.infoBox}>
-          <AppText variant="caption" color="#F59E0B" weight="600">
-            ⚠️ Gradient not available
-          </AppText>
-          <AppText variant="bodySmall" color="#6B7280" style={{ marginTop: 4 }}>
-            Install dependencies to enable:
-          </AppText>
-          <AppText variant="caption" style={{ marginTop: 8 }} color="#666">
-            npm install @react-native-community/masked-view react-native-linear-gradient
-          </AppText>
-        </View>
-      </Section>
-    );
-  }
-
-  return (
-    <Section title="3️⃣3️⃣ Gradient Text (v4.6.0)" initiallyExpanded={false}>
-      <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
-        Gradient text using MaskedView + LinearGradient. Requires optional dependencies.
-      </AppText>
-
-      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>
-        Horizontal Gradient:
-      </AppText>
-      <GradientText
-        colors={["#FF6B6B", "#4ECDC4"]}
-        style={{ fontSize: 24, fontWeight: "700", marginBottom: 12 }}
-      >
-        Beautiful Gradient Text
-      </GradientText>
-
-      <AppText variant="titleSmall" style={{ marginBottom: 8, marginTop: 8 }}>
-        Vertical Gradient:
-      </AppText>
-      <GradientText
-        colors={["#667eea", "#764ba2"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        style={{ fontSize: 20, fontWeight: "600", marginBottom: 12 }}
-      >
-        Vertical Color Transition
-      </GradientText>
-
-      <AppText variant="titleSmall" style={{ marginBottom: 8, marginTop: 8 }}>
-        Diagonal Gradient:
-      </AppText>
-      <GradientText
-        colors={["#f093fb", "#f5576c"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={{ fontSize: 18, fontWeight: "500", marginBottom: 12 }}
-      >
-        Diagonal Pink Gradient
-      </GradientText>
-
-      <AppText variant="titleSmall" style={{ marginBottom: 8, marginTop: 8 }}>
-        Rainbow Gradient:
-      </AppText>
-      <GradientText
-        colors={["#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#9400D3"]}
-        style={{ fontSize: 16, marginBottom: 12 }}
-      >
-        Rainbow Spectrum Text
-      </GradientText>
-
-      <View style={[styles.infoBox, { marginTop: 8 }]}>
-        <AppText variant="caption" color="#10B981" weight="600">
-          ✅ Gradient supported!
-        </AppText>
-        <AppText variant="caption" color="#6B7280" style={{ marginTop: 4 }}>
-          Uses @react-native-community/masked-view + react-native-linear-gradient
-        </AppText>
-      </View>
-    </Section>
-  );
-}
-
-// ============================================================================
 // MAIN CONTENT SCROLL VIEW
 // ============================================================================
 function Content() {
@@ -2056,7 +1968,6 @@ function Content() {
       <RemoteTranslationsDemo />
       <TextMetricsDemo />
       <AnalyticsDemo />
-      <GradientTextDemo />
 
       <View style={styles.footer}>
         <AppText variant="titleSmall" color="#6366F1">

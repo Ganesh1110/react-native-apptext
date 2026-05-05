@@ -1,7 +1,6 @@
 import React from "react";
 import { View, TextStyle } from "react-native";
 import AppText from "./AppText";
-import { GradientText } from "./TextGradient";
 import { AppTextSkeleton } from "./AppTextSkeleton";
 
 const Container = ({ children }: { children: React.ReactNode }) => (
@@ -110,22 +109,6 @@ export const Animations = () => (
       <AppText animated animation={{ type: "wave" }} style={{ marginTop: 8 }}>
         Wave Animation
       </AppText>
-    </Section>
-  </Container>
-);
-
-export const GradientTextStory = () => (
-  <Container>
-    <Section title="Gradient Text">
-      <GradientText colors={["#FF6B6B", "#4ECDC4"]}>Horizontal Gradient</GradientText>
-      <GradientText
-        colors={["#667eea", "#764ba2"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-        style={{ marginTop: 8 }}
-      >
-        Vertical Gradient
-      </GradientText>
     </Section>
   </Container>
 );
