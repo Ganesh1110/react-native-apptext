@@ -247,3 +247,13 @@ export type {
   TextMetricsOptions,
   TextMetrics,
 } from "./src/useTextMetrics";
+
+// ---------------------------------------------------------------------------
+// Number Morph Animation (v4.7.0)
+// ---------------------------------------------------------------------------
+export {
+  NumberMorph,
+  MorphNumber,
+} from "./src/NumberMorph";
+
+export type { NumberMorphProps } from "./src/NumberMorph";

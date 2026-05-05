@@ -50,6 +50,7 @@ import AppText, {
   RemoteLocaleProvider,
   useRemoteLocales,
   useTextMetrics,
+  NumberMorph, // v4.7.0: Animated number counter
 } from "react-native-text-kit";
 
 // ============================================================================
@@ -742,6 +743,93 @@ function NumberFormatterDemo() {
         {OrdinalFormatter.format(3, "en")}, {OrdinalFormatter.format(4, "en")},{" "}
         {OrdinalFormatter.format(11, "en")}, {OrdinalFormatter.format(21, "en")}
       </AppText>
+    </Section>
+  );
+}
+
+// ============================================================================
+// Number Morph Animation (v4.7.0)
+// ============================================================================
+function NumberMorphDemo() {
+  const [counter, setCounter] = useState(0);
+  const [targetValue, setTargetValue] = useState(1234);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCounter((prev) => prev + Math.floor(Math.random() * 100));
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const priceExamples = [
+    { value: 999, label: "Price", prefix: "$" },
+    { value: 4567, label: "Followers", suffix: "K" },
+    { value: 99.99, label: "Rating", decimals: 2, suffix: "/5" },
+  ];
+
+  return (
+    <Section title="3️⃣3️⃣ Number Morph Animation (v4.7.0)" initiallyExpanded={false}>
+      <AppText variant="bodySmall" color="#6B7280" style={{ marginBottom: 12 }}>
+        Animated number counter — animates from 0 to target value with smooth transitions.
+      </AppText>
+
+      <AppText variant="titleSmall" style={{ marginBottom: 8 }}>
+        Live Counter:
+      </AppText>
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: "#6366F1", marginBottom: 12 }]}
+        onPress={() => setCounter(0)}
+      >
+        <AppText color="#FFF" size={12}>Reset to 0</AppText>
+      </TouchableOpacity>
+      <NumberMorph
+        value={counter}
+        duration={1500}
+        prefix=""
+        suffix=""
+        style={{ fontSize: 32, fontWeight: "700", color: "#6366F1" }}
+      />
+
+      <AppText variant="titleSmall" style={{ marginTop: 16, marginBottom: 8 }}>
+        Price Format:
+      </AppText>
+      <View style={{ flexDirection: "row", gap: 12, flexWrap: "wrap" }}>
+        {priceExamples.map((item, index) => (
+          <View key={index} style={[styles.infoBox, { flex: 1, minWidth: 100 }]}>
+            <AppText variant="caption" color="#6B7280">{item.label}</AppText>
+            <NumberMorph
+              value={item.value}
+              duration={1000}
+              prefix={item.prefix || ""}
+              suffix={item.suffix || ""}
+              decimals={item.decimals || 0}
+              style={{ fontSize: 20, fontWeight: "600", color: "#10B981" }}
+            />
+          </View>
+        ))}
+      </View>
+
+      <AppText variant="titleSmall" style={{ marginTop: 16, marginBottom: 8 }}>
+        Custom Target:
+      </AppText>
+      <View style={{ flexDirection: "row", gap: 8, marginBottom: 12 }}>
+        {[100, 500, 1000, 9999].map((val) => (
+          <TouchableOpacity
+            key={val}
+            style={[styles.langButton, targetValue === val && styles.langButtonSelected]}
+            onPress={() => setTargetValue(val)}
+          >
+            <AppText size={12} color={targetValue === val ? "#FFF" : "#374151"}>
+              {val}
+            </AppText>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <NumberMorph
+        value={targetValue}
+        duration={800}
+        style={{ fontSize: 28, fontWeight: "700", color: "#F59E0B" }}
+      />
     </Section>
   );
 }
@@ -1950,6 +2038,7 @@ function Content() {
       <ResponsiveFontDemo />
       <ScriptDetectionDemo />
       <NumberFormatterDemo />
+      <NumberMorphDemo />
       <ThemeDemo />
       <AccessibilityDemo />
       <PerformanceDemo />

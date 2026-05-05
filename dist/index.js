@@ -103,3 +103,7 @@ export { RemoteLocaleProvider, useRemoteLocales, clearRemoteLocaleCache, clearAl
 // Text Metrics API (v4.5.0)
 // ---------------------------------------------------------------------------
 export { useTextMetrics } from "./src/useTextMetrics";
+// ---------------------------------------------------------------------------
+// Number Morph Animation (v4.7.0)
+// ---------------------------------------------------------------------------
+export { NumberMorph, MorphNumber, } from "./src/NumberMorph";
